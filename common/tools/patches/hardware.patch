@@ -1,0 +1,554 @@
+diff --git a/hardware/imx/alsa/config_tlv320aic3x.h b/hardware/imx/alsa/config_tlv320aic3x.h
+new file mode 100644
+index 0000000..43c94fa
+--- a/hardware/imx/alsa/config_tlv320aic3x.h
++++ b/hardware/imx/alsa/config_tlv320aic3x.h
+@@ -0,0 +1,79 @@
++/*
++ * Copyright (C) 2011 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++/* Copyright (C) 2012 Freescale Semiconductor, Inc. */
++
++#ifndef ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H
++#define ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H
++
++#include "audio_hardware.h"
++
++#define MIXER_TLV320AIC3X_JACK_FUNCTION                  "Jack Function"
++#define MIXER_TLV320AIC3X_SPEAKER_VOLUME                 "PCM Playback Volume"
++#define MIXER_TLV320AIC3X_HP_DAC_VOLUME		 	 "HP DAC Playback Volume"
++
++/* These are values that never change */
++static struct route_setting defaults_TLV320AIC3X[] = {
++    /* general */
++    {
++        .ctl_name = MIXER_TLV320AIC3X_JACK_FUNCTION,
++        .intval = 1,
++    },
++    {
++        .ctl_name = MIXER_TLV320AIC3X_SPEAKER_VOLUME,
++        .intval = 120,
++    },
++    {
++        .ctl_name = MIXER_TLV320AIC3X_HP_DAC_VOLUME,
++        .intval = 118,
++    },
++    {
++        .ctl_name = NULL,
++    },
++};
++
++/* ALSA cards for IMX, these must be defined according different board / kernel config*/
++static struct audio_card  tlv320aic3x_card = {
++    .name = "tlv320aic3x-audio",
++    .driver_name = "tlv320aic3x-aud",
++    .supported_out_devices = (
++            AUDIO_DEVICE_OUT_WIRED_HEADPHONE |
++            AUDIO_DEVICE_OUT_SPEAKER |
++            AUDIO_DEVICE_OUT_DEFAULT ),
++    .supported_in_devices = (
++            AUDIO_DEVICE_IN_WIRED_HEADSET |
++            AUDIO_DEVICE_IN_BUILTIN_MIC |
++            AUDIO_DEVICE_IN_DEFAULT),
++    .defaults            = defaults_TLV320AIC3X,
++    .bt_output           = NULL,
++    .speaker_output      = defaults_TLV320AIC3X,
++    .hs_output           = NULL,
++    .earpiece_output     = defaults_TLV320AIC3X,
++    .vx_hs_mic_input     = NULL,
++    .mm_main_mic_input   = NULL,
++    .vx_main_mic_input   = NULL,
++    .mm_hs_mic_input     = NULL,
++    .vx_bt_mic_input     = NULL,
++    .mm_bt_mic_input     = NULL,
++    .card                = 0,
++    .out_rate            = 0,
++    .out_channels        = 0,
++    .out_format          = 0,
++    .in_rate             = 0,
++    .in_channels         = 0,
++    .in_format           = 0,
++};
++
++#endif  /* ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H */
+diff --git a/hardware/imx/alsa/tinyalsa_hal.c b/hardware/imx/alsa/tinyalsa_hal.c
+index 579b470..9d374ff 100644
+--- a/hardware/imx/alsa/tinyalsa_hal.c
++++ b/hardware/imx/alsa/tinyalsa_hal.c
+@@ -48,6 +48,7 @@
+ #include "config_cs42888.h"
+ #include "config_wm8960.h"
+ #include "config_sii902x.h"
++#include "config_tlv320aic3x.h"
+ 
+ 
+ /* ALSA ports for IMX */
+@@ -93,7 +94,7 @@
+ #define PRODUCT_NAME_PROPERTY   "ro.product.name"
+ #define PRODUCT_DEVICE_IMX      "imx"
+ #define PRODUCT_DEVICE_AUTO     "sabreauto"
+-#define SUPPORT_CARD_NUM        9
++#define SUPPORT_CARD_NUM        10
+ 
+ /*"null_card" must be in the end of this array*/
+ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
+@@ -105,6 +106,7 @@ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
+     &cs42888_card,
+     &wm8960_card,
+     &sii902x_card,
++    &tlv320aic3x_card,
+     &null_card,
+ };
+ 
+diff --git a/hardware/imx/mx6/libcamera2/CameraHal.cpp b/hardware/imx/mx6/libcamera2/CameraHal.cpp
+index 1b3cec5..12d47c0 100755
+--- a/hardware/imx/mx6/libcamera2/CameraHal.cpp
++++ b/hardware/imx/mx6/libcamera2/CameraHal.cpp
+@@ -133,6 +133,19 @@ int CameraHal::set_notify_callback(camera2_notify_callback notify_cb,
+     return NO_ERROR;
+ }
+ 
++void CameraHal::sendNotification
++	(int32_t msgType,
++         int32_t ext1,
++         int32_t ext2,
++         int32_t ext3)
++{
++    if (mNotifyCb) {
++        mNotifyCb(msgType, ext1, ext2, ext3, mNotifyUserPtr);
++    }
++    else
++	    FLOGE("%s: no callback for msg %d/%d/%d/%d\n", __func__, msgType,ext1,ext2,ext3);
++}
++
+ status_t CameraHal::initialize(CameraInfo& info)
+ {
+     status_t ret = NO_ERROR;
+@@ -181,3 +194,11 @@ status_t CameraHal::dump(int /*fd*/) const
+     return NO_ERROR;
+ }
+ 
++DeviceAdapter *CameraHal::getDeviceAdapter()
++{
++	if (0 != mRequestManager.get()) {
++		return mRequestManager->getDeviceAdapter();
++	}
++	else
++		return 0;
++}
+diff --git a/hardware/imx/mx6/libcamera2/CameraHal.h b/hardware/imx/mx6/libcamera2/CameraHal.h
+index 226a55c..8eb9866 100755
+--- a/hardware/imx/mx6/libcamera2/CameraHal.h
++++ b/hardware/imx/mx6/libcamera2/CameraHal.h
+@@ -64,13 +64,18 @@ public:
+     int get_metadata_vendor_tag_ops(vendor_tag_query_ops_t **ops);
+     int set_notify_callback(camera2_notify_callback notify_cb,
+             void *user);
+-
++    virtual void sendNotification
++		(int32_t msgType,
++		 int32_t ext1,
++		 int32_t ext2,
++		 int32_t ext3);
+     void     release();
+     status_t dump(int fd) const;
+ 
+     void     LockWakeLock();
+     void     UnLockWakeLock();
+ 
++    DeviceAdapter *getDeviceAdapter();
+ private:
+     bool mPowerLock;
+     int  mCameraId;
+diff --git a/hardware/imx/mx6/libcamera2/CameraModule.cpp b/hardware/imx/mx6/libcamera2/CameraModule.cpp
+index 610d3ce..5084d1d 100755
+--- a/hardware/imx/mx6/libcamera2/CameraModule.cpp
++++ b/hardware/imx/mx6/libcamera2/CameraModule.cpp
+@@ -224,12 +224,40 @@ int release_reprocess_stream(
+     return INVALID_OPERATION;
+ }
+ 
+-int trigger_action(const struct camera2_device *,
+-        uint32_t /*trigger_id*/,
+-        int32_t /*ext1*/,
+-        int32_t /*ext2*/)
++int trigger_action(const struct camera2_device * device,
++        uint32_t msgType,
++        int32_t ext1,
++        int32_t ext2)
+ {
+-    return INVALID_OPERATION;
++    int ret = INVALID_OPERATION;
++    CameraHal *camHal = fsl_get_camerahal(device);
++    DeviceAdapter *adap ;
++    ALOGI("%s:%s: msg %d, ext1 %d, ext2 %d\n",
++	  __FILE__, __func__,
++	  msgType, ext1, ext2);
++    switch (msgType) {
++        case CAMERA2_TRIGGER_AUTOFOCUS:
++	    adap = camHal? camHal->getDeviceAdapter() : 0;
++	    if (adap) {
++		    ret = adap->autoFocus(ext1,ext2,0);
++	    } else
++		    ALOGE("NO hal %p or adapter\n", camHal);
++            break;
++        case CAMERA2_TRIGGER_CANCEL_AUTOFOCUS:
++	    adap = camHal? camHal->getDeviceAdapter() : 0;
++	    if (adap) {
++		    ret = adap->cancelAutoFocus(ext1,ext2,0);
++	    } else
++		    ALOGE("NO hal %p or adapter\n", camHal);
++            break;
++        case CAMERA2_TRIGGER_PRECAPTURE_METERING:
++            ALOGE("TRIGGER_PRECAPTURE_METERING");
++            break;
++        default:
++            ALOGE("%s: Unknown action triggered: %d (arguments %d %d)",
++                    __FUNCTION__, msgType, ext1, ext2);
++    }
++    return ret;
+ }
+ 
+ int set_notify_callback(const struct camera2_device *device,
+diff --git a/hardware/imx/mx6/libcamera2/CameraUtil.h b/hardware/imx/mx6/libcamera2/CameraUtil.h
+index 81ac119..49151a8 100755
+--- a/hardware/imx/mx6/libcamera2/CameraUtil.h
++++ b/hardware/imx/mx6/libcamera2/CameraUtil.h
+@@ -18,7 +18,7 @@
+ #define _CAMERA_UTILS_H
+ 
+ #undef LOG_TAG
+-#define LOG_TAG "FslCameraHAL"
++#define LOG_TAG "FslCameraHAL2"
+ #include <utils/Log.h>
+ 
+ #include <string.h>
+@@ -243,6 +243,11 @@ enum CAMERA_ERROR {
+ class CameraErrorListener {
+ public:
+     virtual void handleError(int err) = 0;
++    virtual void sendNotification
++	    (int32_t msgType,
++	     int32_t ext1,
++	     int32_t ext2,
++	     int32_t ext3) = 0;
+     virtual ~CameraErrorListener() {}
+ };
+ 
+diff --git a/hardware/imx/mx6/libcamera2/DeviceAdapter.cpp b/hardware/imx/mx6/libcamera2/DeviceAdapter.cpp
+index 16870c6..f3466a7 100755
+--- a/hardware/imx/mx6/libcamera2/DeviceAdapter.cpp
++++ b/hardware/imx/mx6/libcamera2/DeviceAdapter.cpp
+@@ -510,6 +510,12 @@ status_t DeviceAdapter::stopDeviceLocked()
+     return ret;
+ }
+ 
++status_t DeviceAdapter::do_autoFocus(int trigger_id, int ext1, int ext2)
++{
++	FLOGE("%s: %d %d %d", __func__, trigger_id, ext1, ext2);
++	return NO_ERROR;
++}
++
+ status_t DeviceAdapter::startPreview()
+ {
+     status_t ret = NO_ERROR;
+@@ -670,30 +676,39 @@ int DeviceAdapter::deviceThread()
+     return NO_ERROR;
+ }
+ 
+-status_t DeviceAdapter::autoFocus()
++status_t DeviceAdapter::autoFocus(int trigger_id,int ext1, int ext2)
+ {
++    FLOGE("%s: %d,%d,%d\n", __func__,trigger_id,ext1, ext2);
+     if (mAutoFocusThread != NULL) {
+         mAutoFocusThread.clear();
+     }
+ 
+-    mAutoFocusThread = new AutoFocusThread(this);
++    mAutoFocusThread = new AutoFocusThread(this,trigger_id,ext1,ext2);
+     if (mAutoFocusThread == NULL) {
+         return UNKNOWN_ERROR;
+     }
++    FLOGE("%s: thread started\n", __func__);
+     return NO_ERROR;
+ }
+ 
+-status_t DeviceAdapter::cancelAutoFocus()
++status_t DeviceAdapter::cancelAutoFocus(int, int, int)
+ {
++    if (mAutoFocusThread != NULL) {
++        mAutoFocusThread.clear();
++    }
+     return NO_ERROR;
+ }
+ 
+-int DeviceAdapter::autoFocusThread()
++int DeviceAdapter::autoFocusThread(int trigger_id,int ext1, int ext2)
+ {
++    FLOGE("%s: tid %d, e1 %d, e2 %d\n", __func__, trigger_id,ext1,ext2);
++    status_t stat = do_autoFocus(trigger_id, ext1, ext2);
++
+     sp<CameraEvent> cameraEvt = new CameraEvent();
+     cameraEvt->mEventType = CameraEvent::EVENT_FOCUS;
+     dispatchEvent(cameraEvt);
+ 
++    FLOGE("%s: dispatched EVENT_FOCUS: status %d\n", __func__, stat);
+     // exit the thread.
+     return UNKNOWN_ERROR;
+ }
+diff --git a/hardware/imx/mx6/libcamera2/DeviceAdapter.h b/hardware/imx/mx6/libcamera2/DeviceAdapter.h
+index 3f5de9a..f0bc6ad 100755
+--- a/hardware/imx/mx6/libcamera2/DeviceAdapter.h
++++ b/hardware/imx/mx6/libcamera2/DeviceAdapter.h
+@@ -61,8 +61,8 @@ public:
+     virtual void setPreviewPixelFormat();
+     virtual void setPicturePixelFormat();
+ 
+-    status_t         autoFocus();
+-    status_t         cancelAutoFocus();
++    status_t         autoFocus(int trigger_id,int ext1, int ext2);
++    status_t         cancelAutoFocus(int trigger_id,int ext1, int ext2);
+ 
+     virtual status_t startPreview();
+     virtual status_t stopPreview();
+@@ -81,8 +81,13 @@ protected:
+ protected:
+     class AutoFocusThread : public Thread {
+     public:
+-        AutoFocusThread(DeviceAdapter *hw) :
+-            Thread(false), mAdapter(hw) {}
++        AutoFocusThread(DeviceAdapter *hw,
++			int trigger_id,int ext1, int ext2) :
++            Thread(false)
++		, mAdapter(hw)
++		, tid(trigger_id)
++		, e1(ext1)
++		, e2(ext2) {}
+ 
+         virtual void onFirstRef() {
+             run("AutoFocusThread", PRIORITY_URGENT_DISPLAY);
+@@ -91,7 +96,7 @@ protected:
+         virtual bool threadLoop() {
+             int ret = 0;
+ 
+-            ret = mAdapter->autoFocusThread();
++            ret = mAdapter->autoFocusThread(tid,e1,e2);
+             if (ret != 0) {
+                 return false;
+             }
+@@ -102,6 +107,7 @@ protected:
+ 
+     private:
+         DeviceAdapter *mAdapter;
++	int	tid, e1, e2;
+     };
+ 
+     class DeviceThread : public Thread {
+@@ -136,9 +142,11 @@ protected:
+     virtual status_t startDeviceLocked();
+     virtual status_t stopDeviceLocked();
+ 
++    virtual status_t do_autoFocus(int trigger_id, int ext1, int ext2);
++
+ private:
+     int          deviceThread();
+-    int          autoFocusThread();
++    int          autoFocusThread(int trigger_id,int ext1, int ext2);
+ 
+ protected:
+     CameraBufferProvider *mBufferProvider;
+diff --git a/hardware/imx/mx6/libcamera2/MetadaManager.cpp b/hardware/imx/mx6/libcamera2/MetadaManager.cpp
+index b9cd985..b5026d3 100755
+--- a/hardware/imx/mx6/libcamera2/MetadaManager.cpp
++++ b/hardware/imx/mx6/libcamera2/MetadaManager.cpp
+@@ -639,11 +639,12 @@ status_t MetadaManager::createStaticInfo(camera_metadata_t **info, bool sizeRequ
+             tag, data, count) ) != OK ) return ret
+ 
+     // android.lens
+-    static float minFocusDistance = 0;
++    static float minFocusDistance = 1.0/0.05 ; /* 5cm */
+     ADD_OR_SIZE(ANDROID_LENS_INFO_MINIMUM_FOCUS_DISTANCE,
+             &minFocusDistance, 1);
++    static float hypFocusDistance = 1.0/0.05 ; /* 5cm */
+     ADD_OR_SIZE(ANDROID_LENS_INFO_HYPERFOCAL_DISTANCE,
+-            &minFocusDistance, 1);
++            &hypFocusDistance, 1);
+ 
+     ADD_OR_SIZE(ANDROID_LENS_INFO_AVAILABLE_FOCAL_LENGTHS,
+             &mSensorInfo->mFocalLength, 1);
+@@ -874,7 +875,8 @@ status_t MetadaManager::createStaticInfo(camera_metadata_t **info, bool sizeRequ
+             availableAwbModes, sizeof(availableAwbModes));
+ 
+     static const uint8_t availableAfModes[] = {
+-            ANDROID_CONTROL_AF_MODE_OFF
++            ANDROID_CONTROL_AF_MODE_OFF,
++            ANDROID_CONTROL_AF_MODE_AUTO
+     };
+     ADD_OR_SIZE(ANDROID_CONTROL_AF_AVAILABLE_MODES,
+                 availableAfModes, sizeof(availableAfModes));
+diff --git a/hardware/imx/mx6/libcamera2/Ov5640Mipi.cpp b/hardware/imx/mx6/libcamera2/Ov5640Mipi.cpp
+index c094862..1602d8d 100755
+--- a/hardware/imx/mx6/libcamera2/Ov5640Mipi.cpp
++++ b/hardware/imx/mx6/libcamera2/Ov5640Mipi.cpp
+@@ -16,7 +16,6 @@
+ 
+ #include "Ov5640Mipi.h"
+ 
+-
+ status_t Ov5640Mipi::initSensorInfo(const CameraInfo& /*info*/)
+ {
+     if (mCameraHandle < 0) {
+@@ -148,4 +147,16 @@ status_t Ov5640Mipi::initSensorInfo(const CameraInfo& /*info*/)
+     return NO_ERROR;
+ }
+ 
++status_t Ov5640Mipi::do_autoFocus(int trigger_id, int ext1, int)
++{
++	struct v4l2_control c;
++	c.id=V4L2_CID_AUTO_FOCUS_START;
++	int res = ioctl(mCameraHandle,VIDIOC_S_CTRL,&c);
++	if (mErrorListener) {
++		mErrorListener->sendNotification(CAMERA2_MSG_AUTOFOCUS,ANDROID_CONTROL_AF_STATE_NOT_FOCUSED_LOCKED,trigger_id,ext1);
++	}
++	else
++		FLOGE("%s: no error listener\n", __func__);
++	return NO_ERROR;
++}
+ 
+diff --git a/hardware/imx/mx6/libcamera2/Ov5640Mipi.h b/hardware/imx/mx6/libcamera2/Ov5640Mipi.h
+index 1f16e83..bf4342c 100755
+--- a/hardware/imx/mx6/libcamera2/Ov5640Mipi.h
++++ b/hardware/imx/mx6/libcamera2/Ov5640Mipi.h
+@@ -22,6 +22,8 @@
+ class Ov5640Mipi : public OvDevice {
+ public:
+     virtual status_t initSensorInfo(const CameraInfo& info);
++protected:
++    virtual status_t do_autoFocus(int trigger_id, int ext1, int ext2);
+ };
+ 
+ #endif // ifndef _OV_DEVICE_H_
+diff --git a/hardware/imx/mx6/libcamera2/Ov5642Csi.cpp b/hardware/imx/mx6/libcamera2/Ov5642Csi.cpp
+index d65de0f..6f5f646 100755
+--- a/hardware/imx/mx6/libcamera2/Ov5642Csi.cpp
++++ b/hardware/imx/mx6/libcamera2/Ov5642Csi.cpp
+@@ -152,4 +152,16 @@ status_t Ov5642Csi::initSensorInfo(const CameraInfo& /*info*/)
+     return NO_ERROR;
+ }
+ 
++status_t Ov5642Csi::do_autoFocus(int trigger_id, int ext1, int)
++{
++	struct v4l2_control c;
++	c.id=V4L2_CID_AUTO_FOCUS_START;
++	int res = ioctl(mCameraHandle,VIDIOC_S_CTRL,&c);
++	if (mErrorListener) {
++		mErrorListener->sendNotification(CAMERA2_MSG_AUTOFOCUS,ANDROID_CONTROL_AF_STATE_NOT_FOCUSED_LOCKED,trigger_id,ext1);
++	}
++	else
++		FLOGE("%s: no error listener\n", __func__);
++	return NO_ERROR;
++}
+ 
+diff --git a/hardware/imx/mx6/libcamera2/Ov5642Csi.h b/hardware/imx/mx6/libcamera2/Ov5642Csi.h
+index daa8d7e..972cd5a 100755
+--- a/hardware/imx/mx6/libcamera2/Ov5642Csi.h
++++ b/hardware/imx/mx6/libcamera2/Ov5642Csi.h
+@@ -22,6 +22,8 @@
+ class Ov5642Csi : public OvDevice {
+ public:
+     virtual status_t initSensorInfo(const CameraInfo& info);
++protected:
++    virtual status_t do_autoFocus(int trigger_id, int ext1, int ext2);
+ };
+ 
+ #endif // ifndef _OV_DEVICE_H_
+diff --git a/hardware/imx/mx6/libcamera2/OvDevice.h b/hardware/imx/mx6/libcamera2/OvDevice.h
+index 4123d13..d31f0e4 100755
+--- a/hardware/imx/mx6/libcamera2/OvDevice.h
++++ b/hardware/imx/mx6/libcamera2/OvDevice.h
+@@ -20,12 +20,10 @@
+ #include "CameraUtil.h"
+ #include "DeviceAdapter.h"
+ 
+-#define DEFAULT_PREVIEW_FPS (15)
+-#define DEFAULT_PREVIEW_W   (640)
+-#define DEFAULT_PREVIEW_H   (480)
+-#define DEFAULT_PICTURE_W   (640)
+-#define DEFAULT_PICTURE_H   (480)
+ #define FORMAT_STRING_LEN 64
++#define V4L2_CID_AUTO_FOCUS_START		(V4L2_CID_CAMERA_CLASS_BASE+28)
++#define V4L2_CID_AUTO_FOCUS_STOP		(V4L2_CID_CAMERA_CLASS_BASE+29)
++#define V4L2_CID_AUTO_FOCUS_STATUS		(V4L2_CID_CAMERA_CLASS_BASE+30)
+ 
+ class OvDevice : public DeviceAdapter {
+ public:
+diff --git a/hardware/imx/mx6/libcamera2/RequestManager.cpp b/hardware/imx/mx6/libcamera2/RequestManager.cpp
+index 9489344..01e54af 100755
+--- a/hardware/imx/mx6/libcamera2/RequestManager.cpp
++++ b/hardware/imx/mx6/libcamera2/RequestManager.cpp
+@@ -85,6 +85,19 @@ void RequestManager::handleError(int err)
+     }
+ }
+ 
++void RequestManager::sendNotification
++	(int32_t msgType,
++	 int32_t ext1,
++	 int32_t ext2,
++	 int32_t ext3)
++{
++    if (mErrorListener != NULL) {
++        mErrorListener->sendNotification(msgType,ext1,ext2,ext3);
++    }
++    else
++        FLOGE("%s: no Error listener\n", __func__);
++}
++
+ void RequestManager::stopStream(int id)
+ {
+     sp<StreamAdapter> cameraStream = mStreamAdapter[id];
+@@ -501,3 +514,8 @@ void RequestManager::release()
+     }
+     FLOG_TRACE("RequestManager %s end...", __FUNCTION__);
+ }
++
++DeviceAdapter *RequestManager::getDeviceAdapter()
++{
++	return mDeviceAdapter.get();
++}
+diff --git a/hardware/imx/mx6/libcamera2/RequestManager.h b/hardware/imx/mx6/libcamera2/RequestManager.h
+index 99db046..45e614e 100755
+--- a/hardware/imx/mx6/libcamera2/RequestManager.h
++++ b/hardware/imx/mx6/libcamera2/RequestManager.h
+@@ -71,6 +71,8 @@ public:
+     void release();
+     void setErrorListener(CameraErrorListener *listener);
+ 
++    DeviceAdapter *getDeviceAdapter();
++
+     class RequestHandleThread : public Thread {
+     public:
+         RequestHandleThread(RequestManager *rm) :
+@@ -90,6 +92,11 @@ private:
+     void stopAllStreams();
+     bool isStreamValid(int requestType, int streamId, int videoSnap);
+     void handleError(int err);
++    void sendNotification
++		(int32_t msgType,
++		 int32_t ext1,
++		 int32_t ext2,
++		 int32_t ext3);
+ 
+ private:
+     sp<DeviceAdapter>  mDeviceAdapter;

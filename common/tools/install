@@ -1,0 +1,91 @@
+#!/bin/sh -e
+#
+# install
+#
+# This script must be run from the Android main  directory. variscite/install
+# must be at ~/var_lp_511_210
+#
+echo "Variscite VAR-MX6 for Android LP5.1.1 210 V1 patches"
+#
+#
+cd ll_511_210_build
+#
+#####################
+# framework patches #
+#####################
+cd build
+patch -p2 < ../../variscite/build.patch
+cd ../device
+patch -p2 < ../../variscite/device.patch
+tar -xvf ../../variscite/variscite.tar.bz2
+cd ../frameworks
+patch -p2 < ../../variscite/frameworks.patch
+cd ../hardware
+patch -p2 < ../../variscite/hardware.patch
+cd ../external
+patch -p2 < ../../variscite/external.patch
+cd ../system
+patch -p2 < ../../variscite/system.patch
+cd ..
+#
+########################
+# wilink8 repositories #
+########################
+cd hardware/ti
+git clone git://git.omapzoom.org/platform/hardware/ti/wlan.git
+cd wlan
+git checkout f5d0bf6a7f7955c0a06d0719555fba4b89ddcfc1
+cd ..
+git clone git://git.ti.com/wilink8-wlan/18xx-ti-utils.git wl18xx-ti-utils
+cd wl18xx-ti-utils
+git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23
+patch -p1 < ../../../../variscite/wl18xx-ti-utils.patch
+cd ..
+git clone git://git.omapzoom.org/platform/hardware/ti/wpan.git
+cd wpan
+git checkout 32acb67605cb0d91955427fc4195205e8bc8eaf4
+patch -p1 < ../../../../variscite/wpan.patch
+cd ../../../device
+mkdir ti
+cd ti
+git clone git://git.omapzoom.org/device/ti/proprietary-open.git
+cd proprietary-open
+git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1
+patch -p1 < ../../../../variscite/ti_proprietary-open.patch 
+cd ../../../external
+git clone git://git.omapzoom.org/platform/external/crda.git
+cd crda
+git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058
+#
+##############################
+# misc external repositories #
+##############################
+cd ..
+git clone https://github.com/linux-can/can-utils.git
+cd can-utils
+git checkout cda61171f1f559dbb3b25c9fede2cc2a85c7cd0d
+cd ..
+git clone https://github.com/Hashcode/i2c-tools.git
+cd i2c-tools
+git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57
+patch -p1 < ../../../variscite/i2c-tools.patch
+cd ..
+git clone git://git.sipsolutions.net/iw.git
+cd iw
+git checkout 96fa73c7564fa7eba89cd78a24f20acd68d2f55f
+cd ..
+git clone https://github.com/jruesga/android_external_libtruezip.git libtruezip
+cd libtruezip
+git checkout 45ac3d07b5a4753bd1abc9fa38fd48221312a3d9
+cd ../..
+#
+##############################
+# misc external repositories #
+##############################
+cp ../variscite/sh/* ./
+#
+echo "Done"
+#
+exit 0
+
+

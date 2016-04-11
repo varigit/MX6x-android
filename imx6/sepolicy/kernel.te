@@ -1,0 +1,5 @@
+allow kernel self:capability { mknod };
+allow kernel sdcard_internal:file rw_file_perms;
+allow kernel sdcard_internal:dir rw_dir_perms;
+allow kernel device:blk_file  { create setattr getattr unlink};
+

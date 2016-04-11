@@ -1,0 +1,28 @@
+diff --git a/ti_st/uim-sysfs/uim.c b/ti_st/uim-sysfs/uim.c
+index 95a1a99..bb86db0 100644
+--- a/ti_st/uim-sysfs/uim.c
++++ b/ti_st/uim-sysfs/uim.c
+@@ -704,7 +704,7 @@ int main(int argc, char *argv[])
+ 		return -1;
+ 	}
+ 
+-	n = scandir("/sys/devices", &namelist, dir_filter, alphasort);
++	n = scandir("/sys/devices/soc0", &namelist, dir_filter, alphasort);
+ 
+ 	if (n == -1) {
+ 		ALOGE("Found zero kim devices:%s", strerror(errno));
+@@ -720,10 +720,10 @@ int main(int argc, char *argv[])
+ 	}
+ 
+ 	UIM_DBG("kim sysfs name: %s", namelist[0]->d_name);
+-	snprintf(INSTALL_SYSFS_ENTRY, UIM_SYSFS_SIZE, "/sys/devices/%s/install", namelist[0]->d_name);
+-	snprintf(DEV_NAME_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/%s/dev_name", namelist[0]->d_name);
+-	snprintf(BAUD_RATE_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/%s/baud_rate", namelist[0]->d_name);
+-	snprintf(FLOW_CTRL_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/%s/flow_cntrl", namelist[0]->d_name);
++	snprintf(INSTALL_SYSFS_ENTRY, UIM_SYSFS_SIZE, "/sys/devices/soc0/%s/install", namelist[0]->d_name);
++	snprintf(DEV_NAME_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/soc0/%s/dev_name", namelist[0]->d_name);
++	snprintf(BAUD_RATE_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/soc0/%s/baud_rate", namelist[0]->d_name);
++	snprintf(FLOW_CTRL_SYSFS, UIM_SYSFS_SIZE, "/sys/devices/soc0/%s/flow_cntrl", namelist[0]->d_name);
+ 
+ 	free(namelist[0]);
+ 	free(namelist);

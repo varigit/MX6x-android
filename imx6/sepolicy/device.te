@@ -1,0 +1,2 @@
+type bluetooth_control, dev_type;
+type caam_device, dev_type;

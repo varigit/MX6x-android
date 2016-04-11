@@ -1,0 +1,88 @@
+diff --git a/frameworks/av/media/libmedia/MediaProfiles.cpp b/frameworks/av/media/libmedia/MediaProfiles.cpp
+index e2e6042..1b5794a 100644
+--- a/frameworks/av/media/libmedia/MediaProfiles.cpp
++++ b/frameworks/av/media/libmedia/MediaProfiles.cpp
+@@ -637,19 +637,47 @@ void MediaProfiles::checkAndAddRequiredProfilesIfNecessary
+ /*static*/ MediaProfiles*
+ MediaProfiles::getInstance()
+ {
++FILE *check_dart_file;
++int dart;
++char *line = NULL;
++size_t alloc_len = 0;
++FILE *fp;
++const char *defaultXmlFile_dart = "/etc/media_profiles_720p.xml";
++const char *defaultXmlFile      = "/etc/media_profiles.xml";
++
++    check_dart_file = fopen("/sys/devices/soc0/machine", "r");
++    getline(&line, &alloc_len, check_dart_file);
++    fclose(check_dart_file);
++    char *pch = strstr(line, "VAR-DART");
++    if (pch){
++        dart = 1;
++        ALOGV("MediaProfile found dart swithcig to %s", defaultXmlFile_dart);
++    } else {
++        dart = 0;
++        ALOGV("MediaProfile using %s", defaultXmlFile);
++    }
++
++
++
+     ALOGV("getInstance");
+     Mutex::Autolock lock(sLock);
+     if (!sIsInitialized) {
+         char value[PROPERTY_VALUE_MAX];
+         if (property_get("media.settings.xml", value, NULL) <= 0) {
+-            const char *defaultXmlFile = "/etc/media_profiles.xml";
+-            FILE *fp = fopen(defaultXmlFile, "r");
++            if (dart)
++                fp = fopen(defaultXmlFile_dart, "r");
++            else
++                fp = fopen(defaultXmlFile, "r");
++
+             if (fp == NULL) {
+                 ALOGW("could not find media config xml file");
+                 sInstance = createDefaultInstance();
+             } else {
+                 fclose(fp);  // close the file first.
+-                sInstance = createInstanceFromXmlFile(defaultXmlFile);
++                if (dart)
++                    sInstance = createInstanceFromXmlFile(defaultXmlFile_dart);
++                else
++                    sInstance = createInstanceFromXmlFile(defaultXmlFile);
+             }
+         } else {
+             sInstance = createInstanceFromXmlFile(value);
+diff --git a/frameworks/base/data/etc/platform.xml b/frameworks/base/data/etc/platform.xml
+index 9fd8a4a..bec23db 100644
+--- a/frameworks/base/data/etc/platform.xml
++++ b/frameworks/base/data/etc/platform.xml
+@@ -65,6 +65,7 @@
+     <permission name="android.permission.WRITE_EXTERNAL_STORAGE" >
+         <group gid="sdcard_r" />
+         <group gid="sdcard_rw" />
++        <group gid="media_rw" />
+     </permission>
+ 
+     <permission name="android.permission.ACCESS_ALL_EXTERNAL_STORAGE" >
+@@ -74,6 +75,7 @@
+     </permission>
+ 
+     <permission name="android.permission.WRITE_MEDIA_STORAGE" >
++        <group gid="sdcard_rw" />
+         <group gid="media_rw" />
+     </permission>
+ 
+diff --git a/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java b/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+index c5fa65a..01a6f2e 100644
+--- a/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
++++ b/frameworks/base/policy/src/com/android/internal/policy/impl/PhoneWindowManager.java
+@@ -1431,7 +1431,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+         int longSizeDp = longSize * DisplayMetrics.DENSITY_DEFAULT / density;
+ 
+         // Allow the navigation bar to move on small devices (phones).
+-        mNavigationBarCanMove = shortSizeDp < 600;
++        mNavigationBarCanMove = shortSizeDp < 480;
+ 
+         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+         // Allow a system property to override this. Used by the emulator.

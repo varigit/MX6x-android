@@ -1,0 +1,49 @@
+diff --git a/build/core/Makefile b/build/core/Makefile
+index 46b0b7e..f962821 100644
+--- a/build/core/Makefile
++++ b/build/core/Makefile
+@@ -926,7 +926,12 @@ ifneq ($(strip $(TARGET_BOOTLOADER_CONFIG)),)
+ BOOTLOADER_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
+ BOOTLOADER_ENV := ARCH=arm CROSS_COMPILE=$(BOOTLOADER_CROSS_TOOLCHAIN)
+ HOST_PROCESSOR := $(shell cat /proc/cpuinfo | grep processor | wc -l)
+-TARGET_BOOTLOADER_IMAGE := $(PRODUCT_OUT)/u-boot.imx
++ifeq ($(BOOTLOADER_USES_SPL),true)
++	TARGET_BOOTLOADER_EXTENSION := img
++else
++	TARGET_BOOTLOADER_EXTENSION := imx
++endif
++TARGET_BOOTLOADER_IMAGE := $(PRODUCT_OUT)/u-boot.$(TARGET_BOOTLOADER_EXTENSION)
+ 
+ BOOTLOADER_PATH := bootable/bootloader/uboot-imx/
+ BOOTLOADER_CONFIG_FILE := $(BOOTLOADER_PATH)/include/config.h
+@@ -942,8 +947,8 @@ $(TARGET_BOOTLOADER_IMAGE):
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ distclean $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $$UBOOT_CONFIG $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $(BOOTLOADER_ENV); \
+-		install -D bootable/bootloader/uboot-imx/u-boot.imx $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.imx; \
+-		install -D bootable/bootloader/uboot-imx/u-boot.imx $@; \
++		install -D bootable/bootloader/uboot-imx/u-boot.$(TARGET_BOOTLOADER_EXTENSION) $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.$(TARGET_BOOTLOADER_EXTENSION); \
++		install -D bootable/bootloader/uboot-imx/u-boot.$(TARGET_BOOTLOADER_EXTENSION) $@; \
+ 	done
+ else
+ bootloader:
+@@ -953,6 +958,8 @@ endif
+ ifneq ($(strip $(TARGET_NO_KERNEL)),true)
+ KERNEL_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-eabi-4.6/bin/arm-eabi-
+ KERNEL_ENV := ARCH=arm CROSS_COMPILE=$(KERNEL_CROSS_TOOLCHAIN) LOADADDR=$(LOAD_KERNEL_ENTRY)
++KERNEL_DIR := `pwd`/kernel_imx
++KMOD_ENV := KERNEL_DIR=$(KERNEL_DIR) KLIB=$(KERNEL_DIR) KLIB_BUILD=$(KERNEL_DIR)
+ HOST_PROCESSOR := $(shell cat /proc/cpuinfo | grep processor | wc -l)
+ INSTALLED_KERNEL_TARGET := $(PRODUCT_OUT)/kernel
+ TARGET_PREBUILT_KERNEL := $(PRODUCT_OUT)/kernel
+@@ -998,6 +1005,10 @@ $(eval kernel_modules_dest_list += $(call append-path,$(PRODUCT_OUT),$(_dest))))
+ ifneq ($(strip $(kernel_modules_src_list)),)
+ 
+ kernelmodules: $(TARGET_PREBUILT_KERNEL) | $(ACP)
++ifeq ($(USES_TI_MAC80211),true)
++	$(MAKE) -C hardware/ti/wlan/mac80211/compat_wl18xx defconfig-wl18xx $(KERNEL_ENV) $(KMOD_ENV)
++	$(MAKE) -C hardware/ti/wlan/mac80211/compat_wl18xx $(KERNEL_ENV) $(KMOD_ENV)
++endif
+ 	$(MAKE) -C kernel_imx modules $(KERNEL_ENV)
+ 	$(hide) $(foreach cf, $(TARGET_KERNEL_MODULES),				\
+ 	$(eval _src := $(call word-colon,1,$(cf)))				\

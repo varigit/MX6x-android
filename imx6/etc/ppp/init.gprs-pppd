@@ -1,0 +1,79 @@
+#!/system/bin/sh
+# An unforunate wrapper script
+# so that the exit code of pppd may be retrieved
+
+
+# this is a workaround for issue #651747
+#trap "/system/bin/sleep 1;exit 0" TERM
+
+
+PPPD_PID=
+
+/system/bin/setprop "net.gprs.ppp-exit" ""
+ril_impl=`/system/bin/getprop gsm.version.ril-impl`
+
+case "$ril_impl" in
+"WD_ZTE_RILV1.0.0B02_V6_20121226" | \
+"ZTE_RIL_W_GENERAL_V02B01")
+		private_username=`/system/bin/getprop ril.private.username`
+
+		private_password=`/system/bin/getprop ril.private.password`
+
+		private_auth_type=`/system/bin/getprop ril.private.authtype`
+
+		dev_path=`/system/bin/getprop ril.data.device.path`
+
+		cmdline=$dev_path" /dev/ttyUSB2 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote ipcp-max-configure 30 ipcp-max-failure 30 connect-delay 5000 lcp-restart 1 lcp-max-terminate 1 linkname ppp0 "
+
+		case "$private_username" in
+		"")
+
+		;;
+		*)
+		cmdline=$cmdline" name "$private_username
+		;;
+		esac
+
+		case "$private_password" in
+		"")
+
+		;;
+		*)
+
+		cmdline=$cmdline" password "$private_password
+		;;
+		esac
+
+		echo "here starts pppd..."
+		echo $cmdline
+		/system/bin/log -t pppd $cmdline
+		#/system/xbin/pppd $*
+		# pppd was put into /system/bin instead of /system/xbin after SDK1.6
+
+
+		#below is config for ZTE CDMA modem
+		#/system/bin/pppd  /dev/ttyUSB0 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote connect-delay 5000 linkname ppp0 name "card" password "card"
+
+		#below is config for general network
+		/system/bin/pppd $cmdline
+		;;
+
+"AMAZON reference-ril 1.0")
+		/system/bin/pppd ttyACM0 921600 nodetach noauth noipdefault defaultroute usepeerdns linkname ppp0 connect "chat -v '' AT OK ATD*99***1# CONNECT" debug
+		;;
+
+"HUAWEI reference-ril 1.0")
+		/system/bin/pppd  /dev/ttyUSB0 115200 mru 1280 mtu 1280 nodetach debug dump defaultroute usepeerdns novj novjccomp noipdefault ipcp-accept-local ipcp-accept-remote connect-delay 5000 linkname ppp0
+		;;
+
+		*)
+		echo ""net.gprs.ppp-exit" not set yet"
+		;;
+esac
+
+PPPD_EXIT=$?
+PPPD_PID=$!
+
+/system/bin/log -t pppd "pppd exited with $PPPD_EXIT"
+
+/system/bin/setprop "net.gprs.ppp-exit" "$PPPD_EXIT"

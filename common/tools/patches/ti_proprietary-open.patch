@@ -1,0 +1,13 @@
+diff --git a/wl12xx/wpan/bluetooth/Android.mk b/wl12xx/wpan/bluetooth/Android.mk
+index c991578..3cc816e 100644
+--- a/wl12xx/wpan/bluetooth/Android.mk
++++ b/wl12xx/wpan/bluetooth/Android.mk
+@@ -16,7 +16,7 @@ LOCAL_PATH := $(call my-dir)
+ 
+ ifeq ($(strip $(BOARD_HAVE_BLUETOOTH_TI)),true)
+ 
+-TI_WILINK_BT_FW_PATH := $(TARGET_OUT_ETC)/firmware
++TI_WILINK_BT_FW_PATH := $(TARGET_OUT_ETC)/firmware/ti-connectivity
+ 
+ WPAN_BT_FW_BINS := \
+ 	TIInit_7.2.31.bts \

@@ -1,0 +1,16 @@
+allow init_shell domain:file rw_file_perms;
+allow init_shell domain:dir rw_dir_perms;
+allow init_shell domain:process {getattr};
+allow init_shell unlabeled:file rw_file_perms;
+allow init_shell property_socket:sock_file {read write};
+allow init_shell radio_prop:property_service {set};
+allow init_shell init:unix_stream_socket {connectto};
+allow init_shell unlabeled:dir rw_dir_perms;
+allow init_shell { file_type -keystore_data_file}:file { getattr };
+allow init_shell { dev_type -keystore_data_file -kmem_device -hw_random_device }:chr_file { getattr };
+allow init_shell sdcard_external:dir rw_dir_perms;
+allow init_shell sdcard_external:file rw_file_perms;
+allow init_shell powerctl_prop:property_service {set};
+allow init_shell fuse:dir {search read open write};
+allow init_shell fuse:file {getattr read open write};
+allow init_shell kernel:system { syslog_mod syslog_read};
