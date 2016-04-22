@@ -15,11 +15,13 @@ endif
 # Overrides
 PRODUCT_NAME 	:= var_mx6
 PRODUCT_DEVICE 	:= var_mx6
-PRODUCT_BRAND 	:= variscite
-PRODUCT_MANUFACTURER := variscite
+PRODUCT_BRAND 	:= Android
+PRODUCT_MANUFACTURER := Variscite
 
 PRODUCT_COPY_FILES += \
 	device/variscite/var_mx6/init.rc:root/init.freescale.rc \
+	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.freescale.i.MX6DL.rc \
+	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.freescale.i.MX6Q.rc \
 	device/variscite/var_mx6/audio_policy.conf:system/etc/audio_policy.conf \
 	device/variscite/var_mx6/audio_effects.conf:system/vendor/etc/audio_effects.conf
 
