@@ -37,6 +37,7 @@ flash_images=0
 not_partition=0
 not_format_fs=0
 built_images_folder="out/target/product/var_mx6"
+spl_file="SPL-var-imx6-sd"
 bootloader_file="u-boot-var-imx6-sd.img"
 bootimage_file="boot.img"
 systemimage_file="system.img"
@@ -99,11 +100,12 @@ function flash_android
     bootimage_file="boot-${soc_name}.img"
     recoveryimage_file="recovery-${soc_name}.img"
 if [ "${flash_images}" -eq "1" ]; then
-    echo "flashing android images..."    
-    echo "bootloader: ${bootloader_file}"
-    dd if=/dev/zero of=${node} bs=1k seek=384 count=129
-    dd if=device/variscite/common/firmware/SPL.mmc of=${node} bs=1k seek=1
     cd ${built_images_folder}
+    echo "flashing android images..."
+    dd if=/dev/zero of=${node} bs=1k seek=384 count=129
+    echo "spl: ${spl_file}"
+    dd if=${spl_file} of=${node} bs=1k seek=1
+    echo "bootloader: ${bootloader_file}"
     dd if=${bootloader_file} of=${node} bs=1k seek=69
     echo "boot image: ${bootimage_file}"
     dd if=${bootimage_file} of=${node}${part}1
