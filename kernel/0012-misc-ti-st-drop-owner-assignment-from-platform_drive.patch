@@ -1,0 +1,30 @@
+From 3999ff08e1cea3eafa9e686f8ec456c44dbda972 Mon Sep 17 00:00:00 2001
+From: Wolfram Sang <wsa@the-dreams.de>
+Date: Mon, 20 Oct 2014 16:20:56 +0200
+Subject: [PATCH 12/34] misc: ti-st: drop owner assignment from
+ platform_drivers
+
+A platform_driver does not need to set an owner, it will be populated by the
+driver core.
+
+Signed-off-by: Wolfram Sang <wsa@the-dreams.de>
+Signed-off-by: varigigi <pierluigi.p@variscite.com>
+---
+ drivers/misc/ti-st/st_kim.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/drivers/misc/ti-st/st_kim.c b/drivers/misc/ti-st/st_kim.c
+index 21c2337..e4b7ee4f 100644
+--- a/drivers/misc/ti-st/st_kim.c
++++ b/drivers/misc/ti-st/st_kim.c
+@@ -858,7 +858,6 @@ static struct platform_driver kim_platform_driver = {
+ 	.resume = kim_resume,
+ 	.driver = {
+ 		.name = "kim",
+-		.owner = THIS_MODULE,
+ 	},
+ };
+ 
+-- 
+2.1.4
+

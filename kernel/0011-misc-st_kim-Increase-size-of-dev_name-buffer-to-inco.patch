@@ -1,0 +1,33 @@
+From 95c21b5a9eaae91b7f245ea8bb6ca78b3da67aac Mon Sep 17 00:00:00 2001
+From: Lee Jones <lee.jones@linaro.org>
+Date: Thu, 28 Aug 2014 14:14:09 +0100
+Subject: [PATCH 11/34] misc: st_kim: Increase size of dev_name buffer to
+ incorporate termination
+
+Calling strncpy with a maximum size argument of 32 bytes on destination
+array kim_gdata->dev_name of size 32 bytes might leave the destination
+string unterminated.
+
+Signed-off-by: Lee Jones <lee.jones@linaro.org>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: varigigi <pierluigi.p@variscite.com>
+---
+ include/linux/ti_wilink_st.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/ti_wilink_st.h b/include/linux/ti_wilink_st.h
+index 932b763..884d626 100644
+--- a/include/linux/ti_wilink_st.h
++++ b/include/linux/ti_wilink_st.h
+@@ -268,7 +268,7 @@ struct kim_data_s {
+ 	struct st_data_s *core_data;
+ 	struct chip_version version;
+ 	unsigned char ldisc_install;
+-	unsigned char dev_name[UART_DEV_NAME_LEN];
++	unsigned char dev_name[UART_DEV_NAME_LEN + 1];
+ 	unsigned char flow_cntrl;
+ 	unsigned long baud_rate;
+ };
+-- 
+2.1.4
+

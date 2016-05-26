@@ -1,0 +1,153 @@
+From 5426ad89b330464622456bbd475867aa04872d2f Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:10:07 +0300
+Subject: [PATCH] added support ti_wl wifi for variscite board
+
+---
+ hostapd/Android.mk        | 16 ++++++++++++++--
+ wpa_supplicant/Android.mk | 24 +++++++++++++++++++-----
+ 2 files changed, 33 insertions(+), 7 deletions(-)
+
+diff --git a/hostapd/Android.mk b/hostapd/Android.mk
+index 63c6ba2..2574b92 100644
+--- a/hostapd/Android.mk
++++ b/hostapd/Android.mk
+@@ -901,6 +901,11 @@ else
+ OBJS_c += src/utils/edit_simple.c
+ endif
+ 
++ifeq ($(BOARD_WLAN_DEVICE),$(filter $(BOARD_WLAN_DEVICE), wl12xx_mac80211))
++# fix p2p mode for ti wl module
++L_CFLAGS += -DANDROID_LIB_STUB
++endif
++
+ ########################
+ 
+ include $(CLEAR_VARS)
+@@ -913,13 +918,18 @@ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
+ 
+ ########################
++ifeq ($(BOARD_HOSTAPD_PRIVATE_LIB_RTL),)
++
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := hostapd
+ LOCAL_MODULE_TAGS := optional
+ ifdef CONFIG_DRIVER_CUSTOM
+ LOCAL_STATIC_LIBRARIES := libCustomWifi
+ endif
+-LOCAL_STATIC_LIBRARIES += lib_driver_cmd_bcmdhd
++ifneq ($(BOARD_HOSTAPD_PRIVATE_LIB),)
++LOCAL_STATIC_LIBRARIES += $(BOARD_HOSTAPD_PRIVATE_LIB)
++endif
++LOCAL_STATIC_LIBRARIES += lib_driver_cmd_wl12xx
+ LOCAL_SHARED_LIBRARIES := libc libcutils liblog libcrypto libssl
+ ifdef CONFIG_DRIVER_NL80211
+ ifneq ($(wildcard external/libnl),)
+@@ -932,10 +942,11 @@ LOCAL_CFLAGS := $(L_CFLAGS)
+ LOCAL_SRC_FILES := $(OBJS)
+ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
+-
++endif
+ ########################
+ 
+ ########################
++ifneq ($(BOARD_HOSTAPD_PRIVATE_LIB_RTL),)
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := rtl_hostapd
+ LOCAL_MODULE_TAGS := optional
+@@ -956,5 +967,6 @@ LOCAL_CFLAGS += -DREALTEK_WIFI_VENDOR
+ LOCAL_SRC_FILES := $(OBJS)
+ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
++endif
+ 
+ endif # ifeq ($(WPA_BUILD_HOSTAPD),true)
+diff --git a/wpa_supplicant/Android.mk b/wpa_supplicant/Android.mk
+index d3519bc..87142e2 100644
+--- a/wpa_supplicant/Android.mk
++++ b/wpa_supplicant/Android.mk
+@@ -26,7 +26,14 @@ L_CFLAGS += -DANDROID_LOG_NAME=\"wpa_supplicant\"
+ L_CFLAGS += -Wno-unused-parameter
+ 
+ # Set Android extended P2P functionality
++ifeq ($(BOARD_WLAN_DEVICE),$(filter $(BOARD_WLAN_DEVICE), qcwcn UNITE wl12xx_mac80211))
+ L_CFLAGS += -DANDROID_P2P
++endif
++
++ifeq ($(BOARD_WLAN_DEVICE),$(filter $(BOARD_WLAN_DEVICE), wl12xx_mac80211))
++# fix p2p mode for ti wl module
++L_CFLAGS += -DANDROID_LIB_STUB
++endif
+ 
+ # Disable roaming in wpa_supplicant
+ ifdef CONFIG_NO_ROAMING
+@@ -1545,15 +1552,22 @@ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
+ 
+ ########################
++ifeq ($(BOARD_WPA_SUPPLICANT_PRIVATE_LIB_RTL),)
++
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := wpa_supplicant
+ ifdef CONFIG_DRIVER_CUSTOM
+ LOCAL_STATIC_LIBRARIES := libCustomWifi
+ endif
+-LOCAL_STATIC_LIBRARIES += lib_driver_cmd_bcmdhd
++ifneq ($(BOARD_WPA_SUPPLICANT_PRIVATE_LIB),)
++LOCAL_STATIC_LIBRARIES += $(BOARD_WPA_SUPPLICANT_PRIVATE_LIB)
++endif
++LOCAL_STATIC_LIBRARIES += lib_driver_cmd_wl12xx
+ ifneq ($(BOARD_WPA_SUPPLICANT_PRIVATE_LIB_BCM),)
+ LOCAL_STATIC_LIBRARIES += $(BOARD_WPA_SUPPLICANT_PRIVATE_LIB_BCM)
+ endif
++LOCAL_CFLAGS += -DFSL_WIFI_VENDOR
++LOCAL_CFLAGS += -DBROADCOM_WIFI_VENDOR
+ LOCAL_SHARED_LIBRARIES := libc libcutils liblog
+ ifdef CONFIG_EAP_PROXY
+ LOCAL_STATIC_LIBRARIES += $(LIB_STATIC_EAP_PROXY)
+@@ -1563,6 +1577,8 @@ ifeq ($(CONFIG_TLS), openssl)
+ LOCAL_SHARED_LIBRARIES += libcrypto libssl libkeystore_binder
+ endif
+ 
++endif
++
+ # With BoringSSL we need libkeystore-engine in order to provide access to
+ # keystore keys.
+ ifneq (,$(wildcard external/boringssl/flavor.mk))
+@@ -1577,13 +1593,12 @@ LOCAL_STATIC_LIBRARIES += libnl_2
+ endif
+ endif
+ LOCAL_CFLAGS := $(L_CFLAGS)
+-LOCAL_CFLAGS += -DBROADCOM_WIFI_VENDOR
+ LOCAL_SRC_FILES := $(OBJS)
+ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
+ 
+ ########################
+-
++ifneq ($(BOARD_WPA_SUPPLICANT_PRIVATE_LIB_RTL),)
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := rtl_wpa_supplicant
+ ifdef CONFIG_DRIVER_CUSTOM
+@@ -1594,7 +1609,6 @@ LOCAL_SHARED_LIBRARIES := libc libcutils liblog
+ ifeq ($(CONFIG_TLS), openssl)
+ LOCAL_SHARED_LIBRARIES += libcrypto libssl libkeystore_binder
+ endif
+-
+ # With BoringSSL we need libkeystore-engine in order to provide access to
+ # keystore keys.
+ ifneq (,$(wildcard external/boringssl/flavor.mk))
+@@ -1612,7 +1626,7 @@ LOCAL_CFLAGS := $(L_CFLAGS)
+ LOCAL_SRC_FILES := $(OBJS)
+ LOCAL_C_INCLUDES := $(INCLUDES)
+ include $(BUILD_EXECUTABLE)
+-
++endif
+ ########################
+ #
+ #include $(CLEAR_VARS)
+-- 
+2.1.4
+

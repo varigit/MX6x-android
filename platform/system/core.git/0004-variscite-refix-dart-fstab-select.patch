@@ -1,0 +1,76 @@
+From 179668bf556b7509e36c7fdb89339a499bb2d408 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Thu, 26 May 2016 12:54:50 +0300
+Subject: [PATCH 4/4] variscite: refix dart fstab select
+
+---
+ init/builtins.cpp | 43 ++++++++++++++++---------------------------
+ 1 file changed, 16 insertions(+), 27 deletions(-)
+
+diff --git a/init/builtins.cpp b/init/builtins.cpp
+index 57833a0..48af375 100644
+--- a/init/builtins.cpp
++++ b/init/builtins.cpp
+@@ -403,14 +403,9 @@ int do_mount_all(int nargs, char **args)
+     int status;
+     struct fstab *fstab;
+ //
+-    FILE *check_dart_file;
+     // ssize_t len;
+     size_t alloc_len = 0;
+     char *line = NULL;
+-    char *line1 = NULL;
+-    int dart=0;
+-    static const char *dart_fstab = "/fstab_emmc_dart.freescale";
+-
+ 
+     if (nargs != 2) {
+         return -1;
+@@ -439,28 +434,22 @@ int do_mount_all(int nargs, char **args)
+     } else if (pid == 0) {
+         /* child, call fs_mgr_mount_all() */
+         klog_set_level(6);  /* So we can see what fs_mgr_mount_all() does */
+-
+-
+-	check_dart_file = fopen("/sys/devices/soc0/machine", "r");
+-	getline(&line, &alloc_len, check_dart_file);
+-	fclose(check_dart_file);
+-	char *pch = strstr(line, "VAR-DART");
+-	if (pch){
+-		check_dart_file = fopen("/fstab.freescale", "r");
+-		getline(&line1, &alloc_len, check_dart_file);
+-		fclose(check_dart_file);
+-		char *pch1 = strstr(line1, "eMMC");
+-		if (pch1) dart=1;
+-	}
+-
+-	/* The name of the fstab file is last, after the option */
+-	if (dart){
+-		ERROR("FSTAB: DART found switching to: %s \n", dart_fstab);
+-	        fstab = fs_mgr_read_fstab(dart_fstab);
+-	} else {
+-		ERROR("FSTAB: using file: %s \n", args[1]);
+-	        fstab = fs_mgr_read_fstab(args[1]);
+-	}
++        {
++            static const char *dart_fstab = "/fstab_dart.freescale";
++            FILE *check_dart_file = fopen("/sys/devices/soc0/machine", "r");
++            getline(&line, &alloc_len, check_dart_file);
++            fclose(check_dart_file);
++
++            /* The name of the fstab file is last, after the option */
++            char *const pch = strstr(line, "VAR-DART");
++            if (pch){
++                ERROR("FSTAB: DART found switching to: %s \n", dart_fstab);
++                    fstab = fs_mgr_read_fstab(dart_fstab);
++            } else {
++                ERROR("FSTAB: using file: %s \n", args[1]);
++                    fstab = fs_mgr_read_fstab(args[1]);
++            }
++        }
+ 
+         child_ret = fs_mgr_mount_all(fstab);
+         fs_mgr_free_fstab(fstab);
+-- 
+2.1.4
+

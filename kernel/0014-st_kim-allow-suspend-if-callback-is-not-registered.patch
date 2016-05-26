@@ -1,0 +1,42 @@
+From baa2bc7e3b5c89a2108bda9909e01abea16f398f Mon Sep 17 00:00:00 2001
+From: Gigi Joseph <gigi.joseph@gmail.com>
+Date: Fri, 9 Jan 2015 03:46:24 +0000
+Subject: [PATCH 14/34] st_kim: allow suspend if callback is not registered
+
+Suspend/resume was failing if callbacks were not registered.
+As it is ok not to do anything when suspending fix this
+so it soen't return an error and allow the system to suspend.
+
+Signed-off-by: Eyal Reizer <eyalr@ti.com>
+Signed-off-by: Gigi Joseph <gigi.joseph@ti.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: varigigi <pierluigi.p@variscite.com>
+---
+ drivers/misc/ti-st/st_kim.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/misc/ti-st/st_kim.c b/drivers/misc/ti-st/st_kim.c
+index 68a0b58..f2c1071 100644
+--- a/drivers/misc/ti-st/st_kim.c
++++ b/drivers/misc/ti-st/st_kim.c
+@@ -908,7 +908,7 @@ static int kim_suspend(struct platform_device *pdev, pm_message_t state)
+ 	if (pdata->suspend)
+ 		return pdata->suspend(pdev, state);
+ 
+-	return -EOPNOTSUPP;
++	return 0;
+ }
+ 
+ static int kim_resume(struct platform_device *pdev)
+@@ -925,7 +925,7 @@ static int kim_resume(struct platform_device *pdev)
+ 	if (pdata->resume)
+ 		return pdata->resume(pdev);
+ 
+-	return -EOPNOTSUPP;
++	return 0;
+ }
+ 
+ /**********************************************************************/
+-- 
+2.1.4
+

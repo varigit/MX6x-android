@@ -1,0 +1,40 @@
+From fd42be46eb89acc6332e98a97697c156b280c1f0 Mon Sep 17 00:00:00 2001
+From: Colin Ian King <colin.king@canonical.com>
+Date: Tue, 12 May 2015 22:37:23 +0100
+Subject: [PATCH 19/34] ti-st: handle null allocation return correctly.
+
+static analysis with smatch picked up the following error:
+
+get_platform_data() error: potential null dereference 'dt_pdata'.
+  (kzalloc returns null)
+
+Instead, the code should return NULL to avoid the following null
+pointer deference.  Also, remove the error message as it is
+redundant, the caller emits an error message to alert of a
+failure anyhow.
+
+Signed-off-by: Colin Ian King <colin.king@canonical.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: varigigi <pierluigi.p@variscite.com>
+---
+ drivers/misc/ti-st/st_kim.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/misc/ti-st/st_kim.c b/drivers/misc/ti-st/st_kim.c
+index 104f271..39030e6 100644
+--- a/drivers/misc/ti-st/st_kim.c
++++ b/drivers/misc/ti-st/st_kim.c
+@@ -749,9 +749,8 @@ static struct ti_st_plat_data *get_platform_data(struct device *dev)
+ 	int len;
+ 
+ 	dt_pdata = kzalloc(sizeof(*dt_pdata), GFP_KERNEL);
+-
+ 	if (!dt_pdata)
+-		pr_err("Can't allocate device_tree platform data\n");
++		return NULL;
+ 
+ 	dt_property = of_get_property(np, "dev_name", &len);
+ 	if (dt_property)
+-- 
+2.1.4
+

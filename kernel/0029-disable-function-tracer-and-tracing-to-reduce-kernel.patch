@@ -1,0 +1,33 @@
+From b47e46526098c279a6dc7e6b9d01bb84e49d3887 Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Sat, 23 Apr 2016 02:49:21 +0200
+Subject: [PATCH 29/34] disable function tracer and tracing to reduce kernel
+ overhead
+
+---
+ arch/arm/configs/imx_v7_var_android_defconfig | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/arch/arm/configs/imx_v7_var_android_defconfig b/arch/arm/configs/imx_v7_var_android_defconfig
+index 7328c7e..5807bf0 100644
+--- a/arch/arm/configs/imx_v7_var_android_defconfig
++++ b/arch/arm/configs/imx_v7_var_android_defconfig
+@@ -591,13 +591,14 @@ CONFIG_NLS_ASCII=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_NLS_ISO8859_15=y
+ CONFIG_NLS_UTF8=y
++CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_PANIC_TIMEOUT=5
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_SCHEDSTATS=y
+ CONFIG_TIMER_STATS=y
+ # CONFIG_DEBUG_BUGVERBOSE is not set
+-CONFIG_FUNCTION_TRACER=y
++# CONFIG_FTRACE is not set
+ CONFIG_CORESIGHT=y
+ CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+ CONFIG_CORESIGHT_SINK_TPIU=y
+-- 
+2.1.4
+

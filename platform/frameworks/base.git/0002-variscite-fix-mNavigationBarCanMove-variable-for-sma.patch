@@ -1,0 +1,26 @@
+From b866143d6dd0934a08a333e9075e34fe7036e89f Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:51:25 +0300
+Subject: [PATCH 2/2] variscite: fix mNavigationBarCanMove variable for small
+ devices
+
+---
+ services/core/java/com/android/server/policy/PhoneWindowManager.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/services/core/java/com/android/server/policy/PhoneWindowManager.java b/services/core/java/com/android/server/policy/PhoneWindowManager.java
+index 6ce109c..1f58028 100644
+--- a/services/core/java/com/android/server/policy/PhoneWindowManager.java
++++ b/services/core/java/com/android/server/policy/PhoneWindowManager.java
+@@ -1650,7 +1650,7 @@ public class PhoneWindowManager implements WindowManagerPolicy {
+         int longSizeDp = longSize * DisplayMetrics.DENSITY_DEFAULT / density;
+ 
+         // Allow the navigation bar to move on non-square small devices (phones).
+-        mNavigationBarCanMove = width != height && shortSizeDp < 600;
++        mNavigationBarCanMove = width != height && shortSizeDp < 480;
+ 
+         mHasNavigationBar = res.getBoolean(com.android.internal.R.bool.config_showNavigationBar);
+         // Allow a system property to override this. Used by the emulator.
+-- 
+2.1.4
+

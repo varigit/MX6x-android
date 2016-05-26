@@ -1,0 +1,3 @@
+allow toolbox init:fifo_file { write };
+allow toolbox init:fifo_file { getattr };
+

@@ -1,0 +1,232 @@
+#!/bin/bash
+#
+# install
+#
+# This script must be run from the Android main directory. variscite/install
+# must be at ~/m_601_100_build
+#
+# echo "Variscite VAR-MX6 for Android m6.0.1 100 patches"
+#
+#
+
+set -e
+#set -x
+
+SCRIPT_NAME=${0##*/}
+readonly SCRIPT_VERSION="0.1"
+
+#### Exports Variables ####
+#### global variables ####
+readonly ABSOLUTE_FILENAME=$(readlink -e "$0")
+readonly ABSOLUTE_DIRECTORY=$(dirname ${ABSOLUTE_FILENAME})
+readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
+readonly SCRIPT_START_DATE=$(date +%Y%m%d)
+readonly ANDROID_DIR="${SCRIPT_POINT}/../m_601_100_build"
+
+readonly BASE_BRANCH_NAME="base_M6.0.1_1.0.0"
+
+## git variables get from base script!
+readonly _EXTPARAM_BRANCH="m6.0.1_1.0.0_variscite"
+readonly _EXTPARAM_KERNEL_ANDROID_SUBDIR="kernel_imx"
+readonly _EXTPARAM_KERNEL_PATCH_FOLDER="kernel"
+readonly _EXTPARAM_KERNEL_START_HASH="ad65770512d2baeb45f5d0622d985f9856b7cc1e"
+
+## dirs ##
+readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
+readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
+readonly VARISCITE_KERNEL_PATCH_DIR="${SCRIPT_POINT}/${_EXTPARAM_KERNEL_PATCH_FOLDER}"
+
+
+# print error message
+# p1 - printing string
+function pr_error() {
+	echo ${2} "E: $1"
+}
+
+# print warning message
+# p1 - printing string
+function pr_warning() {
+	echo ${2} "W: $1"
+}
+
+# print info message
+# p1 - printing string
+function pr_info() {
+	echo ${2} "I: $1"
+}
+
+# print debug message
+# p1 - printing string
+function pr_debug() {
+	echo ${2} "D: $1"
+}
+
+# test existing brang in git repo
+# p1 - git folder
+# p2 - branch name
+function is_branch_exist()
+{
+local D="${1}"
+local B="${2}"
+local B_found
+local HERE
+
+if [ \( ! -d "${D}" \) -o \( -z "${B}" \) ]; then
+	echo false
+	return
+fi
+
+HERE=${PWD}
+cd "${D}" > /dev/null
+
+# Check branch
+git branch 2>&1 > /dev/null
+if [ ${?} -ne 0 ]; then
+	echo false
+	cd ${HERE} > /dev/null
+	return
+fi
+B_found=$(git branch | grep -w "${B}")
+if [ -z "${B_found}" ]; then
+	echo false
+else
+	echo true 
+fi
+
+cd ${HERE} > /dev/null
+return
+}
+
+############### main code ##############
+pr_info "Script version ${SCRIPT_VERSION} (g:20160526)"
+
+cd ${ANDROID_DIR} > /dev/null
+
+######## extended create repositories #######
+
+pr_info "########################"
+pr_info "# wilink8 repositories #"
+pr_info "########################"
+
+mkdir -p ${ANDROID_DIR}/hardware/ti && :;
+cd ${ANDROID_DIR}/hardware/ti > /dev/null
+
+pr_info "clone hardware/ti/wlan"
+git clone git://git.omapzoom.org/platform/hardware/ti/wlan.git ${ANDROID_DIR}/hardware/ti/wlan
+cd ${ANDROID_DIR}/hardware/ti/wlan > /dev/null
+git checkout f5d0bf6a7f7955c0a06d0719555fba4b89ddcfc1 -b ${BASE_BRANCH_NAME}
+
+pr_info "clone hardware/ti/wl18xx-ti-utils"
+git clone git://git.ti.com/wilink8-wlan/18xx-ti-utils.git ${ANDROID_DIR}/hardware/ti/wl18xx-ti-utils
+cd ${ANDROID_DIR}/hardware/ti/wl18xx-ti-utils > /dev/null
+git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23 -b ${BASE_BRANCH_NAME}
+
+pr_info "clone hardware/ti/wpan"
+git clone git://git.omapzoom.org/platform/hardware/ti/wpan.git ${ANDROID_DIR}/hardware/ti/wpan
+cd ${ANDROID_DIR}/hardware/ti/wpan > /dev/null
+git checkout 32acb67605cb0d91955427fc4195205e8bc8eaf4 -b ${BASE_BRANCH_NAME}
+
+pr_info "make device/ti folder"
+mkdir -p ${ANDROID_DIR}/device/ti && :;
+
+pr_info "clone device/ti/proprietary-open"
+git clone git://git.omapzoom.org/device/ti/proprietary-open.git ${ANDROID_DIR}/device/ti/proprietary-open
+cd ${ANDROID_DIR}/device/ti/proprietary-open > /dev/null
+git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1 -b ${BASE_BRANCH_NAME}
+
+pr_info "clone externel/crda"
+mkdir -p ${ANDROID_DIR}/external && :;
+git clone git://git.omapzoom.org/platform/external/crda.git ${ANDROID_DIR}/external/crda
+cd ${ANDROID_DIR}/external/crda > /dev/null
+git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058 -b ${BASE_BRANCH_NAME}
+
+pr_info "##############################"
+pr_info "# misc external repositories #"
+pr_info "##############################"
+
+pr_info "clone externel/can-utils"
+git clone https://github.com/linux-can/can-utils.git ${ANDROID_DIR}/external/can-utils
+cd ${ANDROID_DIR}/external/can-utils > /dev/null
+git checkout cda61171f1f559dbb3b25c9fede2cc2a85c7cd0d -b ${BASE_BRANCH_NAME}
+
+pr_info "clone externel/i2c-tools"
+git clone https://github.com/Hashcode/i2c-tools.git ${ANDROID_DIR}/external/i2c-tools
+cd ${ANDROID_DIR}/external/i2c-tools > /dev/null
+git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57 -b ${BASE_BRANCH_NAME}
+
+pr_info "clone externel/iw"
+git clone git://git.sipsolutions.net/iw.git ${ANDROID_DIR}/external/iw
+cd ${ANDROID_DIR}/external/iw > /dev/null
+git checkout 96fa73c7564fa7eba89cd78a24f20acd68d2f55f -b ${BASE_BRANCH_NAME}
+
+pr_info "clone externel/libtruezip"
+git clone https://github.com/jruesga/android_external_libtruezip.git ${ANDROID_DIR}/external/libtruezip
+cd ${ANDROID_DIR}/external/libtruezip > /dev/null
+git checkout 45ac3d07b5a4753bd1abc9fa38fd48221312a3d9 -b ${BASE_BRANCH_NAME}
+cd - > /dev/null
+
+pr_info "###########################"
+pr_info "# Added Variscite device  #"
+pr_info "###########################"
+cp -r ${SCRIPT_POINT}/variscite ${ANDROID_DIR}/device/
+
+pr_info "###########################"
+pr_info "# Apply framework patches #"
+pr_info "###########################"
+cd ${VARISCITE_PATCHS_DIR} > /dev/null
+git_array=$(find * -type d | grep '.git')
+cd - > /dev/null
+
+for _ddd in ${git_array}
+do
+	_git_p=$(echo ${_ddd} | sed 's/.git//g')
+	cd ${ANDROID_DIR}/${_git_p}/ > /dev/null
+	
+	pr_info "Apply pathes for this git: \"${_git_p}/\""
+	
+	git checkout -b ${_EXTPARAM_BRANCH} || {
+		pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
+	};
+
+	git am ${VARISCITE_PATCHS_DIR}/${_ddd}/*
+
+	cd - > /dev/null
+done
+
+pr_info "########################"
+pr_info "# Apply kernel patches #"
+pr_info "########################"
+cd ${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR} > /dev/null
+
+[ "true" != "$(is_branch_exist "${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR}/\.git" ${_EXTPARAM_BRANCH})" ] && {
+	# added nxp kernel repository
+	git remote add nxp git://git.freescale.com/imx/linux-2.6-imx.git
+
+	# get all history fron nxp kernel repository
+	git fetch nxp
+
+	get all tags from nxp kernel repository (interes tag = m6.0.1_1.0.0-ga)
+	git fetch nxp --tags
+
+	# create new branch
+	git checkout m6.0.1_1.0.0-ga -b ${_EXTPARAM_BRANCH}
+
+	# apply patches
+	git am ${VARISCITE_KERNEL_PATCH_DIR}/*
+
+} || {
+	pr_info "Brunch in the kernel already exists!"
+}
+
+cd - > /dev/null
+
+pr_info "#######################"
+pr_info "# copy shell utilites #"
+pr_info "#######################"
+cp -r ${VARISCITE_SH_DIR}/* ${ANDROID_DIR}/
+
+pr_info "#####################"
+pr_info "# Done             #"
+pr_info "#####################"
+
+exit 0

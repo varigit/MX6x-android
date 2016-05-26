@@ -1,0 +1,25 @@
+From e03d8326b26c57489bda674a3de86278d0544217 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Sun, 22 May 2016 13:48:56 +0300
+Subject: [PATCH 33/34] fix work ads7846 touchscreen in variscite imx6q som
+
+---
+ drivers/input/touchscreen/ads7846.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/input/touchscreen/ads7846.c b/drivers/input/touchscreen/ads7846.c
+index 23ee7c4..7d31927 100644
+--- a/drivers/input/touchscreen/ads7846.c
++++ b/drivers/input/touchscreen/ads7846.c
+@@ -679,7 +679,7 @@ static int ads7846_get_value(struct ads7846 *ts, struct spi_message *m)
+ 		 * adjust:  on-wire is a must-ignore bit, a BE12 value, then
+ 		 * padding; built from two 8 bit values written msb-first.
+ 		 */
+-		return (be16_to_cpup((__be16 *)t->rx_buf) & 0x7ff8) >> 3;
++		return be16_to_cpup((__be16 *)t->rx_buf) >> 3;
+ 	}
+ }
+ 
+-- 
+2.1.4
+

@@ -1,0 +1,26 @@
+From c633765dbc11cf795547b0bb3abe2cdf3bcf036c Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Wed, 25 May 2016 08:54:33 +0300
+Subject: [PATCH 3/3] variscite: fixed build SPL (ERROR in android gcc 4.9:
+ Makefile:1291: recipe for target 'checkarmreloc' failed)
+
+---
+ core/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 2d112a7..a36bbe4 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -971,7 +971,7 @@ endif
+ 
+ .PHONY: bootloader
+ ifneq ($(strip $(TARGET_BOOTLOADER_CONFIG)),)
+-BOOTLOADER_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
++BOOTLOADER_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-eabi-4.8/bin/arm-eabi-
+ BOOTLOADER_ENV := ARCH=arm CROSS_COMPILE=$(BOOTLOADER_CROSS_TOOLCHAIN)
+ HOST_PROCESSOR := $(shell cat /proc/cpuinfo | grep processor | wc -l)
+ ifeq ($(BOOTLOADER_USES_SPL),true)
+-- 
+2.1.4
+

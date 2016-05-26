@@ -1,0 +1,2 @@
+genfscon nfs / u:object_r:rootfs:s0
+genfscon fuseblk / u:object_r:sdcard_external:s0

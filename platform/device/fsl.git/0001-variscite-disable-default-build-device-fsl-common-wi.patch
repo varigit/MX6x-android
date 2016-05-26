@@ -1,0 +1,31 @@
+From c19560df49004e16992dfaddc4761f946d47eb71 Mon Sep 17 00:00:00 2001
+From: Roman Pletnev <roman.pletnev@promwad.com>
+Date: Wed, 25 May 2016 08:19:19 +0300
+Subject: [PATCH] variscite: disable default build device/fsl/common/wifi
+
+---
+ common/wifi/Android.mk | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/common/wifi/Android.mk b/common/wifi/Android.mk
+index 98a381d..28f83d8 100644
+--- a/common/wifi/Android.mk
++++ b/common/wifi/Android.mk
+@@ -24,6 +24,7 @@
+ # components.
+ 
+ ifeq ($(TARGET_BOARD_PLATFORM),$(filter $(TARGET_BOARD_PLATFORM),imx6 imx7))
++ifneq ($(USES_TI_MAC80211),true)
+ 
+ LOCAL_PATH := $(call my-dir)
+ 
+@@ -52,5 +53,6 @@ LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/wifi
+ include $(BUILD_PREBUILT)
+ 
+ endif
++endif
+ 
+ include $(call first-makefiles-under,$(LOCAL_PATH))
+-- 
+2.1.4
+

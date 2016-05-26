@@ -1,0 +1,10 @@
+allow init cache_file:dir  { mounton };
+allow init asec_apk_file:dir  { mounton };
+allow init perfprofd_exec:file  { read open getattr execute };
+allow init shell_data_file:dir  { write };
+allow init socket_device:sock_file  { setattr create };
+allow init tmpfs:lnk_file  { create };
+allow init storage_file:dir  { mounton };
+allow init block_device:blk_file  { write };
+allow init sysfs_devices_system_cpu:dir  { write };
+allow init block_device:chr_file  { getattr ioctl };

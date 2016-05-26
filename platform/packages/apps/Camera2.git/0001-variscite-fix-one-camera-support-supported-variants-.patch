@@ -1,0 +1,40 @@
+From 6cf18f34f6cb66d7e75cfb54379220e6bb2d8ff1 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 16:15:23 +0300
+Subject: [PATCH] variscite: fix one camera support (supported variants: mipi,
+ mipi+uvc)
+
+---
+ src/com/android/camera/CameraActivity.java       | 2 +-
+ src/com/android/camera/app/CameraController.java | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/com/android/camera/CameraActivity.java b/src/com/android/camera/CameraActivity.java
+index bf48898..13ade78 100644
+--- a/src/com/android/camera/CameraActivity.java
++++ b/src/com/android/camera/CameraActivity.java
+@@ -1477,7 +1477,7 @@ public class CameraActivity extends QuickActivity
+         profile.mark("OneCameraManager.get");
+ 
+         try {
+-            mCameraController = new CameraController(mAppContext, this, mMainHandler,
++            mCameraController = new CameraController(mAppContext, null, mMainHandler,
+                     CameraAgentFactory.getAndroidCameraAgent(mAppContext,
+                             CameraAgentFactory.CameraApi.API_1),
+                     CameraAgentFactory.getAndroidCameraAgent(mAppContext,
+diff --git a/src/com/android/camera/app/CameraController.java b/src/com/android/camera/app/CameraController.java
+index 7921335..ae228c5 100644
+--- a/src/com/android/camera/app/CameraController.java
++++ b/src/com/android/camera/app/CameraController.java
+@@ -92,7 +92,7 @@ public class CameraController implements CameraAgent.CameraOpenCallback, CameraP
+         mActiveCameraDeviceTracker = activeCameraDeviceTracker;
+         mInfo = mCameraAgent.getCameraDeviceInfo();
+         if (mInfo == null && mCallbackReceiver != null) {
+-            mCallbackReceiver.onDeviceOpenFailure(-1, "GETTING_CAMERA_INFO");
++            Log.e(TAG, "GETTING_CAMERA_INFO");
+         }
+     }
+ 
+-- 
+2.1.4
+

@@ -1,0 +1,25 @@
+From 7ec4afc98d90aa1315be650b2955f0470160d00e Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Thu, 31 Mar 2016 12:36:20 +0200
+Subject: [PATCH 25/34] fix audio reset signal
+
+---
+ arch/arm/boot/dts/imx6qdl-var-som.dtsi | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-var-som.dtsi b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+index 4e803fe..4463b36 100644
+--- a/arch/arm/boot/dts/imx6qdl-var-som.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+@@ -437,6 +437,8 @@
+ 				MX6QDL_PAD_ENET_RXD0__OSC32K_32K_OUT		0x000b0
+ 				/* Audio Clock */
+ 				MX6QDL_PAD_GPIO_0__CCM_CLKO1 			0x130b0
++				/* Audio Reset */
++				MX6QDL_PAD_GPIO_19__GPIO4_IO05			0x130b0
+ 				/* Camera Clock */
+ 				MX6QDL_PAD_GPIO_3__CCM_CLKO2			0x130b0
+ 			>;
+-- 
+2.1.4
+

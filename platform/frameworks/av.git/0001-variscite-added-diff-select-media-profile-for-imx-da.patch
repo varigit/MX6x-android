@@ -1,0 +1,68 @@
+From c87509351e9eaf412e4cef0e0b1930f6b050ced3 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:47:57 +0300
+Subject: [PATCH] variscite: added diff select media profile for imx/dart
+ boards
+
+---
+ media/libmedia/MediaProfiles.cpp | 34 +++++++++++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/media/libmedia/MediaProfiles.cpp b/media/libmedia/MediaProfiles.cpp
+index c5790fb..60ecac8 100644
+--- a/media/libmedia/MediaProfiles.cpp
++++ b/media/libmedia/MediaProfiles.cpp
+@@ -587,19 +587,47 @@ void MediaProfiles::checkAndAddRequiredProfilesIfNecessary() {
+ /*static*/ MediaProfiles*
+ MediaProfiles::getInstance()
+ {
++FILE *check_dart_file;
++int dart;
++char *line = NULL;
++size_t alloc_len = 0;
++FILE *fp;
++const char *defaultXmlFile_dart = "/etc/media_profiles_720p.xml";
++const char *defaultXmlFile      = "/etc/media_profiles.xml";
++
++    check_dart_file = fopen("/sys/devices/soc0/machine", "r");
++    getline(&line, &alloc_len, check_dart_file);
++    fclose(check_dart_file);
++    char *pch = strstr(line, "VAR-DART");
++    if (pch){
++        dart = 1;
++        ALOGV("MediaProfile found dart swithcig to %s", defaultXmlFile_dart);
++    } else {
++        dart = 0;
++        ALOGV("MediaProfile using %s", defaultXmlFile);
++    }
++
++
++
+     ALOGV("getInstance");
+     Mutex::Autolock lock(sLock);
+     if (!sIsInitialized) {
+         char value[PROPERTY_VALUE_MAX];
+         if (property_get("media.settings.xml", value, NULL) <= 0) {
+-            const char *defaultXmlFile = "/etc/media_profiles.xml";
+-            FILE *fp = fopen(defaultXmlFile, "r");
++            if (dart)
++                fp = fopen(defaultXmlFile_dart, "r");
++            else
++                fp = fopen(defaultXmlFile, "r");
++
+             if (fp == NULL) {
+                 ALOGW("could not find media config xml file");
+                 sInstance = createDefaultInstance();
+             } else {
+                 fclose(fp);  // close the file first.
+-                sInstance = createInstanceFromXmlFile(defaultXmlFile);
++                if (dart)
++                    sInstance = createInstanceFromXmlFile(defaultXmlFile_dart);
++                else
++                    sInstance = createInstanceFromXmlFile(defaultXmlFile);
+             }
+         } else {
+             sInstance = createInstanceFromXmlFile(value);
+-- 
+2.1.4
+

@@ -1,0 +1,61 @@
+From 6696d89938f8d5317f9b3d855925582159de32f3 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:21:37 +0300
+Subject: [PATCH] variscite: fix firmware loda for ti_wl module
+
+---
+ server/Android.mk           |  4 ++++
+ server/SoftapController.cpp | 14 +++++++++++---
+ 2 files changed, 15 insertions(+), 3 deletions(-)
+
+diff --git a/server/Android.mk b/server/Android.mk
+index 5ba45ad..1f4dc57 100644
+--- a/server/Android.mk
++++ b/server/Android.mk
+@@ -26,6 +26,10 @@ LOCAL_CLANG := true
+ LOCAL_CPPFLAGS := -std=c++11 -Wall -Werror
+ LOCAL_MODULE := netd
+ 
++ifdef USES_TI_MAC80211
++LOCAL_CPPFLAGS += -DSINGLE_WIFI_FW
++endif
++
+ LOCAL_SHARED_LIBRARIES := \
+         libcrypto \
+         libcutils \
+diff --git a/server/SoftapController.cpp b/server/SoftapController.cpp
+index 97c3e21..03f9f19 100644
+--- a/server/SoftapController.cpp
++++ b/server/SoftapController.cpp
+@@ -95,10 +95,14 @@ int SoftapController::startSoftap() {
+            ret = execl(HOSTAPD_BIN_FILE_BCM, HOSTAPD_BIN_FILE,
+                        "-e", WIFI_ENTROPY_FILE,
+                        HOSTAPD_CONF_FILE, (char *) NULL);
+-
+-        } else
++        } else {
+             ALOGE("no specific driver vendor");
+-        ALOGE("execl failed (%s)", strerror(errno));
++            ret = execl(HOSTAPD_BIN_FILE, HOSTAPD_BIN_FILE,
++                       "-e", WIFI_ENTROPY_FILE,
++                       HOSTAPD_CONF_FILE, (char *) NULL);
++        }
++        if (ret)
++            ALOGE("execl failed (%s)", strerror(errno));
+         ALOGE("SoftAP failed to start");
+         return ResponseCode::ServiceStartFailed;
+     } else {
+@@ -204,6 +208,10 @@ int SoftapController::fwReloadSoftap(int argc, char *argv[])
+ {
+     char *fwpath = NULL;
+ 
++#ifdef SINGLE_WIFI_FW
++    return ResponseCode::CommandOkay;
++#endif
++
+     if (argc < 4) {
+         ALOGE("SoftAP fwreload is missing arguments. Please use: softap <wlan iface> <AP|P2P|STA>");
+         return ResponseCode::CommandSyntaxError;
+-- 
+2.1.4
+

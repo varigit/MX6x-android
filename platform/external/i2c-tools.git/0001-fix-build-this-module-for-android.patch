@@ -1,0 +1,25 @@
+From d6fe97b69bfc4dc95263025661b298a6c49e0826 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Tue, 24 May 2016 11:28:52 +0300
+Subject: [PATCH] fix build this module for android
+
+---
+ Android.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Android.mk b/Android.mk
+index 090f6c0..bb44211 100644
+--- a/Android.mk
++++ b/Android.mk
+@@ -4,7 +4,7 @@ include $(CLEAR_VARS)
+  
+ LOCAL_MODULE_TAGS := eng
+ LOCAL_C_INCLUDES += $(LOCAL_PATH) $(LOCAL_PATH)/include
+-LOCAL_SRC_FILES := tools/i2cbusses.c tools/util.c
++LOCAL_SRC_FILES := tools/i2cbusses.c tools/util.c lib/smbus.c
+ LOCAL_MODULE := i2c-tools
+ include $(BUILD_STATIC_LIBRARY)
+  
+-- 
+2.1.4
+

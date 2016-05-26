@@ -1,0 +1,50 @@
+From 420a6ad7649684898429029f1243481282a73507 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:40:44 +0300
+Subject: [PATCH 2/3] variscite: fix make options for kernel and etc
+
+---
+ core/Makefile | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index f7b025f..2d112a7 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -974,7 +974,12 @@ ifneq ($(strip $(TARGET_BOOTLOADER_CONFIG)),)
+ BOOTLOADER_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+ BOOTLOADER_ENV := ARCH=arm CROSS_COMPILE=$(BOOTLOADER_CROSS_TOOLCHAIN)
+ HOST_PROCESSOR := $(shell cat /proc/cpuinfo | grep processor | wc -l)
+-TARGET_BOOTLOADER_IMAGE := $(PRODUCT_OUT)/u-boot.imx
++ifeq ($(BOOTLOADER_USES_SPL),true)
++	TARGET_BOOTLOADER_EXTENSION := img
++else
++	TARGET_BOOTLOADER_EXTENSION := imx
++endif
++TARGET_BOOTLOADER_IMAGE := $(PRODUCT_OUT)/u-boot.$(TARGET_BOOTLOADER_EXTENSION)
+ 
+ BOOTLOADER_PATH := bootable/bootloader/uboot-imx/
+ BOOTLOADER_CONFIG_FILE := $(BOOTLOADER_PATH)/include/config.h
+@@ -990,8 +995,8 @@ $(TARGET_BOOTLOADER_IMAGE):
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ distclean $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $$UBOOT_CONFIG $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $(BOOTLOADER_ENV); \
+-		install -D bootable/bootloader/uboot-imx/u-boot.imx $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.imx; \
+-		install -D bootable/bootloader/uboot-imx/u-boot.imx $@; \
++		install -D bootable/bootloader/uboot-imx/u-boot.$(TARGET_BOOTLOADER_EXTENSION) $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.$(TARGET_BOOTLOADER_EXTENSION); \
++		install -D bootable/bootloader/uboot-imx/u-boot.$(TARGET_BOOTLOADER_EXTENSION) $@; \
+ 	done
+ else
+ bootloader:
+@@ -1002,6 +1007,8 @@ ifneq ($(strip $(TARGET_NO_KERNEL)),true)
+ KERNEL_CROSS_TOOLCHAIN := `pwd`/prebuilts/gcc/linux-x86/arm/arm-linux-androideabi-4.9/bin/arm-linux-androideabi-
+ KERNEL_CFLAGS := KCFLAGS=-mno-android
+ KERNEL_ENV := ARCH=arm CROSS_COMPILE=$(KERNEL_CROSS_TOOLCHAIN) LOADADDR=$(LOAD_KERNEL_ENTRY) $(KERNEL_CFLAGS)
++KERNEL_DIR := `pwd`/kernel_imx
++KMOD_ENV := KERNEL_DIR=$(KERNEL_DIR) KLIB=$(KERNEL_DIR) KLIB_BUILD=$(KERNEL_DIR)
+ HOST_PROCESSOR := $(shell cat /proc/cpuinfo | grep processor | wc -l)
+ INSTALLED_KERNEL_TARGET := $(PRODUCT_OUT)/kernel
+ TARGET_PREBUILT_KERNEL := $(PRODUCT_OUT)/kernel
+-- 
+2.1.4
+

@@ -1,0 +1,25 @@
+From 195bc0dc11ccd6d87d22386e405d7243e44e9295 Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Thu, 7 Apr 2016 10:18:29 +0200
+Subject: [PATCH 26/34] otg default to peripheral to allow adb working
+
+---
+ arch/arm/boot/dts/imx6qdl-var-som.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx6qdl-var-som.dtsi b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+index 4463b36..20f1d46 100644
+--- a/arch/arm/boot/dts/imx6qdl-var-som.dtsi
++++ b/arch/arm/boot/dts/imx6qdl-var-som.dtsi
+@@ -946,7 +946,7 @@
+ #ifdef VAR_SOM_SOLO_VSC
+ 	dr_mode = "otg" ;	/* Use "host" if you would like to use the USB0 type A connector */
+ #else
+-	dr_mode = "host" ;
++	dr_mode = "peripheral";	/* Allow adb working */
+ #endif
+ 	status = "okay";
+ };
+-- 
+2.1.4
+

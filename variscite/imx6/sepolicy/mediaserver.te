@@ -1,0 +1,6 @@
+allow mediaserver tmpfs:dir rw_dir_perms;
+allow mediaserver tmpfs:file rw_file_perms;
+allow mediaserver mediaserver_tmpfs:dir create_dir_perms;
+allow mediaserver mediaserver_tmpfs:file create_file_perms;
+allow mediaserver system_file:file execmod;
+allow mediaserver mediaserver:netlink_kobject_uevent_socket { create setopt bind read };

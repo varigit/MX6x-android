@@ -1,0 +1,42 @@
+From e2fbd60b1a4f0fc883cf2fcc0250f5019c044d05 Mon Sep 17 00:00:00 2001
+From: "roman.pletnev" <roman.pletnev@promwad.com>
+Date: Fri, 20 May 2016 10:28:56 +0300
+Subject: [PATCH 1/4] variscite: added boot console options for variscite board
+ (print os type and etc)
+
+---
+ init/init.cpp | 12 +++++++++---
+ 1 file changed, 9 insertions(+), 3 deletions(-)
+
+diff --git a/init/init.cpp b/init/init.cpp
+index 1e92cba..9f8086b 100644
+--- a/init/init.cpp
++++ b/init/init.cpp
+@@ -727,15 +727,21 @@ static int keychord_init_action(int nargs, char **args)
+ 
+ static int console_init_action(int nargs, char **args)
+ {
+-    char console[PROP_VALUE_MAX];
+-    if (property_get("ro.boot.console", console) > 0) {
+-        snprintf(console_name, sizeof(console_name), "/dev/%s", console);
++    char tmp[PROP_VALUE_MAX];
++    
++    if (property_get("ro.boot.console", tmp) > 0) {
++        snprintf(console_name, sizeof(console_name), "/dev/%s", tmp);
+     }
+ 
+     int fd = open(console_name, O_RDWR | O_CLOEXEC);
+     if (fd >= 0)
+         have_console = 1;
+     close(fd);
++    
++    if ((property_get("ro.boot.write_on_console", tmp) != 0) && (strcmp(tmp, "disabled") == 0)) {
++        /* just disable following (ugly) write */
++        return 0;
++    }
+ 
+     fd = open("/dev/tty0", O_WRONLY | O_CLOEXEC);
+     if (fd >= 0) {
+-- 
+2.1.4
+
