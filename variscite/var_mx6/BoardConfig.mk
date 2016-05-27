@@ -90,8 +90,8 @@ USE_QEMU_GPS_HARDWARE := false
 BOARD_HAS_SENSOR := false
 SENSOR_MMA8451 := false
 
-# for recovery service
-TARGET_SELECT_KEY := 28
+# for recovery service (KEY_BACK)
+TARGET_SELECT_KEY := 158
 
 # we don't support sparse image.
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false

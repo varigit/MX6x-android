@@ -87,7 +87,7 @@ BOARD_RECOVERYIMAGE_PARTITION_SIZE := 16777216
 BOARD_SYSTEMIMAGE_PARTITION_SIZE := 419430400
 
 BOARD_FLASH_BLOCK_SIZE := 4096
-TARGET_RECOVERY_UI_LIB := librecovery_ui_imx
+TARGET_RECOVERY_UI_LIB := librecovery_ui_imx_v
 
 # Freescale multimedia parser related prop setting
 # Define fsl avi/aac/asf/mkv/flv/flac format support
