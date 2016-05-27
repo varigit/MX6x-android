@@ -98,7 +98,7 @@ return
 }
 
 ############### main code ##############
-pr_info "Script version ${SCRIPT_VERSION} (g:20160526)"
+pr_info "Script version ${SCRIPT_VERSION} (g:20160527)"
 
 cd ${ANDROID_DIR} > /dev/null
 
@@ -193,32 +193,32 @@ do
 	cd - > /dev/null
 done
 
-pr_info "########################"
-pr_info "# Apply kernel patches #"
-pr_info "########################"
-cd ${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR} > /dev/null
-
-[ "true" != "$(is_branch_exist "${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR}/\.git" ${_EXTPARAM_BRANCH})" ] && {
-	# added nxp kernel repository
-	git remote add nxp git://git.freescale.com/imx/linux-2.6-imx.git
-
-	# get all history fron nxp kernel repository
-	git fetch nxp
-
-	get all tags from nxp kernel repository (interes tag = m6.0.1_1.0.0-ga)
-	git fetch nxp --tags
-
-	# create new branch
-	git checkout m6.0.1_1.0.0-ga -b ${_EXTPARAM_BRANCH}
-
-	# apply patches
-	git am ${VARISCITE_KERNEL_PATCH_DIR}/*
-
-} || {
-	pr_info "Brunch in the kernel already exists!"
-}
-
-cd - > /dev/null
+# pr_info "########################"
+# pr_info "# Apply kernel patches #"
+# pr_info "########################"
+# cd ${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR} > /dev/null
+# 
+# [ "true" != "$(is_branch_exist "${ANDROID_DIR}/${_EXTPARAM_KERNEL_ANDROID_SUBDIR}/\.git" ${_EXTPARAM_BRANCH})" ] && {
+# 	# added nxp kernel repository
+# 	git remote add nxp git://git.freescale.com/imx/linux-2.6-imx.git
+# 
+# 	# get all history fron nxp kernel repository
+# 	git fetch nxp
+# 
+# 	get all tags from nxp kernel repository (interes tag = m6.0.1_1.0.0-ga)
+# 	git fetch nxp --tags
+# 
+# 	# create new branch
+# 	git checkout m6.0.1_1.0.0-ga -b ${_EXTPARAM_BRANCH}
+# 
+# 	# apply patches
+# 	git am ${VARISCITE_KERNEL_PATCH_DIR}/*
+# 
+# } || {
+# 	pr_info "Brunch in the kernel already exists!"
+# }
+# 
+# cd - > /dev/null
 
 pr_info "#######################"
 pr_info "# copy shell utilites #"
