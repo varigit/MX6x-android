@@ -1,7 +1,7 @@
 From 420a6ad7649684898429029f1243481282a73507 Mon Sep 17 00:00:00 2001
 From: "roman.pletnev" <roman.pletnev@promwad.com>
 Date: Fri, 20 May 2016 10:40:44 +0300
-Subject: [PATCH 2/3] variscite: fix make options for kernel and etc
+Subject: [PATCH 2/4] variscite: fix make options for kernel and etc
 
 ---
  core/Makefile | 13 ++++++++++---

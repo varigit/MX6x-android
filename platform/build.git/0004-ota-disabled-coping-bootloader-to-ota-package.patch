@@ -1,0 +1,27 @@
+From fae73e290ffc03221ffefc34ef8a00c96426853c Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Sat, 28 May 2016 11:42:58 +0300
+Subject: [PATCH 4/4] ota: disabled coping bootloader to ota package
+
+---
+ core/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index a36bbe4..f716a57 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1629,8 +1629,8 @@ ifdef BOARD_KERNEL_DTS
+ 	$(hide) echo "$(BOARD_KERNEL_DTS)" > $(zip_root)/BOOT/dtb
+ endif
+ ifdef DTS_PLATFORM
+-	$(hide) mkdir -p $(zip_root)/RADIO;	
+-	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-$(DTS_PLATFORM).imx $(zip_root)/RADIO/bootloader.img
++	$(hide) mkdir -p $(zip_root)/RADIO;
++#	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-var-imx6-sd.img $(zip_root)/RADIO/bootloader.img
+ endif
+ 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
+ 	            mkdir -p $(zip_root)/RADIO; \
+-- 
+2.1.4
+
