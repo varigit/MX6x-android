@@ -1,0 +1,1 @@
+allow update_engine misc_device:blk_file { open read write };

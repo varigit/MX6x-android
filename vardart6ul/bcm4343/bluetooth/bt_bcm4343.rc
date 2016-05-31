@@ -1,0 +1,34 @@
+########################################################
+#  BLUETOOTH CONFIGURATION - BROADCOM SPECIFIC
+########################################################
+
+on fs
+    mkdir /config/bt 0770 system bluetooth
+    setprop ro.bt.bdaddr_path /config/bt/bd_addr.conf
+    setprop bluetooth.enable_timeout_ms 15000
+
+on early-boot
+    chmod 0644 /config/bt/bd_addr.conf
+
+on post-fs-data
+    # Bluetooth
+    write /sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/state 1
+    chmod 0660 /sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/state
+    chown bluetooth net_bt_stack /sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/type
+
+on boot
+
+########################################################
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    group bluetooth wifi system dhcp
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    group bluetooth system dhcp
+    disabled
+    oneshot
+

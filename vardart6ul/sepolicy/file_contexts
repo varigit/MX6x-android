@@ -1,0 +1,13 @@
+/dev/ttymxc[0-9]*               u:object_r:tty_device:s0
+/system/bin/fsl_sensor_fusion   u:object_r:sensors_exec:s0
+/dev/FreescaleAccelerometer     u:object_r:sensors_device:s0
+/dev/FreescaleMagnetometer      u:object_r:sensors_device:s0
+/dev/FreescaleGyroscope         u:object_r:sensors_device:s0
+/dev/block/mmcblk1p9            u:object_r:misc_device:s0
+/dev/block/mmcblk1p1            u:object_r:boot_block_device:s0
+/dev/block/mmcblk1p7            u:object_r:boot_block_device:s0
+/dev/block/mmcblk1p5            u:object_r:system_block_device:s0
+/dev/block/mmcblk1p8            u:object_r:system_block_device:s0
+/dev/ttymxc1                    u:object_r:bluetoothtbd_device:s0
+/sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/state u:object_r:sysfs_bluetoothtbd_writable:s0
+/sys/devices/soc0/bt_rfkill.16/rfkill/rfkill0/type  u:object_r:sysfs_bluetoothtbd_readable:s0

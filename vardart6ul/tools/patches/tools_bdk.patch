@@ -1,0 +1,16 @@
+diff --git a/brunch/config/bsp_manifest.json b/brunch/config/bsp_manifest.json
+index b62f2cd..2529df2 100644
+--- a/brunch/config/bsp_manifest.json
++++ b/brunch/config/bsp_manifest.json
+@@ -246,6 +246,11 @@
+                     "wlan": "vendor/bsp/intel/peripheral/wifi/rtlwifi_firmware"
+                 }
+             }
++        },
++        "vardart6ul" : {
++            "device_name" : "Variscite DART-6UL starter kit",
++            "packages" : {
++            }
+         }
+     }
+ }

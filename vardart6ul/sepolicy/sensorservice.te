@@ -1,0 +1,5 @@
+allow sensorservice sysfs:file write;
+allow sensorservice input_device:dir r_file_perms;
+allow sensorservice input_device:chr_file r_file_perms;
+allow sensorservice self:capability net_admin;
+allow sensorservice sysfs:dir r_file_perms;

@@ -1,0 +1,1 @@
+allow wifi_setup proc:file open;

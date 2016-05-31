@@ -1,0 +1,13 @@
+diff --git a/peripheral/wifi/bcm4339/Android.mk b/peripheral/wifi/bcm4339/Android.mk
+index 9998a5f..1662b85 100644
+--- a/peripheral/wifi/bcm4339/Android.mk
++++ b/peripheral/wifi/bcm4339/Android.mk
+@@ -14,7 +14,7 @@
+ 
+ LOCAL_PATH := $(call my-dir)
+ 
+-ifeq ($(findstring imx, $(soc_name)), imx)
++ifeq ($(WIFI_DRIVER_HAL_PERIPHERAL),bcm4339)
+ ifneq ($(TARGET_SIMULATOR),true)
+ 
+ # HAL module implemenation, not prelinked, and stored in

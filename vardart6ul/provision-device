@@ -1,0 +1,7 @@
+#!/bin/sh
+
+fastboot \
+  flash boot_a ${ANDROID_PRODUCT_OUT}/boot.img \
+  flash system_a ${ANDROID_PRODUCT_OUT}/system.img \
+  flash boot_b ${ANDROID_PRODUCT_OUT}/boot.img \
+  flash system_b ${ANDROID_PRODUCT_OUT}/system.img "$@"

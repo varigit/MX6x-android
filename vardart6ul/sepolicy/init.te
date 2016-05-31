@@ -1,0 +1,1 @@
+allow init functionfs:dir mounton;
