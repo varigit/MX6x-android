@@ -1,0 +1,55 @@
+From e9316c400901e565fceda0eac820f295003c26a3 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Wed, 1 Jun 2016 12:53:34 +0300
+Subject: [PATCH 3/3] [dart] fixed: button switch to android recovery mode
+
+---
+ board/variscite/mx6var_som/mx6var_som.c | 20 ++++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
+
+diff --git a/board/variscite/mx6var_som/mx6var_som.c b/board/variscite/mx6var_som/mx6var_som.c
+index e72aac7..ce48497 100644
+--- a/board/variscite/mx6var_som/mx6var_som.c
++++ b/board/variscite/mx6var_som/mx6var_som.c
+@@ -1303,7 +1303,8 @@ void board_fastboot_setup(void)
+ 
+ #ifdef CONFIG_ANDROID_RECOVERY
+ 
+-#define GPIO_BACK_KEY IMX_GPIO_NR(5, 20)
++#define GPIO_BACK_KEY      IMX_GPIO_NR(5, 20)
++#define GPIO_BACK_KEY_DART IMX_GPIO_NR(4, 26)
+ 
+ int check_recovery_cmd_file(void)
+ {
+@@ -1311,16 +1312,23 @@ int check_recovery_cmd_file(void)
+ 	int recovery_mode = 0;
+ 
+ 	recovery_mode = recovery_check_and_clean_flag();
++	int back_key = 0;
+ 
+-	/* Check Recovery Combo Button press or not. */
+-	SETUP_IOMUX_PAD(PAD_CSI0_DATA_EN__GPIO5_IO20 | MUX_PAD_CTRL(NO_PAD_CTRL));
++	if(is_dart_board()) {/* dart board */
++		back_key = GPIO_BACK_KEY_DART;
++		SETUP_IOMUX_PAD(PAD_DISP0_DAT5__GPIO4_IO26 | MUX_PAD_CTRL(NO_PAD_CTRL));
++	} else {/* etc boards */
++		back_key = GPIO_BACK_KEY;
++		SETUP_IOMUX_PAD(PAD_CSI0_DATA_EN__GPIO5_IO20 | MUX_PAD_CTRL(NO_PAD_CTRL));
++	};
+ 
+-	gpio_direction_input(GPIO_BACK_KEY);
++	gpio_direction_input(back_key);
+ 
+-	if (gpio_get_value(GPIO_BACK_KEY) == 0) { /* BACK key is low assert */
++	/* Check Recovery Combo Button press or not. */
++	if (gpio_get_value(back_key) == 0) { /* BACK key is low assert */
+ 		button_pressed = 1;
+ 		printf("Recovery key pressed\n");
+-	}
++	};
+ 
+ 	return recovery_mode || button_pressed;
+ }
+-- 
+2.1.4
+
