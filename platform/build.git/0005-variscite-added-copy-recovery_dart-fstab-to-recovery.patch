@@ -1,0 +1,80 @@
+From 2ebe686a32474b799b3b519ff3f9baf6a04676c3 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Wed, 1 Jun 2016 15:16:38 +0300
+Subject: [PATCH 5/5] variscite: added copy recovery_dart fstab to recovery.img
+
+---
+ core/Makefile | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index f716a57..caf9837 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -839,14 +839,18 @@ recovery_resource_deps := $(shell find $(recovery_resources_common) \
+ ifeq ($(TARGET_USERIMAGES_USE_UBIFS),true)
+ ifdef TARGET_RECOVERY_FSTAB
+ recovery_fstab := $(TARGET_RECOVERY_FSTAB)
++recovery_dart_fstab := $(TARGET_RECOVERY_DART_FSTAB)
+ else
+ recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery_nand.fstab))
++recovery_dart_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery_dart_nand.fstab))
+ endif
+ else
+ ifdef TARGET_RECOVERY_FSTAB
+ recovery_fstab := $(TARGET_RECOVERY_FSTAB)
++recovery_dart_fstab := $(TARGET_RECOVERY_DART_FSTAB)
+ else
+ recovery_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery.fstab))
++recovery_dart_fstab := $(strip $(wildcard $(TARGET_DEVICE_DIR)/recovery_dart.fstab))
+ endif
+ endif
+ 
+@@ -863,6 +867,10 @@ ifeq ($(recovery_fstab),)
+   $(info No recovery.fstab for TARGET_DEVICE $(TARGET_DEVICE))
+ endif
+ 
++ifeq ($(recovery_dart_fstab),)
++  $(info No recovery_dart.fstab for TARGET_DEVICE $(TARGET_DEVICE))
++endif
++
+ INTERNAL_RECOVERYIMAGE_ARGS := \
+ 	$(addprefix --second ,$(INSTALLED_2NDBOOTLOADER_TARGET)) \
+ 	--kernel $(recovery_kernel) \
+@@ -920,6 +928,8 @@ define build-recoveryimage-target
+     cp -rf $(item) $(TARGET_RECOVERY_ROOT_OUT)/)
+   $(hide) $(foreach item,$(recovery_fstab), \
+     cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery.fstab)
++  $(hide) $(foreach item,$(recovery_dart_fstab), \
++    cp -f $(item) $(TARGET_RECOVERY_ROOT_OUT)/etc/recovery_dart.fstab)
+   $(hide) cp $(RECOVERY_INSTALL_OTA_KEYS) $(TARGET_RECOVERY_ROOT_OUT)/res/keys
+   $(hide) cat $(INSTALLED_DEFAULT_PROP_TARGET) $(recovery_build_prop) \
+           > $(TARGET_RECOVERY_ROOT_OUT)/default.prop
+@@ -953,6 +963,7 @@ $(INSTALLED_RECOVERYIMAGE_TARGET): $(MKBOOTFS) $(MKBOOTIMG) $(MINIGZIP) \
+ 		$(INSTALLED_2NDBOOTLOADER_TARGET) \
+ 		$(recovery_build_prop) $(recovery_resource_deps) \
+ 		$(recovery_fstab) \
++		$(recovery_dart_fstab) \
+ 		$(RECOVERY_INSTALL_OTA_KEYS)
+ 		$(call build-recoveryimage-target, $@)
+ 
+@@ -1717,6 +1728,7 @@ ifneq ($(TARGET_PRODUCT),sdk)
+ ifeq ($(filter generic%,$(TARGET_DEVICE)),)
+ ifneq ($(TARGET_NO_KERNEL),true)
+ ifneq ($(recovery_fstab),)
++ifneq ($(recovery_dart_fstab),)
+ 
+ # -----------------------------------------------------------------
+ # OTA update package
+@@ -1760,7 +1772,7 @@ otapackage:
+ 		cp -f $(INTERNAL_OTA_PACKAGE_TARGET) $$OTA_PACKAGE_BOARD; \
+ 	done
+ 
+-
++endif    # recovery_dart_fstab is defined
+ endif    # recovery_fstab is defined
+ endif    # TARGET_NO_KERNEL != true
+ endif    # TARGET_DEVICE != generic*
+-- 
+2.1.4
+

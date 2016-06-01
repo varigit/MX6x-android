@@ -1,0 +1,49 @@
+From 6f3afa7b02735ef027dbe18c9479bed5a5812902 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Wed, 1 Jun 2016 15:14:13 +0300
+Subject: [PATCH] variscite: added select unique fstab config for Dart board
+
+---
+ roots.cpp | 26 +++++++++++++++++++++-----
+ 1 file changed, 21 insertions(+), 5 deletions(-)
+
+diff --git a/roots.cpp b/roots.cpp
+index c709fed..5afe732 100644
+--- a/roots.cpp
++++ b/roots.cpp
+@@ -89,11 +89,27 @@ void load_volume_table()
+ {
+     int i;
+     int ret;
+-
+-    fstab = fs_mgr_read_fstab("/etc/recovery.fstab");
+-    if (!fstab) {
+-        LOGE("failed to read /etc/recovery.fstab\n");
+-        return;
++    size_t alloc_len = 0;
++    char *line = NULL;
++
++    FILE *check_dart_file = fopen("/sys/devices/soc0/machine", "r");
++    getline(&line, &alloc_len, check_dart_file);
++    fclose(check_dart_file);
++
++    /* The name of the fstab file is last, after the option */
++    char *const pch = strstr(line, "VAR-DART");
++    if (pch){
++        fstab = fs_mgr_read_fstab("/etc/recovery_dart.fstab");
++        if (!fstab) {
++            LOGE("failed to read (DART) /etc/recovery_dart.fstab\n");
++            return;
++        };
++    } else {
++        fstab = fs_mgr_read_fstab("/etc/recovery.fstab");
++        if (!fstab) {
++            LOGE("failed to read /etc/recovery.fstab\n");
++            return;
++        };
+     }
+ 
+     ret = fs_mgr_add_entry(fstab, "/tmp", "ramdisk", "ramdisk");
+-- 
+2.1.4
+

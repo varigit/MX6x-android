@@ -1,7 +1,7 @@
 From cc62a758301ebc7819240c6d324fe06daa5d58df Mon Sep 17 00:00:00 2001
 From: "roman.pletnev" <roman.pletnev@promwad.com>
 Date: Fri, 20 May 2016 08:00:40 +0300
-Subject: [PATCH 1/4] added build wl18xx compact
+Subject: [PATCH 1/5] added build wl18xx compact
 
 ---
  core/Makefile | 4 ++++
