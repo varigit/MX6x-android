@@ -7,7 +7,7 @@ on boot
     write /sys/bus/platform/drivers/galcore/gpu3DMinClock 8
 
     # set back camera.
-    setprop back_camera_name ov5640_mipi
+    setprop back_camera_name ov5640_mipi,uvc
 
     # set front camera.
     setprop front_camera_name uvc,ov5642_camera,ov5640_camera
