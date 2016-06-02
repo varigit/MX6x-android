@@ -17,7 +17,7 @@ ADDITIONAL_BUILD_PROPERTIES += \
                         ro.boot.storage_type=sd
 ifneq ($(BUILD_TARGET_FS),f2fs)
 TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_sd.freescale
-TARGET_RECOVERY_ART_FSTAB = device/variscite/var_mx6/fstab_sd_dart.freescale
+
 # build for ext4
 PRODUCT_COPY_FILES +=	\
 	device/variscite/var_mx6/fstab_sd.freescale:root/fstab.freescale \
@@ -35,7 +35,7 @@ ADDITIONAL_BUILD_PROPERTIES += \
                         ro.boot.storage_type=emmc
 ifneq ($(BUILD_TARGET_FS),f2fs)
 TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_emmc.freescale
-TARGET_RECOVERY_DART_FSTAB = device/variscite/var_mx6/fstab_emmc_dart.freescale
+
 # build for ext4
 PRODUCT_COPY_FILES +=	\
 	device/variscite/var_mx6/fstab_emmc.freescale:root/fstab.freescale \
