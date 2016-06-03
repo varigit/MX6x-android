@@ -1,7 +1,7 @@
 From e9316c400901e565fceda0eac820f295003c26a3 Mon Sep 17 00:00:00 2001
 From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
 Date: Wed, 1 Jun 2016 12:53:34 +0300
-Subject: [PATCH 3/3] [dart] fixed: button switch to android recovery mode
+Subject: [PATCH 3/4] [dart] fixed: button switch to android recovery mode
 
 ---
  board/variscite/mx6var_som/mx6var_som.c | 20 ++++++++++++++------

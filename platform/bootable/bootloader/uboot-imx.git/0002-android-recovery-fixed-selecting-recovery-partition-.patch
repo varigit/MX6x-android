@@ -1,7 +1,7 @@
 From ca1bdb5abbfbe97e4e64d8d42bfa7d3449f7dc3a Mon Sep 17 00:00:00 2001
 From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
 Date: Sat, 28 May 2016 14:54:33 +0300
-Subject: [PATCH 2/3] android-recovery: fixed selecting recovery partition if
+Subject: [PATCH 2/4] android-recovery: fixed selecting recovery partition if
  boot from nand
 
 ---
