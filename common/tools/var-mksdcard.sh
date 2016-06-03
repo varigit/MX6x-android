@@ -56,9 +56,21 @@ while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	[ "$moreoptions" = 1 ] && shift
 done
 
+if [ "${node}" = "/dev/sda" ]; then
+        echo "====== dangerous!"
+        exit
+fi
+
 if [ ! -e ${node} ]; then
+	echo "no such node ${node}"
 	help
 	exit
+fi
+
+part=""
+echo ${node} | grep mmcblk > /dev/null
+if [ "$?" -eq "0" ]; then
+	part="p"
 fi
 
 # call sfdisk to create partition table
@@ -69,6 +81,11 @@ total_size=`expr ${total_size} / 1024`
 boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
 extend_size=`expr ${SYSTEM_ROM_SIZE} + ${CACHE_SIZE} + ${DEVICE_SIZE} + ${MISC_SIZE} + ${DATAFOOTER_SIZE} + ${seprate}`
 data_size=`expr ${total_size} - ${boot_rom_sizeb} - ${RECOVERY_ROM_SIZE} - ${extend_size} + ${seprate}`
+
+echo "total_size $total_size"
+echo "boot_rom_sizeb $boot_rom_sizeb"
+echo "extend_size $extend_size"
+echo "data_size $data_size"
 
 # create partitions
 if [ "${cal_only}" -eq "1" ]; then
@@ -85,14 +102,27 @@ EOF
 exit
 fi
 
+function umount_android
+{
+    echo "unmountig android partitions"
+    umount ${node}${part}9
+    umount ${node}${part}8
+    umount ${node}${part}7
+    umount ${node}${part}6
+    umount ${node}${part}5
+    umount ${node}${part}4
+    umount ${node}${part}3
+    umount ${node}${part}2
+    umount ${node}${part}1
+}
+
 function format_android
 {
-    echo "formating android images"
-    mkfs.ext4 ${node}${part}4 -L data
+    echo "formatting android partitions"
+    mkfs.ext4 ${node}${part}4 -Ldata
     mkfs.ext4 ${node}${part}5 -Lsystem
     mkfs.ext4 ${node}${part}6 -Lcache
     mkfs.ext4 ${node}${part}7 -Ldevice
-    sync
 }
 
 function flash_android
@@ -125,9 +155,9 @@ if [[ "${not_partition}" -eq "1" && "${flash_images}" -eq "1" ]] ; then
     exit
 fi
 
-# destroy the partition table
-dd if=/dev/zero of=${node} bs=1024 count=1
+umount_android
 
+echo "partitioning ${node}..."
 sfdisk --force -uM ${node} << EOF
 ,${boot_rom_sizeb},83
 ,${RECOVERY_ROM_SIZE},83
@@ -140,6 +170,7 @@ sfdisk --force -uM ${node} << EOF
 ,${DATAFOOTER_SIZE},83
 EOF
 
+echo "adjust bootloader partition..."
 # adjust the partition reserve for bootloader.
 # if you don't put the uboot on same device, you can remove the BOOTLOADER_ERSERVE
 # to have 8M space.
@@ -149,44 +180,10 @@ sfdisk --force -uM ${node} -N1 << EOF
 ${BOOTLOAD_RESERVE},${BOOT_ROM_SIZE},83
 EOF
 
+sleep 10
+umount_android
+
 # format the SDCARD/DATA/CACHE partition
-part=""
-echo ${node} | grep mmcblk > /dev/null
-if [ "$?" -eq "0" ]; then
-	part="p"
-fi
-
-umount ${node}${part}1 2>/dev/null
-umount ${node}${part}2 2>/dev/null
-umount ${node}${part}3 2>/dev/null
-umount ${node}${part}4 2>/dev/null
-umount ${node}${part}5 2>/dev/null
-umount ${node}${part}6 2>/dev/null
-umount ${node}${part}7 2>/dev/null
-umount ${node}${part}8 2>/dev/null
-umount ${node}${part}9 2>/dev/null
-
-sync;sleep 3;
 format_android
-sync;sleep 3;
 flash_android
-sync;sleep 3;
 
-umount ${node}${part}1 2>/dev/null
-umount ${node}${part}2 2>/dev/null
-umount ${node}${part}3 2>/dev/null
-umount ${node}${part}4 2>/dev/null
-umount ${node}${part}5 2>/dev/null
-umount ${node}${part}6 2>/dev/null
-umount ${node}${part}7 2>/dev/null
-umount ${node}${part}8 2>/dev/null
-umount ${node}${part}9 2>/dev/null
-
-# For MFGTool Notes:
-# MFGTool use mksdcard-android.tar store this script
-# if you want change it.
-# do following:
-#   tar xf mksdcard-android.sh.tar
-#   vi mksdcard-android.sh 
-#   [ edit want you want to change ]
-#   rm mksdcard-android.sh.tar; tar cf mksdcard-android.sh.tar mksdcard-android.sh
