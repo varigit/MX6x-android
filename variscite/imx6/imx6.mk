@@ -313,7 +313,7 @@ PRODUCT_COPY_FILES +=	\
 	device/variscite/common/input/ADS7846_Touchscreen.idc:system/usr/idc/ADS7846_Touchscreen.idc \
 	device/variscite/common/input/eGalax_Touch_Screen.idc:system/usr/idc/EP0700M06.idc \
 	device/variscite/common/input/ft5x06_ts.idc:system/usr/idc/ft5x06_ts.idc \
-	system/core/rootdir/init.rc:root/init.rc \
+	device/variscite/imx6/init.rc:root/init.rc \
 	device/variscite/imx6/etc/apns-conf.xml:system/etc/apns-conf.xml \
 	device/variscite/imx6/etc/init.usb.rc:root/init.freescale.usb.rc \
 	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.freescale.rc \

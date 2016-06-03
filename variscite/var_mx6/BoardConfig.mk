@@ -51,6 +51,9 @@ endif # BUILD_TARGET_FS
 endif # BUILD_TARGET_DEVICE
 
 
+PRODUCT_COPY_FILES +=	\
+	device/variscite/var_mx6/pm_off.sh:/system/bin/pm_off.sh
+
 BOOTLOADER_USES_SPL := true
 TARGET_BOOTLOADER_BOARD_NAME := VAR_MX6
 PRODUCT_MODEL := VAR_SOM_MX6
