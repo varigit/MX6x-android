@@ -1,33 +1,30 @@
 #!/bin/sh -e
-#
-# install
-#
-# This script must be run from the Android main  directory. variscite/install
-# must be at ~/var_lp_511_210
-#
-echo "Variscite VAR-MX6 for Android LP5.1.1 210 V1 patches"
-#
-#
-cd ll_511_210_build
-#
+
+export BUILD_FOLDER=~/var_ll_511_210/ll_511_210_build
+export TOOLS_FOLDER=$BUILD_FOLDER/device/variscite/common/tools
+export PATCH_FOLDER=$TOOLS_FOLDER/patches
+
+echo "Variscite VAR-MX6 for Android LP5.1.1 210 V2 patches"
+
+cd $BUILD_FOLDER
+
 #####################
 # framework patches #
 #####################
 cd build
-patch -p2 < ../../variscite/build.patch
+patch -p2 < $PATCH_FOLDER/build.patch
 cd ../device
-patch -p2 < ../../variscite/device.patch
-tar -xvf ../../variscite/variscite.tar.bz2
+patch -p2 < $PATCH_FOLDER/device.patch
 cd ../frameworks
-patch -p2 < ../../variscite/frameworks.patch
+patch -p2 < $PATCH_FOLDER/frameworks.patch
 cd ../hardware
-patch -p2 < ../../variscite/hardware.patch
+patch -p2 < $PATCH_FOLDER/hardware.patch
 cd ../external
-patch -p2 < ../../variscite/external.patch
+patch -p2 < $PATCH_FOLDER/external.patch
 cd ../system
-patch -p2 < ../../variscite/system.patch
+patch -p2 < $PATCH_FOLDER/system.patch
 cd ..
-#
+
 ########################
 # wilink8 repositories #
 ########################
@@ -39,24 +36,24 @@ cd ..
 git clone git://git.ti.com/wilink8-wlan/18xx-ti-utils.git wl18xx-ti-utils
 cd wl18xx-ti-utils
 git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23
-patch -p1 < ../../../../variscite/wl18xx-ti-utils.patch
+patch -p1 < $PATCH_FOLDER/wl18xx-ti-utils.patch
 cd ..
 git clone git://git.omapzoom.org/platform/hardware/ti/wpan.git
 cd wpan
 git checkout 32acb67605cb0d91955427fc4195205e8bc8eaf4
-patch -p1 < ../../../../variscite/wpan.patch
+patch -p1 < $PATCH_FOLDER/wpan.patch
 cd ../../../device
 mkdir ti
 cd ti
 git clone git://git.omapzoom.org/device/ti/proprietary-open.git
 cd proprietary-open
 git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1
-patch -p1 < ../../../../variscite/ti_proprietary-open.patch 
+patch -p1 < $PATCH_FOLDER/ti_proprietary-open.patch
 cd ../../../external
 git clone git://git.omapzoom.org/platform/external/crda.git
 cd crda
 git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058
-#
+
 ##############################
 # misc external repositories #
 ##############################
@@ -68,7 +65,7 @@ cd ..
 git clone https://github.com/Hashcode/i2c-tools.git
 cd i2c-tools
 git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57
-patch -p1 < ../../../variscite/i2c-tools.patch
+patch -p1 < $PATCH_FOLDER/i2c-tools.patch
 cd ..
 git clone git://git.sipsolutions.net/iw.git
 cd iw
@@ -78,14 +75,14 @@ git clone https://github.com/jruesga/android_external_libtruezip.git libtruezip
 cd libtruezip
 git checkout 45ac3d07b5a4753bd1abc9fa38fd48221312a3d9
 cd ../..
-#
-##############################
-# misc external repositories #
-##############################
-cp ../variscite/sh/* ./
-#
+
+#######################
+# var-mksdcard script #
+#######################
+cp $TOOLS_FOLDER/var-mksdcard.sh .
+
 echo "Done"
-#
+
 exit 0
 
 
