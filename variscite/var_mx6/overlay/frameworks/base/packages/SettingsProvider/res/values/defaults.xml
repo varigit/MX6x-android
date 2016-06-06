@@ -23,4 +23,6 @@
     <string name="def_location_providers_allowed" translatable="false"></string>
     <!-- Default screen brightness, from 0 to 255. 200 is 80%. -->
     <integer name="def_screen_brightness">200</integer>
+    <!-- Development settings -->
+    <bool name="def_stay_on_while_plugged_in">true</bool>
 </resources>

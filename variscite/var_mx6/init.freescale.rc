@@ -286,9 +286,3 @@ on post-fs
     exec - root system -- /system/bin/sh -c "/system/bin/tinymix 'PCM Playback Volume' 127 127"
     exec - root system -- /system/bin/sh -c "/system/bin/tinymix 'HP DAC Playback Volume' 118 118"
     exec - root system -- /system/bin/sh -c "/system/bin/tinymix 'PGA Capture Volume' 110 110"
-
-# disable auto suspend
-service pm_off /system/bin/sh /system/bin/pm_off.sh
-    class main
-    user root
-    oneshot 
