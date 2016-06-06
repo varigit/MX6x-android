@@ -37,6 +37,7 @@ git clone git://git.ti.com/wilink8-wlan/18xx-ti-utils.git wl18xx-ti-utils
 cd wl18xx-ti-utils
 git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23
 patch -p1 < $PATCH_FOLDER/wl18xx-ti-utils.patch
+dos2unix wlconf/official_inis/WL1835MOD_INI.ini
 cd ..
 git clone git://git.omapzoom.org/platform/hardware/ti/wpan.git
 cd wpan
