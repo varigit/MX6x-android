@@ -1,7 +1,7 @@
 From 04cde9dcda051d035b944a40db66724e25d56bd6 Mon Sep 17 00:00:00 2001
 From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
 Date: Wed, 8 Jun 2016 09:41:50 +0300
-Subject: [PATCH 3/3] variscite: fix crash Camera3 apk under certain lcd
+Subject: [PATCH 3/4] variscite: fix crash Camera3 apk under certain lcd
  density
 
 ---

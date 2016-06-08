@@ -1,7 +1,7 @@
 From e7f524b59bb5aba2c96f4ee8bfa4a1e4b4f01290 Mon Sep 17 00:00:00 2001
 From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
 Date: Mon, 6 Jun 2016 13:59:50 +0300
-Subject: [PATCH 2/3] variscite: fix crash camera2.apk if used only back mipi
+Subject: [PATCH 2/4] variscite: fix crash camera2.apk if used only back mipi
  camera in video mode
 
 ---
