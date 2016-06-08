@@ -1,0 +1,30 @@
+From e7f524b59bb5aba2c96f4ee8bfa4a1e4b4f01290 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Mon, 6 Jun 2016 13:59:50 +0300
+Subject: [PATCH 2/3] variscite: fix crash camera2.apk if used only back mipi
+ camera in video mode
+
+---
+ src/com/android/camera/VideoModule.java | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/com/android/camera/VideoModule.java b/src/com/android/camera/VideoModule.java
+index 36f6b81..e774d88 100644
+--- a/src/com/android/camera/VideoModule.java
++++ b/src/com/android/camera/VideoModule.java
+@@ -882,7 +882,11 @@ public class VideoModule extends CameraModule
+         mDisplayRotation = CameraUtil.getDisplayRotation();
+         Characteristics info =
+                 mActivity.getCameraProvider().getCharacteristics(mCameraId);
+-        mCameraDisplayOrientation = info.getPreviewOrientation(mDisplayRotation);
++        mCameraDisplayOrientation = mDisplayRotation;
++        if(info != null) {
++            mCameraDisplayOrientation = info.getPreviewOrientation(mDisplayRotation);
++        };
++
+         // Change the camera display orientation
+         if (mCameraDevice != null) {
+             mCameraDevice.setDisplayOrientation(mDisplayRotation);
+-- 
+2.1.4
+
