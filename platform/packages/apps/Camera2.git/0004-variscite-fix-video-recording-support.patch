@@ -1,0 +1,25 @@
+From b566ae469736b0a5ca3ba6bda7f54e49378a3290 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Wed, 8 Jun 2016 14:30:37 +0300
+Subject: [PATCH 4/4] variscite: fix video recording support
+
+---
+ src/com/android/camera/CameraActivity.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/com/android/camera/CameraActivity.java b/src/com/android/camera/CameraActivity.java
+index 13ade78..bf48898 100644
+--- a/src/com/android/camera/CameraActivity.java
++++ b/src/com/android/camera/CameraActivity.java
+@@ -1477,7 +1477,7 @@ public class CameraActivity extends QuickActivity
+         profile.mark("OneCameraManager.get");
+ 
+         try {
+-            mCameraController = new CameraController(mAppContext, null, mMainHandler,
++            mCameraController = new CameraController(mAppContext, this, mMainHandler,
+                     CameraAgentFactory.getAndroidCameraAgent(mAppContext,
+                             CameraAgentFactory.CameraApi.API_1),
+                     CameraAgentFactory.getAndroidCameraAgent(mAppContext,
+-- 
+2.1.4
+

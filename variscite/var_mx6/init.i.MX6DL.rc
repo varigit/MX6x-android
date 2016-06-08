@@ -10,4 +10,4 @@ on boot
     setprop back_camera_name ov5640_mipi,uvc
 
     # set front camera.
-    setprop front_camera_name uvc,ov5642_camera,ov5640_camera
+    setprop front_camera_name uvc,ov5642_camera,ov5640_camera,ov5640_mipi
