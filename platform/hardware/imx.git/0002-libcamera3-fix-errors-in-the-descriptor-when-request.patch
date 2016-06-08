@@ -1,0 +1,238 @@
+From a26bdf059ca1aac7d03c874ded7412ce4d238fa3 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Tue, 7 Jun 2016 11:47:44 +0300
+Subject: [PATCH 2/2] libcamera3: fix errors in the descriptor when requesting
+ device
+
+---
+ mx6/libcamera3/CameraUtils.h  |  4 ++--
+ mx6/libcamera3/Metadata.cpp   | 33 +++++++++++++++------------------
+ mx6/libcamera3/Ov5640Csi.cpp  |  6 +++---
+ mx6/libcamera3/Ov5640Mipi.cpp |  6 +++---
+ mx6/libcamera3/Ov5642Csi.cpp  |  6 +++---
+ mx6/libcamera3/TVINDevice.cpp |  6 +++---
+ mx6/libcamera3/UvcDevice.cpp  |  6 +++---
+ 7 files changed, 32 insertions(+), 35 deletions(-)
+
+diff --git a/mx6/libcamera3/CameraUtils.h b/mx6/libcamera3/CameraUtils.h
+index 8bf1003..acdb5c3 100644
+--- a/mx6/libcamera3/CameraUtils.h
++++ b/mx6/libcamera3/CameraUtils.h
+@@ -211,8 +211,8 @@ public:
+     int mPictureResolutionCount;
+     int mAvailableFormats[MAX_SENSOR_FORMAT];
+     int mAvailableFormatCount;
+-    nsecs_t mMinFrameDuration;
+-    nsecs_t mMaxFrameDuration;
++    nsecs_t mMinFrameDuration[MAX_RESOLUTION_SIZE];
++    nsecs_t mMaxFrameDuration[MAX_RESOLUTION_SIZE];
+     int mTargetFpsRange[MAX_FPS_RANGE];
+     int mMaxWidth;
+     int mMaxHeight;
+diff --git a/mx6/libcamera3/Metadata.cpp b/mx6/libcamera3/Metadata.cpp
+index 0f7a5ed..384917c 100644
+--- a/mx6/libcamera3/Metadata.cpp
++++ b/mx6/libcamera3/Metadata.cpp
+@@ -240,10 +240,9 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor)
+             sensor.mAvailableFormatCount,
+             sensor.mAvailableFormats);
+ 
+-    int64_t android_scaler_available_jpeg_min_durations[] = {sensor.mMinFrameDuration};
+     m.addInt64(ANDROID_SCALER_AVAILABLE_JPEG_MIN_DURATIONS,
+-            ARRAY_SIZE(android_scaler_available_jpeg_min_durations),
+-            android_scaler_available_jpeg_min_durations);
++            sensor.mPictureResolutionCount,
++            sensor.mMinFrameDuration);
+ 
+     m.addInt32(ANDROID_SCALER_AVAILABLE_JPEG_SIZES,
+             sensor.mPictureResolutionCount,
+@@ -254,19 +253,17 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor)
+             ARRAY_SIZE(android_scaler_available_max_digital_zoom),
+             android_scaler_available_max_digital_zoom);
+ 
+-    int64_t android_scaler_available_processed_min_durations[] = {sensor.mMinFrameDuration};
+     m.addInt64(ANDROID_SCALER_AVAILABLE_PROCESSED_MIN_DURATIONS,
+-            ARRAY_SIZE(android_scaler_available_processed_min_durations),
+-            android_scaler_available_processed_min_durations);
++            sensor.mPictureResolutionCount,
++            sensor.mMinFrameDuration);
+ 
+     m.addInt32(ANDROID_SCALER_AVAILABLE_PROCESSED_SIZES,
+             sensor.mPreviewResolutionCount,
+             sensor.mPreviewResolutions);
+ 
+-    int64_t android_scaler_available_raw_min_durations[] = {sensor.mMinFrameDuration};
+     m.addInt64(ANDROID_SCALER_AVAILABLE_RAW_MIN_DURATIONS,
+-            ARRAY_SIZE(android_scaler_available_raw_min_durations),
+-            android_scaler_available_raw_min_durations);
++            sensor.mPictureResolutionCount,
++            sensor.mMinFrameDuration);
+ 
+     int32_t android_scaler_available_raw_sizes[] = {sensor.mMaxWidth, sensor.mMaxHeight};
+     m.addInt32(ANDROID_SCALER_AVAILABLE_RAW_SIZES,
+@@ -286,10 +283,10 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor)
+             ARRAY_SIZE(android_sensor_info_sensitivity_range),
+             android_sensor_info_sensitivity_range);
+ #endif
+-    int64_t android_sensor_info_max_frame_duration[] = {sensor.mMaxFrameDuration};
+-    m.addInt64(ANDROID_SENSOR_INFO_MAX_FRAME_DURATION,
+-            ARRAY_SIZE(android_sensor_info_max_frame_duration),
+-            android_sensor_info_max_frame_duration);
++
++   m.addInt64(ANDROID_SENSOR_INFO_MAX_FRAME_DURATION,
++            sensor.mPictureResolutionCount,
++            sensor.mMaxFrameDuration);
+ 
+     float android_sensor_info_physical_size[] = {sensor.mPhysicalWidth, sensor.mPhysicalHeight};
+     m.addFloat(ANDROID_SENSOR_INFO_PHYSICAL_SIZE,
+@@ -409,12 +406,12 @@ void Metadata::createSettingTemplate(Metadata& base, SensorData& sensor,
+     base.addUInt8(ANDROID_NOISE_REDUCTION_STRENGTH, 1, &noiseStrength);
+ 
+     /** android.color */
+-    static const float colorTransform[9] = {
+-        1.0f, 0.f, 0.f,
+-        0.f, 1.f, 0.f,
+-        0.f, 0.f, 1.f
++    camera_metadata_rational_t colorTransform[9] = {
++        {1,0}, {0,0}, {0,0},
++        {0,0}, {1,0}, {0,0},
++        {0,0}, {0,0}, {1,0},
+     };
+-    base.addFloat(ANDROID_COLOR_CORRECTION_TRANSFORM, 9, colorTransform);
++    base.addRational(ANDROID_COLOR_CORRECTION_TRANSFORM, 9, colorTransform);
+ 
+     /** android.tonemap */
+     static const float tonemapCurve[4] = {
+diff --git a/mx6/libcamera3/Ov5640Csi.cpp b/mx6/libcamera3/Ov5640Csi.cpp
+index 8cff148..ddc6c40 100644
+--- a/mx6/libcamera3/Ov5640Csi.cpp
++++ b/mx6/libcamera3/Ov5640Csi.cpp
+@@ -143,10 +143,10 @@ status_t Ov5640Csi::initSensorStaticData()
+     mPreviewResolutionCount = previewCnt;
+     mPictureResolutionCount = pictureCnt;
+ 
+-    mMinFrameDuration = 33331760L;
+-    mMaxFrameDuration = 30000000000L;
+     int i;
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<pictureCnt; i+=2) {
++        mMinFrameDuration[i/2] = 33331760L;
++        mMaxFrameDuration[i/2] = 30000000000L;
+         ALOGI("SupportedPictureSizes: %d x %d", mPictureResolutions[i], mPictureResolutions[i+1]);
+     }
+ 
+@@ -154,7 +154,7 @@ status_t Ov5640Csi::initSensorStaticData()
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<previewCnt; i+=2) {
+         ALOGI("SupportedPreviewSizes: %d x %d", mPreviewResolutions[i], mPreviewResolutions[i+1]);
+     }
+-    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration, mMaxFrameDuration);
++    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration[0], mMaxFrameDuration[0]);
+ 
+     i = 0;
+     mTargetFpsRange[i++] = 10;
+diff --git a/mx6/libcamera3/Ov5640Mipi.cpp b/mx6/libcamera3/Ov5640Mipi.cpp
+index 4689317..a04b0c5 100644
+--- a/mx6/libcamera3/Ov5640Mipi.cpp
++++ b/mx6/libcamera3/Ov5640Mipi.cpp
+@@ -137,10 +137,10 @@ status_t Ov5640Mipi::initSensorStaticData()
+     mPreviewResolutionCount = previewCnt;
+     mPictureResolutionCount = pictureCnt;
+ 
+-    mMinFrameDuration = 33331760L;
+-    mMaxFrameDuration = 30000000000L;
+     int i;
+     for (i=0; i<MAX_RESOLUTION_SIZE  && i<pictureCnt; i+=2) {
++        mMinFrameDuration[i/2] = 33331760L;
++        mMaxFrameDuration[i/2] = 30000000000L;
+         ALOGI("SupportedPictureSizes: %d x %d", mPictureResolutions[i], mPictureResolutions[i+1]);
+     }
+ 
+@@ -148,7 +148,7 @@ status_t Ov5640Mipi::initSensorStaticData()
+     for (i=0; i<MAX_RESOLUTION_SIZE  && i<previewCnt; i+=2) {
+         ALOGI("SupportedPreviewSizes: %d x %d", mPreviewResolutions[i], mPreviewResolutions[i+1]);
+     }
+-    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration, mMaxFrameDuration);
++    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration[0], mMaxFrameDuration[0]);
+ 
+     i = 0;
+     mTargetFpsRange[i++] = 10;
+diff --git a/mx6/libcamera3/Ov5642Csi.cpp b/mx6/libcamera3/Ov5642Csi.cpp
+index 9cd2580..f51b5f9 100644
+--- a/mx6/libcamera3/Ov5642Csi.cpp
++++ b/mx6/libcamera3/Ov5642Csi.cpp
+@@ -138,10 +138,10 @@ status_t Ov5642Csi::initSensorStaticData()
+     mPreviewResolutionCount = previewCnt;
+     mPictureResolutionCount = pictureCnt;
+ 
+-    mMinFrameDuration = 33331760L;
+-    mMaxFrameDuration = 30000000000L;
+     int i;
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<pictureCnt; i+=2) {
++        mMinFrameDuration[i/2] = 33331760L;
++        mMaxFrameDuration[i/2] = 30000000000L;
+         ALOGI("SupportedPictureSizes: %d x %d", mPictureResolutions[i], mPictureResolutions[i+1]);
+     }
+ 
+@@ -149,7 +149,7 @@ status_t Ov5642Csi::initSensorStaticData()
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<previewCnt; i+=2) {
+         ALOGI("SupportedPreviewSizes: %d x %d", mPreviewResolutions[i], mPreviewResolutions[i+1]);
+     }
+-    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration, mMaxFrameDuration);
++    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration[0], mMaxFrameDuration[0]);
+ 
+     i = 0;
+     mTargetFpsRange[i++] = 10;
+diff --git a/mx6/libcamera3/TVINDevice.cpp b/mx6/libcamera3/TVINDevice.cpp
+index 09c6652..a487cfc 100644
+--- a/mx6/libcamera3/TVINDevice.cpp
++++ b/mx6/libcamera3/TVINDevice.cpp
+@@ -149,10 +149,10 @@ status_t TVINDevice::initSensorStaticData()
+     mPreviewResolutionCount = previewCnt;
+     mPictureResolutionCount = pictureCnt;
+ 
+-    mMinFrameDuration = 33331760L;
+-    mMaxFrameDuration = 30000000000L;
+     int i;
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<pictureCnt; i+=2) {
++        mMinFrameDuration[i/2] = 33331760L;
++        mMaxFrameDuration[i/2] = 30000000000L;
+         ALOGI("SupportedPictureSizes: %d x %d", mPictureResolutions[i], mPictureResolutions[i+1]);
+     }
+ 
+@@ -160,7 +160,7 @@ status_t TVINDevice::initSensorStaticData()
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<previewCnt; i+=2) {
+         ALOGI("SupportedPreviewSizes: %d x %d", mPreviewResolutions[i], mPreviewResolutions[i+1]);
+     }
+-    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration, mMaxFrameDuration);
++    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration[0], mMaxFrameDuration[0]);
+ 
+     i = 0;
+     mTargetFpsRange[i++] = 10;
+diff --git a/mx6/libcamera3/UvcDevice.cpp b/mx6/libcamera3/UvcDevice.cpp
+index 7ee47e2..41a2a69 100644
+--- a/mx6/libcamera3/UvcDevice.cpp
++++ b/mx6/libcamera3/UvcDevice.cpp
+@@ -141,10 +141,10 @@ status_t UvcDevice::initSensorStaticData()
+     mPreviewResolutionCount = previewCnt;
+     mPictureResolutionCount = pictureCnt;
+ 
+-    mMinFrameDuration = 33331760L;
+-    mMaxFrameDuration = 30000000000L;
+     int i;
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<pictureCnt; i+=2) {
++        mMinFrameDuration[i/2] = 33331760L;
++        mMaxFrameDuration[i/2] = 30000000000L;
+         ALOGI("SupportedPictureSizes: %d x %d", mPictureResolutions[i], mPictureResolutions[i+1]);
+     }
+ 
+@@ -152,7 +152,7 @@ status_t UvcDevice::initSensorStaticData()
+     for (i=0; i<MAX_RESOLUTION_SIZE && i<previewCnt; i+=2) {
+         ALOGI("SupportedPreviewSizes: %d x %d", mPreviewResolutions[i], mPreviewResolutions[i+1]);
+     }
+-    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration, mMaxFrameDuration);
++    ALOGI("FrameDuration is %lld, %lld", mMinFrameDuration[0], mMaxFrameDuration[0]);
+ 
+     i = 0;
+     mTargetFpsRange[i++] = 10;
+-- 
+2.1.4
+

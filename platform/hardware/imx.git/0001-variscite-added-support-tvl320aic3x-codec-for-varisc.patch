@@ -1,7 +1,7 @@
 From 93dc397ce2584431e2ba83cde8a852c63f9dcd35 Mon Sep 17 00:00:00 2001
 From: Roman Pletnev <roman.pletnev@promwad.com>
 Date: Sat, 28 May 2016 15:40:44 +0300
-Subject: [PATCH] variscite: added support tvl320aic3x codec for variscite
+Subject: [PATCH 1/2] variscite: added support tvl320aic3x codec for variscite
  boards
 
 ---
