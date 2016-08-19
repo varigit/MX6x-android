@@ -1,0 +1,71 @@
+From 28c3029957c2cfbea42108c1c3246edeafadfc27 Mon Sep 17 00:00:00 2001
+From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
+Date: Tue, 2 Aug 2016 16:44:45 +0300
+Subject: [PATCH] recovery: fix working the recovering script for variscite
+ boards Example script creating and booting:  adb shell "echo 'boot-recovery '
+ > /cache/recovery/command"  adb shell "echo
+ '--update_package=/cache/update.zip' >> /cache/recovery/command"  adb shell
+ "echo '--wipe_cache' >> /cache/recovery/command"
+
+ adb push /media/ster/ff47c977-c594-432a-b48a-8b6885004030/ster/android-6-0-1-var-som/src/output_package_testting/var_m_601_100/m_601_100_build/out/target/product/var_mx6/var_mx6-ota-20160331-som-mx6q-c.zip  /cache/update.zip
+ adb shell sync
+ adb reboot recovery
+---
+ recovery.cpp | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/recovery.cpp b/recovery.cpp
+index b7a5458..3b99385 100644
+--- a/recovery.cpp
++++ b/recovery.cpp
+@@ -193,7 +193,8 @@ static void
+ get_args(int *argc, char ***argv) {
+     struct bootloader_message boot;
+     memset(&boot, 0, sizeof(boot));
+-    get_bootloader_message(&boot);  // this may fail, leaving a zeroed structure
++    /* not used messgaes from bootloader */
++//    get_bootloader_message(&boot);  // this may fail, leaving a zeroed structure
+     stage = strndup(boot.stage, sizeof(boot.stage));
+ 
+     if (boot.command[0] != 0 && boot.command[0] != 255) {
+@@ -935,14 +936,15 @@ main(int argc, char **argv) {
+     bool sideload_auto_reboot = false;
+     bool just_exit = false;
+     bool shutdown_after = false;
++    bool auto_reboot = true;
+ 
+     int arg;
+     while ((arg = getopt_long(argc, argv, "", OPTIONS, NULL)) != -1) {
+         switch (arg) {
+         case 'i': send_intent = optarg; break;
+-        case 'u': update_package = optarg; break;
+-        case 'w': should_wipe_data = true; break;
+-        case 'c': should_wipe_cache = true; break;
++        case 'u': update_package = optarg; auto_reboot = true; break;
++        case 'w': should_wipe_data = true; auto_reboot = true; break;
++        case 'c': should_wipe_cache = true; auto_reboot = true; break;
+         case 't': show_text = true; break;
+         case 's': sideload = true; break;
+         case 'a': sideload = true; sideload_auto_reboot = true; break;
+@@ -983,6 +985,9 @@ main(int argc, char **argv) {
+         ui->SetStage(st_cur, st_max);
+     }
+ 
++    /* used only Text mode for update */
++    ui->ShowText(true);
++
+     ui->SetBackground(RecoveryUI::NONE);
+     if (show_text) ui->ShowText(true);
+ 
+@@ -1088,7 +1093,7 @@ main(int argc, char **argv) {
+     }
+ 
+     Device::BuiltinAction after = shutdown_after ? Device::SHUTDOWN : Device::REBOOT;
+-    if ((status != INSTALL_SUCCESS && !sideload_auto_reboot) || ui->IsTextVisible()) {
++    if ((status != INSTALL_SUCCESS && !sideload_auto_reboot) || (ui->IsTextVisible() && !auto_reboot)) {
+         Device::BuiltinAction temp = prompt_and_wait(device, status);
+         if (temp != Device::NO_ACTION) {
+             after = temp;
+-- 
+2.1.4
+
