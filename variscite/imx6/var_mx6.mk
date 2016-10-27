@@ -19,6 +19,7 @@ PRODUCT_BRAND 	:= Android
 PRODUCT_MANUFACTURER := Variscite
 
 PRODUCT_COPY_FILES += \
+	device/variscite/var_mx6/init.rc:root/init.rc \
 	device/variscite/var_mx6/init.freescale.rc:root/init.freescale.rc \
 	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.freescale.i.MX6DL.rc \
 	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.freescale.i.MX6Q.rc \
@@ -36,10 +37,10 @@ PRODUCT_COPY_FILES +=	\
 
 # setup dm-verity configs.
 ifneq ($(BUILD_TARGET_DEVICE),sd)
- PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk0p5
+ PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk1p5
  $(call inherit-product, build/target/product/verity.mk)
 else 
- PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk1p5
+ PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk0p5
  $(call inherit-product, build/target/product/verity.mk)
 
 endif

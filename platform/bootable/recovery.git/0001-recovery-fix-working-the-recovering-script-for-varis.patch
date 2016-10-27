@@ -1,13 +1,15 @@
 From 28c3029957c2cfbea42108c1c3246edeafadfc27 Mon Sep 17 00:00:00 2001
 From: Ruslan Filipovich <ruslan.filipovich@promwad.com>
 Date: Tue, 2 Aug 2016 16:44:45 +0300
-Subject: [PATCH] recovery: fix working the recovering script for variscite
- boards Example script creating and booting:  adb shell "echo 'boot-recovery '
+Subject: [PATCH] recovery: fix working the recovering script for variscite boards
+
+ Example script creating and booting:
+ adb shell "echo 'boot-recovery '
  > /cache/recovery/command"  adb shell "echo
  '--update_package=/cache/update.zip' >> /cache/recovery/command"  adb shell
  "echo '--wipe_cache' >> /cache/recovery/command"
 
- adb push /media/ster/ff47c977-c594-432a-b48a-8b6885004030/ster/android-6-0-1-var-som/src/output_package_testting/var_m_601_100/m_601_100_build/out/target/product/var_mx6/var_mx6-ota-20160331-som-mx6q-c.zip  /cache/update.zip
+ adb push ~/var_m_601_210/m_601_210_build/out/target/product/var_mx6/var_mx6-ota-20160331-som-mx6q-c.zip  /cache/update.zip
  adb shell sync
  adb reboot recovery
 ---

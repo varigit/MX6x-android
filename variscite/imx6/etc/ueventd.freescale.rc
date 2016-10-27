@@ -43,14 +43,10 @@
 
 /sys/devices/platform/mxsdhci.2/mmc_host/mmc0/mmc0:000* boot_bus_config 0660 root root
 /sys/devices/platform/mxsdhci.2/mmc_host/mmc0/mmc0:000* boot_config 0660 root root
-/sys/devices/soc0/soc.0/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 mode 0660 system system
-/sys/devices/soc0/soc.0/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 lux 0660 system system
-/sys/devices/soc0/soc.0/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 int_lt_lux 0660 system system
-/sys/devices/soc0/soc.0/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 int_ht_lux 0660 system system
+/sys/devices/soc0/soc/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 mode 0660 system system
+/sys/devices/soc0/soc/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 lux 0660 system system
+/sys/devices/soc0/soc/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 int_lt_lux 0660 system system
+/sys/devices/soc0/soc/2100000.aips-bus/21a8000.i2c/i2c-2/2-0044 int_ht_lux 0660 system system
 
-/sys/devices/platform/mxc_sdc_fb.0/graphics/fb*	fsl_disp_property 0660 system graphics
-/sys/devices/platform/mxc_sdc_fb.1/graphics/fb*	fsl_disp_property 0660 system graphics
-/sys/devices/platform/mxc_sdc_fb.0/graphics/fb*	mode 0660 system graphics
-/sys/devices/platform/mxc_sdc_fb.1/graphics/fb*	mode 0660 system graphics
 /sys/devices/platform/mxc_dvfs_core.0 enable 0660 system system
 /sys/devices/platform/busfreq.0 enable 0660 system system

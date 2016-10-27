@@ -313,13 +313,12 @@ PRODUCT_COPY_FILES +=	\
 	device/variscite/common/input/ADS7846_Touchscreen.idc:system/usr/idc/ADS7846_Touchscreen.idc \
 	device/variscite/common/input/eGalax_Touch_Screen.idc:system/usr/idc/EP0700M06.idc \
 	device/variscite/common/input/ft5x06_ts.idc:system/usr/idc/ft5x06_ts.idc \
-	device/variscite/imx6/init.rc:root/init.rc \
 	device/variscite/imx6/etc/apns-conf.xml:system/etc/apns-conf.xml \
 	device/variscite/imx6/etc/init.usb.rc:root/init.freescale.usb.rc \
 	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.freescale.rc \
 	device/variscite/imx6/etc/ppp/init.gprs-pppd:system/etc/ppp/init.gprs-pppd \
 	device/variscite/imx6/etc/ota.conf:system/etc/ota.conf \
-	device/variscite/imx6/init.recovery.imx6.rc:root/init.recovery.imx6.rc \
+	device/variscite/imx6/init.recovery.freescale.rc:root/init.recovery.freescale.rc \
 	device/variscite/common/display/display_mode_fb0.conf:system/etc/display_mode_fb0.conf \
 	device/variscite/common/display/display_mode_fb2.conf:system/etc/display_mode_fb2.conf \
 	device/variscite/common/display/display_mode_fb4.conf:system/etc/display_mode_fb4.conf \

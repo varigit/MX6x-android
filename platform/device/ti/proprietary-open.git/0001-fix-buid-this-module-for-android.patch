@@ -1,7 +1,7 @@
-From 0b904f30c4f7bf889ed8c4228270260fe05a18dd Mon Sep 17 00:00:00 2001
+From 3c99fc60d94c5dcd7315ea2cb989426f3442304a Mon Sep 17 00:00:00 2001
 From: "roman.pletnev" <roman.pletnev@promwad.com>
 Date: Tue, 24 May 2016 11:23:22 +0300
-Subject: [PATCH] fix buid this module for android
+Subject: [PATCH 1/3] fix buid this module for android
 
 ---
  wl12xx/wpan/bluetooth/Android.mk | 2 +-
@@ -21,5 +21,5 @@ index c991578..3cc816e 100644
  WPAN_BT_FW_BINS := \
  	TIInit_7.2.31.bts \
 -- 
-2.1.4
+2.10.1
 

@@ -6,10 +6,10 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 #
 #Mount point for sdcard
-/devices/soc0/soc.0/2100000.aips-bus/2194000.usdhc/mmc_host* auto auto defaults voldmanaged=sdcard:auto,encryptable=userdata
+/devices/soc0/soc/2100000.aips-bus/2194000.usdhc/mmc_host* auto auto defaults voldmanaged=sdcard:auto,encryptable=userdata
 
 #Mount point for usb otg
-/devices/soc0/soc.0/2100000.aips-bus/2184000.usb/ci_hdrc.0* auto auto defaults voldmanaged=usb:auto
+/devices/soc0/soc/2100000.aips-bus/2184000.usb/ci_hdrc.0* auto auto defaults voldmanaged=usb:auto
 
 #eMMC
 /dev/block/mmcblk0p5    /system      ext4    ro                                                                               wait

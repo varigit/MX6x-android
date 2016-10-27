@@ -6,7 +6,7 @@
 # partition size in MB
 BOOTLOAD_RESERVE=8
 BOOT_ROM_SIZE=16
-SYSTEM_ROM_SIZE=512
+SYSTEM_ROM_SIZE=800
 CACHE_SIZE=512
 RECOVERY_ROM_SIZE=16
 DEVICE_SIZE=8
@@ -67,7 +67,7 @@ total_size=`sfdisk -s ${node}`
 total_size=`expr ${total_size} / 1024`
 boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
 extend_size=`expr ${SYSTEM_ROM_SIZE} + ${CACHE_SIZE} + ${DEVICE_SIZE} + ${MISC_SIZE} + ${DATAFOOTER_SIZE} + ${seprate}`
-data_size=`expr ${total_size} - ${boot_rom_sizeb} - ${RECOVERY_ROM_SIZE} - ${extend_size} + ${seprate}`
+data_size=`expr ${total_size} - ${boot_rom_sizeb} - ${RECOVERY_ROM_SIZE} - ${extend_size}`
 
 # create partitions
 if [ "${cal_only}" -eq "1" ]; then

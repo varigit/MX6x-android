@@ -1,0 +1,7 @@
+on init 
+    # disable cursor blink for fbcon, if no splash screen support
+    write /sys/class/graphics/fbcon/cursor_blink 0
+
+on boot
+    # ci_hdrc.0 is the fixed UDC name
+    setprop sys.usb.controller ci_hdrc.0

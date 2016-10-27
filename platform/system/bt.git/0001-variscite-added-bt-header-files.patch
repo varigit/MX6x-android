@@ -15,7 +15,7 @@ new file mode 100644
 index 0000000..468e513
 --- /dev/null
 +++ b/hci/include/bt_hci_lib.h
-@@ -0,0 +1,202 @@
+@@ -0,0 +1,201 @@
 +/******************************************************************************
 + *
 + *  Copyright (C) 2009-2012 Broadcom Corporation
@@ -217,13 +217,12 @@ index 0000000..468e513
 +extern const bt_hc_interface_t* bt_hc_get_interface(void);
 +
 +#endif /* BT_HCI_LIB_H */
-+
 diff --git a/hci/include/utils.h b/hci/include/utils.h
 new file mode 100644
 index 0000000..0f1517c
 --- /dev/null
 +++ b/hci/include/utils.h
-@@ -0,0 +1,194 @@
+@@ -0,0 +0,193 @@
 +/******************************************************************************
 + *
 + *  Copyright (C) 2009-2012 Broadcom Corporation
@@ -417,7 +416,6 @@ index 0000000..0f1517c
 +void utils_unlock (void);
 +
 +#endif /* UTILS_H */
-+
 -- 
 2.1.4
 

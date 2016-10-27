@@ -1,7 +1,5 @@
-#
 # Product-specific compile-time definitions.
 # Variscite VAR-SOM-MX6
-#
 
 include device/variscite/imx6/soc/imx6dq.mk
 include device/variscite/var_mx6/build_id.mk
@@ -56,14 +54,7 @@ PRODUCT_MODEL := VAR_SOM_MX6
 
 TARGET_RELEASETOOLS_EXTENSIONS := device/variscite/imx6
 
-TARGET_KERNEL_MODULES := \
-    hardware/ti/wlan/mac80211/compat_wl18xx/compat/compat.ko:system/lib/modules/compat.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/net/wireless/cfg80211.ko:system/lib/modules/cfg80211.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/net/mac80211/mac80211.ko:system/lib/modules/mac80211.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/drivers/net/wireless/ti/wl12xx/wl12xx.ko:system/lib/modules/wl12xx.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/drivers/net/wireless/ti/wl18xx/wl18xx.ko:system/lib/modules/wl18xx.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/drivers/net/wireless/ti/wlcore/wlcore.ko:system/lib/modules/wlcore.ko \
-    hardware/ti/wlan/mac80211/compat_wl18xx/drivers/net/wireless/ti/wlcore/wlcore_sdio.ko:system/lib/modules/wlcore_sdio.ko
+TARGET_KERNEL_MODULES :=
 
 # TI WILINK WIFI
 USES_TI_MAC80211 := true
@@ -74,7 +65,6 @@ BOARD_HOSTAPD_DRIVER             := NL80211
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB := lib_driver_cmd_wl12xx
 BOARD_HOSTAPD_PRIVATE_LIB        := lib_driver_cmd_wl12xx
 BOARD_WLAN_DEVICE                := wl12xx_mac80211
-#BOARD_WLAN_DEVICE                := UNITE
 
 BOARD_SOFTAP_DEVICE              := wl12xx_mac80211
 COMMON_GLOBAL_CFLAGS             += -DUSES_TI_MAC80211
@@ -136,7 +126,7 @@ IMX_CAMERA_HAL_V3 := true
 IMX6_CONSUMER_IR_HAL := false
 
 TARGET_BOOTLOADER_CONFIG := var-imx6-sd:mx6var_som_sd_android_config var-imx6-nand:mx6var_som_nand_android_config
-TARGET_BOARD_DTS_CONFIG := som-mx6q-r:imx6q-var-som.dtb som-mx6q-vsc:imx6q-var-som-vsc.dtb som-mx6dl-r:imx6dl-var-som.dtb som-solo-r:imx6dl-var-som-solo.dtb som-solo-vsc:imx6dl-var-som-solo-vsc.dtb imx6q-var-dart:imx6q-var-dart.dtb som-mx6q-c:imx6q-var-som-cap.dtb som-mx6dl-c:imx6dl-var-som-cap.dtb som-solo-c:imx6dl-var-som-solo-cap.dtb
+TARGET_BOARD_DTS_CONFIG := som-mx6q-r:imx6q-var-som-res.dtb som-mx6q-vsc:imx6q-var-som-vsc.dtb som-mx6dl-r:imx6dl-var-som-res.dtb som-solo-r:imx6dl-var-som-solo-res.dtb som-solo-vsc:imx6dl-var-som-solo-vsc.dtb imx6q-var-dart:imx6q-var-dart.dtb som-mx6q-c:imx6q-var-som-cap.dtb som-mx6dl-c:imx6dl-var-som-cap.dtb som-solo-c:imx6dl-var-som-solo-cap.dtb
 
 BOARD_SEPOLICY_DIRS := \
        device/variscite/imx6/sepolicy \

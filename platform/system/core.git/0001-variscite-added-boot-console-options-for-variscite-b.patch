@@ -20,7 +20,7 @@ index 1e92cba..9f8086b 100644
 -    if (property_get("ro.boot.console", console) > 0) {
 -        snprintf(console_name, sizeof(console_name), "/dev/%s", console);
 +    char tmp[PROP_VALUE_MAX];
-+    
++
 +    if (property_get("ro.boot.console", tmp) > 0) {
 +        snprintf(console_name, sizeof(console_name), "/dev/%s", tmp);
      }
@@ -29,7 +29,7 @@ index 1e92cba..9f8086b 100644
      if (fd >= 0)
          have_console = 1;
      close(fd);
-+    
++
 +    if ((property_get("ro.boot.write_on_console", tmp) != 0) && (strcmp(tmp, "disabled") == 0)) {
 +        /* just disable following (ugly) write */
 +        return 0;

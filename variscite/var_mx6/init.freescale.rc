@@ -116,11 +116,11 @@ on boot
     setprop ro.ril.wake_lock_timeout 300
 
     # Default backlight device
-    setprop hw.backlight.dev "backlight.0"
+    setprop hw.backlight.dev "backlight"
     # Chmod/chown FSL specific sys entry
-    chown system system /sys/class/backlight/backlight.0/brightness
-    chmod 0660 /sys/class/backlight/backlight.0/brightness
-    write /sys/class/backlight/backlight.0/brightness 6
+    chown system system /sys/class/backlight/backlight/brightness
+    chmod 0660 /sys/class/backlight/backlight/brightness
+    write /sys/class/backlight/backlight/brightness 6
 
 
     # Set light sensor sysfs path and light sensor threshold lux value
