@@ -35,14 +35,12 @@ soc_name=""
 cal_only=0
 flash_images=0
 not_partition=0
-not_format_fs=0
 while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	case $1 in
 	    -h) help; exit ;;
 	    -s) cal_only=1 ;;
 	    -f) flash_images=1 ; soc_name=$2; shift;;
 	    -np) not_partition=1 ;;
-	    -nf) not_format_fs=1 ;;
 	    *)  moreoptions=0; node=$1 ;;
 	esac
 	[ "$moreoptions" = 0 ] && [ $# -gt 1 ] && help && exit
@@ -105,7 +103,7 @@ function check_images
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/u-boot-var-imx6-sd.img ]] ; then
+	if [[ ! -f ${imagesdir}/${bootloader_file} ]] ; then
 		echo "ERROR: U-Boot image does not exist"
 		exit 1
 	fi
@@ -203,7 +201,7 @@ function install_bootloader
 
 	dd if=device/variscite/common/firmware/SPL.mmc of=$node bs=1k seek=1; sync
 
-	dd if=${imagesdir}/u-boot-var-imx6-sd.img of=$node bs=1k seek=69; sync
+	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=69; sync
 }
 
 function install_android
