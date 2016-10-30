@@ -1,15 +1,17 @@
-#eMMC boot
 # Android fstab file.
-#Used by all VAR-SOM-MX6 VAR-SOM-SOLO
+# eMMC boot - Used by all VAR-SOM-MX6 VAR-SOM-SOLO boards
 #<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
 # The filesystem that contains the filesystem checker binary (typically /system) cannot
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
-#
-#Mount point for sdcard
+
+#Mount point for SD card
 /devices/soc0/soc/2100000.aips-bus/2194000.usdhc/mmc_host* auto auto defaults voldmanaged=sdcard:auto,encryptable=userdata
 
-#Mount point for usb otg
+#Mount point for USB OTG
 /devices/soc0/soc/2100000.aips-bus/2184000.usb/ci_hdrc.0* auto auto defaults voldmanaged=usb:auto
+
+#Mount point for USB host
+/devices/soc0/soc/2100000.aips-bus/2184200.usb/ci_hdrc.1* auto auto defaults voldmanaged=usb:auto
 
 #eMMC
 /dev/block/mmcblk0p5    /system      ext4    ro                                                                               wait

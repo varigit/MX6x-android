@@ -24,7 +24,8 @@ else
 TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_sd-f2fs.freescale
 # build for f2fs
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_sd-f2fs.freescale:root/fstab.freescale
+	device/variscite/var_mx6/fstab_sd-f2fs.freescale:root/fstab.freescale \
+	device/variscite/var_mx6/fstab_sd_dart-f2fs.freescale:root/fstab_dart.freescale
 endif # BUILD_TARGET_FS
 
 else
@@ -43,7 +44,8 @@ else
 TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_emmc-f2fs.freescale
 # build for f2fs
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_emmc-f2fs.freescale:root/fstab.freescale
+	device/variscite/var_mx6/fstab_emmc-f2fs.freescale:root/fstab.freescale \
+	device/variscite/var_mx6/fstab_emmc_dart-f2fs.freescale:root/fstab_dart.freescale
 
 endif # BUILD_TARGET_FS
 endif # BUILD_TARGET_DEVICE
