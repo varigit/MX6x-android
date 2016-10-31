@@ -154,7 +154,7 @@ cd ${ANDROID_DIR}/external/i2c-tools > /dev/null
 git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57 -b ${BASE_BRANCH_NAME}
 
 pr_info "clone externel/iw"
-git clone git://git.sipsolutions.net/iw.git ${ANDROID_DIR}/external/iw
+git clone https://git.sipsolutions.net/iw.git ${ANDROID_DIR}/external/iw
 cd ${ANDROID_DIR}/external/iw > /dev/null
 git checkout 96fa73c7564fa7eba89cd78a24f20acd68d2f55f -b ${BASE_BRANCH_NAME}
 
