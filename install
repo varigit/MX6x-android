@@ -112,8 +112,8 @@ pr_info "clone hardware/ti/wlan"
 git clone git://git.omapzoom.org/platform/hardware/ti/wlan.git ${ANDROID_DIR}/hardware/ti/wlan
 cd ${ANDROID_DIR}/hardware/ti/wlan > /dev/null
 git checkout 4ba8edfbd44814d2e2c7b8167401344ddd8f2736 -b ${BASE_BRANCH_NAME}
-# Remove compat_wl18xx as we build it from the kernel source code
-rm -rf ${ANDROID_DIR}/hardware/ti/wlan/mac80211/compat_wl18xx/
+git rm -qrf ${ANDROID_DIR}/hardware/ti/wlan/mac80211/compat_wl18xx/
+git commit -qa -m "Remove compat_wl18xx" -m "Build it from the kernel source code instead"
 
 pr_info "clone hardware/ti/wl18xx-ti-utils"
 git clone git://git.ti.com/wilink8-wlan/18xx-ti-utils.git ${ANDROID_DIR}/hardware/ti/wl18xx-ti-utils
