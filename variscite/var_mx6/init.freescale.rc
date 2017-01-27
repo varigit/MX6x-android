@@ -81,7 +81,7 @@ on boot
     setprop wifi.ap.interface wlan0
 
 #    #  Enable adb security for JB4.2.2
-#    setprop ro.adb.secure 1
+    setprop ro.adb.secure 1
 
     # Set rotation to 270 to cofigure as portrait mode
     setprop ro.sf.hwrotation 0
