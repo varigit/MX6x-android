@@ -68,7 +68,7 @@ fi
 # get total card size
 seprate=40
 total_size=`sfdisk -s ${node}`
-total_size=`expr ${total_size} / 1024`
+total_size=`expr ${total_size} \/ 1024`
 echo "TOTAL SIZE ${total_size}MB"
 boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
 extend_size=`expr ${SYSTEM_ROM_SIZE} + ${CACHE_SIZE} + ${DEVICE_SIZE} + ${MISC_SIZE} + ${DATAFOOTER_SIZE} + ${seprate}`
@@ -148,23 +148,25 @@ function create_parts
 	echo
 	echo "Creating Android partitions"
 
-	SECT_SIZE_BYTES=`cat /sys/block/${block}/queue/hw_sector_size`
-	BOOTLOAD_RESERVE_sect=`expr $BOOTLOAD_RESERVE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	boot_rom_sizeb_sect=`expr $boot_rom_sizeb \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	RECOVERY_ROM_SIZE_sect=`expr $RECOVERY_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	extend_size_sect=`expr $extend_size \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	data_size_sect=`expr $data_size \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	SYSTEM_ROM_SIZE_sect=`expr $SYSTEM_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	CACHE_SIZE_sect=`expr $CACHE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	DEVICE_SIZE_sect=`expr $DEVICE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	MISC_SIZE_sect=`expr $MISC_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
-	DATAFOOTER_SIZE_sect=`expr $DATAFOOTER_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_BYTES`
+	SECT_SIZE_bytes=`cat /sys/block/${block}/queue/hw_sector_size`
+
+	boot_rom_sizeb_sect=`expr $boot_rom_sizeb \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	BOOTLOAD_RESERVE_sect=`expr $BOOTLOAD_RESERVE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+
+	RECOVERY_ROM_SIZE_sect=`expr $RECOVERY_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+
+	extend_size_sect=`expr $extend_size \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	SYSTEM_ROM_SIZE_sect=`expr $SYSTEM_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	CACHE_SIZE_sect=`expr $CACHE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	DEVICE_SIZE_sect=`expr $DEVICE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	MISC_SIZE_sect=`expr $MISC_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
+	DATAFOOTER_SIZE_sect=`expr $DATAFOOTER_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
 
 sfdisk --force -uS ${node} &> /dev/null << EOF
 ,${boot_rom_sizeb_sect},83
 ,${RECOVERY_ROM_SIZE_sect},83
 ,${extend_size_sect},5
-,${data_size_sect},83
+,-,83
 ,${SYSTEM_ROM_SIZE_sect},83
 ,${CACHE_SIZE_sect},83
 ,${DEVICE_SIZE_sect},83
@@ -172,18 +174,17 @@ sfdisk --force -uS ${node} &> /dev/null << EOF
 ,${DATAFOOTER_SIZE_sect},83
 EOF
 
-	sync; sleep 1
+	sync; sleep 3
 
-	# Adjust the partition reserve for bootloader.
-	((echo d; echo 1; echo w) | fdisk $node &> /dev/null)
-	sync; sleep 1
-	((echo n; echo p; echo $BOOTLOAD_RESERVE_sect; echo; echo w) | fdisk -u $node &> /dev/null)
-	sync; sleep 1
+	# Adjust the partition reserve for the bootloader
+	((echo d; echo 1; echo n; echo p; echo $BOOTLOAD_RESERVE_sect; echo; echo w) | fdisk -u $node &> /dev/null)
+
+	sync; sleep 3
 
 	fdisk -u -l $node
 }
 
-function format_android
+function format_parts
 {
 	echo
 	echo "Formating Android partitions"
@@ -208,18 +209,18 @@ function install_android
 {
 	echo
 	echo "Installing Android boot image: $bootimage_file"
-	dd if=${imagesdir}/${bootimage_file} of=${node}${part}1
+	dd if=${imagesdir}/${bootimage_file} of=${node}${part}1 bs=1M
 	sync
 
 	echo
 	echo "Installing Android recovery image: $recoveryimage_file"
-	dd if=${imagesdir}/${recoveryimage_file} of=${node}${part}2
+	dd if=${imagesdir}/${recoveryimage_file} of=${node}${part}2 bs=1M
 	sync
 
 	echo
 	echo "Installing Android system image: $systemimage_file"
 	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${imagesdir}/${systemimage_raw_file}
-	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}5
+	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}5 bs=1M
 	rm ${imagesdir}/${systemimage_raw_file}
 	sync; sleep 1
 }
@@ -231,7 +232,7 @@ umount ${node}${part}*  2> /dev/null || true
 if [ "${not_partition}" -eq "0" ]; then
 	delete_device
 	create_parts
-	format_android
+	format_parts
 fi
 
 if [ "${flash_images}" -eq "1" ]; then
