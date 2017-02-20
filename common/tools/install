@@ -68,7 +68,7 @@ cd i2c-tools
 git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57
 patch -p1 < $PATCH_FOLDER/i2c-tools.patch
 cd ..
-git clone git://git.sipsolutions.net/iw.git
+git clone https://git.sipsolutions.net/iw.git
 cd iw
 git checkout 96fa73c7564fa7eba89cd78a24f20acd68d2f55f
 cd ..
