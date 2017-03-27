@@ -50,7 +50,7 @@ PRODUCT_COPY_FILES +=	\
 endif # BUILD_TARGET_FS
 endif # BUILD_TARGET_DEVICE
 
-BOOTLOADER_USES_SPL := true
+BOOTLOADER_USES_SPL := flase
 TARGET_BOOTLOADER_BOARD_NAME := VAR_MX6
 PRODUCT_MODEL := VAR_SOM_MX6
 
@@ -127,8 +127,8 @@ IMX_CAMERA_HAL_V3 := true
 #define consumer IR HAL support
 IMX6_CONSUMER_IR_HAL := false
 
-TARGET_BOOTLOADER_CONFIG := var-imx6-sd:mx6var_som_sd_android_config var-imx6-nand:mx6var_som_nand_android_config
-TARGET_BOARD_DTS_CONFIG := som-mx6q-r:imx6q-var-som-res.dtb som-mx6q-vsc:imx6q-var-som-vsc.dtb som-mx6dl-r:imx6dl-var-som-res.dtb som-solo-r:imx6dl-var-som-solo-res.dtb som-solo-vsc:imx6dl-var-som-solo-vsc.dtb imx6q-var-dart:imx6q-var-dart.dtb som-mx6q-c:imx6q-var-som-cap.dtb som-mx6dl-c:imx6dl-var-som-cap.dtb som-solo-c:imx6dl-var-som-solo-cap.dtb
+TARGET_BOOTLOADER_CONFIG := var-imx6p-nand:mx6p_var_som_android_nand_defconfig
+TARGET_BOARD_DTS_CONFIG := som-mx6qp-c:imx6qp-var-som-cap.dtb
 
 BOARD_SEPOLICY_DIRS := \
        device/variscite/imx6/sepolicy \
