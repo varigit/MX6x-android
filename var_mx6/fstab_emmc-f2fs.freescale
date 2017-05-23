@@ -1,0 +1,26 @@
+# Android fstab file.
+#<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+#Mount point for USB OTG
+/devices/soc0/soc/2100000.aips-bus/2184000.usb/ci_hdrc.0* auto auto defaults voldmanaged=usb:auto
+
+#Mount point for USB host
+/devices/soc0/soc/2100000.aips-bus/2184200.usb/ci_hdrc.1* auto auto defaults voldmanaged=usb:auto
+
+#Mount point for SD card
+/devices/soc0/soc/2100000.aips-bus/2194000.usdhc/mmc_host* auto auto defaults voldmanaged=sdcard:auto,encryptable=userdata
+
+#eMMC
+/dev/block/mmcblk0p5    /system      ext4    ro                                                                               wait
+/dev/block/mmcblk0p4    /data        f2fs    noatime,nosuid,nodev  	                                                       wait,formattable,check,encryptable=/dev/block/mmcblk0p9
+/dev/block/mmcblk0p4    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,formattable,encryptable=/dev/block/mmcblk0p9
+/dev/block/mmcblk0p6    /cache       f2fs    noatime,nosuid,nodev	                                                       wait,check
+/dev/block/mmcblk0p6    /cache       ext4    nosuid,nodev,nomblk_io_submit                                                    wait
+/dev/block/mmcblk0p7    /device      ext4    ro,nosuid,nodev                                                                  wait
+/dev/block/mmcblk0p1    /boot        emmc    defaults                                                                         defaults
+/dev/block/mmcblk0p2    /recovery    emmc    defaults                                                                         defaults
+/dev/block/mmcblk0p8    /misc        emmc    defaults                                                                         defaults
+/dev/block/mmcblk0boot0 /bootloader  emmc    defaults                                                                         defaults
+/dev/block/zram0 none swap defaults zramsize=314572800

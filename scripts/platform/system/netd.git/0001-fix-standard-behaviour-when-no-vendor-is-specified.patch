@@ -1,0 +1,33 @@
+From 52c7b200e250c5905b60c21d1edfbe04f6b940ae Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Wed, 19 Apr 2017 11:11:03 +0200
+Subject: [PATCH] fix standard behaviour when no vendor is specified
+
+---
+ server/SoftapController.cpp | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/server/SoftapController.cpp b/server/SoftapController.cpp
+index 8fa521a..4187f9e 100644
+--- a/server/SoftapController.cpp
++++ b/server/SoftapController.cpp
+@@ -96,9 +96,14 @@ int SoftapController::startSoftap() {
+                        "-e", WIFI_ENTROPY_FILE,
+                        HOSTAPD_CONF_FILE, (char *) NULL);
+ 
+-        } else
++        } else {
+             ALOGE("no specific driver vendor");
+-        ALOGE("execl failed (%s)", strerror(errno));
++            ret = execl(HOSTAPD_BIN_FILE, HOSTAPD_BIN_FILE,
++                       "-e", WIFI_ENTROPY_FILE,
++                       HOSTAPD_CONF_FILE, (char *) NULL);
++        }
++        if (ret)
++            ALOGE("execl failed (%s)", strerror(errno));
+         ALOGE("SoftAP failed to start");
+         return ResponseCode::ServiceStartFailed;
+     } else {
+-- 
+2.7.4
+

@@ -1,0 +1,56 @@
+From 3af4d4f483d48e1c350fcb75a3838d991b26f33c Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Mon, 1 May 2017 02:38:28 +0200
+Subject: [PATCH] use DART specific fstab if needed
+
+---
+ init/builtins.cpp | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/init/builtins.cpp b/init/builtins.cpp
+index 44217f0..952d45e 100644
+--- a/init/builtins.cpp
++++ b/init/builtins.cpp
+@@ -593,6 +593,22 @@ static int queue_fs_event(int code) {
+     return ret;
+ }
+ 
++/* check if the board uses a VAR-DART-MX6 */
++static int is_dart() {
++    FILE *check_dart_file = fopen("/sys/devices/soc0/machine", "r");
++    size_t alloc_len = 0;
++    char *line = NULL;
++
++    getline(&line, &alloc_len, check_dart_file);
++    fclose(check_dart_file);
++    char *pch = strstr(line, "VAR-DART");
++    if (pch){
++        NOTICE("FSTAB: DART found\n");
++        return 1;
++    }
++    return 0;
++}
++
+ /* mount_all <fstab> [ <path> ]* [--<options>]*
+  *
+  * This function might request a reboot, in which case it will
+@@ -604,6 +620,7 @@ static int do_mount_all(const std::vector<std::string>& args) {
+     bool queue_event = true;
+     int mount_mode = MOUNT_MODE_DEFAULT;
+     const char* fstabfile = args[1].c_str();
++    const char *fstabdart = "/fstab_emmc_dart.freescale";
+     std::size_t path_arg_end = args.size();
+ 
+     for (na = args.size() - 1; na > 1; --na) {
+@@ -618,7 +635,7 @@ static int do_mount_all(const std::vector<std::string>& args) {
+         }
+     }
+ 
+-    int ret =  mount_fstab(fstabfile, mount_mode);
++    int ret = mount_fstab(is_dart() ? fstabdart : fstabfile, mount_mode);
+ 
+     if (import_rc) {
+         /* Paths of .rc files are specified at the 2nd argument and beyond */
+-- 
+2.7.4
+

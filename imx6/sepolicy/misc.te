@@ -1,0 +1,17 @@
+allow audioserver rootfs:lnk_file { getattr };
+allow audioserver debugfs_tracing:file { open write };
+
+allow bootanim rootfs:lnk_file { getattr };
+allow bootanim debugfs_tracing:file { open write };
+
+allow cameraserver rootfs:lnk_file { getattr };
+allow cameraserver debugfs_tracing:file { open write };
+
+allow dex2oat debugfs_tracing:file { open write };
+
+allow mediacodec rootfs:lnk_file { getattr };
+
+allow mediadrmserver rootfs:lnk_file { getattr };
+allow mediadrmserver debugfs_tracing:file { write };
+
+allow surfaceflinger debugfs_tracing:file { open write };
