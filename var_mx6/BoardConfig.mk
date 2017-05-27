@@ -28,10 +28,12 @@ PRODUCT_COPY_FILES +=	\
 	device/variscite/var_mx6/fstab_sd_dart-f2fs.freescale:root/fstab_dart.freescale
 endif # BUILD_TARGET_FS
 else
+# We cannot hardcode here ro.internel.storage_size and ro.frp.pst
+# because when booting from emmc, VAR-DART uses mmcblk2 while all
+# the other Variscite iMX6 SoMs use mmcblk0.
+# Let the system manage this at runtime after loading build.prop
 ADDITIONAL_BUILD_PROPERTIES += \
-                        ro.internel.storage_size=/sys/block/mmcblk0/size \
-                        ro.boot.storage_type=emmc \
-                        ro.frp.pst=/dev/block/mmcblk0p12
+                        ro.boot.storage_type=emmc
 ifneq ($(BUILD_TARGET_FS),f2fs)
 TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_emmc.freescale
 # build for ext4
