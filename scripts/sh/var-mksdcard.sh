@@ -58,6 +58,7 @@ if [ ! -e ${node} ]; then
 fi
 
 imagesdir="out/target/product/var_mx6"
+spl_file="SPL-var-imx6-sd"
 bootloader_file="u-boot-var-imx6-sd.img"
 bootimage_file="boot-${soc_name}.img"
 recoveryimage_file="recovery-${soc_name}.img"
@@ -107,7 +108,7 @@ function check_images
 		exit 1
 	fi
 
-	if [[ ! -f device/variscite/common/firmware/SPL.mmc ]] ; then
+	if [[ ! -f ${imagesdir}/${spl_file} ]] ; then
 		echo "ERROR: SPL image does not exist"
 		exit 1
 	fi
@@ -215,7 +216,7 @@ function install_bootloader
 	echo
 	echo "Installing booloader"
 
-	dd if=device/variscite/common/firmware/SPL.mmc of=$node bs=1k seek=1; sync
+	dd if=${imagesdir}/${spl_file} of=$node bs=1k seek=1; sync
 
 	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=69; sync
 }
@@ -240,8 +241,6 @@ function install_android
 	sync; sleep 1
 }
 
-check_images
-
 umount ${node}${part}*  2> /dev/null || true
 
 if [ "${not_partition}" -eq "0" ]; then
@@ -251,6 +250,7 @@ if [ "${not_partition}" -eq "0" ]; then
 fi
 
 if [ "${flash_images}" -eq "1" ]; then
+	check_images
 	install_bootloader
 	install_android
 fi
