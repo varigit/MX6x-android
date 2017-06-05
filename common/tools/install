@@ -49,7 +49,7 @@ cd ti
 git clone git://git.omapzoom.org/device/ti/proprietary-open.git
 cd proprietary-open
 git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1
-patch -p1 < $PATCH_FOLDER/ti_proprietary-open.patch
+git am $PATCH_FOLDER/ti_proprietary-open/*.patch
 cd ../../../external
 git clone git://git.omapzoom.org/platform/external/crda.git
 cd crda
