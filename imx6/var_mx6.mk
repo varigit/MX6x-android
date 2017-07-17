@@ -38,12 +38,11 @@ PRODUCT_COPY_FILES +=	\
 	external/linux-firmware-imx/firmware/vpu/vpu_fw_imx6d.bin:system/lib/firmware/vpu/vpu_fw_imx6d.bin 	\
 	external/linux-firmware-imx/firmware/vpu/vpu_fw_imx6q.bin:system/lib/firmware/vpu/vpu_fw_imx6q.bin
 
-ifeq ($(TI_WLAN_CHIP),wl12xx)
 # wl12xx driver currently broken due to kernel 4.1 patch to
 # support wl18xx R8.6_SP1
 # revert that patch to use wl12xx
 # please note that wl1271-nvs.bin is used also by wl18xx driver
-# to reset the MAC: do not copy it to rootfs for wl18xx sanity
+# to reset the MAC
 # wl12xx firmware
 PRODUCT_COPY_FILES +=	\
 	device/variscite/common/wl12xx/wl1271-nvs.bin:system/etc/firmware/ti-connectivity/wl1271-nvs.bin \
@@ -51,13 +50,12 @@ PRODUCT_COPY_FILES +=	\
 	device/variscite/common/wl12xx/wl127x-fw-5-plt.bin:system/etc/firmware/ti-connectivity/wl127x-fw-5-plt.bin \
 	device/variscite/common/wl12xx/wl127x-fw-5-sr.bin:system/etc/firmware/ti-connectivity/wl127x-fw-5-sr.bin \
 	device/variscite/common/wl12xx/TIInit_7.6.15.bts:system/etc/firmware/ti-connectivity/TIInit_7.6.15.bts
-else
+
 # wl18xx firmware
 PRODUCT_COPY_FILES +=	\
 	device/variscite/common/wl18xx/wl18xx-conf.bin:system/etc/firmware/ti-connectivity/wl18xx-conf.bin \
 	device/variscite/common/wl18xx/wl18xx-fw-4.bin:system/etc/firmware/ti-connectivity/wl18xx-fw-4.bin \
 	device/variscite/common/wl18xx/TIInit_11.8.32.bts:system/etc/firmware/ti-connectivity/TIInit_11.8.32.bts
-endif #
 
 # setup dm-verity configs.
 ifneq ($(BUILD_TARGET_DEVICE),sd)

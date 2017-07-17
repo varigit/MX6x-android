@@ -1,4 +1,4 @@
 firmware revisions
 - TIInit_11.8.32.bts: March 8, 2017 (BT SP 4.2)
-- wl18xx-fw-4.bin: 8.9.0.10.70 (WL R8.7_SP2-RC0)
+- wl18xx-fw-4.bin: 8.9.0.0.75 (WL R8.7_SP2-RC1)
 - wl18xx-conf.bin: WL1831 (no SISO40 as suggested by TI)
