@@ -17,10 +17,14 @@ PRODUCT_NAME := var_mx6
 PRODUCT_DEVICE := var_mx6
 
 PRODUCT_COPY_FILES += \
-	device/variscite/var_mx6/init.rc:root/init.freescale.rc \
-        device/variscite/var_mx6/init.i.MX6Q.rc:root/init.freescale.i.MX6Q.rc \
-        device/variscite/var_mx6/init.i.MX6DL.rc:root/init.freescale.i.MX6DL.rc \
-	device/variscite/var_mx6/init.i.MX6QP.rc:root/init.freescale.i.MX6QP.rc \
+	device/variscite/var_mx6/init.rc:root/init.var-som-mx6.rc \
+	device/variscite/var_mx6/init.rc:root/init.var-dart-mx6.rc \
+	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.var-som-mx6.i.MX6Q.rc \
+	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.var-dart-mx6.i.MX6Q.rc \
+	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.var-som-mx6.i.MX6DL.rc \
+	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.var-dart-mx6.i.MX6DL.rc \
+	device/variscite/var_mx6/init.i.MX6QP.rc:root/init.var-som-mx6.i.MX6QP.rc \
+	device/variscite/var_mx6/init.i.MX6QP.rc:root/init.var-dart-mx6.i.MX6QP.rc \
 	device/variscite/var_mx6/bootanimation-var0640.zip:/system/media/bootanimation.zip
 
 # Audio

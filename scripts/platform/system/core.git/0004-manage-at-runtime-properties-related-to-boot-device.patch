@@ -1,6 +1,6 @@
-From 29b8f9745d5be2da540c3434e454a0a33e3bbabc Mon Sep 17 00:00:00 2001
+From 676e73f41e34a58f81506033b8ac0cbe4adf3aee Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
-Date: Sat, 27 May 2017 16:47:30 +0200
+Date: Thu, 19 Jul 2017 22:54:02 +0200
 Subject: [PATCH] manage at runtime properties related to boot device
 
 When booting from sd, all Variscite iMX6 SoMs use mmcblk1.
@@ -11,14 +11,14 @@ to initialize ro.internel.storage_size and ro.frp.pst, but hardcode them
 in BoardConfig.mk => in build.prop
 To fix this, let's manage them at runtime if needed.
 ---
- init/property_service.cpp | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ init/property_service.cpp | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index 5c1ae79..cf2e157 100644
+index 5c1ae79..059196e 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
-@@ -517,11 +517,43 @@ void load_recovery_id_prop() {
+@@ -517,11 +517,39 @@ void load_recovery_id_prop() {
      close(fd);
  }
  
@@ -33,21 +33,17 @@ index 5c1ae79..cf2e157 100644
 +void variscite_system_props() {
 +    std::string ro_boot_storage_type = property_get("ro.boot.storage_type");
 +    std::string ro_frp_pst = property_get("ro.frp.pst");
-+
-+    if (!match_machine_model("Variscite")) {
-+        /* not a Variscite machine */
-+        return;
-+    }
++    std::string ro_hardware = property_get("ro.hardware");
 +
 +    if ((ro_boot_storage_type == "sd") || (!ro_frp_pst.empty())) {
 +        /* already set */
 +        return;
 +    }
 +
-+    if (!match_machine_model("VAR-DART")) {
++    if (ro_hardware == "var-som-mx6") {
 +        property_set("ro.internel.storage_size", "/sys/block/mmcblk0/size");
 +        property_set("ro.frp.pst", "/dev/block/mmcblk0p12");
-+    } else {
++    } else if (ro_hardware == "var-dart-mx6") {
 +        property_set("ro.internel.storage_size", "/sys/block/mmcblk2/size");
 +        property_set("ro.frp.pst", "/dev/block/mmcblk2p12");
 +    }

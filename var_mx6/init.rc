@@ -76,6 +76,7 @@ on boot
     # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk2/queue/read_ahead_kb 2048
 
     # ALSA mixer naming define
     setprop alsa.mixer.playback.master Playback
@@ -270,7 +271,7 @@ service hostapd /system/bin/hostapd /data/misc/wifi/hostapd.conf
 
 on fs
 # mount ext4 partitions
-    mount_all /fstab.freescale
+    mount_all /fstab.${ro.hardware}
 
     # Update dm-verity state and set partition.*.verified properties
     verity_update_state
@@ -280,7 +281,7 @@ on verity-logging
 
 on post-fs
     # Turn on swap
-    swapon_all /fstab.freescale
+    swapon_all /fstab.${ro.hardware}
 
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0

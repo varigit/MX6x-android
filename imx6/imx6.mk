@@ -299,11 +299,14 @@ PRODUCT_COPY_FILES +=	\
 	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/EP0700M06.idc \
 	system/core/rootdir/init.rc:root/init.rc \
 	device/fsl/imx6/etc/apns-conf.xml:system/etc/apns-conf.xml \
-	device/fsl/imx6/etc/init.usb.rc:root/init.freescale.usb.rc \
-	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.freescale.rc \
+	device/fsl/imx6/etc/init.usb.rc:root/init.var-som-mx6.usb.rc \
+	device/fsl/imx6/etc/init.usb.rc:root/init.var-dart-mx6.usb.rc \
+	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.var-som-mx6.rc \
+	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.var-dart-mx6.rc \
 	device/fsl/imx6/etc/ppp/init.gprs-pppd:system/etc/ppp/init.gprs-pppd \
 	device/fsl/imx6/etc/ota.conf:system/etc/ota.conf \
-        device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.freescale.rc \
+	device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-som-mx6.rc \
+	device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-dart-mx6.rc \
     device/fsl-proprietary/media-profile/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     device/fsl-proprietary/media-profile/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     device/fsl-proprietary/media-profile/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \

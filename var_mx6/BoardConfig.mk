@@ -15,17 +15,15 @@ ADDITIONAL_BUILD_PROPERTIES += \
                         ro.boot.storage_type=sd \
                         ro.frp.pst=/dev/block/mmcblk1p12
 ifneq ($(BUILD_TARGET_FS),f2fs)
-TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_sd.freescale
 # build for ext4
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_sd.freescale:root/fstab.freescale \
-	device/variscite/var_mx6/fstab_sd_dart.freescale:root/fstab_dart.freescale
+	device/variscite/var_mx6/fstab_sd.freescale:root/fstab.var-som-mx6 \
+	device/variscite/var_mx6/fstab_sd_dart.freescale:root/fstab.var-dart-mx6
 else
-TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_sd-f2fs.freescale
 # build for f2fs
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_sd-f2fs.freescale:root/fstab.freescale \
-	device/variscite/var_mx6/fstab_sd_dart-f2fs.freescale:root/fstab_dart.freescale
+	device/variscite/var_mx6/fstab_sd-f2fs.freescale:root/fstab.var-som-mx6 \
+	device/variscite/var_mx6/fstab_sd_dart-f2fs.freescale:root/fstab.var-dart-mx6
 endif # BUILD_TARGET_FS
 else
 # We cannot hardcode here ro.internel.storage_size and ro.frp.pst
@@ -35,17 +33,15 @@ else
 ADDITIONAL_BUILD_PROPERTIES += \
                         ro.boot.storage_type=emmc
 ifneq ($(BUILD_TARGET_FS),f2fs)
-TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_emmc.freescale
 # build for ext4
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_emmc.freescale:root/fstab.freescale \
-	device/variscite/var_mx6/fstab_emmc_dart.freescale:root/fstab_dart.freescale
+	device/variscite/var_mx6/fstab_emmc.freescale:root/fstab.var-som-mx6 \
+	device/variscite/var_mx6/fstab_emmc_dart.freescale:root/fstab.var-dart-mx6
 else
-TARGET_RECOVERY_FSTAB = device/variscite/var_mx6/fstab_emmc-f2fs.freescale
 # build for f2fs
 PRODUCT_COPY_FILES +=	\
-	device/variscite/var_mx6/fstab_emmc-f2fs.freescale:root/fstab.freescale \
-	device/variscite/var_mx6/fstab_emmc_dart-f2fs.freescale:root/fstab_dart.freescale
+	device/variscite/var_mx6/fstab_emmc-f2fs.freescale:root/fstab.var-som-mx6 \
+	device/variscite/var_mx6/fstab_emmc_dart-f2fs.freescale:root/fstab.var-dart-mx6
 endif # BUILD_TARGET_FS
 endif # BUILD_TARGET_DEVICE
 
