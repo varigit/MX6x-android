@@ -1,0 +1,7 @@
+#### WARNING ####
+Current uboot branch used by Yocto does not support i.MX6QP.
+In this folder you can find a special release of SPL/u-boot for SD/NAND,
+compiled using Nougat u-boot branch and linux defconfig.
+As soon as i.MX6QP support will be integrated in u-boot branch, this folder
+and any script reference to it will be removed.
+
