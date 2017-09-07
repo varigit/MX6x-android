@@ -23,6 +23,7 @@ PRODUCT_COPY_FILES += \
 	device/variscite/var_mx6/init.freescale.rc:root/init.freescale.rc \
 	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.freescale.i.MX6DL.rc \
 	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.freescale.i.MX6Q.rc \
+	device/variscite/var_mx6/init.i.MX6Q.rc:root/init.freescale.i.MX6QP.rc \
 	device/variscite/var_mx6/audio_policy.conf:system/etc/audio_policy.conf \
 	device/variscite/var_mx6/audio_effects.conf:system/vendor/etc/audio_effects.conf
 

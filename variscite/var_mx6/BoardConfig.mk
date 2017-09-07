@@ -128,7 +128,7 @@ IMX_CAMERA_HAL_V3 := true
 IMX6_CONSUMER_IR_HAL := false
 
 TARGET_BOOTLOADER_CONFIG := var-imx6-sd:mx6var_som_sd_android_config var-imx6-nand:mx6var_som_nand_android_config
-TARGET_BOARD_DTS_CONFIG := som-mx6q-r:imx6q-var-som-res.dtb som-mx6q-vsc:imx6q-var-som-vsc.dtb som-mx6dl-r:imx6dl-var-som-res.dtb som-solo-r:imx6dl-var-som-solo-res.dtb som-solo-vsc:imx6dl-var-som-solo-vsc.dtb imx6q-var-dart:imx6q-var-dart.dtb som-mx6q-c:imx6q-var-som-cap.dtb som-mx6dl-c:imx6dl-var-som-cap.dtb som-solo-c:imx6dl-var-som-solo-cap.dtb
+TARGET_BOARD_DTS_CONFIG := som-mx6q-r:imx6q-var-som-res.dtb som-mx6q-vsc:imx6q-var-som-vsc.dtb som-mx6dl-r:imx6dl-var-som-res.dtb som-solo-r:imx6dl-var-som-solo-res.dtb som-solo-vsc:imx6dl-var-som-solo-vsc.dtb imx6q-var-dart:imx6q-var-dart.dtb som-mx6q-c:imx6q-var-som-cap.dtb som-mx6dl-c:imx6dl-var-som-cap.dtb som-solo-c:imx6dl-var-som-solo-cap.dtb som-mx6qp-c:imx6qp-var-som-cap.dtb som-mx6qp-r:imx6qp-var-som-res.dtb som-mx6qp-vsc:imx6qp-var-som-vsc.dtb
 
 BOARD_SEPOLICY_DIRS := \
        device/variscite/imx6/sepolicy \
