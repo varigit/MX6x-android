@@ -25,7 +25,7 @@ PRODUCT_COPY_FILES += \
 	device/variscite/var_mx6/init.i.MX6DL.rc:root/init.var-dart-mx6.i.MX6DL.rc \
 	device/variscite/var_mx6/init.i.MX6QP.rc:root/init.var-som-mx6.i.MX6QP.rc \
 	device/variscite/var_mx6/init.i.MX6QP.rc:root/init.var-dart-mx6.i.MX6QP.rc \
-	device/variscite/var_mx6/bootanimation-var0640.zip:/system/media/bootanimation.zip
+	device/variscite/common/bootanimation-var0640.zip:/system/media/bootanimation.zip
 
 # Audio
 USE_XML_AUDIO_POLICY_CONF := 1
