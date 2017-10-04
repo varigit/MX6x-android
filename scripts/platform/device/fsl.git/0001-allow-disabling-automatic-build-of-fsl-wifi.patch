@@ -15,7 +15,7 @@ index 98a381d..28f83d8 100644
  # components.
  
  ifeq ($(TARGET_BOARD_PLATFORM),$(filter $(TARGET_BOARD_PLATFORM),imx6 imx7))
-+ifneq ($(USES_TI_MAC80211),true)
++ifeq ($(BOARD_WLAN_DEVICE),UNITE)
  
  LOCAL_PATH := $(call my-dir)
  
