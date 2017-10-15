@@ -235,9 +235,9 @@ function install_android
 
 	echo
 	echo "Installing Android system image: $systemimage_file"
+	rm ${imagesdir}/${systemimage_raw_file} 2> /dev/null
 	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${imagesdir}/${systemimage_raw_file}
 	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}5 bs=1M conv=fsync
-	rm ${imagesdir}/${systemimage_raw_file}
 	sync; sleep 1
 }
 
