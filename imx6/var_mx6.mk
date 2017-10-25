@@ -68,7 +68,6 @@ ifneq ($(BUILD_TARGET_DEVICE),sd)
 else 
  PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk0p5
  $(call inherit-product, build/target/product/verity.mk)
-
 endif
 
 # GPU files
@@ -110,6 +109,7 @@ PRODUCT_PACKAGES += \
 	wl18xx-conf-default.bin \
 	example.conf \
 	example.ini \
+	uim-sysfs \
 	iw
 
 # CANbus tools
