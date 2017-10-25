@@ -62,11 +62,13 @@ PRODUCT_COPY_FILES +=	\
 	device/variscite/common/wl18xx/TIInit_11.8.32.bts:system/etc/firmware/ti-connectivity/TIInit_11.8.32.bts
 
 # setup dm-verity configs.
-ifneq ($(BUILD_TARGET_DEVICE),sd)
+ifeq ($(BUILD_TARGET_DEVICE),sd)
  PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk1p5
  $(call inherit-product, build/target/product/verity.mk)
 else 
  PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk0p5
+# only for DART-MX6 comment above line and uncomment below line
+# PRODUCT_SYSTEM_VERITY_PARTITION := /dev/block/mmcblk2p5
  $(call inherit-product, build/target/product/verity.mk)
 endif
 
