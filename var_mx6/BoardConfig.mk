@@ -127,3 +127,4 @@ BOARD_SEPOLICY_DIRS := \
 BOARD_SECCOMP_POLICY += device/variscite/var_mx6/seccomp
 
 TARGET_BOARD_KERNEL_HEADERS := device/fsl/common/kernel-headers
+BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions.bpt

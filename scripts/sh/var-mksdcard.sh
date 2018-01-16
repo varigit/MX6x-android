@@ -4,18 +4,6 @@
 # "sudo apt-get install android-tools-fsutils"
 
 # partition size in MB
-BOOTLOAD_RESERVE=8
-BOOT_ROM_SIZE=32
-SYSTEM_ROM_SIZE=1536
-CACHE_SIZE=512
-RECOVERY_ROM_SIZE=32
-DEVICE_SIZE=8
-MISC_SIZE=4
-DATAFOOTER_SIZE=2
-METADATA_SIZE=2
-FBMISC_SIZE=1
-PRESISTDATA_SIZE=1
-
 help() {
 
 bn=`basename $0`
@@ -24,8 +12,8 @@ usage $bn <option> device_node
 
 options:
   -h				displays this help message
-  -s				only get partition size
   -np 				not partition.
+  -nf				not format partition
   -f soc_name			flash android image.
 EOF
 
@@ -35,14 +23,12 @@ EOF
 moreoptions=1
 node="na"
 soc_name=""
-cal_only=0
 flash_images=0
 not_partition=0
 not_format_fs=0
 while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	case $1 in
 	    -h) help; exit ;;
-	    -s) cal_only=1 ;;
 	    -f) flash_images=1 ; soc_name=$2; shift;;
 	    -np) not_partition=1 ;;
 	    -nf) not_format_fs=1 ;;
@@ -64,6 +50,7 @@ bootimage_file="boot-${soc_name}.img"
 recoveryimage_file="recovery-${soc_name}.img"
 systemimage_file="system.img"
 systemimage_raw_file="system_raw.img"
+partition_file="partition-table.img"
 
 block=`basename $node`
 part=""
@@ -71,40 +58,15 @@ if [[ $block == mmcblk* ]] ; then
 	part="p"
 fi
 
-# call sfdisk to create partition table
-# get total card size
-seprate=100
-total_size=`sfdisk -s ${node}`
-total_size=`expr ${total_size} \/ 1024`
-boot_rom_sizeb=`expr ${BOOT_ROM_SIZE} + ${BOOTLOAD_RESERVE}`
-extend_size=`expr ${SYSTEM_ROM_SIZE} + ${CACHE_SIZE} + ${DEVICE_SIZE} + ${MISC_SIZE} + ${FBMISC_SIZE} + ${PRESISTDATA_SIZE} + ${DATAFOOTER_SIZE} + ${METADATA_SIZE} +  ${seprate}`
-data_size=`expr ${total_size} - ${boot_rom_sizeb} - ${RECOVERY_ROM_SIZE} - ${extend_size}`
-
-# Echo partitions
-cat << EOF
-TOTAL  : ${total_size}MB
-U-BOOT : ${BOOTLOAD_RESERVE}MB
-BOOT   : ${BOOT_ROM_SIZE}MB
-RECOVERY: ${RECOVERY_ROM_SIZE}MB
-SYSTEM : ${SYSTEM_ROM_SIZE}MB
-CACHE  : ${CACHE_SIZE}MB
-DATA   : ${data_size}MB
-MISC   : ${MISC_SIZE}MB
-DEVICE : ${DEVICE_SIZE}MB
-DATAFOOTER : ${DATAFOOTER_SIZE}MB
-METADATA : ${METADATA_SIZE}MB
-FBMISC   : ${FBMISC_SIZE}MB
-PRESISTDATA : ${PRESISTDATA_SIZE}MB
-EOF
-
-if [ "${cal_only}" -eq "1" ]; then
-    exit 0
-fi
-
 function check_images
 {
 	if [[ ! -b $node ]] ; then
 		echo "ERROR: \"$node\" is not a block device"
+		exit 1
+	fi
+
+	if [[ ! -f ${imagesdir}/${partition_file} ]] ; then
+		echo "ERROR: Partition image does not exist"
 		exit 1
 	fi
 
@@ -155,59 +117,18 @@ function delete_device
 
 function create_parts
 {
-	echo
-	echo "Creating Android partitions"
-
-	SECT_SIZE_bytes=`cat /sys/block/${block}/queue/hw_sector_size`
-
-	boot_rom_sizeb_sect=`expr $boot_rom_sizeb \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	BOOTLOAD_RESERVE_sect=`expr $BOOTLOAD_RESERVE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-
-	RECOVERY_ROM_SIZE_sect=`expr $RECOVERY_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-
-	extend_size_sect=`expr $extend_size \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	SYSTEM_ROM_SIZE_sect=`expr $SYSTEM_ROM_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	CACHE_SIZE_sect=`expr $CACHE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	DEVICE_SIZE_sect=`expr $DEVICE_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	MISC_SIZE_sect=`expr $MISC_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	DATAFOOTER_SIZE_sect=`expr $DATAFOOTER_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	METADATA_SIZE_sect=`expr $METADATA_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	FBMISC_SIZE_sect=`expr $FBMISC_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-	PRESISTDATA_SIZE_sect=`expr $PRESISTDATA_SIZE \* 1024 \* 1024 \/ $SECT_SIZE_bytes`
-
-sfdisk --force -uS ${node} &> /dev/null << EOF
-,${boot_rom_sizeb_sect},83
-,${RECOVERY_ROM_SIZE_sect},83
-,${extend_size_sect},5
-,-,83
-,${SYSTEM_ROM_SIZE_sect},83
-,${CACHE_SIZE_sect},83
-,${DEVICE_SIZE_sect},83
-,${MISC_SIZE_sect},83
-,${DATAFOOTER_SIZE_sect},83
-,${METADATA_SIZE_sect},83
-,${FBMISC_SIZE_sect},83
-,${PRESISTDATA_SIZE_sect},83
-EOF
-
-	sync; sleep 3
-
-	# Adjust the partition reserve for the bootloader
-	((echo d; echo 1; echo n; echo p; echo $BOOTLOAD_RESERVE_sect; echo; echo w) | fdisk -u $node &> /dev/null)
-
-	sync; sleep 3
-
-	fdisk -u -l $node
+    echo "make gpt partition for android"
+    dd if=${imagesdir}/${partition_file} of=${node} conv=fsync
 }
 
 function format_parts
 {
 	echo
 	echo "Formating Android partitions"
-	mkfs.ext4 ${node}${part}4 -Ldata
-	mkfs.ext4 ${node}${part}5 -Lsystem
-	mkfs.ext4 ${node}${part}6 -Lcache
-	mkfs.ext4 ${node}${part}7 -Ldevice
+	mkfs.ext4 -F ${node}10 -L data
+	mkfs.ext4 -F ${node}3 -Lsystem
+	mkfs.ext4 -F ${node}4 -Lcache
+	mkfs.ext4 -F ${node}5 -Ldevice
 	sync; sleep 1
 }
 
@@ -246,7 +167,16 @@ umount ${node}${part}*  2> /dev/null || true
 if [ "${not_partition}" -eq "0" ]; then
 	delete_device
 	create_parts
-	format_parts
+	sleep 3
+	for i in `cat /proc/mounts | grep "${node}" | awk '{print $2}'`; do umount $i; done
+	hdparm -z ${node}
+
+	# backup the GPT table to last LBA for sd card.
+	echo -e 'r\ne\nY\nw\nY\nY' |  gdisk ${node}
+
+	if [ "${not_format_fs}" -eq "0" ]; then
+		format_parts
+	fi
 fi
 
 if [ "${flash_images}" -eq "1" ]; then

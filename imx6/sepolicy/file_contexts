@@ -1,2 +1,9 @@
 /dev/hci_tty                    u:object_r:hci_attach_dev:s0
 /system/bin/uim-sysfs           u:object_r:hci_attach_exec:s0
+/dev/block/mmcblk[0-9]p2        u:object_r:recovery_block_device:s0
+/dev/block/mmcblk[0-9]p1        u:object_r:boot_block_device:s0
+/dev/block/mmcblk[0-9]p3        u:object_r:system_block_device:s0
+/dev/block/mmcblk[0-9]p10       u:object_r:userdata_block_device:s0
+/dev/block/mmcblk[0-9]p4        u:object_r:cache_block_device:s0
+/dev/block/mmcblk[0-9]p7        u:object_r:metadata_block_device:s0
+/dev/block/mmcblk[0-9]p9        u:object_r:frp_block_device:s0
