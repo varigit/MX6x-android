@@ -1,0 +1,123 @@
+From 89bf217bab8123f821e5f6a12bd1cef24a667d78 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 19 Dec 2017 18:12:19 -0800
+Subject: [PATCH 2/2] Audio HAL rebase from Android 7.1.1
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ alsa/Android.mk     |  2 +-
+ alsa/tinyalsa_hal.c | 50 +++++++++++++++++++++++++++++---------------------
+ 2 files changed, 30 insertions(+), 22 deletions(-)
+
+diff --git a/alsa/Android.mk b/alsa/Android.mk
+index 0db1ec4..704ff99 100755
+--- a/alsa/Android.mk
++++ b/alsa/Android.mk
+@@ -21,7 +21,7 @@ LOCAL_PATH := $(call my-dir)
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := audio.primary.$(TARGET_BOARD_PLATFORM)
+ LOCAL_MODULE_RELATIVE_PATH := hw
+-LOCAL_SRC_FILES := tinyalsa_hal.c control.c pcm_ext.c
++LOCAL_SRC_FILES := tinyalsa_hal.c
+ LOCAL_C_INCLUDES += \
+ 	external/tinyalsa/include \
+ 	system/media/audio_utils/include \
+diff --git a/alsa/tinyalsa_hal.c b/alsa/tinyalsa_hal.c
+index ada3d0d..a8a81de 100644
+--- a/alsa/tinyalsa_hal.c
++++ b/alsa/tinyalsa_hal.c
+@@ -14,7 +14,6 @@
+  * limitations under the License.
+  */
+ /* Copyright (C) 2012-2016 Freescale Semiconductor, Inc. */
+-/* Copyright 2017 NXP */
+ 
+ #define LOG_TAG "audio_hw_primary"
+ //#define LOG_NDEBUG 0
+@@ -49,9 +48,30 @@
+ #include "config_wm8960.h"
+ #include "config_sii902x.h"
+ #include "config_tlv320aic3x.h"
+-#include "config_rpmsg.h"
+-#include "control.h"
+-#include "pcm_ext.h"
++
++#ifdef BRILLO
++#define PCM_HW_PARAM_ACCESS 0
++#define PCM_HW_PARAM_FORMAT 1
++#define PCM_HW_PARAM_SUBFORMAT 2
++#define PCM_HW_PARAM_FIRST_MASK PCM_HW_PARAM_ACCESS
++#define PCM_HW_PARAM_LAST_MASK PCM_HW_PARAM_SUBFORMAT
++#define PCM_HW_PARAM_SAMPLE_BITS 8
++#define PCM_HW_PARAM_FRAME_BITS 9
++#define PCM_HW_PARAM_CHANNELS 10
++#define PCM_HW_PARAM_RATE 11
++#define PCM_HW_PARAM_PERIOD_TIME 12
++#define PCM_HW_PARAM_PERIOD_SIZE 13
++#define PCM_HW_PARAM_PERIOD_BYTES 14
++#define PCM_HW_PARAM_PERIODS 15
++#define PCM_HW_PARAM_BUFFER_TIME 16
++#define PCM_HW_PARAM_BUFFER_SIZE 17
++#define PCM_HW_PARAM_BUFFER_BYTES 18
++#define PCM_HW_PARAM_TICK_TIME 19
++#define PCM_HW_PARAM_FIRST_INTERVAL PCM_HW_PARAM_SAMPLE_BITS
++#define PCM_HW_PARAM_LAST_INTERVAL PCM_HW_PARAM_TICK_TIME
++#define PCM_HW_PARAMS_NORESAMPLE (1<<0)
++#endif
++
+ 
+ /* ALSA ports for IMX */
+ #define PORT_MM     0
+@@ -108,7 +128,6 @@ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
+     &cs42888_card,
+     &wm8960_card,
+     &sii902x_card,
+-    &rpmsg_card,
+     &tlv320aic3x_card,
+     &null_card,
+ };
+@@ -620,9 +639,6 @@ static int start_output_stream_hdmi(struct imx_stream_out *out)
+         out->pcm[PCM_HDMI] = NULL;
+         return -ENOMEM;
+     }
+-
+-    out->written = 0;
+-
+     return 0;
+ }
+ 
+@@ -2273,13 +2289,11 @@ static uint32_t in_get_input_frames_lost(struct audio_stream_in *stream)
+     int times, diff;
+     struct imx_stream_in *in = (struct imx_stream_in *)stream;
+     if (in->pcm == NULL)  return 0;
+-
+-    if(pcm_get_time_of_xrun == NULL) {
+-        times = 0;
+-    } else {
+-        times = pcm_get_time_of_xrun(in->pcm);
+-    }
+-
++#ifdef BRILLO
++    times = 0;
++#else
++    times = pcm_get_time_of_xrun(in->pcm);
++#endif
+     diff = times - in->last_time_of_xrun;
+     ALOGW_IF((diff != 0), "in_get_input_frames_lost %d ms total %d ms\n",diff, times);
+     in->last_time_of_xrun = times;
+@@ -3242,12 +3256,6 @@ static int scan_available_device(struct imx_audio_device *adev, bool queryInput,
+                     pcm_config_mm_out.period_size = 768;
+                 }
+ 
+-                if(strcmp(audio_card_list[j]->driver_name, "rpmsg-audio") == 0) {
+-                    ALOGI("rpmsg-audio, set period_size to 1024");
+-                    pcm_config_mm_out.period_size = 1024;
+-                    pcm_config_mm_out.period_count = 4;
+-                }
+-
+                 // check if the device have been scaned before
+                 scanned = false;
+                 n = k;
+-- 
+2.7.4
+

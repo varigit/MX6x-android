@@ -1,14 +1,14 @@
-From 3d9dbc9a6463a846cb24660a217ef2bcedbc87a1 Mon Sep 17 00:00:00 2001
+From aba0d15b011649a4cd56dbae76e6a5f9b31a9e67 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Fri, 7 Apr 2017 22:45:14 +0200
-Subject: [PATCH] allow disabling automatic build of fsl wifi
+Subject: [PATCH 1/2] allow disabling automatic build of fsl wifi
 
 ---
  common/wifi/Android.mk | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/common/wifi/Android.mk b/common/wifi/Android.mk
-index 98a381d..28f83d8 100644
+index 98a381d..fe72787 100644
 --- a/common/wifi/Android.mk
 +++ b/common/wifi/Android.mk
 @@ -24,6 +24,7 @@

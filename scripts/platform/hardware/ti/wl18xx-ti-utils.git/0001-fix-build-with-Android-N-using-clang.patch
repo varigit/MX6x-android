@@ -1,7 +1,7 @@
-From 52b752f7b2c15c9cb8fe93bedc7d931f7d5333b7 Mon Sep 17 00:00:00 2001
+From 573e234471abe41775b5c172a5916cb6b2a0bf65 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Mon, 1 May 2017 12:30:29 +0200
-Subject: [PATCH] fix build with Android N (using clang)
+Subject: [PATCH 1/2] fix build with Android N (using clang)
 
 - wl_logproxy compilation disabled: currently broken with clang
 ---

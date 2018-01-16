@@ -1,4 +1,4 @@
-From 52c7b200e250c5905b60c21d1edfbe04f6b940ae Mon Sep 17 00:00:00 2001
+From 2d1833d62ebe74f00835bc69e18ec77b5dd728b9 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Wed, 19 Apr 2017 11:11:03 +0200
 Subject: [PATCH] fix standard behaviour when no vendor is specified

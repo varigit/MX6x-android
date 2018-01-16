@@ -1,7 +1,7 @@
-From 676e73f41e34a58f81506033b8ac0cbe4adf3aee Mon Sep 17 00:00:00 2001
+From ee6911a53535de1dd319f496a311443f7490d562 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
-Date: Thu, 19 Jul 2017 22:54:02 +0200
-Subject: [PATCH] manage at runtime properties related to boot device
+Date: Wed, 19 Jul 2017 22:54:02 +0200
+Subject: [PATCH 3/3] manage at runtime properties related to boot device
 
 When booting from sd, all Variscite iMX6 SoMs use mmcblk1.
 When booting from emmc, VAR-DART uses mmcblk2 while all the other
@@ -15,7 +15,7 @@ To fix this, let's manage them at runtime if needed.
  1 file changed, 28 insertions(+)
 
 diff --git a/init/property_service.cpp b/init/property_service.cpp
-index 5c1ae79..059196e 100644
+index 5c1ae79..7616fe4 100644
 --- a/init/property_service.cpp
 +++ b/init/property_service.cpp
 @@ -517,11 +517,39 @@ void load_recovery_id_prop() {

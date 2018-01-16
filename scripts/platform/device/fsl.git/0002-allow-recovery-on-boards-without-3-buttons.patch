@@ -1,7 +1,7 @@
-From e16cf0d5a9b9651770b5511ab990baa0fa321451 Mon Sep 17 00:00:00 2001
+From 136f656c01218c93e1ab4c1cd04712ea1c2869f0 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Fri, 7 Apr 2017 22:46:58 +0200
-Subject: [PATCH] allow recovery on boards without 3 buttons
+Subject: [PATCH 2/2] allow recovery on boards without 3 buttons
 
 ---
  common/recovery/recovery_ui.cpp | 10 ++++++++++

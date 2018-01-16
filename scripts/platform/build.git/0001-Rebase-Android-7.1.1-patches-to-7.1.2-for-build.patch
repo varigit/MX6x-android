@@ -1,0 +1,77 @@
+From 70b767ab4eab32bcc914f46f5b30bcbb498d458d Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Mon, 8 Jan 2018 23:51:29 -0800
+Subject: [PATCH] Rebase Android 7.1.1 patches to 7.1.2 for build
+
+Change-Id: Ib00d85449102e95e9fb86ae64fca791ec4c810b8
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ core/Makefile | 24 ++++++++++++++++++++----
+ 1 file changed, 20 insertions(+), 4 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index e3ed218..6517383 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1126,11 +1126,14 @@ $(TARGET_BOOTLOADER_IMAGE):
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ distclean $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $$UBOOT_CONFIG $(BOOTLOADER_ENV); \
+ 		$(MAKE) -C bootable/bootloader/uboot-imx/ $(BOOTLOADER_ENV); \
+-		install -D bootable/bootloader/uboot-imx/u-boot$(TARGET_DTB_POSTFIX).$(TARGET_BOOTLOADER_POSTFIX) $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.imx; \
+-		if [ $(UBOOT_POST_PROCESS) = true ]; then \
++		install -D bootable/bootloader/uboot-imx/u-boot.$(TARGET_BOOTLOADER_POSTFIX) $(PRODUCT_OUT)/u-boot-$$UBOOT_PLATFORM.$(TARGET_BOOTLOADER_POSTFIX); \
++		if [ "$(TARGET_BOOTLOADER_POSTFIX)" == "img" ]; then \
++			install -D bootable/bootloader/uboot-imx/SPL $(PRODUCT_OUT)/SPL-$$UBOOT_PLATFORM; \
++		fi; \
++		if [ "$(UBOOT_POST_PROCESS)" == "true" ]; then \
+ 		echo "build post process" ; \
+ 		$(call build_uboot, $(TARGET_BOOTLOADER_POSTFIX), $$UBOOT_PLATFORM) \
+-		fi \
++		fi; \
+ 	done
+ else
+ bootloader:
+@@ -1767,8 +1770,10 @@ ifeq ($(TARGET_NO_KERNEL),true)
+ build_ota_package := false
+ endif
+ ifeq ($(recovery_fstab),)
++ifneq ($(PRODUCT_MODEL),VAR_SOM_MX6)
+ build_ota_package := false
+ endif
++endif
+ ifeq ($(TARGET_BUILD_PDK),true)
+ build_ota_package := false
+ endif
+@@ -1994,7 +1999,7 @@ ifdef BOARD_KERNEL_DTS
+ endif
+ ifdef DTS_PLATFORM
+ 	$(hide) mkdir -p $(zip_root)/RADIO;
+-	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-$(DTS_PLATFORM).imx $(zip_root)/RADIO/bootloader.img
++#	$(hide) $(ACP) $(PRODUCT_OUT)/u-boot-$(DTS_PLATFORM).$(TARGET_BOOTLOADER_POSTFIX) $(zip_root)/RADIO/bootloader.img
+ endif
+ 	$(hide) $(foreach t,$(INSTALLED_RADIOIMAGE_TARGET),\
+ 	            mkdir -p $(zip_root)/RADIO; \
+@@ -2186,9 +2191,20 @@ otapackage:
+ 		export DTS_PLATFORM=`echo $$dtsplat | cut -d':' -f1`; \
+ 		DTS_BOARD=`echo $$dtsplat | cut -d':' -f2`; \
+ 		export BOARD_KERNEL_DTS="$(PRODUCT_OUT)/$$DTS_BOARD" ; \
++		if [ "$(PRODUCT_MODEL)" == "VAR_SOM_MX6" ]; then \
++			if [ "$$DTS_PLATFORM" == "imx6q-var-dart" ]; then \
++				export TARGET_OTA_FSTAB=/fstab.var-dart-mx6 ; \
++			else \
++				export TARGET_OTA_FSTAB=/fstab.var-som-mx6 ; \
++			fi; \
++			echo "OTA FSTAB: $$DTS_PLATFORM => $$TARGET_OTA_FSTAB"; \
++		fi; \
+ 		make otagenerate; \
+ 		OTA_PACKAGE_BOARD=$(patsubst %.zip,%-$$DTS_PLATFORM.zip,$(INTERNAL_OTA_PACKAGE_TARGET)); \
+ 		cp -f $(INTERNAL_OTA_PACKAGE_TARGET) $$OTA_PACKAGE_BOARD; \
++		if [ "$(PRODUCT_MODEL)" == "VAR_SOM_MX6" ]; then \
++			unset TARGET_OTA_FSTAB; \
++		fi; \
+ 	done
+ 
+ 
+-- 
+2.7.4
+

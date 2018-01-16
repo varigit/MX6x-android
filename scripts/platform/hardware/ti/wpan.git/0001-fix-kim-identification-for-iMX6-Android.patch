@@ -1,4 +1,4 @@
-From e926cb6528690ee23ce29a85f5098622b2ef3bb6 Mon Sep 17 00:00:00 2001
+From cb5375c1419f6ee0a9b374ba6d4cd2c671cc48f2 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Mon, 1 May 2017 14:56:28 +0200
 Subject: [PATCH] fix kim identification for iMX6 Android

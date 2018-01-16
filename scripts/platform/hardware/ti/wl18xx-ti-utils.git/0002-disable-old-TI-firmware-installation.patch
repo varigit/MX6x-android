@@ -1,7 +1,7 @@
-From 78b006fb7e93c5b44bad8925cc82bc9cd078b642 Mon Sep 17 00:00:00 2001
+From ec81b173f015da7448d0cfc9571fe35e3acef343 Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Mon, 1 May 2017 14:53:27 +0200
-Subject: [PATCH] disable old TI firmware installation
+Subject: [PATCH 2/2] disable old TI firmware installation
 
 ---
  hw/firmware/Android.mk | 5 +++++

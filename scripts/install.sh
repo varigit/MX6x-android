@@ -3,9 +3,9 @@
 # install
 #
 # This script must be run from the Android main directory.
-# variscite/install must be at ~/n711_100_build
+# variscite/install must be at ~/n712_200_build
 #
-# Variscite VAR-MX6 patches for Android n7.1.1 1.0.0
+# Variscite VAR-MX6 patches for Android n7.1.2 2.0.0
 
 set -e
 #set -x
@@ -21,10 +21,10 @@ readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 
-readonly BASE_BRANCH_NAME="base_n7.1.1_1.0.0"
+readonly BASE_BRANCH_NAME="base_n7.1.2_2.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="n7.1.1_1.0.0-ga-var01"
+readonly _EXTPARAM_BRANCH="n7.1.2_2.0.0-ga-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"

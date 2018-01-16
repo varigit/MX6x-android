@@ -1,14 +1,14 @@
-From c5ce8e8b088e04123676377abdd112e402af9799 Mon Sep 17 00:00:00 2001
+From 0305a2dfa9f0833413b8facd14c07f3bba65da0c Mon Sep 17 00:00:00 2001
 From: varigigi <pierluigi.p@variscite.com>
 Date: Mon, 1 May 2017 17:33:43 +0200
-Subject: [PATCH] allow skipping write on console
+Subject: [PATCH 2/3] allow skipping write on console
 
 ---
  init/init.cpp | 4 ++++
  1 file changed, 4 insertions(+)
 
 diff --git a/init/init.cpp b/init/init.cpp
-index 24cdc2b..ab8669c 100644
+index f215ae9..bcba4bb 100644
 --- a/init/init.cpp
 +++ b/init/init.cpp
 @@ -364,6 +364,10 @@ static int console_init_action(const std::vector<std::string>& args)
