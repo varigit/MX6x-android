@@ -1,0 +1,6 @@
+For installing Android to eMMC, please use the following scripts from Variscite's Android recovery SD card:
+https://github.com/varigit/meta-variscite-fslc/blob/rocko/scripts/var_mk_yocto_sdcard/variscite_scripts_android/install_android.sh
+https://github.com/varigit/meta-variscite-fslc/blob/rocko/scripts/var_mk_yocto_sdcard/variscite_scripts_android/install_android_emmc.sh
+
+For more info:
+http://variwiki.com/index.php?title=Android_Recovery_SD_card&release=RELEASE_N7.1.2_2.0.0_VAR-SOM-MX6
