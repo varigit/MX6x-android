@@ -1,0 +1,47 @@
+From 7b7268c17172f52d50200a24025906875cba80a4 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Mon, 7 May 2018 12:01:36 +0200
+Subject: [PATCH] disable NXP kernel Android.mk
+
+---
+ drivers/staging/greybus/tools/Android.mk   | 10 ----------
+ drivers/staging/greybus/tools/Android.mk__ | 10 ++++++++++
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+ delete mode 100644 drivers/staging/greybus/tools/Android.mk
+ create mode 100644 drivers/staging/greybus/tools/Android.mk__
+
+diff --git a/drivers/staging/greybus/tools/Android.mk b/drivers/staging/greybus/tools/Android.mk
+deleted file mode 100644
+index fdadbf6..0000000
+--- a/drivers/staging/greybus/tools/Android.mk
++++ /dev/null
+@@ -1,10 +0,0 @@
+-LOCAL_PATH:= $(call my-dir)
+-
+-include $(CLEAR_VARS)
+-
+-LOCAL_SRC_FILES:= loopback_test.c
+-LOCAL_MODULE_TAGS := optional
+-LOCAL_MODULE := gb_loopback_test
+-
+-include $(BUILD_EXECUTABLE)
+-
+diff --git a/drivers/staging/greybus/tools/Android.mk__ b/drivers/staging/greybus/tools/Android.mk__
+new file mode 100644
+index 0000000..fdadbf6
+--- /dev/null
++++ b/drivers/staging/greybus/tools/Android.mk__
+@@ -0,0 +1,10 @@
++LOCAL_PATH:= $(call my-dir)
++
++include $(CLEAR_VARS)
++
++LOCAL_SRC_FILES:= loopback_test.c
++LOCAL_MODULE_TAGS := optional
++LOCAL_MODULE := gb_loopback_test
++
++include $(BUILD_EXECUTABLE)
++
+-- 
+2.7.4
+

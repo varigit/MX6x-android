@@ -1,0 +1,36 @@
+From d69372943135c2fc4d8394956a58533e36ac59c3 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Mon, 7 May 2018 11:21:39 +0200
+Subject: [PATCH] avoid referring PRODUCT_MANUFACTURER in emmc/sd init
+
+---
+ core/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index 16654dd..d21ddd2 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1236,8 +1236,8 @@ define build-recoveryimage-target
+   $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
+   $(hide) cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
+   $(hide) cp $(TARGET_ROOT_OUT)/init.recovery.*.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+-  $(hide) cp $(TARGET_ROOT_OUT)/init.$(PRODUCT_MANUFACTURER).sd.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+-  $(hide) cp $(TARGET_ROOT_OUT)/init.$(PRODUCT_MANUFACTURER).emmc.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
++  $(hide) cp $(TARGET_ROOT_OUT)/init.*.sd.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
++  $(hide) cp $(TARGET_ROOT_OUT)/init.*.emmc.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/res
+   $(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
+   $(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
+@@ -1423,7 +1423,7 @@ $(TARGET_KERNEL_CONFIGURE): $(KERNEL_IMX_PATH)/kernel_imx/arch/$(TARGET_ARCH)/co
+ 	install -D $(KERNEL_CONFIGURE) $(TARGET_KERNEL_CONFIGURE)
+ 
+ ifeq ($(TARGET_ARCH),arm64)
+-DTS_ADDITIONAL_PATH := freescale
++DTS_ADDITIONAL_PATH := $(PRODUCT_MANUFACTURER)
+ else
+ DTS_ADDITIONAL_PATH :=
+ endif
+-- 
+2.7.4
+

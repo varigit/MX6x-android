@@ -1,0 +1,25 @@
+type init-brcm-wifibt-sh, domain;
+type init-brcm-wifibt-sh_exec, exec_type, vendor_file_type, file_type;
+
+init_daemon_domain(init-brcm-wifibt-sh)
+
+allow init-brcm-wifibt-sh vendor_shell_exec:file rx_file_perms;
+allow init-brcm-wifibt-sh vendor_toolbox_exec:file rx_file_perms;
+
+# Set the sys.brcm.wifibt.completed property
+set_prop(init-brcm-wifibt-sh, system_prop)
+
+# Allow insmod
+allow init-brcm-wifibt-sh self:capability sys_module;
+allow init-brcm-wifibt-sh system_file:system module_load;
+allow init-brcm-wifibt-sh vendor_file:system module_load;
+
+# some more permissions
+# extending the rules under system/sepolicy
+allow init-brcm-wifibt-sh proc:file { getattr open read };
+allow init-brcm-wifibt-sh proc_modules:file { getattr open read };
+allow init-brcm-wifibt-sh self:capability net_admin;
+allow init-brcm-wifibt-sh sysfs:dir { add_name write };
+allow init-brcm-wifibt-sh sysfs:file { create getattr open read write };
+allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
+allow init-brcm-wifibt-sh wifi_prop:property_service set;

@@ -1,0 +1,252 @@
+import init.${ro.hardware}.usb.rc
+import init.${ro.hardware}.${ro.boot.soc_type}.rc
+import init.${ro.hardware}.${ro.boot.storage_type}.rc
+
+on early-init
+    # mount the debugfs
+    mount debugfs none /sys/kernel/debug/ mode=0755
+
+    # start broadcom powerup sequence in background
+    start init_brcm_wifibt_sh
+
+service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+
+on init
+    start watchdogd
+
+    # Support legacy paths
+    symlink /sdcard /mnt/sdcard
+    symlink /sdcard /storage/sdcard0
+
+    # setup the global environment
+    export CORE_REGISTER_FILE /vendor/etc/core_register
+    export COMPONENT_REGISTER_FILE /vendor/etc/component_register
+    export CONTENTPIPE_REGISTER_FILE /vendor/etc/contentpipe_register
+
+    # disable cursor blink for fbcon, if no splash screen support
+    write /sys/class/graphics/fbcon/cursor_blink 0
+
+    # deattch the fbcon as hdmi hotplug conflict with fbcon
+    write /sys/class/vtconsole/vtcon1/bind 0
+
+    mkdir /device 0771 system system
+
+on boot
+
+    # wait for broadcom powerup sequence completed
+    wait_for_prop sys.brcm.wifibt.completed 1
+
+    # emmulate battery property
+    setprop sys.emulated.battery 1
+
+    # Set permission for IIM node
+    symlink /dev/mxs_viim /dev/mxc_mem
+
+    # Enable Tethering in the Settings
+    setprop ro.tether.denied false
+
+    # 3D acceleration property
+    setprop debug.sf.showfps    0
+    setprop debug.sf.enable_hgl 1
+    setprop debug.egl.hw	1
+
+    setprop hwc.stretch.filter  1
+    setprop hwc.enable_dither   1
+
+    # fsl omx graphic manager media framework property
+    setprop media.omxgm.enable-player 0
+    setprop media.omxgm.enable-record 0
+    setprop media.omxgm.enable-scan 1
+    setprop rw.VIDEO_RENDER_NAME video_render.surface
+    setprop media.fsl_codec.flag 7
+
+    #Define the config for dual camera
+    #For landscape mode, orient is 0
+    #For portrait mode, orient is 90
+    #the android before honycomb are all in portrait mode
+    setprop camera.disable_zsl_mode 1
+    setprop back_camera_name mx6s-csi
+    setprop back_camera_orient 0
+    setprop front_camera_name uvc
+    setprop front_camera_orient 0
+
+   # Tweak the mmc device read ahead buffer size
+    write /sys/block/mmcblk0/queue/read_ahead_kb 2048
+    write /sys/block/mmcblk1/queue/read_ahead_kb 2048
+
+    # ALSA mixer naming define
+    setprop alsa.mixer.playback.master Playback
+    setprop alsa.mixer.capture.master Capture
+    setprop alsa.mixer.playback.speaker Playback
+    setprop alsa.mixer.playback.headset Headphone
+    setprop alsa.mixer.capture.headset Capture
+
+    # Set period_us for usb audio
+    setprop ro.audio.usb.period_us 20000
+
+    # Prepare for wifi
+    setprop wifi.interface wlan0
+    setprop wifi.ap.interface wlan0
+
+    # Prepare for bluetooth
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 0
+
+    setprop qcom.bluetooth.soc rome_uart
+    setprop wc_transport.start_hci false
+
+    # Prepare for RIL
+    setprop gsm.ril.delay 15
+    setprop ro.ril.wake_lock_timeout 300
+
+    # Set rotation to 270 to cofigure as portrait mode
+    setprop ro.sf.hwrotation 0
+
+    # Set the density to 160 dpi to match LCD.
+    setprop ro.sf.lcd_density 160
+
+    # Set extsd access permission
+    setprop persist.sampling_profiler 1
+
+    # Set tracefs permission to 755
+    chmod 0755 /sys/kernel/debug/tracing
+
+    # Default backlight device
+    setprop hw.backlight.dev "backlight"
+    # Chmod/chown FSL specific sys entry
+    chown system system /sys/class/backlight/backlight/brightness
+    chmod 0660 /sys/class/backlight/backlight/brightness
+
+    # Set light sensor sysfs path and light sensor threshold lux value
+    setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
+    setprop ro.lightsensor.threshold  20
+
+    # No bluetooth hardware present
+    setprop hw.bluetooth 0
+    setprop wlan.interface wlan0
+    # Set WiFi Display Source VideoBitRate Adaptive
+    setprop media.wfd.video-bitrate 3000000
+
+service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
+    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
+    -e/data/misc/wifi/entropy.bin  -g@android:wpa_wlan0
+    socket wpa_wlan0 dgram 660 wifi wifi
+    class main
+    disabled
+    oneshot
+
+service sensor_fusion /vendor/bin/fsl_sensor_fusion
+    class late_start
+    seclabel u:r:sensors:s0
+    user system
+    group input
+    oneshot
+
+# Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
+service watchdogd /sbin/watchdogd 10 20
+    class core
+    seclabel u:r:watchdogd:s0
+
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL p2p-wlan0-0
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL eth0
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n eth0
+    class main
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B -z \
+        -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116
+
+on property:wc_transport.start_hci=true
+    start start_hci_filter
+
+on property:wc_transport.start_hci=false
+    stop start_hci_filter
+
+service start_hci_filter /vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth diag
+    disabled
+
+on property:wc_transport.start_root=true
+    start hci_filter_root
+
+on property:wc_transport.start_root=false
+    stop hci_filter_root
+
+service hci_filter_root /vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth diag system
+    disabled
+
+on fs
+# mount ext4 partitions
+    mount_all /fstab.freescale
+
+    # Adjust parameters for dm-verity device
+    write /sys/block/dm-0/queue/read_ahead_kb 4096
+
+    # Update dm-verity state and set partition.*.verified properties
+    verity_update_state
+
+on verity-logging
+    exec u:r:slideshow:s0 -- /sbin/slideshow warning/verity_red_1 warning/verity_red_2
+
+on post-fs
+    # Turn on swap
+    swapon_all /fstab.freescale
+
+    # Swap in only 1 page at a time
+    write /proc/sys/vm/page-cluster 0
+
+    # This may have been created by the recovery system with the wrong context.
+    restorecon /cache/recovery
+
+on post-fs-data
+    setprop vold.post_fs_data_done 1

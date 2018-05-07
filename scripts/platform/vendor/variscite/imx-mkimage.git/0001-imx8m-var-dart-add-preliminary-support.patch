@@ -1,0 +1,34 @@
+From dc60556b7da19349712efe0ba570dbf7c511a537 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Mon, 7 May 2018 11:38:16 +0200
+Subject: [PATCH] imx8m-var-dart: add preliminary support
+
+---
+ iMX8M/soc.mak | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index e3003de..5c6efec 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -58,7 +58,7 @@ u-boot-atf-tee.bin: u-boot.bin bl31.bin tee.bin
+ clean:
+ 	@rm -f $(MKIMG) $(DCD_CFG) .imx8mq_dcd.cfg.cfgtmp.d u-boot-atf.bin u-boot-atf-tee.bin u-boot-spl-ddr.bin u-boot.itb u-boot.its u-boot-ddr3l.itb u-boot-ddr3l.its u-boot-spl-ddr3l.bin u-boot-ddr4.itb u-boot-ddr4.its u-boot-spl-ddr4.bin $(OUTIMG)
+ 
+-dtbs = fsl-imx8mq-evk.dtb
++dtbs = imx8m-var-dart.dtb
+ u-boot.itb: $(dtbs)
+ 	./mkimage_fit_atf.sh $(dtbs) > u-boot.its
+ 	./mkimage_uboot -E -p 0x3000 -f u-boot.its u-boot.itb
+@@ -107,7 +107,7 @@ nightly :
+ 	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/bl31-imx8mq.bin -O bl31.bin
+ 	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/u-boot-spl.bin-imx8mqevk-sd -O u-boot-spl.bin
+ 	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/u-boot-nodtb.bin -O u-boot-nodtb.bin
+-	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/fsl-imx8mq-evk.dtb -O fsl-imx8mq-evk.dtb
++	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/imx8m-var-dart.dtb -O imx8m-var-dart.dtb
+ 	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/signed_hdmi_imx8m.bin -O signed_hdmi_imx8m.bin
+ 	@$(WGET) -q $(SERVER)/$(DIR)/$(FW_DIR)/mkimage_uboot -O mkimage_uboot
+ 
+-- 
+2.7.4
+
