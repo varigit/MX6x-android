@@ -1,0 +1,37 @@
+From 106956290d16239a25663a6c59619d9e9700d6ba Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Fri, 11 May 2018 19:57:38 -0700
+Subject: [PATCH 2/2] Fixed Compilation Errors
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ asi/log.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/asi/log.c b/asi/log.c
+index 37c132a..1d623ee 100755
+--- a/asi/log.c
++++ b/asi/log.c
+@@ -20,7 +20,7 @@ char file_name[MAX_FILE_NAME]={0};
+ int log_printf_scr=false;
+ 
+ static int prepend_timestamp( char s[], size_t capacity )	{
+-	int errno = LOG_FILE_SUCCESS;
++	int rc = LOG_FILE_SUCCESS;
+     const char fmt[] = "[%y-%m-%d %H:%M:%S]";
+     /*
+         If you use different specifiers, this calculation may need to
+@@ -47,8 +47,8 @@ static int prepend_timestamp( char s[], size_t capacity )	{
+         //s[n - 1] = ' ';
+     }
+     else
+-        errno = LOG_FILE_FAIL;
+-    return errno;
++        rc = LOG_FILE_FAIL;
++    return rc;
+ }
+ 
+ void error(const char *msg)
+-- 
+2.7.4
+

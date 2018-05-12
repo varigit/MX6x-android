@@ -1,0 +1,26 @@
+From 1bd162d2d05e87844102bcdc8df042b5c316f4af Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 24 Apr 2018 12:22:47 -0700
+Subject: [PATCH] Bluetooth : Fixes broken build when added TI STlink
+
+Change-Id: Id1610a020ccdbb7a715e60abddaeb56cd3c8fc9a
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ Android.bp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Android.bp b/Android.bp
+index dae6460..4e54c6e 100644
+--- a/Android.bp
++++ b/Android.bp
+@@ -13,7 +13,6 @@ subdirs = [
+     "main",
+     "bta",
+     "vendor_libs",
+-    "test",
+     "udrv",
+     "tools",
+ ]
+-- 
+2.7.4
+

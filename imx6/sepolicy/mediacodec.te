@@ -1,0 +1,5 @@
+allow mediacodec sysfs:file { read open getattr };
+allow mediacodec tmpfs:dir { search write add_name };
+allow mediacodec debugfs_tracing:file { write open };
+allow mediacodec rootfs:lnk_file { getattr };
+allow mediacodec mediacodec_tmpfs:file { create open setattr };

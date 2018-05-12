@@ -1,0 +1,32 @@
+From 23025c30e95c6bbd649f698e48292aee74631046 Mon Sep 17 00:00:00 2001
+From: varigigi <pierluigi.p@variscite.com>
+Date: Mon, 1 May 2017 14:53:27 +0200
+Subject: [PATCH 2/2] disable old TI firmware installation
+
+---
+ hw/firmware/Android.mk | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/hw/firmware/Android.mk b/hw/firmware/Android.mk
+index fbc57b4..5b35be6 100644
+--- a/hw/firmware/Android.mk
++++ b/hw/firmware/Android.mk
+@@ -1,6 +1,9 @@
+ local_target_dir := $(TARGET_OUT)/etc/firmware/ti-connectivity
+ LOCAL_PATH:= $(call my-dir)
+ 
++INSTALL_TI_FIRMWARE := false
++ifneq ($(INSTALL_TI_FIRMWARE),false)
++
+ include $(CLEAR_VARS)
+ LOCAL_MODULE := wl1271-nvs.bin
+ LOCAL_MODULE_TAGS := debug
+@@ -56,3 +59,5 @@ LOCAL_MODULE_PATH := $(local_target_dir)
+ LOCAL_SRC_FILES := $(LOCAL_MODULE)
+ LOCAL_MODULE_CLASS := FIRMWARE
+ include $(BUILD_PREBUILT)
++
++endif
+-- 
+2.7.4
+

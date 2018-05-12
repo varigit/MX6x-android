@@ -1,0 +1,5 @@
+allow bootanim ashmem_device:chr_file {execute};
+allow bootanim self:process execmem;
+allow bootanim rootfs:lnk_file {getattr};
+allow bootanim debugfs_tracing:file { getattr write open };
+allow bootanim hal_configstore_default:binder { call };

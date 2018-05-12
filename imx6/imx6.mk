@@ -1,9 +1,12 @@
 $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/generic.mk)
+ifeq ($(PRODUCT_IMX_CAR),true)
+$(call inherit-product, packages/services/Car/car_product/build/car.mk)
+endif
 $(call inherit-product, $(TOPDIR)frameworks/base/data/sounds/AllAudio.mk)
 # overrides
-PRODUCT_BRAND := Freescale
-PRODUCT_MANUFACTURER := Freescale
+PRODUCT_BRAND := Android
+PRODUCT_MANUFACTURER := freescale
 
 # Android infrastructures
 PRODUCT_PACKAGES += \
@@ -41,17 +44,18 @@ PRODUCT_PACKAGES += \
 	libjni_pinyinime        		\
 	libRS					\
 	librs_jni				\
-	pppd					\
 	chat					\
 	ip-up-vpn				\
-	ip-up-ppp0				\
-	ip-down-ppp0				\
 	wpa_supplicant				\
 	wpa_supplicant.conf			\
 	p2p_supplicant_overlay.conf			\
 	wpa_supplicant_overlay.conf			\
     p2p_supplicant_advance_overlay.conf \
-	libion
+	libion \
+	vndk-sp
+
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.vendor.vndk.version=26.1.0 \
 
 #FREESCALE_EXTENDED
 PRODUCT_PACKAGES += freescale-extended 		\
@@ -70,7 +74,6 @@ PRODUCT_PACKAGES += \
 #audio related lib
 PRODUCT_PACKAGES += \
 	audio.primary.imx6			\
-	audio_policy.conf			\
 	tinyplay				\
 	audio.a2dp.default			\
 	audio.usb.default			\
@@ -93,6 +96,18 @@ PRODUCT_PACKAGES += \
 	libbt-vendor				\
 	magd
 
+# Memtrack HAL
+PRODUCT_PACKAGES += \
+	memtrack.imx6 \
+	android.hardware.memtrack@1.0-impl \
+	android.hardware.memtrack@1.0-service
+
+# camera related libs
+PRODUCT_PACKAGES += \
+	camera.device@1.0-impl          \
+	camera.device@3.2-impl          \
+	android.hardware.camera.provider@2.4-impl \
+        android.hardware.camera.provider@2.4-service
 
 # Freescale VPU firmware files.
 PRODUCT_PACKAGES += \
@@ -158,6 +173,7 @@ omx_libs := \
 	lib_omx_android_audio_render_arm11_elinux	\
 	lib_omx_audio_fake_render_arm11_elinux		\
 	lib_omx_ipulib_render_arm11_elinux		\
+	lib_omx_tunneled_decoder_arm11_elinux           \
 	lib_avi_parser_arm11_elinux.3.0			\
 	lib_divx_drm_arm11_elinux			\
 	lib_mp4_parser_arm11_elinux.3.0			\
@@ -217,7 +233,7 @@ omx_libs := \
 	lib_omx_libav_video_dec_arm11_elinux \
 	libavcodec \
 	libavutil \
-    libavresample \
+    libswresample \
 	lib_omx_libav_audio_dec_arm11_elinux \
     lib_omx_soft_hevc_dec_arm11_elinux \
     lib_ape_parser_arm11_elinux.3.0 \
@@ -273,11 +289,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     com.android.future.usb.accessory
 
-PRODUCT_AAPT_CONFIG := normal mdpi
+#PRODUCT_AAPT_CONFIG := normal mdpi
 
-# ril related libs
-PRODUCT_PACKAGES += \
-	libruntime-ril-port
+
+PRODUCT_AAPT_CONFIG := xlarge large tvdpi hdpi xhdpi normal mdpi
 
 PRODUCT_PACKAGES += \
     charger_res_images \
@@ -289,36 +304,48 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     fsck.f2fs mkfs.f2fs
 
+# display libs
+PRODUCT_PACKAGES += \
+    libdrm \
+    libfsldisplay
+
 PRODUCT_COPY_FILES +=	\
 	device/fsl/common/input/Dell_Dell_USB_Keyboard.kl:system/usr/keylayout/Dell_Dell_USB_Keyboard.kl \
 	device/fsl/common/input/Dell_Dell_USB_Keyboard.idc:system/usr/idc/Dell_Dell_USB_Keyboard.idc \
+	device/fsl/common/input/Dell_Dell_USB_Entry_Keyboard.idc:system/usr/idc/Dell_Dell_USB_Entry_Keyboard.idc \
 	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/eGalax_Touch_Screen.idc \
 	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/HannStar_P1003_Touchscreen.idc \
 	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/Novatek_NT11003_Touch_Screen.idc \
-	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/ADS7846_Touchscreen.idc \
-	device/fsl/common/input/eGalax_Touch_Screen.idc:system/usr/idc/EP0700M06.idc \
 	system/core/rootdir/init.rc:root/init.rc \
-	device/fsl/imx6/etc/apns-conf.xml:system/etc/apns-conf.xml \
 	device/fsl/imx6/etc/init.usb.rc:root/init.var-som-mx6.usb.rc \
 	device/fsl/imx6/etc/init.usb.rc:root/init.var-dart-mx6.usb.rc \
-	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.var-som-mx6.rc \
-	device/variscite/imx6/etc/ueventd.freescale.rc:root/ueventd.var-dart-mx6.rc \
-	device/fsl/imx6/etc/ppp/init.gprs-pppd:system/etc/ppp/init.gprs-pppd \
 	device/fsl/imx6/etc/ota.conf:system/etc/ota.conf \
-	device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-som-mx6.rc \
-	device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-dart-mx6.rc \
-    device/fsl-proprietary/media-profile/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
-    device/fsl-proprietary/media-profile/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
-    device/fsl-proprietary/media-profile/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
-    device/fsl-proprietary/media-profile/media_profiles_720p.xml:system/etc/media_profiles_720p.xml \
+        device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.freescale.rc \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_profiles_720p.xml:system/etc/media_profiles_720p.xml \
     
+PRODUCT_COPY_FILES += \
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/ZP_BCM4339/BCM4335C0.ZP.hcd:vendor/firmware/bcm/Type_ZP.hcd 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/ZP_BCM4339/fw_bcmdhd.bin:vendor/firmware/bcm/fw_bcmdhd.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/ZP_BCM4339/fw_bcmdhd.bin:vendor/firmware/bcm/fw_bcmdhd_apsta.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1BW_BCM43340/BCM43341B0.1BW.hcd:vendor/firmware/bcm/1BW_BCM43340/BCM43341B0.1BW.hcd 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1BW_BCM43340/fw_bcmdhd.bin:vendor/firmware/bcm/1BW_BCM43340/fw_bcmdhd.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1BW_BCM43340/fw_bcmdhd.bin:vendor/firmware/bcm/1BW_BCM43340/fw_bcmdhd_apsta.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1DX_BCM4343W/BCM43430A1.1DX.hcd:vendor/firmware/bcm/1DX_BCM4343W/BCM43430A1.1DX.hcd 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1DX_BCM4343W/fw_bcmdhd.bin:vendor/firmware/bcm/1DX_BCM4343W/fw_bcmdhd.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/1DX_BCM4343W/fw_bcmdhd.bin:vendor/firmware/bcm/1DX_BCM4343W/fw_bcmdhd_apsta.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/SN8000_BCM43362/fw_bcmdhd.bin:vendor/firmware/bcm/SN8000_BCM43362/fw_bcmdhd.bin 	\
+	$(IMX_FIRMWARE_PATH)/imx-firmware/brcm/SN8000_BCM43362/fw_bcmdhd.bin:vendor/firmware/bcm/SN8000_BCM43362/fw_bcmdhd_apsta.bin 	\
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
 # for property
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
-	persist.sys.usb.config=mtp
+	persist.sys.usb.config="mtp,adb" \
+	ro.radio.noril=yes 
 
 # enlarge media max memory size to 3G.
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -327,6 +354,20 @@ PRODUCT_PROPERTY_OVERRIDES += \
 #this must be set before including tablet-7in-hdpi-1024-dalvik-heap.mk
 PRODUCT_PROPERTY_OVERRIDES += \
         dalvik.vm.heapgrowthlimit=128m
+
+#this makes imx6 wifionly devices
+PRODUCT_PROPERTY_OVERRIDES += \
+        ro.radio.noril=yes
+
+# Freescale multimedia parser related prop setting
+# Define fsl avi/aac/asf/mkv/flv/flac format support
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.FSL_AVI_PARSER=1 \
+    ro.FSL_AAC_PARSER=1 \
+    ro.FSL_FLV_PARSER=1 \
+    ro.FSL_MKV_PARSER=1 \
+    ro.FSL_FLAC_PARSER=1 \
+    ro.FSL_MPG2_PARSER=1 \
 
 PRODUCT_DEFAULT_DEV_CERTIFICATE := \
         device/fsl/common/security/testkey
@@ -346,3 +387,5 @@ endif
 include frameworks/native/build/tablet-7in-hdpi-1024-dalvik-heap.mk
 
 -include device/google/gapps/gapps.mk
+-include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/fsl_real_dec/fsl_real_dec.mk
+-include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/fsl_ms_codec/fsl_ms_codec.mk

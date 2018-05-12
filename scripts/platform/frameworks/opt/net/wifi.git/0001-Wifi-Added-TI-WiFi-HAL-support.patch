@@ -1,0 +1,28 @@
+From c5d371368c68bfbbf88c4cd60f3ec7578fe6158b Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 24 Apr 2018 12:32:26 -0700
+Subject: [PATCH] Wifi : Added TI WiFi HAL support
+
+Change-Id: I3544ee3e4e59e155842dff146dc777f97f7fc1c4
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ libwifi_hal/Android.mk | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libwifi_hal/Android.mk b/libwifi_hal/Android.mk
+index 1179a09..f8f28b5 100644
+--- a/libwifi_hal/Android.mk
++++ b/libwifi_hal/Android.mk
+@@ -99,6 +99,9 @@ else ifeq ($(BOARD_WLAN_DEVICE), mrvl)
+ else ifeq ($(BOARD_WLAN_DEVICE), MediaTek)
+   # support MTK WIFI HAL
+   LIB_WIFI_HAL := libwifi-hal-mt66xx
++else ifeq ($(BOARD_WLAN_DEVICE), wl12xx_mac80211)
++  # support for TI wlan WiFi HAL
++  LIB_WIFI_HAL :=libwifi-hal-wl18xx
+ endif
+ 
+ # The WiFi HAL that you should be linking.
+-- 
+2.7.4
+

@@ -1,0 +1,35 @@
+From 2b059aeac1ee65a29f4dfa596aefc72378eccfd8 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 24 Apr 2018 22:06:36 -0700
+Subject: [PATCH] Fixed the WLAN conflict with variscite coexistence
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/wifi/Android.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/common/wifi/Android.mk b/common/wifi/Android.mk
+index 9aba127..fb22424 100644
+--- a/common/wifi/Android.mk
++++ b/common/wifi/Android.mk
+@@ -24,7 +24,7 @@
+ # components.
+ 
+ ifeq ($(TARGET_BOARD_PLATFORM),$(filter $(TARGET_BOARD_PLATFORM),imx6 imx7 imx8))
+-
++ifneq ($(BOARD_WLAN_DEVICE),wl12xx_mac80211)
+ LOCAL_PATH := $(call my-dir)
+ 
+ include $(CLEAR_VARS)
+@@ -50,7 +50,7 @@ LOCAL_MODULE_CLASS := ETC
+ LOCAL_SRC_FILES    := $(LOCAL_MODULE)
+ LOCAL_MODULE_PATH  := $(TARGET_OUT_ETC)/wifi
+ include $(BUILD_PREBUILT)
+-
++endif
+ endif
+ 
+ include $(call first-makefiles-under,$(LOCAL_PATH))
+-- 
+2.7.4
+

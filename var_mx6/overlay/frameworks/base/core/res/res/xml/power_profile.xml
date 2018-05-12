@@ -23,7 +23,7 @@
   <item name="none">0</item>
   <item name="screen.on">71</item>
   <item name="bluetooth.active">17</item>
-  <item name="bluetooth.on">17</item>
+  <item name="bluetooth.on">17</item> <!--sabresd don't have BT device -->
   <item name="screen.full">200</item>
   <item name="wifi.on">80</item>
   <item name="wifi.active">96</item>

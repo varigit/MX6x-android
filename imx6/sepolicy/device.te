@@ -1,0 +1,2 @@
+type caam_device, dev_type;
+type pxp_device, dev_type;

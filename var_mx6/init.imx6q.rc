@@ -1,0 +1,13 @@
+on boot
+
+    # Set OpenGLES version
+    setprop ro.opengles.version 131072
+
+    # Set GPU 3D minimum clock to 3/64
+    write /sys/bus/platform/drivers/galcore/gpu3DMinClock 3
+
+    # set back camera.
+    setprop back_camera_name ov5640_mipi,ov5642_camera,ov5640_camera
+
+    # set front camera.
+    setprop front_camera_name uvc,ov5642_camera,ov5640_camera

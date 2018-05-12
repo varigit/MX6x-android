@@ -18,7 +18,7 @@
 
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
-
+//#warning
 #define BTM_DEF_LOCAL_NAME "Variscite VAR-SOM-MX6"
 
 /* actually kernel support it, but rtc irq pin is not connected */

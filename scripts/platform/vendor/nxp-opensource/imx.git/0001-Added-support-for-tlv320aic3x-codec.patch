@@ -1,0 +1,126 @@
+From 2ea6273e802fb14c6b4d894c4a96c8f131a2cc5f Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Wed, 21 Mar 2018 15:49:17 -0700
+Subject: [PATCH] Added support for tlv320aic3x codec
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ alsa/config_tlv320aic3x.h | 76 +++++++++++++++++++++++++++++++++++++++++++++++
+ alsa/tinyalsa_hal.c       |  4 ++-
+ 2 files changed, 79 insertions(+), 1 deletion(-)
+ create mode 100644 alsa/config_tlv320aic3x.h
+
+diff --git a/alsa/config_tlv320aic3x.h b/alsa/config_tlv320aic3x.h
+new file mode 100644
+index 0000000..9da6d50
+--- /dev/null
++++ b/alsa/config_tlv320aic3x.h
+@@ -0,0 +1,76 @@
++/*
++ * Copyright (C) 2011 The Android Open Source Project
++ *
++ * Licensed under the Apache License, Version 2.0 (the "License");
++ * you may not use this file except in compliance with the License.
++ * You may obtain a copy of the License at
++ *
++ *      http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * Unless required by applicable law or agreed to in writing, software
++ * distributed under the License is distributed on an "AS IS" BASIS,
++ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++ * See the License for the specific language governing permissions and
++ * limitations under the License.
++ */
++/* Copyright (C) 2012-2014 Freescale Semiconductor, Inc. */
++
++#ifndef ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H
++#define ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H
++
++#include "audio_hardware.h"
++#define MIXER_TLV320AIC3X_PCM_VOLUME    "PCM Playback Volume"
++#define MIXER_TLV320AIC3X_HP_DAC_VOLUME "HP DAC Playback Volume"
++
++static struct route_setting defaults_TLV320AIC3X[] = {
++    /* general */
++    {
++        .ctl_name = MIXER_TLV320AIC3X_PCM_VOLUME,
++        .intval = 118,
++    },
++    {
++        .ctl_name = MIXER_TLV320AIC3X_HP_DAC_VOLUME,
++        .intval = 118,
++    },
++};
++
++/* ALSA cards for IMX, these must be defined according different board / kernel config*/
++static struct audio_card  tlv320aic3x_card = {
++    .name = "tlv320aic3x-audio",
++    .driver_name = "tlv320aic3x-aud",
++    .supported_out_devices = (AUDIO_DEVICE_OUT_EARPIECE |
++            AUDIO_DEVICE_OUT_SPEAKER |
++            AUDIO_DEVICE_OUT_WIRED_HEADSET |
++            AUDIO_DEVICE_OUT_WIRED_HEADPHONE |
++            AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET |
++            AUDIO_DEVICE_OUT_ALL_SCO |
++            AUDIO_DEVICE_OUT_DEFAULT ),
++    .supported_in_devices = (
++            AUDIO_DEVICE_IN_COMMUNICATION |
++            AUDIO_DEVICE_IN_AMBIENT |
++            AUDIO_DEVICE_IN_BUILTIN_MIC |
++            AUDIO_DEVICE_IN_WIRED_HEADSET |
++            AUDIO_DEVICE_IN_BACK_MIC |
++            AUDIO_DEVICE_IN_ALL_SCO |
++            AUDIO_DEVICE_IN_DEFAULT),
++    .defaults            = defaults_TLV320AIC3X,
++    .bt_output           = NULL,
++    .speaker_output      = NULL,
++    .hs_output           = NULL,
++    .earpiece_output     = NULL,
++    .vx_hs_mic_input     = NULL,
++    .mm_main_mic_input   = NULL,
++    .vx_main_mic_input   = NULL,
++    .mm_hs_mic_input     = NULL,
++    .vx_bt_mic_input     = NULL,
++    .mm_bt_mic_input     = NULL,
++    .card                = 0,
++    .out_rate            = 0,
++    .out_channels        = 0,
++    .out_format          = 0,
++    .in_rate             = 0,
++    .in_channels         = 0,
++    .in_format           = 0,
++};
++
++#endif  /* ANDROID_INCLUDE_IMX_CONFIG_TLV320AIC3X_H */
+diff --git a/alsa/tinyalsa_hal.c b/alsa/tinyalsa_hal.c
+index 5c4c7a3..c18cdf4 100644
+--- a/alsa/tinyalsa_hal.c
++++ b/alsa/tinyalsa_hal.c
+@@ -51,6 +51,7 @@
+ #include "config_rpmsg.h"
+ #include "config_wm8524.h"
+ #include "config_cdnhdmi.h"
++#include "config_tlv320aic3x.h"
+ #include "control.h"
+ #include "pcm_ext.h"
+ 
+@@ -97,7 +98,7 @@
+ #define PRODUCT_NAME_PROPERTY   "ro.product.name"
+ #define PRODUCT_DEVICE_IMX      "imx"
+ #define PRODUCT_DEVICE_AUTO     "sabreauto"
+-#define SUPPORT_CARD_NUM        11
++#define SUPPORT_CARD_NUM        12
+ 
+ /*"null_card" must be in the end of this array*/
+ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
+@@ -112,6 +113,7 @@ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
+     &rpmsg_card,
+     &wm8524_card,
+     &cdnhdmi_card,
++    &tlv320aic3x_card,
+     &null_card,
+ };
+ 
+-- 
+2.7.4
+

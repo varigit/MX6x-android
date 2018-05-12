@@ -1,0 +1,28 @@
+From 757b03f417a29cfa34d13bd4ea2205431da34923 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Fri, 11 May 2018 15:45:23 -0700
+Subject: [PATCH 2/2] Fix copying init strorage files to recovery image
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ core/Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/core/Makefile b/core/Makefile
+index f3bec8f..2b11739 100644
+--- a/core/Makefile
++++ b/core/Makefile
+@@ -1214,8 +1214,8 @@ define build-recoveryimage-target
+   $(hide) rm -f $(TARGET_RECOVERY_ROOT_OUT)/init*.rc
+   $(hide) cp -f $(recovery_initrc) $(TARGET_RECOVERY_ROOT_OUT)/
+   $(hide) cp $(TARGET_ROOT_OUT)/init.recovery.*.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+-  $(hide) cp $(TARGET_ROOT_OUT)/init.$(PRODUCT_MANUFACTURER).sd.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+-  $(hide) cp $(TARGET_ROOT_OUT)/init.$(PRODUCT_MANUFACTURER).emmc.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
++  $(hide) cp $(TARGET_ROOT_OUT)/init.*.sd.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
++  $(hide) cp $(TARGET_ROOT_OUT)/init.*.emmc.rc $(TARGET_RECOVERY_ROOT_OUT)/ || true # Ignore error when the src file doesn't exist.
+   $(hide) mkdir -p $(TARGET_RECOVERY_ROOT_OUT)/res
+   $(hide) rm -rf $(TARGET_RECOVERY_ROOT_OUT)/res/*
+   $(hide) cp -rf $(recovery_resources_common)/* $(TARGET_RECOVERY_ROOT_OUT)/res
+-- 
+2.7.4
+

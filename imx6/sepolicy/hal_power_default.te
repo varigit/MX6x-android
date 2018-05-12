@@ -1,0 +1,4 @@
+allow hal_power_default sysfs_devices_system_cpu:file { write };
+allow hal_power_default property_socket:sock_file { write };
+allow hal_power_default init:unix_stream_socket { connectto };
+allow hal_power_default system_prop:property_service { set };

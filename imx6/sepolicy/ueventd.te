@@ -1,2 +1,0 @@
-allow ueventd system_file:file { execute_no_trans };
-allow ueventd ueventd:netlink_socket { create setopt bind getattr write read };

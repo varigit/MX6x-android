@@ -1,16 +1,12 @@
 import init.${ro.hardware}.usb.rc
-import init.${ro.hardware}.${ro.soc}.rc
+import init.${ro.hardware}.${ro.boot.soc_type}.rc
+import init.${ro.hardware}.${ro.boot.storage_type}.rc
 
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
-    setprop ro.boot.skip_write_on_console 1
 
 on init
-
-    # Load persistent dm-verity state
-    verity_load_state
-
     start watchdogd
 
     # Support legacy paths
@@ -19,12 +15,11 @@ on init
 
     # setup the global environment
     export SHM_MOUNTPOINT /mnt/shm
-    export LIGHTSENSOR_PATH /sys/class/i2c-adapter/i2c-1/1-0044
     export VPU_FW_PATH /system/lib/firmware/vpu
     export CODEC_SHM_PATH /mnt/shm
-    export CORE_REGISTER_FILE /system/etc/core_register
-    export COMPONENT_REGISTER_FILE /system/etc/component_register
-    export CONTENTPIPE_REGISTER_FILE /system/etc/contentpipe_register
+    export CORE_REGISTER_FILE /vendor/etc/core_register
+    export COMPONENT_REGISTER_FILE /vendor/etc/component_register
+    export CONTENTPIPE_REGISTER_FILE /vendor/etc/contentpipe_register
 
 
     # disable cursor blink for fbcon, if no splash screen support
@@ -49,6 +44,8 @@ on boot
 
     # Enable Tethering in the Settings
     setprop ro.tether.denied false
+    #setprop config.disable_bluetooth true
+    setprop ro.boot.flash.locked 0
 
     # 3D acceleration property
     setprop debug.sf.showfps    0
@@ -64,6 +61,7 @@ on boot
     setprop media.omxgm.enable-scan 1
     setprop rw.VIDEO_RENDER_NAME video_render.surface
     setprop media.fsl_codec.flag 7
+    setprop media.omx.enable-tunnel 0
 
     #Define the config for dual camera
     setprop camera.disable_zsl_mode 1
@@ -76,7 +74,6 @@ on boot
     # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
-    write /sys/block/mmcblk2/queue/read_ahead_kb 2048
 
     # ALSA mixer naming define
     setprop alsa.mixer.playback.master Playback
@@ -85,24 +82,24 @@ on boot
     setprop alsa.mixer.playback.headset Headphone
     setprop alsa.mixer.capture.headset Capture
 
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/bcmdhd/parameters/firmware_path
+    chown wifi wifi /sys/module/bcmdhd/parameters/nvram_path
+
     # Prepare for wifi
     setprop wifi.interface wlan0
     setprop wifi.ap.interface wlan0
 
     # Prepare for bluetooth
-    chmod 665 /sys/class/rfkill/rfkill0/state
-    chown bluetooth net_bt_stack /sys/class/rfkill/rfkill0/state
+    chmod 660 /sys/class/rfkill/rfkill0/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 0
 
-    # Prepare for RIL
-    #setprop gsm.ril.delay 15
-    #setprop ro.ril.wake_lock_timeout 300
-
     # Set rotation to 270 to cofigure as portrait mode
-    setprop ro.sf.hwrotation 0
+    setprop ro.sf.hwrotation 180
 
     # Set the density to 160dpi, default 128dpi is not good
-    setprop ro.sf.lcd_density 160
+    setprop ro.sf.lcd_density 124
 
     # Set extsd access permission
     setprop persist.sampling_profiler 1
@@ -129,10 +126,6 @@ on boot
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
 
-    # prepare for ril
-    #setprop gsm.ril.delay 15
-    #setprop ro.ril.wake_lock_timeout 300
-
     # Default backlight device
     setprop hw.backlight.dev "backlight"
     # Chmod/chown FSL specific sys entry
@@ -143,7 +136,11 @@ on boot
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-2/device/2-0044/"
     setprop ro.lightsensor.threshold  20
 
-    # BT and WLAN up
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/bcmdhd/parameters/firmware_path
+    chown wifi wifi /sys/module/bcmdhd/parameters/nvram_path
+
+    # No bluetooth hardware present
     setprop wlan.interface wlan0
     setprop hw.bluetooth 1
 
@@ -174,7 +171,6 @@ on property:sys.boot_completed=1
     write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 40000
     write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 60000
     write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 40
-    #write /sys/devices/system/cpu/cpufreq/interactive/hispeed_freq 792000
 # change interactive atrrubuties permissions when interactive is actived
 on property:sys.interactive="active"
     chown system root /sys/devices/system/cpu/cpufreq/interactive/timer_rate
@@ -191,32 +187,35 @@ on property:sys.interactive="active"
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boost
     chown system root /sys/devices/system/cpu/cpufreq/interactive/boostpulse
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse
-    chown system root /sys/devices/system/cpu/cpufreq/interactive/input_boost
-    chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/input_boost
     chown system system /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/boostpulse_duration
     chown system system /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
     chmod 0660 /sys/devices/system/cpu/cpufreq/interactive/io_is_busy
+    write /sys/devices/system/cpu/cpufreq/interactive/timer_rate 40000
+    write /sys/devices/system/cpu/cpufreq/interactive/min_sample_time 60000
+    write /sys/devices/system/cpu/cpufreq/interactive/go_hispeed_load 40
 
-
-service p2p_supplicant /system/bin/wpa_supplicant \
+service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets -pp2p_device=1 \
-    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
+    -e/data/misc/wifi/entropy.bin  -g@android:wpa_wlan0
     socket wpa_wlan0 dgram 660 wifi wifi
-    class late_start
+    class main
     disabled
     oneshot
 
-service wpa_supplicant /system/bin/wpa_supplicant \
-    -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
-    -I/system/etc/wifi/wpa_supplicant_overlay.conf \
-    -O/data/misc/wifi/sockets \
-    -e/data/misc/wifi/entropy.bin -g@android:wpa_wlan0
-    socket wpa_wlan0 dgram 660 wifi wifi
+# magd daemon
+service magd /vendor/bin/magd
     class late_start
-    disabled
+    seclabel u:r:sensors:s0
+    user system
+    group input
+    oneshot
+
+service uim /system/bin/uim-sysfs
+    class late_start
+    seclabel u:r:hci_attach:s0
+    user system
+    group bluetooth
     oneshot
 
 service charger /charger
@@ -227,17 +226,17 @@ service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
     disabled
     oneshot
 
-service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL p2p-wlan0-0
     class main
     disabled
     oneshot
 
-service dhcpcd_eth0 /system/bin/dhcpcd -ABDKL
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL eth0
     class main
     disabled
     oneshot
 
-service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL bt-pan
     class main
     disabled
     oneshot
@@ -252,26 +251,27 @@ service iprenew_p2p /system/bin/dhcpcd -n
     disabled
     oneshot
 
-service iprenew_eth0 /system/bin/dhcpcd -n
+service iprenew_eth0 /system/bin/dhcpcd -n eth0
     class main
     disabled
     oneshot
 
-service iprenew_bt-pan /system/bin/dhcpcd -n
+service iprenew_bt-pan /system/bin/dhcpcd -n bt-pan
     class main
     disabled
     oneshot
 
-service hostapd /system/bin/hostapd /data/misc/wifi/hostapd.conf
-    socket hostapd_wlan0 dgram 660 root wifi
-    user root
-    group wifi
-    oneshot
+# bugreport is triggered by holding down volume down, volume up and power
+service bugreport /system/bin/dumpstate -d -p -B -z \
+        -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
+    class main
     disabled
+    oneshot
+    keycodes 114 115 116
 
 on fs
 # mount ext4 partitions
-    mount_all /fstab.${ro.hardware}
+    mount_all /fstab.freescale
 
     # Update dm-verity state and set partition.*.verified properties
     verity_update_state
@@ -281,7 +281,7 @@ on verity-logging
 
 on post-fs
     # Turn on swap
-    swapon_all /fstab.${ro.hardware}
+    swapon_all /fstab.freescale
 
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
@@ -289,9 +289,5 @@ on post-fs
     # This may have been created by the recovery system with the wrong context.
     restorecon /cache/recovery
 
-# shared transport user space mgr service for TI Bluetooth
-service uim /system/bin/uim-sysfs
-    class core
-    user bluetooth
-    group bluetooth net_bt_admin
-    oneshot
+on post-fs-data
+    setprop vold.post_fs_data_done 1
