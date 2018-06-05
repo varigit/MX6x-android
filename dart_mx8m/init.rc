@@ -34,6 +34,9 @@ on init
     # deattch the fbcon as hdmi hotplug conflict with fbcon
     write /sys/class/vtconsole/vtcon1/bind 0
 
+    # force USB2740 autosuspend
+    write /sys/devices/platform/usb@38200000/38200000.dwc3/xhci-hcd.0.auto/usb1/1-1/1-1.5/power/control auto
+
     mkdir /device 0771 system system
 
 on boot
