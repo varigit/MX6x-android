@@ -41,9 +41,6 @@ on init
 
 on boot
 
-    # wait for broadcom powerup sequence completed
-    wait_for_prop sys.brcm.wifibt.completed 1
-
     # emmulate battery property
     setprop sys.emulated.battery 1
 
@@ -73,9 +70,9 @@ on boot
     #For portrait mode, orient is 90
     #the android before honycomb are all in portrait mode
     setprop camera.disable_zsl_mode 1
-    setprop back_camera_name mx6s-csi
+    setprop back_camera_name mx6s-csi,uvc
     setprop back_camera_orient 0
-    setprop front_camera_name uvc
+    setprop front_camera_name mx6s-csi,uvc
     setprop front_camera_orient 0
 
    # Tweak the mmc device read ahead buffer size
@@ -135,6 +132,9 @@ on boot
     setprop wlan.interface wlan0
     # Set WiFi Display Source VideoBitRate Adaptive
     setprop media.wfd.video-bitrate 3000000
+
+    # wait for broadcom powerup sequence completed
+    wait_for_prop sys.brcm.wifibt.completed 1
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -iwlan0 -Dnl80211 -c/data/misc/wifi/wpa_supplicant.conf \
