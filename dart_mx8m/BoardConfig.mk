@@ -113,8 +113,10 @@ endif
 TARGET_BOARD_DTS_CONFIG := \
 		imx8m-var-dart-emmc-wifi-dcss-lvds:imx8m-var-dart-emmc-wifi-dcss-lvds.dtb \
 		imx8m-var-dart-emmc-wifi-hdmi:imx8m-var-dart-emmc-wifi-hdmi.dtb \
+		imx8m-var-dart-emmc-wifi-hdmi-4k:imx8m-var-dart-emmc-wifi-hdmi-4k.dtb \
 		imx8m-var-dart-sd-emmc-dcss-lvds:imx8m-var-dart-sd-emmc-dcss-lvds.dtb \
-		imx8m-var-dart-sd-emmc-hdmi:imx8m-var-dart-sd-emmc-hdmi.dtb
+		imx8m-var-dart-sd-emmc-hdmi:imx8m-var-dart-sd-emmc-hdmi.dtb \
+		imx8m-var-dart-sd-emmc-hdmi-4k:imx8m-var-dart-sd-emmc-hdmi-4k.dtb
 
 TARGET_BOOTLOADER_CONFIG := imx8m-var-dart:imx8m_var_dart_android_defconfig
 
