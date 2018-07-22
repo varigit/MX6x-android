@@ -102,7 +102,7 @@ else
 CMASIZE=1536M
 endif
 
-BOARD_KERNEL_CMDLINE := console=ttymxc0,115200 earlycon=imxuart,0x30860000,115200 init=/init video=HDMI-A-1:1920x1080-32@60 androidboot.console=ttymxc0 consoleblank=0 androidboot.hardware=freescale androidboot.fbTileSupport=enable cma=$(CMASIZE) androidboot.primary_display=imx-drm firmware_class.path=/vendor/firmware
+#BOARD_KERNEL_CMDLINE := console=ttymxc0,115200 earlycon=imxuart,0x30860000,115200 init=/init video=HDMI-A-1:1920x1080-32@60 androidboot.console=ttymxc0 consoleblank=0 androidboot.hardware=freescale androidboot.fbTileSupport=enable cma=$(CMASIZE) androidboot.primary_display=imx-drm firmware_class.path=/vendor/firmware
 
 ifeq ($(TARGET_USERIMAGES_USE_UBIFS),true)
 ifeq ($(TARGET_USERIMAGES_USE_EXT4),true)
@@ -112,11 +112,15 @@ endif
 
 TARGET_BOARD_DTS_CONFIG := \
 		imx8m-var-dart-emmc-wifi-dcss-lvds:imx8m-var-dart-emmc-wifi-dcss-lvds.dtb \
+		imx8m-var-dart-emmc-wifi-dual-display:imx8m-var-dart-emmc-wifi-dual-display.dtb \
 		imx8m-var-dart-emmc-wifi-hdmi:imx8m-var-dart-emmc-wifi-hdmi.dtb \
 		imx8m-var-dart-emmc-wifi-hdmi-4k:imx8m-var-dart-emmc-wifi-hdmi-4k.dtb \
+		imx8m-var-dart-emmc-wifi-lcdif-lvds:imx8m-var-dart-emmc-wifi-lcdif-lvds.dtb \
 		imx8m-var-dart-sd-emmc-dcss-lvds:imx8m-var-dart-sd-emmc-dcss-lvds.dtb \
+		imx8m-var-dart-sd-emmc-dual-display:imx8m-var-dart-sd-emmc-dual-display.dtb \
 		imx8m-var-dart-sd-emmc-hdmi:imx8m-var-dart-sd-emmc-hdmi.dtb \
-		imx8m-var-dart-sd-emmc-hdmi-4k:imx8m-var-dart-sd-emmc-hdmi-4k.dtb
+		imx8m-var-dart-sd-emmc-hdmi-4k:imx8m-var-dart-sd-emmc-hdmi-4k.dtb \
+		imx8m-var-dart-sd-emmc-lcdif-lvds:imx8m-var-dart-sd-emmc-lcdif-lvds.dtb
 
 TARGET_BOOTLOADER_CONFIG := imx8m-var-dart:imx8m_var_dart_android_defconfig
 
