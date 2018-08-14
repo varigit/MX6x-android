@@ -174,7 +174,7 @@ function delete_device
 	sgdisk -Z $node
 	sync
 
-	dd if=/dev/zero of=$node bs=1M count=4
+	dd if=/dev/zero of=$node bs=1M count=8
 	sync; sleep 1
 }
 
@@ -241,7 +241,9 @@ function install_android
 
 	echo
 	blue_underlined_bold_echo "Installing Android system image: $systemimage_file"
-	rm ${imagesdir}/${systemimage_raw_file} 2> /dev/null
+	if [[ -f ${imagesdir}/${systemimage_raw_file} ]] ; then
+		rm ${imagesdir}/${systemimage_raw_file} 2> /dev/null
+	fi
 	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${imagesdir}/${systemimage_raw_file}
 	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}3
 	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}4
@@ -249,7 +251,9 @@ function install_android
 
 	echo
 	blue_underlined_bold_echo "Installing Android vendor image: $vendorimage_file"
-	rm ${imagesdir}/${vendorimage_raw_file} 2> /dev/null
+	if [[ -f ${imagesdir}/${vendorimage_raw_file} ]] ; then
+		rm ${imagesdir}/${vendorimage_raw_file} 2> /dev/null
+	fi
 	out/host/linux-x86/bin/simg2img ${imagesdir}/${vendorimage_file} ${imagesdir}/${vendorimage_raw_file}
 	dd if=${imagesdir}/${vendorimage_raw_file} of=${node}${part}8
 	dd if=${imagesdir}/${vendorimage_raw_file} of=${node}${part}9
@@ -264,6 +268,13 @@ function install_android
 	sleep 1
 }
 
+function finish
+{
+        echo
+        blue_bold_echo "Android installed successfully"
+        exit 0
+}
+
 check_images
 
 umount ${node}${part}*  2> /dev/null || true
@@ -276,9 +287,8 @@ create_parts
 install_bootloader
 format_android
 install_android
+finish
 
-echo
 #Start Udev back before exit
 #/etc/init.d/udev restart
 
-exit 0
