@@ -42,7 +42,7 @@ help() {
 # Parse command line
 moreoptions=1
 node="na"
-soc_name=""
+soc_name="showoptions"
 cal_only=0
 
 while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
@@ -57,6 +57,39 @@ while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 done
 
 imagesdir="out/target/product/dart_mx8m"
+
+img_prefix="boot-"
+img_search_str="ls ${imagesdir}/${img_prefix}* | grep sd"
+img_list=()
+
+# generate options list
+for img in $(eval $img_search_str)
+do
+	img=$(basename $img .img)
+	img=${img#${img_prefix}}
+	img_list+=($img)
+done
+
+# check for dtb
+if [[ $soc_name != "showoptions" ]] && [[ ! ${img_list[@]} =~ $soc_name ]] ; then
+	echo; red_bold_echo "ERROR: invalid dtb $soc_name"
+	soc_name=showoptions
+fi
+
+if [[ $soc_name == "showoptions" ]] ; then
+	PS3='Please choose your configuration: '
+	select opt in "${img_list[@]}"
+	do
+		if [[ -z "$opt" ]] ; then
+			echo invalid option
+			continue
+		else
+			soc_name=$opt
+			break
+		fi
+	done
+fi
+
 bootimage_file="boot-${soc_name}.img"
 vbmeta_file="vbmeta-${soc_name}.img"
 systemimage_file="system.img"
@@ -160,11 +193,17 @@ function delete_device
 {
 	echo
 	blue_underlined_bold_echo "Deleting current partitions"
-	for ((i=0; i<=12; i++))
+	for partition in ${node}*
 	do
-		if [[ -e ${node}${part}${i} ]] ; then
-			dd if=/dev/zero of=${node}${part}${i} bs=1M count=1 2> /dev/null || true
+		if [[ ${partition} = ${node} ]] ; then
+			# skip base node
+			continue
 		fi
+		if [[ ! -b ${partition} ]] ; then
+			red_bold_echo "ERROR: \"${partition}\" is not a block device"
+			exit 1
+		fi
+		dd if=/dev/zero of=${partition} bs=1M count=1 2> /dev/null || true
 	done
 	sync
 
@@ -226,6 +265,8 @@ function format_android
 	dd if=/dev/zero of=${node}${part}11 bs=1M count=${FBMISC_SIZE} conv=fsync
 	blue_underlined_bold_echo "Erasing misc partition"
 	dd if=/dev/zero of=${node}${part}5 bs=1M count=${MISC_SIZE} conv=fsync
+	blue_underlined_bold_echo "Erasing metadata partition"
+	dd if=/dev/zero of=${node}${part}6 bs=1M count=${METADATA_SIZE} conv=fsync
 	blue_underlined_bold_echo "Formating userdata partition"
 	mkfs.ext4 -F ${node}${part}10 -Ldata
 	sync; sleep 1
@@ -270,9 +311,22 @@ function install_android
 
 function finish
 {
-        echo
-        blue_bold_echo "Android installed successfully"
-        exit 0
+	echo
+	errors=0
+	for partition in ${node}*
+	do
+		if [[ ! -b ${partition} ]] ; then
+			red_bold_echo "ERROR: \"${partition}\" is not a block device"
+			errors=$((errors+1))
+		fi
+	done
+
+	if [[ ${errors} = 0 ]] ; then
+		blue_bold_echo "Android installed successfully"
+	else
+		red_bold_echo "Android installation failed"
+	fi
+	exit ${errors}
 }
 
 check_images
