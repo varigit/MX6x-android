@@ -1,0 +1,43 @@
+From 7c8a1c710f05d2d39af858b20466d3a931af9557 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Tue, 21 Aug 2018 16:21:34 -0700
+Subject: [PATCH] framework-services-wifi: workaround for WiFi AP re-connect
+ issue
+
+Change-Id: I6554ec5ea5c871aa2cfff6765841465119b4f189
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ .../com/android/server/wifi/scanner/WificondScannerImpl.java   | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/service/java/com/android/server/wifi/scanner/WificondScannerImpl.java b/service/java/com/android/server/wifi/scanner/WificondScannerImpl.java
+index 84105ee..7ff796c 100644
+--- a/service/java/com/android/server/wifi/scanner/WificondScannerImpl.java
++++ b/service/java/com/android/server/wifi/scanner/WificondScannerImpl.java
+@@ -544,6 +544,11 @@ public class WificondScannerImpl extends WifiScannerImpl implements Handler.Call
+             for (int i = 0; i < mNativeScanResults.size(); ++i) {
+                 ScanResult result = mNativeScanResults.get(i).getScanResult();
+                 long timestamp_ms = result.timestamp / 1000; // convert us -> ms
++                if (timestamp_ms <= mLastScanSettings.startTime) {
++                    timestamp_ms = mClock.getElapsedSinceBootMillis();
++                    result.timestamp = timestamp_ms * 1000; // convert ms -> us
++                    if (DBG) Log.d(TAG, "Forcing valid scan timestamp for " + result.SSID);
++                }
+                 if (timestamp_ms > mLastScanSettings.startTime) {
+                     if (mLastScanSettings.hwPnoScanActive) {
+                         hwPnoScanResults.add(result);
+@@ -605,6 +610,11 @@ public class WificondScannerImpl extends WifiScannerImpl implements Handler.Call
+             for (int i = 0; i < mNativeScanResults.size(); ++i) {
+                 ScanResult result = mNativeScanResults.get(i).getScanResult();
+                 long timestamp_ms = result.timestamp / 1000; // convert us -> ms
++                if (timestamp_ms <= mLastScanSettings.startTime) {
++                    timestamp_ms = mClock.getElapsedSinceBootMillis();
++                    result.timestamp = timestamp_ms * 1000; // convert ms -> us
++                    if (DBG) Log.d(TAG, "Forcing valid scan timestamp for " + result.SSID);
++                }
+                 if (timestamp_ms > mLastScanSettings.startTime) {
+                     if (mLastScanSettings.backgroundScanActive) {
+                         backgroundScanResults.add(result);
+-- 
+2.7.4
+
