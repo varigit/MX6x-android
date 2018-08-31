@@ -1,0 +1,25 @@
+From 9ebd888cd8af1eb8a85407b51a85495ace785f5c Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Fri, 31 Aug 2018 16:29:34 +0200
+Subject: [PATCH] align wm8904 support to fsl-asoc-card usage
+
+---
+ alsa/config_wm8904.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/alsa/config_wm8904.h b/alsa/config_wm8904.h
+index 273fc8c..6b8bd3d 100644
+--- a/alsa/config_wm8904.h
++++ b/alsa/config_wm8904.h
+@@ -59,7 +59,7 @@ static struct route_setting defaults_wm8904[] = {
+ /* ALSA cards for IMX, these must be defined according different board / kernel config*/
+ static struct audio_card  wm8904_card = {
+     .name = "wm8904-audio",
+-    .driver_name = "imx-wm8904",
++    .driver_name = "wm8904-audio",
+     .supported_out_devices = (AUDIO_DEVICE_OUT_EARPIECE |
+             AUDIO_DEVICE_OUT_SPEAKER |
+             AUDIO_DEVICE_OUT_WIRED_HEADSET |
+-- 
+2.7.4
+
