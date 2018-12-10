@@ -221,3 +221,4 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.internel.storage_size=/sys/block/bootdev_size
 
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
+PRODUCT_PROPERTY_OVERRIDES += setprop persist.sys.strictmode.visual=0 setprop persist.sys.strictmode.disable=1
