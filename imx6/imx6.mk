@@ -321,6 +321,8 @@ PRODUCT_COPY_FILES +=	\
 	device/fsl/imx6/etc/init.usb.rc:root/init.var-dart-mx6.usb.rc \
 	device/fsl/imx6/etc/ota.conf:system/etc/ota.conf \
         device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.freescale.rc \
+       device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-som-mx6.rc \
+       device/fsl/imx6/init.recovery.freescale.rc:root/init.recovery.var-dart-mx6.rc \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_video.xml:system/etc/media_codecs_google_video.xml \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
