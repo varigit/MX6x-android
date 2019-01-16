@@ -1,0 +1,29 @@
+From 5a74bc85f370e11971b8d7a34592fe93b004c910 Mon Sep 17 00:00:00 2001
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 29 Mar 2017 12:27:28 +0200
+Subject: [PATCH 3/6] libcamera3: VideoStream: expose stream height and width
+
+Will be useful for camera HAL that need to know the aspect ratio.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ libcamera3/VideoStream.h | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/libcamera3/VideoStream.h b/libcamera3/VideoStream.h
+index 3e9d3f5..45636f0 100644
+--- a/libcamera3/VideoStream.h
++++ b/libcamera3/VideoStream.h
+@@ -57,6 +57,9 @@ public:
+ 
+     virtual void* getG2dHandle() {return g2dHandle;}
+ 
++    int32_t getWidth() {return mWidth;}
++    int32_t getHeight() {return mHeight;}
++
+ private:
+     // message type.
+     static const int32_t MSG_CONFIG = 0x100;
+-- 
+2.7.4
+

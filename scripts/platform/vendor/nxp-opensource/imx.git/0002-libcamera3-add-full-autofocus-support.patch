@@ -1,0 +1,174 @@
+From 1b5da94baf1f16b1e38558b959c99be5cb4c1abc Mon Sep 17 00:00:00 2001
+From: Gary Bisson <gary.bisson@boundarydevices.com>
+Date: Wed, 29 Mar 2017 11:00:10 +0200
+Subject: [PATCH 2/6] libcamera3: add full autofocus support
+
+This patch adds the necessary hooks for:
+- Continuous auto-focus
+- Single auto-focus
+- Area selection auto-focus
+
+squashed:
+libcamera3: skip AF cancel requests when in AUTO mode
+
+cancelAutoFocus should only be used in continuous mode to reset it,
+see packages/apps/Camera2/src/com/android/camera/PhotoModule.java.
+
+Signed-off-by: Gary Bisson <gary.bisson@boundarydevices.com>
+---
+ libcamera3/Camera.cpp   | 62 +++++++++++++++++++++++++++++++++++++++++++------
+ libcamera3/Camera.h     | 10 ++++++++
+ libcamera3/Metadata.cpp | 18 +++++++++++---
+ 3 files changed, 80 insertions(+), 10 deletions(-)
+
+diff --git a/libcamera3/Camera.cpp b/libcamera3/Camera.cpp
+index 39326a9..8b31a2d 100644
+--- a/libcamera3/Camera.cpp
++++ b/libcamera3/Camera.cpp
+@@ -47,6 +47,11 @@
+ 
+ #define CAMERA_SYNC_TIMEOUT 5000 // in msecs
+ 
++// Undefine u8 since the camera_metadata_ro_entry_t contains a u8 field
++#ifdef u8
++    #undef u8
++#endif
++
+ extern "C" {
+ // Shim passed to the framework to close an opened device.
+ static int32_t close_device(hw_device_t* dev)
+@@ -626,19 +631,62 @@ int32_t Camera::processSettings(sp<Metadata> settings, uint32_t frame)
+     settings->addUInt8(ANDROID_CONTROL_AE_STATE, 1, &m3aState.aeState);
+ 
+     // auto focus control.
+-    m3aState.afState = ANDROID_CONTROL_AF_STATE_INACTIVE;
++    entry = settings->find(ANDROID_CONTROL_AF_MODE);
++    if (entry.count == 0) {
++        ALOGE("%s: No AF mode entry!", __FUNCTION__);
++        return BAD_VALUE;
++    }
++    uint8_t afMode = (entry.count > 0) ?
++        entry.data.u8[0] : (uint8_t)ANDROID_CONTROL_AF_MODE_OFF;
++
++    entry = settings->find(ANDROID_CONTROL_AF_TRIGGER);
++    if (entry.count > 0) {
++        // save trigger value
++        uint8_t trigger = entry.data.u8[0];
++
++        // check if a ROI has been provided
++        entry = settings->find(ANDROID_CONTROL_AF_REGIONS);
++        if (entry.count > 0) {
++            int xavg = (entry.data.i32[0] + entry.data.i32[2]) / 2;
++            int yavg = (entry.data.i32[1] + entry.data.i32[3]) / 2;
++            ALOGV("%s: AF region: x %d y %d", __FUNCTION__, xavg, yavg);
++            setAutoFocusRegion(xavg, yavg);
++        }
++
++        // get and save trigger ID
++        entry = settings->find(ANDROID_CONTROL_AF_TRIGGER_ID);
++        if (entry.count > 0)
++            m3aState.afTriggerId = entry.data.i32[0];
++
++        // process trigger type
++        ALOGV("trigger: %d afMode %d afTriggerId %d", trigger, afMode, m3aState.afTriggerId);
++        switch (trigger) {
++            case ANDROID_CONTROL_AF_TRIGGER_CANCEL:
++                // in case of continuous focus, cancel means to stop manual focus only
++                if ((afMode == ANDROID_CONTROL_AF_MODE_CONTINUOUS_VIDEO) ||
++                    (afMode == ANDROID_CONTROL_AF_MODE_CONTINUOUS_PICTURE))
++                    m3aState.afState = doAutoFocus(afMode);
++                break;
++            case ANDROID_CONTROL_AF_TRIGGER_START:
++                m3aState.afState = doAutoFocus(afMode);
++                break;
++            case ANDROID_CONTROL_AF_TRIGGER_IDLE:
++                m3aState.afState = ANDROID_CONTROL_AF_STATE_INACTIVE;
++                break;
++            default:
++                ALOGE("unknown trigger: %d", trigger);
++                m3aState.afState = ANDROID_CONTROL_AF_STATE_INACTIVE;
++        }
++    } else {
++        m3aState.afState = getAutoFocusStatus(afMode);
++    }
++    settings->addInt32(ANDROID_CONTROL_AF_TRIGGER_ID, 1, &m3aState.afTriggerId);
+     settings->addUInt8(ANDROID_CONTROL_AF_STATE, 1, &m3aState.afState);
+ 
+     // auto white balance control.
+     m3aState.awbState = ANDROID_CONTROL_AWB_STATE_INACTIVE;
+     settings->addUInt8(ANDROID_CONTROL_AWB_STATE, 1, &m3aState.awbState);
+ 
+-    entry = settings->find(ANDROID_CONTROL_AF_TRIGGER_ID);
+-    if (entry.count > 0) {
+-        m3aState.afTriggerId = entry.data.i32[0];
+-    }
+-
+-    settings->addInt32(ANDROID_CONTROL_AF_TRIGGER_ID, 1, &m3aState.afTriggerId);
+     settings->addInt32(ANDROID_CONTROL_AE_PRECAPTURE_ID, 1, &m3aState.aeTriggerId);
+ 
+     notifyShutter(frame, timestamp);
+diff --git a/libcamera3/Camera.h b/libcamera3/Camera.h
+index 06d8638..2f10b33 100644
+--- a/libcamera3/Camera.h
++++ b/libcamera3/Camera.h
+@@ -78,6 +78,16 @@ protected:
+     // Initialize static camera characteristics for individual device
+     virtual status_t initSensorStaticData() = 0;
+ 
++    virtual uint8_t doAutoFocus(uint8_t mode) {
++        return ANDROID_CONTROL_AF_STATE_INACTIVE;
++    }
++    virtual uint8_t getAutoFocusStatus(uint8_t mode) {
++        return ANDROID_CONTROL_AF_STATE_INACTIVE;
++    }
++    virtual void setAutoFocusRegion(int x, int y) {
++        return;
++    }
++
+     virtual void setPreviewPixelFormat();
+     virtual void setPicturePixelFormat();
+ 
+diff --git a/libcamera3/Metadata.cpp b/libcamera3/Metadata.cpp
+index 1f234b5..5178f7e 100644
+--- a/libcamera3/Metadata.cpp
++++ b/libcamera3/Metadata.cpp
+@@ -220,11 +220,26 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
+             android_jpeg_max_size);
+ 
+     /* android.lens */
++    float minFocusDistance = 1.0/0.05; /* 5cm */
++    m.addFloat(ANDROID_LENS_INFO_MINIMUM_FOCUS_DISTANCE, 1, &minFocusDistance);
++
++    float hypFocusDistance = 1.0/0.05; /* 5cm */
++    m.addFloat(ANDROID_LENS_INFO_HYPERFOCAL_DISTANCE, 1, &hypFocusDistance);
++
+     float android_lens_info_available_focal_lengths[] = {sensor.mFocalLength};
+     m.addFloat(ANDROID_LENS_INFO_AVAILABLE_FOCAL_LENGTHS,
+             ARRAY_SIZE(android_lens_info_available_focal_lengths),
+             android_lens_info_available_focal_lengths);
+ 
++    const uint8_t availableAfModes[] = {
++        ANDROID_CONTROL_AF_MODE_OFF,
++        ANDROID_CONTROL_AF_MODE_AUTO,
++        ANDROID_CONTROL_AF_MODE_CONTINUOUS_PICTURE,
++        ANDROID_CONTROL_AF_MODE_CONTINUOUS_VIDEO,
++    };
++    m.addUInt8(ANDROID_CONTROL_AF_AVAILABLE_MODES, sizeof(availableAfModes),
++               availableAfModes);
++
+     /* android.request */
+     int32_t android_request_max_num_output_streams[] = {0, 3, 1};
+     m.addInt32(ANDROID_REQUEST_MAX_NUM_OUTPUT_STREAMS,
+@@ -459,9 +474,6 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
+     static const uint8_t availableAeModes[] = {ANDROID_CONTROL_AE_MODE_OFF, ANDROID_CONTROL_AE_MODE_ON};
+     m.addUInt8(ANDROID_CONTROL_AE_AVAILABLE_MODES, ARRAY_SIZE(availableAeModes), availableAeModes);
+ 
+-    static const uint8_t availableAfModes[] = {ANDROID_CONTROL_AF_MODE_OFF};
+-    m.addUInt8(ANDROID_CONTROL_AF_AVAILABLE_MODES, ARRAY_SIZE(availableAfModes), availableAfModes);
+-
+     static const uint8_t availableAwbModes[] = {
+         ANDROID_CONTROL_AWB_MODE_OFF,
+         ANDROID_CONTROL_AWB_MODE_AUTO,
+-- 
+2.7.4
+

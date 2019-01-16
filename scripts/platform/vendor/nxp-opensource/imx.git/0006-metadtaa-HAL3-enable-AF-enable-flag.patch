@@ -1,0 +1,29 @@
+From 4e8ce873705b37dd5510c6fb97d03dc9e96c6d4f Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 10 Jan 2019 17:39:30 -0800
+Subject: [PATCH 6/6] metadtaa: HAL3 enable AF enable flag
+
+Setup AF available flag to indicate HAL3
+has Auto Focus capability
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ libcamera3/Metadata.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/libcamera3/Metadata.cpp b/libcamera3/Metadata.cpp
+index 5178f7e..11f61b3 100644
+--- a/libcamera3/Metadata.cpp
++++ b/libcamera3/Metadata.cpp
+@@ -203,7 +203,7 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
+             ARRAY_SIZE(android_control_ae_compensation_step),
+             android_control_ae_compensation_step);
+ 
+-    int32_t android_control_max_regions[] = {/*AE*/ 0, /*AWB*/ 0, /*AF*/ 0};
++    int32_t android_control_max_regions[] = {/*AE*/ 0, /*AWB*/ 0, /*AF*/ 1};
+     m.addInt32(ANDROID_CONTROL_MAX_REGIONS,
+             ARRAY_SIZE(android_control_max_regions),
+             android_control_max_regions);
+-- 
+2.7.4
+

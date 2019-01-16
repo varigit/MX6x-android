@@ -1,0 +1,117 @@
+From 0467932dc5c92bafd3f607469d35ca8360305408 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 10 Jan 2019 17:37:38 -0800
+Subject: [PATCH 5/6] ov5640: Auto Focus support for OV5640 MIPI module
+
+- Open FD only during OV5640 MIPI object creation
+- Close FD only during OV5640 MIPI object destroy
+This fixes the STREAM_ON/STERAM_OFF issue for
+Android Kernel
+---
+ libcamera3/Ov5640Mipi.cpp | 19 ++++++++++---------
+ libcamera3/Ov5640Mipi.h   |  1 +
+ 2 files changed, 11 insertions(+), 9 deletions(-)
+
+diff --git a/libcamera3/Ov5640Mipi.cpp b/libcamera3/Ov5640Mipi.cpp
+index 812a24d..0d6f591 100644
+--- a/libcamera3/Ov5640Mipi.cpp
++++ b/libcamera3/Ov5640Mipi.cpp
+@@ -20,16 +20,22 @@ Ov5640Mipi::Ov5640Mipi(int32_t id, int32_t facing, int32_t orientation, char* pa
+     : Camera(id, facing, orientation, path)
+ {
+     mVideoStream = new OvStream(this);
++    ctrl_fd = open(mDevPath, O_RDWR);
++    if (ctrl_fd < 0) {
++        ALOGE("%s invalid fd handle", __func__);
++    }
+ }
+ 
+ Ov5640Mipi::~Ov5640Mipi()
+ {
++    if (ctrl_fd > 0)
++        close(ctrl_fd);
+ }
+ 
+ status_t Ov5640Mipi::initSensorStaticData()
+ {
+     ALOGV("%s", __func__);
+-    int32_t fd = open(mDevPath, O_RDWR);
++    int32_t fd = ctrl_fd;
+     if (fd < 0) {
+         ALOGE("OvDevice: initParameters sensor has not been opened");
+         return BAD_VALUE;
+@@ -173,7 +179,6 @@ status_t Ov5640Mipi::initSensorStaticData()
+     ALOGI("ov5640Mipi, mFocalLength:%f, mPhysicalWidth:%f, mPhysicalHeight %f",
+ 	mFocalLength, mPhysicalWidth, mPhysicalHeight);
+ 
+-    close(fd);
+     return NO_ERROR;
+ }
+ 
+@@ -183,7 +188,7 @@ uint8_t Ov5640Mipi::getAutoFocusStatus(uint8_t mode)
+     uint8_t ret = ANDROID_CONTROL_AF_STATE_INACTIVE;
+     int result;
+ 
+-    int32_t fd = open(mDevPath, O_RDWR);
++    int32_t fd = ctrl_fd;
+     if (fd < 0) {
+         ALOGE("couldn't open device %s", mDevPath);
+         return ret;
+@@ -213,7 +218,6 @@ uint8_t Ov5640Mipi::getAutoFocusStatus(uint8_t mode)
+         ret = ANDROID_CONTROL_AF_STATE_INACTIVE;
+     }
+ end:
+-    close(fd);
+     return ret;
+ }
+ 
+@@ -227,7 +231,7 @@ void Ov5640Mipi::setAutoFocusRegion(int x, int y)
+     int scaled_x = x / (mMaxWidth / OV5640_AF_ZONE_ARRAY_WIDTH);
+     int scaled_y = y / (mMaxHeight / (OV5640_AF_ZONE_ARRAY_WIDTH / ratio));
+ 
+-    int32_t fd = open(mDevPath, O_RDWR);
++    int32_t fd = ctrl_fd;
+     if (fd < 0) {
+         ALOGE("couldn't open device %s", mDevPath);
+         return;
+@@ -240,7 +244,6 @@ void Ov5640Mipi::setAutoFocusRegion(int x, int y)
+     if (result != 0)
+         ALOGE("ioctl error: %d", result);
+ 
+-    close(fd);
+     return;
+ }
+ 
+@@ -250,7 +253,7 @@ uint8_t Ov5640Mipi::doAutoFocus(uint8_t mode)
+     uint8_t ret = ANDROID_CONTROL_AF_STATE_INACTIVE;
+     int result;
+ 
+-    int32_t fd = open(mDevPath, O_RDWR);
++    int32_t fd = ctrl_fd;
+     if (fd < 0) {
+         ALOGE("couldn't open device %s", mDevPath);
+         return ret;
+@@ -279,8 +282,6 @@ uint8_t Ov5640Mipi::doAutoFocus(uint8_t mode)
+         ret = ANDROID_CONTROL_AF_STATE_INACTIVE;
+     }
+ 
+-    close(fd);
+-
+     return ret;
+ }
+ 
+diff --git a/libcamera3/Ov5640Mipi.h b/libcamera3/Ov5640Mipi.h
+index 7f690d9..9af0f91 100644
+--- a/libcamera3/Ov5640Mipi.h
++++ b/libcamera3/Ov5640Mipi.h
+@@ -33,6 +33,7 @@ public:
+     virtual uint8_t getAutoFocusStatus(uint8_t mode);
+     virtual void    setAutoFocusRegion(int x, int y);
+ 
++    int ctrl_fd;
+ private:
+     class OvStream : public MMAPStream {
+     public:
+-- 
+2.7.4
+
