@@ -29,7 +29,7 @@ cd ..
 # wilink8 repositories #
 ########################
 cd hardware/ti
-git clone git://git.omapzoom.org/platform/hardware/ti/wlan.git
+git clone http://git.omapzoom.org/platform/hardware/ti/wlan.git
 cd wlan
 git checkout f5d0bf6a7f7955c0a06d0719555fba4b89ddcfc1
 cd ..
@@ -39,19 +39,19 @@ git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23
 patch -p1 < $PATCH_FOLDER/wl18xx-ti-utils.patch
 dos2unix wlconf/official_inis/WL1835MOD_INI.ini
 cd ..
-git clone git://git.omapzoom.org/platform/hardware/ti/wpan.git
+git clone http://git.omapzoom.org/platform/hardware/ti/wpan.git
 cd wpan
 git checkout 32acb67605cb0d91955427fc4195205e8bc8eaf4
 patch -p1 < $PATCH_FOLDER/wpan.patch
 cd ../../../device
 mkdir ti
 cd ti
-git clone git://git.omapzoom.org/device/ti/proprietary-open.git
+git clone http://git.omapzoom.org/device/ti/proprietary-open.git
 cd proprietary-open
 git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1
 git am $PATCH_FOLDER/ti_proprietary-open/*.patch
 cd ../../../external
-git clone git://git.omapzoom.org/platform/external/crda.git
+git clone http://git.omapzoom.org/platform/external/crda.git
 cd crda
 git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058
 
