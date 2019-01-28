@@ -194,10 +194,10 @@ function format_parts
 {
 	echo
 	echo "Formating Android partitions"
-	mkfs.ext4 -F ${node}10 -L data
-	mkfs.ext4 -F ${node}3 -Lsystem
-	mkfs.ext4 -F ${node}4 -Lcache
-	mkfs.ext4 -F ${node}5 -Ldevice
+	mkfs.ext4 -F ${node}${part}10 -L data
+	mkfs.ext4 -F ${node}${part}3 -Lsystem
+	mkfs.ext4 -F ${node}${part}4 -Lcache
+	mkfs.ext4 -F ${node}${part}5 -Ldevice
 	sync; sleep 1
 }
 
