@@ -23,5 +23,17 @@
 
 /* actually kernel support it, but rtc irq pin is not connected */
 #define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
+#define BTA_DM_COD {0x1A, 0x01, 0x14}
+
+#define BTIF_HF_SERVICES (BTA_HSP_SERVICE_MASK)
+#define BTIF_HF_SERVICE_NAMES  { BTIF_HSAG_SERVICE_NAME, NULL }
+#define BTM_WBS_INCLUDED TRUE
+#define BTIF_HF_WBS_PREFERRED TRUE
+
+#define BTA_AV_SINK_INCLUDED TRUE
+#define USE_AUDIO_TRACK TRUE
+
+#define BLE_PRIVACY_SPT TRUE
+#define BLE_VND_INCLUDED TRUE
 
 #endif
