@@ -3,9 +3,9 @@
 # install
 #
 # This script must be run from the Android main directory.
-# variscite/install must be at ~/o810_130_8m_build
+# variscite/install must be at ~/p900_100_build
 #
-# Variscite DART-MX8M patches for Android 8.1.0 1.3.0 8M
+# Variscite DART-MX8M patches for Android 9.0.0 1.0.0
 
 set -e
 #set -x
@@ -21,10 +21,10 @@ readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 
-readonly BASE_BRANCH_NAME="base_o8.1.0_1.3.0_8m"
+readonly BASE_BRANCH_NAME="base_p9.0.0_1.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="o8.1.0_1.3.0_8m-ga-var01"
+readonly _EXTPARAM_BRANCH="p9.0.0_1.0.0-ga-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
@@ -99,9 +99,6 @@ pr_info "Script version ${SCRIPT_VERSION} (g:20160527)"
 cd ${ANDROID_DIR} > /dev/null
 mv vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk__
 
-# make a copy of NXP imx-mkimage
-cp -r vendor/nxp-opensource/imx-mkimage ${VENDOR_BASE_DIR}
-
 ######## extended create repositories #######
 pr_info "#########################"
 pr_info "# Laird FW repositories #"
@@ -110,7 +107,7 @@ pr_info "#########################"
 pr_info "clone ${VENDOR_BASE_DIR}/bcm_4343w_fw"
 git clone https://github.com/varigit/bcm_4343w_fw.git ${VENDOR_BASE_DIR}/bcm_4343w_fw
 cd ${VENDOR_BASE_DIR}/bcm_4343w_fw
-git checkout 423be46b06b5629e45a4943f98a3053c819091ce -b ${BASE_BRANCH_NAME}
+git checkout 7bce9b69b51ffd967176c1597feed79305927370 -b ${BASE_BRANCH_NAME}
 
 pr_info "###############################"
 pr_info "# Misc. external repositories #"

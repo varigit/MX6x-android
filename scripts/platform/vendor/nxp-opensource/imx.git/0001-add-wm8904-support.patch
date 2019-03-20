@@ -1,17 +1,17 @@
-From 126dd24b272b971f0a1395685d0ae91b13cea23e Mon Sep 17 00:00:00 2001
+From d7669064f0c4ced93968efd36c9a8b2d5c07e5a6 Mon Sep 17 00:00:00 2001
 From: Pierluigi Passaro <pierluigi.p@variscite.com>
-Date: Mon, 7 May 2018 11:04:34 +0200
+Date: Sat, 2 Feb 2019 15:22:05 +0100
 Subject: [PATCH] add wm8904 support
 
 ---
- alsa/config_wm8904.h | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++
- alsa/tinyalsa_hal.c  |   4 ++-
+ alsa/config_wm8904.h | 100 +++++++++++++++++++++++++++++++++++++++++++
+ alsa/tinyalsa_hal.c  |   4 +-
  2 files changed, 103 insertions(+), 1 deletion(-)
  create mode 100644 alsa/config_wm8904.h
 
 diff --git a/alsa/config_wm8904.h b/alsa/config_wm8904.h
 new file mode 100644
-index 0000000..273fc8c
+index 0000000..6b8bd3d
 --- /dev/null
 +++ b/alsa/config_wm8904.h
 @@ -0,0 +1,100 @@
@@ -76,7 +76,7 @@ index 0000000..273fc8c
 +/* ALSA cards for IMX, these must be defined according different board / kernel config*/
 +static struct audio_card  wm8904_card = {
 +    .name = "wm8904-audio",
-+    .driver_name = "imx-wm8904",
++    .driver_name = "wm8904-audio",
 +    .supported_out_devices = (AUDIO_DEVICE_OUT_EARPIECE |
 +            AUDIO_DEVICE_OUT_SPEAKER |
 +            AUDIO_DEVICE_OUT_WIRED_HEADSET |
@@ -116,34 +116,34 @@ index 0000000..273fc8c
 +
 +#endif  /* ANDROID_INCLUDE_IMX_CONFIG_WM8904_H */
 diff --git a/alsa/tinyalsa_hal.c b/alsa/tinyalsa_hal.c
-index 5db4f72..b669a5d 100644
+index 78a025e..16b2af5 100755
 --- a/alsa/tinyalsa_hal.c
 +++ b/alsa/tinyalsa_hal.c
-@@ -56,6 +56,7 @@
- #include "control.h"
- #include "pcm_ext.h"
- #include "config_xtor.h"
-+#include "config_wm8904.h"
+@@ -48,6 +48,7 @@
+ #endif
  
- /* ALSA ports for IMX */
- #define PORT_MM     0
-@@ -104,7 +105,7 @@
+ #include "audio_hardware.h"
++#include "config_wm8904.h"
+ #include "config_wm8962.h"
+ #include "config_wm8958.h"
+ #include "config_hdmi.h"
+@@ -128,7 +129,7 @@
  #define PRODUCT_NAME_PROPERTY   "ro.product.name"
  #define PRODUCT_DEVICE_IMX      "imx"
  #define PRODUCT_DEVICE_AUTO     "sabreauto"
--#define SUPPORT_CARD_NUM        14
-+#define SUPPORT_CARD_NUM        15
+-#define SUPPORT_CARD_NUM        19
++#define SUPPORT_CARD_NUM        20
+ 
+ #define IMX8_BOARD_NAME "imx8"
+ #define IMX7_BOARD_NAME "imx7"
+@@ -140,6 +141,7 @@ static const char* lpa_wakelock = "lpa_audio_wakelock";
  
  /*"null_card" must be in the end of this array*/
  struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
-@@ -122,6 +123,7 @@ struct audio_card *audio_card_list[SUPPORT_CARD_NUM] = {
-     &xtor_card,
-     &ak4458_card,
-     &ak5558_card,
 +    &wm8904_card,
-     &null_card,
- };
- 
+     &wm8958_card,
+     &wm8962_card,
+     &hdmi_card,
 -- 
-2.7.4
+2.17.1
 

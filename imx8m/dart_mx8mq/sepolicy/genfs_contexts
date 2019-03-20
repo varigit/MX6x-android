@@ -1,0 +1,2 @@
+genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
+genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0

@@ -1,0 +1,4 @@
+add_lunch_combo dart_mx8mq-eng
+add_lunch_combo dart_mx8mq-userdebug
+add_lunch_combo dart_mx8mq_drm-eng
+add_lunch_combo dart_mx8mq_drm-userdebug
