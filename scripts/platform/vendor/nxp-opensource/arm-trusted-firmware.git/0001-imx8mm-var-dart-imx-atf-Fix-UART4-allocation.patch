@@ -1,0 +1,37 @@
+From 9d699739bcfebf49c1ea597da6609d9acc8b45b4 Mon Sep 17 00:00:00 2001
+From: Felix Radensky <felix.r@variscite.com>
+Date: Tue, 12 Feb 2019 13:07:47 +0200
+Subject: [PATCH] imx8mm-var-dart: imx-atf: Fix UART4 allocation
+
+i.MX8MM ATF code unconditionally allocates UART2 and UART4
+to Resource Domain 1 used by Cortex-M4 Core. This prevents
+UART4 from being used by Cortex-A53 cores as a bluetooth port.
+Fix this by allocating only UART2 to RD1 and only when
+Cortex-M4 core is enabled.
+---
+ plat/imx/imx8mm/imx8mm_bl31_setup.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/plat/imx/imx8mm/imx8mm_bl31_setup.c b/plat/imx/imx8mm/imx8mm_bl31_setup.c
+index 4819b5c..691cd55 100644
+--- a/plat/imx/imx8mm/imx8mm_bl31_setup.c
++++ b/plat/imx/imx8mm/imx8mm_bl31_setup.c
+@@ -311,10 +311,11 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 
+ 	bl31_tzc380_setup();
+ 
+-	/* Assign M4 to domain 1 */
+-	mmio_write_32(IMX_RDC_BASE + 0x204, 0x1);
+-	mmio_write_32(IMX_RDC_BASE + 0x518, 0xfc);
+-	mmio_write_32(IMX_RDC_BASE + 0x5A4, 0xf3);
++	/* Assign UART2 to domain 1 */
++	if (imx_is_m4_enabled()) {
++		mmio_write_32(IMX_RDC_BASE + 0x204, 0x1);
++		mmio_write_32(IMX_RDC_BASE + 0x5A4, 0xf3);
++	}
+ 
+ #if defined (CSU_RDC_TEST)
+ 	csu_test();
+-- 
+2.17.1
+
