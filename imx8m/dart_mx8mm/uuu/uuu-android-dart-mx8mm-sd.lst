@@ -1,0 +1,37 @@
+uuu_version 1.1.81
+# uuu scripts for imx8mm Android imx_pi9.0 sd
+SDP: boot -f u-boot-imx8mm-evk-uuu.imx
+# This command will be run when use SPL
+SDPU: delay 1000
+SDPU: write -f u-boot-imx8mm-evk-uuu.imx -offset 0x57c00
+SDPU: jump
+# This command will be run when ROM support stream mode
+SDPS: boot -f u-boot-imx8mm.imx
+
+FB: ucmd setenv fastboot_dev mmc
+FB: ucmd setenv mmcdev 1
+FB: ucmd mmc dev 1
+FB: flash bootloader0 u-boot-imx8mm.imx
+FB[-t 600000]: flash gpt partition-table.img
+
+# erase environment variables of uboot
+FB: ucmd mmc erase 0x2000 8
+
+FB: flash boot_a boot.img
+FB: flash boot_b boot.img
+FB[-t 200000]: flash system_a system.img
+FB[-t 200000]: flash system_b system.img
+FB: flash vbmeta_a vbmeta-imx8mm.img
+FB: flash vbmeta_b vbmeta-imx8mm.img
+FB: flash vendor_a vendor.img
+FB: flash vendor_b vendor.img
+FB: flash dtbo_a dtbo-imx8mm.img
+FB: flash dtbo_b dtbo-imx8mm.img
+
+# erase userdata and misc partition
+FB[-t 600000]: ERASE userdata
+FB: ERASE misc
+FB[-t 100000]: ERASE presistdata
+FB[-t 100000]: ERASE fbmisc
+
+FB: done
