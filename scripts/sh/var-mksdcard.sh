@@ -104,9 +104,7 @@ dtboimage_file="dtbo-${soc_name}.img"
 bootimage_file="boot.img"
 vbmeta_file="vbmeta-${soc_name}.img"
 systemimage_file="system.img"
-systemimage_raw_file="system_raw.img"
 vendorimage_file="vendor.img"
-vendorimage_raw_file="vendor_raw.img"
 
 block=`basename $node`
 part=""
@@ -313,22 +311,14 @@ function install_android
 
 	echo
 	blue_underlined_bold_echo "Installing Android system image: $systemimage_file"
-	if [[ -f ${imagesdir}/${systemimage_raw_file} ]] ; then
-		rm ${imagesdir}/${systemimage_raw_file} 2> /dev/null
-	fi
-	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${imagesdir}/${systemimage_raw_file}
-	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}5
-	dd if=${imagesdir}/${systemimage_raw_file} of=${node}${part}6
+	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${node}${part}5
+	out/host/linux-x86/bin/simg2img ${imagesdir}/${systemimage_file} ${node}${part}6
 	sync;
 
 	echo
 	blue_underlined_bold_echo "Installing Android vendor image: $vendorimage_file"
-	if [[ -f ${imagesdir}/${vendorimage_raw_file} ]] ; then
-		rm ${imagesdir}/${vendorimage_raw_file} 2> /dev/null
-	fi
-	out/host/linux-x86/bin/simg2img ${imagesdir}/${vendorimage_file} ${imagesdir}/${vendorimage_raw_file}
-	dd if=${imagesdir}/${vendorimage_raw_file} of=${node}${part}10
-	dd if=${imagesdir}/${vendorimage_raw_file} of=${node}${part}11
+	out/host/linux-x86/bin/simg2img ${imagesdir}/${vendorimage_file} ${node}${part}10
+	out/host/linux-x86/bin/simg2img ${imagesdir}/${vendorimage_file} ${node}${part}11
 	sync;
 
 	echo
