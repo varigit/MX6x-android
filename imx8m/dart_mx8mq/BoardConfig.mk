@@ -129,6 +129,12 @@ endif
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-sd-emmc-lvds.img
 TARGET_BOARD_DTS_CONFIG := \
+        imx8mq-var-dart-emmc-wifi-lvds-cb12:fsl-imx8mq-var-dart-emmc-wifi-lvds-cb12.dtb \
+        imx8mq-var-dart-emmc-wifi-dual-display-cb12:fsl-imx8mq-var-dart-emmc-wifi-dual-display-cb12.dtb \
+        imx8mq-var-dart-emmc-wifi-hdmi-cb12:fsl-imx8mq-var-dart-emmc-wifi-hdmi-cb12.dtb \
+        imx8mq-var-dart-sd-emmc-lvds-cb12:fsl-imx8mq-var-dart-sd-emmc-lvds-cb12.dtb \
+        imx8mq-var-dart-sd-emmc-dual-display-cb12:fsl-imx8mq-var-dart-sd-emmc-dual-display-cb12.dtb \
+        imx8mq-var-dart-sd-emmc-hdmi-cb12:fsl-imx8mq-var-dart-sd-emmc-hdmi-cb12.dtb \
         imx8mq-var-dart-emmc-wifi-lvds:fsl-imx8mq-var-dart-emmc-wifi-lvds.dtb \
         imx8mq-var-dart-emmc-wifi-dual-display:fsl-imx8mq-var-dart-emmc-wifi-dual-display.dtb \
         imx8mq-var-dart-emmc-wifi-hdmi:fsl-imx8mq-var-dart-emmc-wifi-hdmi.dtb \
