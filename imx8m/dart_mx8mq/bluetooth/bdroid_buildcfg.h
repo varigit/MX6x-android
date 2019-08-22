@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2019 Variscite Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +15,6 @@
  * limitations under the License.
  */
 
-/* Copyright (C) 2015-2016 Freescale Semiconductor, Inc. */
-/* Copyright (C) 2018 Variscite Ltd */
-
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
@@ -24,21 +22,11 @@
 
 #define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
 
-// Networking, Capturing, Object Transfer
-// MAJOR CLASS: COMPUTER
-// MINOR CLASS: PALM SIZE PC/PDA
-#define BTA_DM_COD {0x1A, 0x01, 0x14}
-
-#define BTIF_HF_SERVICES (BTA_HSP_SERVICE_MASK)
-#define BTIF_HF_SERVICE_NAMES  { BTIF_HSAG_SERVICE_NAME, NULL }
+// Wide-band speech support
 #define BTM_WBS_INCLUDED TRUE
 #define BTIF_HF_WBS_PREFERRED TRUE
 
-/*Enable A2dp Sink */
+// Enable A2dp Sink
 #define BTA_AV_SINK_INCLUDED TRUE
-#define USE_AUDIO_TRACK TRUE
-
-#define BLE_PRIVACY_SPT TRUE
-#define BLE_VND_INCLUDED TRUE
 
 #endif
