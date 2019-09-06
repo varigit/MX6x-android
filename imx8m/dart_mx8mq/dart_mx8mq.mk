@@ -115,23 +115,23 @@ PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
 PRODUCT_PACKAGES += \
-        libEGL_VIVANTE \
-        libGLESv1_CM_VIVANTE \
-        libGLESv2_VIVANTE \
-        gralloc_viv.imx8 \
-        libGAL \
-        libGLSLC \
-        libVSC \
-        libg2d \
-        libgpuhelper \
-        libSPIRV_viv \
-        libvulkan_VIVANTE \
-        vulkan.imx8 \
-        libCLC \
-        libLLVM_viv \
-        libOpenCL \
-        libopencl-2d \
-        gatekeeper.imx8
+    libEGL_VIVANTE \
+    libGLESv1_CM_VIVANTE \
+    libGLESv2_VIVANTE \
+    gralloc_viv.imx8 \
+    libGAL \
+    libGLSLC \
+    libVSC \
+    libg2d \
+    libgpuhelper \
+    libSPIRV_viv \
+    libvulkan_VIVANTE \
+    vulkan.imx8 \
+    libCLC \
+    libLLVM_viv \
+    libOpenCL \
+    libopencl-2d \
+    gatekeeper.imx8
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@4.0-impl:32 \
@@ -206,6 +206,27 @@ PRODUCT_PACKAGES += \
     libg1 \
     libhantro \
     libcodec
+
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
+
+#I2C tools
+PRODUCT_PACKAGES += \
+    i2c-tools \
+    i2cdetect \
+    i2cget \
+    i2cset \
+    i2cdump
 
 # Add oem unlocking option in settings.
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
