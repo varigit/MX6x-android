@@ -1,0 +1,30 @@
+From 9ea9662af4e1d8646a4a1811ff614f4958b3e19e Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Mon, 19 Aug 2019 17:58:18 -0700
+Subject: [PATCH] libcamera3: use camera orientation to pass to fwk
+
+This fixes the camera orientation bug
+
+back camera : setprop back_camera_orient to 0 or 90
+front camera :  setprop front_camera_orient to 0 or 90
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ libcamera3/Metadata.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/libcamera3/Metadata.cpp b/libcamera3/Metadata.cpp
+index 1a2738b..d1cbfb9 100644
+--- a/libcamera3/Metadata.cpp
++++ b/libcamera3/Metadata.cpp
+@@ -318,6 +318,7 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
+             android_sensor_info_pixel_array_size);
+ 
+     int32_t android_sensor_orientation[] = {0};
++    android_sensor_orientation[0] = camInfo.orientation;
+     m.addInt32(ANDROID_SENSOR_ORIENTATION,
+             ARRAY_SIZE(android_sensor_orientation),
+             android_sensor_orientation);
+-- 
+2.21.0.4.g36eb1cb
+
