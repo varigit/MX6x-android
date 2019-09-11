@@ -93,10 +93,15 @@ USE_ION_ALLOCATOR := true
 USE_GPU_ALLOCATOR := false
 
 BOARD_AVB_ENABLE := true
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+BOARD_AVB_ALGORITHM := SHA256_RSA4096
+# The testkey_rsa4096.pem is copied from external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_KEY_PATH := device/fsl/common/security/testkey_rsa4096.pem
+endif
 TARGET_USES_MKE2FS := true
 
 # define frame buffer count
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 5
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 ifeq ($(PRODUCT_IMX_DRM),true)
 CMASIZE=736M
@@ -106,6 +111,9 @@ endif
 
 KERNEL_NAME := Image
 #BOARD_KERNEL_CMDLINE := init=/init androidboot.console=ttymxc0 androidboot.hardware=freescale cma=$(CMASIZE) androidboot.primary_display=imx-drm firmware_class.path=/vendor/firmware transparent_hugepage=never
+
+# Default wificountrycode
+#BOARD_KERNEL_CMDLINE += androidboot.wificountrycode=US
 
 # Broadcom BT
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
@@ -125,13 +133,11 @@ BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart.i
 TARGET_BOARD_DTS_CONFIG := \
         imx8mm-var-dart:fsl-imx8mm-var-dart.dtb
 
-TARGET_BOOTLOADER_CONFIG := imx8mm-var-dart:imx8mm_var_dart_android_defconfig
+TARGET_BOOTLOADER_CONFIG := \
+        imx8mm-var-dart:imx8mm_var_dart_android_defconfig \
+        imx8mm-var-dart-uuu:imx8mm_var_dart_android_uuu_defconfig
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
-# TARGET_KERNEL_ADDITION_DEFCONF ?= android_addition_defconfig
-
-# set TARGET_BOOTLOADER_CONFIG for u-boot used by uuu
-TARGET_BOOTLOADER_CONFIG += imx8mm-var-dart-uuu:imx8mm_var_dart_android_uuu_defconfig
 
 BOARD_SEPOLICY_DIRS := \
        device/fsl/imx8m/sepolicy \

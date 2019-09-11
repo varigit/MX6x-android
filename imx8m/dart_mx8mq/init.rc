@@ -9,6 +9,11 @@ on early-init
     # start broadcom powerup sequence in background
     start init_brcm_wifibt_sh
 
+    # Due keymaster start very early so set prop here
+    # Also gatekeeper share same role for keymaster
+    setprop ro.hardware.keystore ${ro.boot.keystore}
+    setprop ro.hardware.gatekeeper ${ro.boot.keystore}
+
 service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
     class main
     user root
@@ -63,6 +68,7 @@ on early-boot
     setprop ro.tether.denied false
 
     setprop sys.hwc.disable     1
+    setprop vendor.2d.composition 0
     setprop hwc.stretch.filter  1
 
     # fsl omx graphic manager media framework property
@@ -135,6 +141,8 @@ on early-boot
     # wait for broadcom powerup sequence completed
     wait_for_prop sys.brcm.wifibt.completed 1
 
+    start vendor.wifi_hal_legacy
+
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
     -g@android:wpa_wlan0
@@ -205,6 +213,12 @@ service bugreport /system/bin/dumpstate -d -p -B -z \
     oneshot
     keycodes 114 115 116
 
+on boot
+    start audioserver
+    start mediadrm
+    start media
+    start drm
+
 on property:vendor.wc_transport.start_hci=true
     start start_hci_filter
 
@@ -257,6 +271,8 @@ on post-fs
 
 on post-fs-data
     setprop vold.post_fs_data_done 1
+    # create temp node for secure storage proxy
+    mkdir /data/vendor/ss 0700 system system
 
     # tmp dir for opencl Compiler
     setprop TMPDIR /data/vendor/.opencl-cache
@@ -271,3 +287,9 @@ on zygote-start
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
+
+on property:sys.boot_completed=1 && property:ro.hardware.gatekeeper=trusty
+    start storageproxyd
+
+service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/block/mmcblk0rpmb -d /dev/trusty-ipc-dev0
+   group system

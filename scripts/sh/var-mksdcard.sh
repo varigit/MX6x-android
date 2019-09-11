@@ -58,11 +58,16 @@ while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 done
 
 sdshared=false
-if [[ $soc_name == "imx8mm-var-dart" ]] ; then
+if [[ "${soc_name}" = *"mx8mm"* ]]; then
 	imagesdir="out/target/product/dart_mx8mm"
-else
+elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 	imagesdir="out/target/product/dart_mx8mq"
 	sdshared=true
+elif [[ "${soc_name}" = *"mx8qx"* ]]; then
+	imagesdir="out/target/product/som_mx8q"
+	sdshared=true
+elif [[ "${soc_name}" = *"mx8qm"* ]]; then
+	imagesdir="out/target/product/som_mx8q"
 fi
 
 img_prefix="dtbo-"
@@ -129,13 +134,19 @@ if [[ "${soc_name}" = *"mx8mm"* ]]; then
 	bootloader_file="u-boot-imx8mm-var-dart.imx"
 fi
 
-if [[ "${soc_name}" = *"mx8q"* ]]; then
-	bootloader_offset=33
-	bootloader_file="u-boot-imx8q-var-spear.imx"
+if [[ "${soc_name}" = *"mx8qx"* ]]; then
+	bootloader_offset=32
+	bootloader_file="u-boot-imx8qxp.imx"
 fi
 
-echo "${soc_name} bootloader offset is: ${bootloader_offset}"
+if [[ "${soc_name}" = *"mx8qm"* ]]; then
+	bootloader_offset=32
+	bootloader_file="u-boot-imx8qm.imx"
+fi
+
+echo "${soc_name} image dir is: ${imagesdir}"
 echo "${soc_name} bootloader is: ${bootloader_file}"
+echo "${soc_name} bootloader offset is: ${bootloader_offset}"
 
 # Get total device size
 seprate=100
@@ -180,32 +191,32 @@ function check_images
 	fi
 
 	if [[ ! -f ${imagesdir}/${bootloader_file} ]] ; then
-		red_bold_echo "ERROR: U-Boot image does not exist"
+		red_bold_echo "ERROR: ${bootloader_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ ! -f ${imagesdir}/${dtboimage_file} ]] ; then
-		red_bold_echo "ERROR: boot image does not exist"
+		red_bold_echo "ERROR: ${dtboimage_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ ! -f ${imagesdir}/${bootimage_file} ]] ; then
-		red_bold_echo "ERROR: boot image does not exist"
+		red_bold_echo "ERROR: ${bootimage_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ ! -f ${imagesdir}/${systemimage_file} ]] ; then
-		red_bold_echo "ERROR: system image does not exist"
+		red_bold_echo "ERROR: ${systemimage_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ ! -f ${imagesdir}/${vendorimage_file} ]] ; then
-		red_bold_echo "ERROR: vendor image does not exist"
+		red_bold_echo "ERROR: ${vendorimage_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ ! -f ${imagesdir}/${vbmeta_file} ]] ; then
-		red_bold_echo "ERROR: vbmeta image does not exist"
+		red_bold_echo "ERROR: ${vbmeta_file} image does not exist"
 		exit 1
 	fi
 }
@@ -299,14 +310,14 @@ function install_android
 {
 	echo
 	blue_underlined_bold_echo "Installing Android dtbo image: $dtboimage_file"
-	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}1
-	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}2
+	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}1 bs=1M
+	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}2 bs=1M
 	sync
 
 	echo
 	blue_underlined_bold_echo "Installing Android boot image: $bootimage_file"
-	dd if=${imagesdir}/${bootimage_file} of=${node}${part}3
-	dd if=${imagesdir}/${bootimage_file} of=${node}${part}4
+	dd if=${imagesdir}/${bootimage_file} of=${node}${part}3 bs=1M
+	dd if=${imagesdir}/${bootimage_file} of=${node}${part}4 bs=1M
 	sync
 
 	echo
@@ -323,8 +334,8 @@ function install_android
 
 	echo
 	blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-	dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14
-	dd if=${imagesdir}/${vbmeta_file} of=${node}${part}15
+	dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
+	dd if=${imagesdir}/${vbmeta_file} of=${node}${part}15 bs=1M
 	sync;
 
 	sleep 1

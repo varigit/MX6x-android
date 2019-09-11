@@ -5,16 +5,15 @@ IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mm
 
 PRODUCT_IMX_DRM := true
 
-# copy drm specific files before inherit dart_mx8m.mk, otherwise copy is ignored
+# copy drm specific files before inherit dart_mx8mm.mk, otherwise copy is ignored
 PRODUCT_COPY_FILES += \
-	$(IMX_DEVICE_PATH)/audio_policy_configuration_drm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
 	$(IMX_DEVICE_PATH)/init.imx8mm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8mm.main.rc \
 	$(IMX_DEVICE_PATH)/init.imx8mm.drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8mm.rc \
 	$(TOPDIR)device/fsl/imx8m/tee-supplicant.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/tee-supplicant.rc \
 
 
 $(call inherit-product, $(TOPDIR)device/fsl/imx8m/optee-packages.mk)
-$(call inherit-product, $(TOPDIR)$(IMX_DEVICE_PATH)/dart_mx8m.mk)
+$(call inherit-product, $(TOPDIR)$(IMX_DEVICE_PATH)/dart_mx8mm.mk)
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 

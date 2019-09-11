@@ -18,13 +18,23 @@ PRODUCT_MANUFACTURER := variscite
 
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 
+#Enable this to include trusty support
+#PRODUCT_IMX_TRUSTY := true
+
+# Include keystore attestation keys and certificates.
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+-include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
+endif
+
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/gpu-viv/lib/egl/egl.cfg:$(TARGET_COPY_OUT_VENDOR)/lib/egl/egl.cfg \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/gpu-viv/lib64/egl/egl.cfg:$(TARGET_COPY_OUT_VENDOR)/lib64/egl/egl.cfg \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx8mm/imx8mm_m4_demo.img:imx8mm_m4_demo.img \
     $(IMX_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
     $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml \
     $(IMX_DEVICE_PATH)/fstab.freescale:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.freescale \
     $(IMX_DEVICE_PATH)/init.freescale.emmc.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.emmc.rc \
     $(IMX_DEVICE_PATH)/init.freescale.emmc.rc:root/init.recovery.freescale.emmc.rc \
@@ -37,9 +47,14 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-imx.xml \
     $(IMX_DEVICE_PATH)/ueventd.freescale.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/sdma/sdma-imx7d.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sdma/sdma-imx7d.bin \
-    device/fsl/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
     device/fsl/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     device/fsl/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+PRODUCT_COPY_FILES += \
+    device/fsl/common/security/rpmb_key_test.bin:rpmb_key_test.bin \
+    device/fsl/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
+endif
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \
@@ -64,17 +79,17 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.print.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.print.xml \
     frameworks/native/data/etc/android.software.sip.voip.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.sip.voip.xml \
     frameworks/native/data/etc/android.software.verified_boot.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.verified_boot.xml \
-    frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml
+    frameworks/native/data/etc/android.software.voice_recognizers.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.voice_recognizers.xml \
+    frameworks/native/data/etc/android.software.activities_on_secondary_displays.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.activities_on_secondary_displays.xml \
+    frameworks/native/data/etc/android.software.picture_in_picture.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.picture_in_picture.xml
 
 # Vendor seccomp policy files for media components:
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
     $(IMX_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
 
-# uuu scripts, fastboot_imx_flashall scripts, fsl-sdcard-partition script and uuu_imx_android_flash scripts
+# fastboot_imx_flashall, fsl-sdcard-partition and uuu_imx_android_flash scripts
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/uuu/uuu-android-dart-mx8mm-emmc.lst:uuu-android-dart-mx8mm-emmc.lst \
-    $(IMX_DEVICE_PATH)/uuu/uuu-android-dart-mx8mm-sd.lst:uuu-android-dart-mx8mm-sd.lst \
     device/fsl/common/tools/fastboot_imx_flashall.bat:fastboot_imx_flashall.bat \
     device/fsl/common/tools/fastboot_imx_flashall.sh:fastboot_imx_flashall.sh \
     device/fsl/common/tools/fsl-sdcard-partition.sh:fsl-sdcard-partition.sh \
@@ -156,6 +171,10 @@ PRODUCT_COPY_FILES += \
     device/variscite/common/bootanimation-var0640.zip:system/media/bootanimation.zip
 
 # Keymaster HAL
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+PRODUCT_PACKAGES += \
+    android.hardware.keymaster@3.0-service.trusty
+endif
 PRODUCT_PACKAGES += \
     android.hardware.keymaster@3.0-impl \
     android.hardware.keymaster@3.0-service
@@ -213,3 +232,10 @@ PRODUCT_PACKAGES += \
 # Add oem unlocking option in settings.
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true
+
+# Add Trusty OS backed gatekeeper and secure storage proxy
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+PRODUCT_PACKAGES += \
+    gatekeeper.trusty \
+    storageproxyd
+endif

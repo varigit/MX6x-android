@@ -103,7 +103,7 @@ BOARD_AVB_ENABLE := true
 TARGET_USES_MKE2FS := true
 
 # define frame buffer count
-NUM_FRAMEBUFFER_SURFACE_BUFFERS := 5
+NUM_FRAMEBUFFER_SURFACE_BUFFERS := 3
 
 ifeq ($(PRODUCT_IMX_DRM),true)
 CMASIZE=736M
@@ -113,6 +113,9 @@ endif
 
 KERNEL_NAME := Image
 #BOARD_KERNEL_CMDLINE := init=/init androidboot.gui_resolution=1080p androidboot.console=ttymxc0 androidboot.hardware=freescale androidboot.fbTileSupport=enable cma=$(CMASIZE) androidboot.primary_display=imx-drm firmware_class.path=/vendor/firmware transparent_hugepage=never
+
+# Default wificountrycode
+#BOARD_KERNEL_CMDLINE += androidboot.wificountrycode=US
 
 # Broadcom BT
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
@@ -142,13 +145,12 @@ TARGET_BOARD_DTS_CONFIG := \
         imx8mq-var-dart-sd-emmc-dual-display:fsl-imx8mq-var-dart-sd-emmc-dual-display.dtb \
         imx8mq-var-dart-sd-emmc-hdmi:fsl-imx8mq-var-dart-sd-emmc-hdmi.dtb
 
-TARGET_BOOTLOADER_CONFIG := imx8mq-var-dart:imx8m_var_dart_android_defconfig
+TARGET_BOOTLOADER_CONFIG := \
+        imx8mq-var-dart:imx8m_var_dart_android_defconfig \
+        imx8mq-var-dart-uuu:imx8m_var_dart_android_uuu_defconfig
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 # TARGET_KERNEL_ADDITION_DEFCONF ?= android_addition_defconfig
-
-# set TARGET_BOOTLOADER_CONFIG for u-boot used by uuu
-TARGET_BOOTLOADER_CONFIG += imx8mq-var-dart-uuu:imx8m_var_dart_android_uuu_defconfig
 
 BOARD_SEPOLICY_DIRS := \
        device/fsl/imx8m/sepolicy \
