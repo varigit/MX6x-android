@@ -1,0 +1,6 @@
+mknodat: 1
+create: 1
+access: 1
+mkfifo: 1
+fchmodat: 1
+ftruncate64: 1
