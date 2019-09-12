@@ -1,0 +1,146 @@
+From bca71dfd2e6f5ef1129eddbb9381a517b3308c32 Mon Sep 17 00:00:00 2001
+From: Elvis Chien <elvis.chien@mediatek.com>
+Date: Fri, 29 Sep 2017 15:47:05 +0800
+Subject: [PATCH] ethernet: Fix the connect fail issue when switch DHCP to
+ Static config at Ethernet interface.
+
+add different logic to handle static ip configuration.
+
+Bug: b/64914694 <http://b/issue?id=64914694&query=64914694>
+Test: follow the following steps to switch ethernet config
+1.Plug Ethernet cable ,Ethernet succeed to access internet with DHCP mode
+2.Change Ethernet IP settings to Static
+3.Input correct ip , gateway, prefix length, DNS
+4.UI show Connected, but failed to access Internet.
+
+Change-Id: I223bca85814e94745fbb8b50ca677eb7032e9bb3
+(cherry picked from commit 44a107bc8f058c6ac1aab6fbfbf60bf8f3474711)
+---
+ .../ethernet/EthernetNetworkFactory.java      | 94 +++++++------------
+ 1 file changed, 36 insertions(+), 58 deletions(-)
+
+diff --git a/java/com/android/server/ethernet/EthernetNetworkFactory.java b/java/com/android/server/ethernet/EthernetNetworkFactory.java
+index d6d0def..2d54fd2 100644
+--- a/java/com/android/server/ethernet/EthernetNetworkFactory.java
++++ b/java/com/android/server/ethernet/EthernetNetworkFactory.java
+@@ -248,25 +248,6 @@ class EthernetNetworkFactory {
+         return true;
+     }
+ 
+-    private boolean setStaticIpAddress(StaticIpConfiguration staticConfig) {
+-        if (staticConfig.ipAddress != null &&
+-                staticConfig.gateway != null &&
+-                staticConfig.dnsServers.size() > 0) {
+-            try {
+-                Log.i(TAG, "Applying static IPv4 configuration to " + mIface + ": " + staticConfig);
+-                InterfaceConfiguration config = mNMService.getInterfaceConfig(mIface);
+-                config.setLinkAddress(staticConfig.ipAddress);
+-                mNMService.setInterfaceConfig(mIface, config);
+-                return true;
+-            } catch(RemoteException|IllegalStateException e) {
+-               Log.e(TAG, "Setting static IP address failed: " + e.getMessage());
+-            }
+-        } else {
+-            Log.e(TAG, "Invalid static IP configuration.");
+-        }
+-        return false;
+-    }
+-
+     public void updateAgent() {
+         if (mNetworkAgent == null) return;
+         if (DBG) {
+@@ -332,55 +313,52 @@ class EthernetNetworkFactory {
+                     mNetworkInfo));
+         }
+ 
+-        LinkProperties linkProperties;
+-
+         IpConfiguration config = mEthernetManager.getConfiguration();
+ 
+-        if (config.getIpAssignment() == IpAssignment.STATIC) {
+-            if (!setStaticIpAddress(config.getStaticIpConfiguration())) {
+-                // We've already logged an error.
+-                return;
++        mNetworkInfo.setDetailedState(DetailedState.OBTAINING_IPADDR, null, mHwAddr);
++        IpManager.Callback ipmCallback = new IpManager.Callback() {
++            @Override
++            public void onProvisioningSuccess(LinkProperties newLp) {
++                mHandler.post(() -> onIpLayerStarted(newLp));
+             }
+-            linkProperties = config.getStaticIpConfiguration().toLinkProperties(mIface);
+-        } else {
+-            mNetworkInfo.setDetailedState(DetailedState.OBTAINING_IPADDR, null, mHwAddr);
+-            IpManager.Callback ipmCallback = new IpManager.Callback() {
+-                @Override
+-                public void onProvisioningSuccess(LinkProperties newLp) {
+-                    mHandler.post(() -> onIpLayerStarted(newLp));
+-                }
+ 
+-                @Override
+-                public void onProvisioningFailure(LinkProperties newLp) {
+-                    mHandler.post(() -> onIpLayerStopped(newLp));
+-                }
++            @Override
++            public void onProvisioningFailure(LinkProperties newLp) {
++                mHandler.post(() -> onIpLayerStopped(newLp));
++            }
+ 
+-                @Override
+-                public void onLinkPropertiesChange(LinkProperties newLp) {
+-                    mHandler.post(() -> updateLinkProperties(newLp));
+-                }
+-            };
++            @Override
++            public void onLinkPropertiesChange(LinkProperties newLp) {
++                mHandler.post(() -> updateLinkProperties(newLp));
++            }
++        };
+ 
+-            stopIpManager();
+-            mIpManager = new IpManager(mContext, mIface, ipmCallback);
++        stopIpManager();
++        mIpManager = new IpManager(mContext, mIface, ipmCallback);
+ 
+-            if (config.getProxySettings() == ProxySettings.STATIC ||
+-                    config.getProxySettings() == ProxySettings.PAC) {
+-                mIpManager.setHttpProxy(config.getHttpProxy());
+-            }
++        if (config.getProxySettings() == ProxySettings.STATIC ||
++                config.getProxySettings() == ProxySettings.PAC) {
++            mIpManager.setHttpProxy(config.getHttpProxy());
++        }
+ 
+-            final String tcpBufferSizes = mContext.getResources().getString(
+-                    com.android.internal.R.string.config_ethernet_tcp_buffers);
+-            if (!TextUtils.isEmpty(tcpBufferSizes)) {
+-                mIpManager.setTcpBufferSizes(tcpBufferSizes);
+-            }
++        final String tcpBufferSizes = mContext.getResources().getString(
++                com.android.internal.R.string.config_ethernet_tcp_buffers);
++        if (!TextUtils.isEmpty(tcpBufferSizes)) {
++            mIpManager.setTcpBufferSizes(tcpBufferSizes);
++        }
+ 
+-            final ProvisioningConfiguration provisioningConfiguration =
+-                    mIpManager.buildProvisioningConfiguration()
+-                            .withProvisioningTimeoutMs(0)
+-                            .build();
+-            mIpManager.startProvisioning(provisioningConfiguration);
++        final ProvisioningConfiguration provisioningConfiguration;
++        if (config.getIpAssignment() == IpAssignment.STATIC) {
++            provisioningConfiguration = IpManager.buildProvisioningConfiguration()
++                    .withStaticConfiguration(config.getStaticIpConfiguration())
++                    .build();
++        } else {
++            provisioningConfiguration = mIpManager.buildProvisioningConfiguration()
++                    .withProvisioningTimeoutMs(0)
++                    .build();
+         }
++
++        mIpManager.startProvisioning(provisioningConfiguration);
+     }
+ 
+     /**
+-- 
+2.17.1
+
