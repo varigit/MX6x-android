@@ -96,7 +96,7 @@ wifi_down()
 wifi_is_available()
 {
 	# Read SOM options EEPROM field
-	opt=$(i2cget -f -y 0x0 0x52 0x20)
+	opt=$(/system/bin/i2cget -f -y 0x0 0x52 0x20)
 
 	# Check WIFI bit in SOM options
 	if [ $((opt & 0x1)) -eq 1 ]; then

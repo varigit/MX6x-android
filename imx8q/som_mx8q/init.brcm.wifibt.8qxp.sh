@@ -58,7 +58,7 @@ wifi_up()
 	usleep 10000
 
 	# WIFI_1V8 up
-	echo 0 > /sys/class/gpio/gpio${WIFI_1V8_GPIO}/value
+	echo 1 > /sys/class/gpio/gpio${WIFI_1V8_GPIO}/value
 	usleep 10000
 
 	# WLAN_EN up
@@ -112,7 +112,7 @@ wifi_down()
 	usleep 10000
 
 	# WIFI_1V8 down
-	echo 1 > /sys/class/gpio/gpio${WIFI_1V8_GPIO}/value
+	echo 0 > /sys/class/gpio/gpio${WIFI_1V8_GPIO}/value
 
 	# WIFI_3V3 down
 	echo 0 > /sys/class/gpio/gpio${WIFI_3V3_GPIO}/value
@@ -122,7 +122,7 @@ wifi_down()
 wifi_is_available()
 {
 	# Read SOM options EEPROM field
-	opt=$(i2cget -f -y 0x0 0x52 0x20)
+	opt=$(/system/bin/i2cget -f -y 0x0 0x52 0x20)
 
 	# Check WIFI bit in SOM options
 	if [ $((opt & 0x1)) -eq 1 ]; then
