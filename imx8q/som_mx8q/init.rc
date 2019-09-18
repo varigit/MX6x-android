@@ -6,16 +6,6 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-    # start broadcom powerup sequence in background
-    start init_brcm_wifibt_sh
-
-service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
-
 on init
     start watchdogd
 
@@ -41,6 +31,16 @@ on init
     write /dev/stune/top-app/schedtune.prefer_idle 1
     write /dev/stune/rt/schedtune.boost 50
     write /dev/stune/rt/schedtune.prefer_idle 1
+
+    # start broadcom powerup sequence in background
+    start init_brcm_wifibt_sh
+
+service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
 
 on late-fs
     # Start keymaster service
