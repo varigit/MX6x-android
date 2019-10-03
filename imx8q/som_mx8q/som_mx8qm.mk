@@ -20,7 +20,10 @@ BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds
 TARGET_BOARD_DTS_CONFIG := \
         imx8qm-var-som-dp:fsl-imx8qm-var-som-dp.dtb \
         imx8qm-var-som-hdmi:fsl-imx8qm-var-som-hdmi.dtb \
-        imx8qm-var-som-lvds:fsl-imx8qm-var-som-lvds.dtb
+        imx8qm-var-som-lvds:fsl-imx8qm-var-som-lvds.dtb \
+        imx8qm-var-spear-dp:fsl-imx8qm-var-spear-dp.dtb \
+        imx8qm-var-spear-hdmi:fsl-imx8qm-var-spear-hdmi.dtb \
+        imx8qm-var-spear-lvds:fsl-imx8qm-var-spear-lvds.dtb
 
 TARGET_BOOTLOADER_CONFIG := \
         imx8qm:imx8qm_var_som_android_defconfig \
