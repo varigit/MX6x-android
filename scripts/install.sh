@@ -99,6 +99,11 @@ pr_info "Script version ${SCRIPT_VERSION} (g:20160527)"
 cd ${ANDROID_DIR} > /dev/null
 mv vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk__
 
+# patch vendor/nxp/fsl-proprietary to limit h264 camera recording profile to 480p
+cd ${ANDROID_DIR}/vendor/nxp/
+patch -p1  <  ../../device/variscite/scripts/platform/vendor/nxp/media_profile_480p.patch
+
+cd ${ANDROID_DIR} > /dev/null
 ######## extended create repositories #######
 pr_info "#########################"
 pr_info "# Laird FW repositories #"
