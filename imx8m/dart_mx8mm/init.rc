@@ -95,7 +95,7 @@ on early-boot
 
     # Prepare for wifi
     setprop wifi.interface wlan0
-    setprop wifi.concurrent.interface p2p0
+    setprop wifi.ap.interface wlan0
 
     # Prepare for bluetooth
     chmod 665 /sys/class/rfkill/rfkill0/state
@@ -138,6 +138,8 @@ on early-boot
 
     # wait for broadcom powerup sequence completed
     wait_for_prop sys.brcm.wifibt.completed 1
+
+    setprop wlan.interface wlan0
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
