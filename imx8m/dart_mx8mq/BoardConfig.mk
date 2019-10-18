@@ -67,8 +67,6 @@ BOARD_HOSTAPD_DRIVER         := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB               := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
-WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
-
 BOARD_VENDOR_KERNEL_MODULES += \
         $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
         $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
