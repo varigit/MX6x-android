@@ -128,24 +128,26 @@ $(error "TARGET_USERIMAGES_USE_UBIFS and TARGET_USERIMAGES_USE_EXT4 config open 
 endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-sd-emmc-lvds.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-sd-lvds.img
 TARGET_BOARD_DTS_CONFIG := \
-        imx8mq-var-dart-emmc-wifi-lvds-cb12:fsl-imx8mq-var-dart-emmc-wifi-lvds-cb12.dtb \
-        imx8mq-var-dart-emmc-wifi-dual-display-cb12:fsl-imx8mq-var-dart-emmc-wifi-dual-display-cb12.dtb \
-        imx8mq-var-dart-emmc-wifi-hdmi-cb12:fsl-imx8mq-var-dart-emmc-wifi-hdmi-cb12.dtb \
-        imx8mq-var-dart-sd-emmc-lvds-cb12:fsl-imx8mq-var-dart-sd-emmc-lvds-cb12.dtb \
-        imx8mq-var-dart-sd-emmc-dual-display-cb12:fsl-imx8mq-var-dart-sd-emmc-dual-display-cb12.dtb \
-        imx8mq-var-dart-sd-emmc-hdmi-cb12:fsl-imx8mq-var-dart-sd-emmc-hdmi-cb12.dtb \
-        imx8mq-var-dart-emmc-wifi-lvds:fsl-imx8mq-var-dart-emmc-wifi-lvds.dtb \
-        imx8mq-var-dart-emmc-wifi-dual-display:fsl-imx8mq-var-dart-emmc-wifi-dual-display.dtb \
-        imx8mq-var-dart-emmc-wifi-hdmi:fsl-imx8mq-var-dart-emmc-wifi-hdmi.dtb \
-        imx8mq-var-dart-sd-emmc-lvds:fsl-imx8mq-var-dart-sd-emmc-lvds.dtb \
-        imx8mq-var-dart-sd-emmc-dual-display:fsl-imx8mq-var-dart-sd-emmc-dual-display.dtb \
-        imx8mq-var-dart-sd-emmc-hdmi:fsl-imx8mq-var-dart-sd-emmc-hdmi.dtb
+        imx8mq-var-dart-wifi-lvds-cb12:fsl-imx8mq-var-dart-wifi-lvds-cb12.dtb \
+        imx8mq-var-dart-wifi-dual-display-cb12:fsl-imx8mq-var-dart-wifi-dual-display-cb12.dtb \
+        imx8mq-var-dart-wifi-hdmi-cb12:fsl-imx8mq-var-dart-wifi-hdmi-cb12.dtb \
+        imx8mq-var-dart-sd-lvds-cb12:fsl-imx8mq-var-dart-sd-lvds-cb12.dtb \
+        imx8mq-var-dart-sd-dual-display-cb12:fsl-imx8mq-var-dart-sd-dual-display-cb12.dtb \
+        imx8mq-var-dart-sd-hdmi-cb12:fsl-imx8mq-var-dart-sd-hdmi-cb12.dtb \
+        imx8mq-var-dart-wifi-lvds:fsl-imx8mq-var-dart-wifi-lvds.dtb \
+        imx8mq-var-dart-wifi-dual-display:fsl-imx8mq-var-dart-wifi-dual-display.dtb \
+        imx8mq-var-dart-wifi-hdmi:fsl-imx8mq-var-dart-wifi-hdmi.dtb \
+        imx8mq-var-dart-wifi-dp:fsl-imx8mq-var-dart-wifi-dp.dtb \
+        imx8mq-var-dart-sd-lvds:fsl-imx8mq-var-dart-sd-lvds.dtb \
+        imx8mq-var-dart-sd-dual-display:fsl-imx8mq-var-dart-sd-dual-display.dtb \
+        imx8mq-var-dart-sd-hdmi:fsl-imx8mq-var-dart-sd-hdmi.dtb \
+        imx8mq-var-dart-sd-dp:fsl-imx8mq-var-dart-sd-dp.dtb
 
 TARGET_BOOTLOADER_CONFIG := \
-        imx8mq-var-dart:imx8m_var_dart_android_defconfig \
-        imx8mq-var-dart-uuu:imx8m_var_dart_android_uuu_defconfig
+        imx8mq-var-dart:imx8mq_var_dart_android_defconfig \
+        imx8mq-var-dart-uuu:imx8mq_var_dart_android_uuu_defconfig
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 # TARGET_KERNEL_ADDITION_DEFCONF ?= android_addition_defconfig
