@@ -131,17 +131,19 @@ endif
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-sd-lvds.img
 TARGET_BOARD_DTS_CONFIG := \
         imx8mq-var-dart-wifi-lvds-cb12:fsl-imx8mq-var-dart-wifi-lvds-cb12.dtb \
-        imx8mq-var-dart-wifi-dual-display-cb12:fsl-imx8mq-var-dart-wifi-dual-display-cb12.dtb \
+        imx8mq-var-dart-wifi-lvds-hdmi-cb12:fsl-imx8mq-var-dart-wifi-lvds-hdmi-cb12.dtb \
         imx8mq-var-dart-wifi-hdmi-cb12:fsl-imx8mq-var-dart-wifi-hdmi-cb12.dtb \
         imx8mq-var-dart-sd-lvds-cb12:fsl-imx8mq-var-dart-sd-lvds-cb12.dtb \
-        imx8mq-var-dart-sd-dual-display-cb12:fsl-imx8mq-var-dart-sd-dual-display-cb12.dtb \
+        imx8mq-var-dart-sd-lvds-hdmi-cb12:fsl-imx8mq-var-dart-sd-lvds-hdmi-cb12.dtb \
         imx8mq-var-dart-sd-hdmi-cb12:fsl-imx8mq-var-dart-sd-hdmi-cb12.dtb \
         imx8mq-var-dart-wifi-lvds:fsl-imx8mq-var-dart-wifi-lvds.dtb \
-        imx8mq-var-dart-wifi-dual-display:fsl-imx8mq-var-dart-wifi-dual-display.dtb \
+        imx8mq-var-dart-wifi-lvds-hdmi:fsl-imx8mq-var-dart-wifi-lvds-hdmi.dtb \
+        imx8mq-var-dart-wifi-lvds-dp:fsl-imx8mq-var-dart-wifi-lvds-dp.dtb \
         imx8mq-var-dart-wifi-hdmi:fsl-imx8mq-var-dart-wifi-hdmi.dtb \
         imx8mq-var-dart-wifi-dp:fsl-imx8mq-var-dart-wifi-dp.dtb \
         imx8mq-var-dart-sd-lvds:fsl-imx8mq-var-dart-sd-lvds.dtb \
-        imx8mq-var-dart-sd-dual-display:fsl-imx8mq-var-dart-sd-dual-display.dtb \
+        imx8mq-var-dart-sd-lvds-hdmi:fsl-imx8mq-var-dart-sd-lvds-hdmi.dtb \
+        imx8mq-var-dart-sd-lvds-dp:fsl-imx8mq-var-dart-sd-lvds-dp.dtb \
         imx8mq-var-dart-sd-hdmi:fsl-imx8mq-var-dart-sd-hdmi.dtb \
         imx8mq-var-dart-sd-dp:fsl-imx8mq-var-dart-sd-dp.dtb
 
