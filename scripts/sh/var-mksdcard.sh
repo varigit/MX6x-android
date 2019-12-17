@@ -91,7 +91,11 @@ if [[ $soc_name != "showoptions" ]] && [[ ! ${img_list[@]} =~ $soc_name ]] ; the
 	soc_name=showoptions
 fi
 
-if [[ $soc_name == "showoptions" ]] || [[ ${#img_list[@]} > 1 ]] ; then
+if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} == 1 ]] ; then
+	soc_name=${img_list[0]};
+fi
+
+if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 	PS3='Please choose your configuration: '
 	select opt in "${img_list[@]}"
 	do
@@ -126,7 +130,11 @@ bootloader_offset=1
 
 if [[ "${soc_name}" = *"mx8mq"* ]]; then
 	bootloader_offset=33
-	bootloader_file="u-boot-imx8mq-var-dart.imx"
+	if [[ "${soc_name}" = *"dp"* ]]; then
+		bootloader_file="u-boot-imx8mq-var-dart-dp.imx"
+	else
+		bootloader_file="u-boot-imx8mq-var-dart.imx"
+	fi
 fi
 
 if [[ "${soc_name}" = *"mx8mm"* ]]; then
@@ -225,7 +233,7 @@ function delete_device
 {
 	echo
 	blue_underlined_bold_echo "Deleting current partitions"
-	for partition in ${node}*
+	for partition in `ls ${node}${part}* 2> /dev/null`
 	do
 		if [[ ${partition} = ${node} ]] ; then
 			# skip base node
