@@ -9,7 +9,8 @@ define build_imx_uboot
 	cp $(UBOOT_OUT)/spl/u-boot-spl.bin  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(UBOOT_OUT)/tools/mkimage  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/mkimage_uboot; \
 	cp $(FSL_PROPRIETARY_PATH)/fsl-proprietary/uboot-firmware/imx8m/signed_hdmi_imx8m.bin  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
-	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-dart.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/fsl-imx8mm-evk.dtb; \
+	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-dart.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
+	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-som.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(FSL_PROPRIETARY_PATH)/fsl-proprietary/uboot-firmware/imx8m/lpddr4_pmu_train_* $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	$(MAKE) -C $(IMX_PATH)/arm-trusted-firmware/ PLAT=`echo $(2) | cut -d '-' -f1` clean; \
 	if [ "$(PRODUCT_IMX_TRUSTY)" == "true" ] && [ `echo $(2) | rev | cut -d '-' -f1` != "uuu" ]; then \
