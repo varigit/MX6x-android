@@ -104,10 +104,10 @@ on early-boot
     chmod 0755 /sys/kernel/debug/tracing
 
     # Default backlight device
-    setprop hw.backlight.dev "backlight"
+    setprop hw.backlight.dev ${ro.boot.backlight.dev}
     # Chmod/chown FSL specific sys entry
-    chown system system /sys/class/backlight/backlight/brightness
-    chmod 0660 /sys/class/backlight/backlight/brightness
+    chown system system /sys/class/backlight/${ro.boot.backlight.dev}/brightness
+    chmod 0660 /sys/class/backlight/${ro.boot.backlight.dev}/brightness
 
     # Set light sensor threshold lux value
     setprop ro.lightsensor.threshold  20
