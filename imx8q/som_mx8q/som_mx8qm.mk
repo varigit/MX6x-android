@@ -11,6 +11,9 @@ PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/bluetooth/qm/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
 
 PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/dpfw.bin:vendor/firmware/hdp/dpfw.bin \
+    $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:vendor/firmware/hdp/hdmitxfw.bin \
+    $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin:vendor/firmware/hdp/hdmirxfw.bin \
     $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8qm.rc \
     $(IMX_DEVICE_PATH)/ueventd.freescale.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
     $(IMX_DEVICE_PATH)/init.brcm.wifibt.8qm.sh:vendor/bin/init.brcm.wifibt.sh
