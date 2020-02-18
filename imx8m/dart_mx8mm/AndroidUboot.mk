@@ -12,6 +12,7 @@ define build_imx_uboot
 	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-dart.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-som.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(FSL_PROPRIETARY_PATH)/fsl-proprietary/uboot-firmware/imx8m/lpddr4_pmu_train_* $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
+	cp $(FSL_PROPRIETARY_PATH)/fsl-proprietary/uboot-firmware/imx8m/ddr4_* $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	$(MAKE) -C $(IMX_PATH)/arm-trusted-firmware/ PLAT=`echo $(2) | cut -d '-' -f1` clean; \
 	if [ "$(PRODUCT_IMX_TRUSTY)" == "true" ] && [ `echo $(2) | rev | cut -d '-' -f1` != "uuu" ]; then \
 		cp $(FSL_PROPRIETARY_PATH)/fsl-proprietary/uboot-firmware/imx8m/tee-imx8mm.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/tee.bin; \
@@ -24,7 +25,7 @@ define build_imx_uboot
 	fi; \
 	cp $(IMX_PATH)/arm-trusted-firmware/build/`echo $(2) | cut -d '-' -f1`/release/bl31.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/bl31.bin; \
 	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ clean; \
-	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MM  flash_spl_uboot 1>/dev/null || exit 1; \
+	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MM  flash_lpddr4_ddr4_evk 1>/dev/null || exit 1; \
 	cp $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/flash.bin $(PRODUCT_OUT)/u-boot-$(strip $(2)).imx;
 endef
 
