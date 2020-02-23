@@ -1,0 +1,28 @@
+From af5ae1688aa5bb26e88895666d027a0f62296a19 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <pal.mohit.singh@gmail.com>
+Date: Mon, 17 Feb 2020 13:52:15 -0800
+Subject: [PATCH] imx8mm_var_som: Allow parsing additional board specific
+ permissions
+
+- Added support to parse a new .rc file that we'll use to set permissions
+  for BT uart i.e. /dev/ttymxc1.
+---
+ init/ueventd.cpp | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/init/ueventd.cpp b/init/ueventd.cpp
+index a284203ba..0495a5ee2 100644
+--- a/init/ueventd.cpp
++++ b/init/ueventd.cpp
+@@ -231,6 +231,8 @@ DeviceHandler CreateDeviceHandler() {
+ 
+     parser.ParseConfig("/ueventd.rc");
+     parser.ParseConfig("/vendor/ueventd.rc");
++    std::string board = android::base::GetProperty("ro.boot.board", "");
++    parser.ParseConfig("/vendor/ueventd."+ board + ".rc");
+     parser.ParseConfig("/odm/ueventd.rc");
+ 
+     /*
+-- 
+2.25.0
+
