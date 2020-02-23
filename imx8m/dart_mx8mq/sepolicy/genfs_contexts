@@ -1,2 +1,4 @@
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
 genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0
+# RTC on DART-MX8M
+genfscon sysfs /devices/platform/30a30000.i2c/i2c-1/1-0068/rtc u:object_r:sysfs_rtc:s0
