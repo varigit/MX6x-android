@@ -117,7 +117,7 @@ vendorimage_file="vendor.img"
 
 block=`basename $node`
 part=""
-if [[ $block == mmcblk* ]] ; then
+if [[ $block == mmcblk* ]] || [[ $block == loop* ]]; then
 	part="p"
 fi
 
