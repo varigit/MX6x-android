@@ -1,4 +1,0 @@
-add_lunch_combo som_mx8qm-eng
-add_lunch_combo som_mx8qm-userdebug
-add_lunch_combo som_mx8qx-eng
-add_lunch_combo som_mx8qx-userdebug
