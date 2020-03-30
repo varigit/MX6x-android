@@ -31,3 +31,13 @@ PRODUCT_MAKEFILES := \
   $(LOCAL_DIR)/dart_mx8mq/dart_mx8mq_drm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm_drm.mk \
+
+COMMON_LUNCH_CHOICES := \
+  dart_mx8mq-user \
+  dart_mx8mq-userdebug \
+  dart_mx8mq_drm-user \
+  dart_mx8mq_drm-userdebug \
+  dart_mx8mm-user \
+  dart_mx8mm-userdebug \
+  dart_mx8mm_drm-user \
+  dart_mx8mm_drm-userdebug

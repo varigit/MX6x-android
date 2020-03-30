@@ -26,3 +26,7 @@ allow init-brcm-wifibt-sh self:capability net_admin;
 allow init-brcm-wifibt-sh sysfs:dir { add_name write };
 allow init-brcm-wifibt-sh sysfs:file { create getattr open read write };
 allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
+
+allow init-brcm-wifibt-sh sysfs_net:dir search;
+allow init-brcm-wifibt-sh sysfs_rfkill:dir search;
+allow init-brcm-wifibt-sh sysfs_rfkill:file { open write };

@@ -1,18 +1,20 @@
 import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.storage_type}.rc
+#import /vendor/etc/init/hw/init.${ro.hardware}.additional.rc
 
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-    # start broadcom powerup sequence in background
+on early-init
     start init_brcm_wifibt_sh
 
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
     setprop ro.hardware.keystore ${ro.boot.keystore}
     setprop ro.hardware.gatekeeper ${ro.boot.keystore}
+    setprop vendor.storageproxyd ${ro.boot.keystore}
 
 service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
     class main
@@ -39,6 +41,17 @@ on init
     # deattch the fbcon as hdmi hotplug conflict with fbcon
     write /sys/class/vtconsole/vtcon1/bind 0
 
+    chown system system /dev/stune/top-app/schedtune.boost
+    chmod 664 /dev/stune/top-app/schedtune.boost
+    chown system system /dev/stune/top-app/schedtune.prefer_idle
+    chmod 664 /dev/stune/top-app/schedtune.prefer_idle
+    chown system system /dev/stune/foreground/schedtune.boost
+    chmod 664 /dev/stune/foreground/schedtune.boost
+    chown system system /dev/stune/foreground/schedtune.prefer_idle
+    chmod 664 /dev/stune/foreground/schedtune.prefer_idle
+    chown system system /dev/stune/schedtune.boost
+    chmod 664 /dev/stune/schedtune.boost
+
     # set default schedTune value for foreground/top-app (only affects EAS)
     write /dev/stune/foreground/schedtune.boost 10
     write /dev/stune/foreground/schedtune.prefer_idle 1
@@ -47,16 +60,19 @@ on init
     write /dev/stune/rt/schedtune.boost 50
     write /dev/stune/rt/schedtune.prefer_idle 1
 
-    # force USB2740 autosuspend
-    write /sys/devices/platform/32e50000.usb/ci_hdrc.1/usb1/1-1/1-1.5/power/control auto
-
 on late-fs
     # Start keymaster service
     start vendor.keymaster-3-0-${ro.boot.keystore}
+    setprop vendor.powerhal.init 1
+
+on late-fs && property:vendor.storageproxyd=trusty
+    start vendor.oemlock-1-0
 
 on early-boot
-    # Config lowmemorykiller options
-    setprop ro.lmk.use_minfree_levels true
+    # For evk_8mm, when swap used about 400M, upgrade the level.
+    setprop ro.lmk.upgrade_pressure 80
+    setprop ro.lmk.downgrade_pressure 95
+    setprop ro.lmk.critical_upgrade true
 
     # Set the host name which used in console
     export HOSTNAME imx8mm-var-dart
@@ -69,9 +85,13 @@ on early-boot
 
     setprop hwc.stretch.filter  1
 
+    # Default g2d [dpu|pxp|viv] lib to be used
+    setprop vendor.imx.default-g2d viv
+
     # fsl omx graphic manager media framework property
     setprop rw.VIDEO_RENDER_NAME video_render.surface
     setprop media.fsl_codec.flag 7
+    setprop debug.stagefright.ccodec 0
 
     #Define the config for dual camera
     #For landscape mode, orient is 0
@@ -102,17 +122,19 @@ on early-boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 0
 
-    setprop qcom.bluetooth.soc rome_uart
-    setprop vendor.wc_transport.start_hci false
-
-    # Prepare for RIL
-    setprop ro.ril.wake_lock_timeout 300
 
     # Set the density to 160 dpi to match LCD.
-    setprop ro.sf.lcd_density 160
+    setprop ro.sf.lcd_density 120
+
+    # prepare for ril
+    setprop ro.ril.wake_lock_timeout 300
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
+
+    # Set sw_sync group to graphics and set permission to 664
+    chown root graphics /sys/kernel/debug/sync/sw_sync
+    chmod 0664 /sys/kernel/debug/sync/sw_sync
 
     # Default backlight device
     setprop hw.backlight.dev "backlight"
@@ -136,9 +158,6 @@ on early-boot
     # enlarge media max memory size to 3G.
     setprop ro.media.maxmem 3221225471
 
-    # wait for broadcom powerup sequence completed
-    wait_for_prop sys.brcm.wifibt.completed 1
-
     setprop wlan.interface wlan0
     start vendor.wifi_hal_legacy
 
@@ -147,6 +166,7 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -g@android:wpa_wlan0
     interface android.hardware.wifi.supplicant@1.0::ISupplicant default
     interface android.hardware.wifi.supplicant@1.1::ISupplicant default
+    interface android.hardware.wifi.supplicant@1.2::ISupplicant default
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
@@ -218,6 +238,9 @@ on boot
     start media
     start drm
 
+on property:sys.brcm.wifibt.completed=1
+    start early_init_sh
+
 on property:vendor.wc_transport.start_hci=true
     start start_hci_filter
 
@@ -265,9 +288,6 @@ on post-fs
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
 
-    # This may have been created by the recovery system with the wrong context.
-    restorecon /cache/recovery
-
 on post-fs-data
     setprop vold.post_fs_data_done 1
     # create temp node for secure storage proxy
@@ -283,8 +303,18 @@ on zygote-start
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
 
-on property:sys.boot_completed=1 && property:ro.hardware.gatekeeper=trusty
+service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg sys.all.early_init.ready
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+
+on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start storageproxyd
 
-service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/block/mmcblk2rpmb -d /dev/trusty-ipc-dev0
+service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system
+
+on property:ro.boot.vendor.sysrq=1
+    write /proc/sys/kernel/sysrq 1

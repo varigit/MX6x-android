@@ -26,6 +26,8 @@ CFG_RDC_SECURE_DATA_PATH ?= y
 
 ifeq ($(CFG_DRM_SECURE_DATA_PATH),y)
 CFG_SECURE_DATA_PATH := y
+SOONG_CONFIG_IMXPLUGIN += CFG_SECURE_DATA_PATH
+SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_DATA_PATH = y
 CFG_TEE_SDP_MEM_BASE := 0xB6000000
 CFG_TEE_SDP_MEM_SIZE := 0x02000000
 ifeq ($(CFG_RDC_SECURE_DATA_PATH),y)
@@ -36,7 +38,10 @@ DECODED_BUFFER_LEN		:= 0x05C00000
 endif
 endif
 
-TARGET_BOARD_DTS_CONFIG := imx8mm-var-dart:fsl-imx8mm-var-dart.dtb
+TARGET_BOARD_DTS_CONFIG := \
+        imx8mm-var-dart:fsl-imx8mm-var-dart.dtb \
+        imx8mm-var-som:fsl-imx8mm-var-som.dtb \
+        imx8mm-var-som-v10:fsl-imx8mm-var-som-rev10.dtb
 
 # Exoplayer
 PRODUCT_PACKAGES += \
