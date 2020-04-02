@@ -3,9 +3,9 @@
 # install
 #
 # This script must be run from the Android main directory.
-# variscite/install must be at ~/p900_200_build
+# variscite/install must be at ~/q1000_100_build
 #
-# Variscite DART-MX8M patches for Android 9.0.0 2.0.0
+# Variscite DART-MX8M patches for Android 10.0.0 1.0.0
 
 set -e
 #set -x
@@ -21,10 +21,10 @@ readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 
-readonly BASE_BRANCH_NAME="base_p9.0.0_2.0.0"
+readonly BASE_BRANCH_NAME="base_q10.0.0_1.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="p9.0.0_2.0.0-ga-var01"
+readonly _EXTPARAM_BRANCH="q10.0.0_1.0.0-ga-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
@@ -93,15 +93,11 @@ function is_branch_exist()
 }
 
 ############### main code ##############
-pr_info "Script version ${SCRIPT_VERSION} (g:20160527)"
+pr_info "Script version ${SCRIPT_VERSION} (g:20200401)"
 
 # disable NXP kernel Android.mk
 cd ${ANDROID_DIR} > /dev/null
 mv vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk__
-
-# patch vendor/nxp/fsl-proprietary to limit h264 camera recording profile to 480p
-cd ${ANDROID_DIR}/vendor/nxp/
-patch -p1  <  ../../device/variscite/scripts/platform/vendor/nxp/media_profile_480p.patch
 
 cd ${ANDROID_DIR} > /dev/null
 ######## extended create repositories #######
@@ -122,11 +118,6 @@ pr_info "clone ${VENDOR_BASE_DIR}/can-utils"
 git clone https://github.com/linux-can/can-utils.git ${VENDOR_BASE_DIR}/can-utils
 cd ${VENDOR_BASE_DIR}/can-utils > /dev/null
 git checkout 791890542ac1ce99131f36435e72af5635afc2fa -b ${BASE_BRANCH_NAME}
-
-pr_info "clone ${VENDOR_BASE_DIR}/i2c-tools"
-git clone https://github.com/Hashcode/i2c-tools.git ${VENDOR_BASE_DIR}/i2c-tools
-cd ${VENDOR_BASE_DIR}/i2c-tools > /dev/null
-git checkout 4aea42526b73eed33f811ce4b894df5d545e4d57 -b ${BASE_BRANCH_NAME}
 
 pr_info "###########################"
 pr_info "# Apply framework patches #"

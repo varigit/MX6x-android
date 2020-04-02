@@ -238,14 +238,6 @@ PRODUCT_PACKAGES += \
     isotpsend \
     isotpserver
 
-#I2C tools
-PRODUCT_PACKAGES += \
-    i2c-tools \
-    i2cdetect \
-    i2cget \
-    i2cset \
-    i2cdump
-
 # Add oem unlocking option in settings.
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 PRODUCT_COMPATIBLE_PROPERTY_OVERRIDE := true

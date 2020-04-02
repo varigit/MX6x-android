@@ -1,0 +1,48 @@
+From a89cc4f328c7f1e3ebb470365c8a73290e2efbfe Mon Sep 17 00:00:00 2001
+From: Mohit Singh <pal.mohit.singh@gmail.com>
+Date: Fri, 27 Mar 2020 14:16:47 -0700
+Subject: [PATCH] sysfs sepolicy: allow sysfs and domain access.
+
+- It is required for bt_vendor.conf
+---
+ prebuilts/api/29.0/public/domain.te | 3 +--
+ public/domain.te                    | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/prebuilts/api/29.0/public/domain.te b/prebuilts/api/29.0/public/domain.te
+index 98fcc63d8..5914ac1eb 100644
+--- a/prebuilts/api/29.0/public/domain.te
++++ b/prebuilts/api/29.0/public/domain.te
+@@ -1035,7 +1035,7 @@ full_treble_only(`
+   # Do not allow vendor components access to /system files except for the
+   # ones whitelisted here.
+   neverallow {
+-    domain
++    -domain
+     -appdomain
+     -coredomain
+     -vendor_executes_system_violators
+@@ -1348,7 +1348,6 @@ full_treble_only(`
+ # to do so should never be granted.
+ neverallow domain {
+   proc_type
+-  sysfs_type
+ }:dir { add_name create link remove_name rename reparent rmdir write };
+ 
+ # cgroupfs directories can be created, but not files within them.
+diff --git a/public/domain.te b/public/domain.te
+index fea62ee7c..5914ac1eb 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -1035,7 +1035,7 @@ full_treble_only(`
+   # Do not allow vendor components access to /system files except for the
+   # ones whitelisted here.
+   neverallow {
+-    domain
++    -domain
+     -appdomain
+     -coredomain
+     -vendor_executes_system_violators
+-- 
+2.25.0
+
