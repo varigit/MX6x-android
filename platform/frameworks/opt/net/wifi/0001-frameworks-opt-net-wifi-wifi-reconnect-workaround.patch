@@ -1,0 +1,46 @@
+From bf481e7fec37c268ba25ff1dedc891c0a68f0c9f Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Tue, 21 Apr 2020 05:12:31 +0200
+Subject: [PATCH] frameworks/opt/net/wifi: wifi reconnect workaround
+
+The networks validation in AutoJoin class relies on tsf value, expected
+to be referenced to the machine boot time.
+Some kernel drivers, at least in older kernel versions, do not support
+this functionality and the framework generate a tsf referred to AP boot
+seen time.
+This cause the tsf to appear too old, as the AP was down, leading the
+AutoJoin class to skip the AP.
+---
+ .../java/com/android/server/wifi/WifiStateMachine.java   | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/service/java/com/android/server/wifi/WifiStateMachine.java b/service/java/com/android/server/wifi/WifiStateMachine.java
+index 7773cb9e4..3126da39f 100644
+--- a/service/java/com/android/server/wifi/WifiStateMachine.java
++++ b/service/java/com/android/server/wifi/WifiStateMachine.java
+@@ -3889,6 +3889,7 @@ public class WifiStateMachine extends StateMachine implements WifiNative.WifiPno
+         String scanResults;
+         String tmpResults;
+         StringBuffer scanResultsBuf = new StringBuffer();
++        long scanTime_us = SystemClock.elapsedRealtime() * 1000;
+         int sid = 0;
+ 
+         while (true) {
+@@ -3987,6 +3988,14 @@ public class WifiStateMachine extends StateMachine implements WifiNative.WifiPno
+                                 Log.d(Utils.hs2LogTag(getClass()), "HSNwk: '" + networkDetail);
+                             }
+ 
++                            if (tsf < scanTime_us) {
++                                if (DBG) {
++                                    Log.d(TAG, networkDetail.getSSID() +
++                                          ": old TSF " + Long.toString(tsf) +
++                                          " updated with " + Long.toString(scanTime_us));
++                                }
++                                tsf = scanTime_us;
++                            }
+                             ScanDetail scanDetail = mScanResultCache.get(networkDetail);
+                             if (scanDetail != null) {
+                                 scanDetail.updateResults(networkDetail, level, wifiSsid, xssid,
+-- 
+2.17.1
+
