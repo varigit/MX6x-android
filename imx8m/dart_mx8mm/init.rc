@@ -124,7 +124,7 @@ on early-boot
 
 
     # Set the density to 160 dpi to match LCD.
-    setprop ro.sf.lcd_density 120
+    setprop ro.sf.lcd_density 160
 
     # prepare for ril
     setprop ro.ril.wake_lock_timeout 300
