@@ -10,4 +10,3 @@ define build_uboot_w_tee
 	cp $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/flash.bin $(PRODUCT_OUT)/u-boot-$(strip $(2)).imx;
 endef
 
-

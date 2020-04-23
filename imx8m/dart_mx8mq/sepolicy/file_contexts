@@ -3,6 +3,7 @@
 /dev/block/platform/30b50000\.usdhc/by-name/boot_[ab]        u:object_r:boot_block_device:s0
 /dev/block/platform/30b50000\.usdhc/by-name/system_[ab]      u:object_r:system_block_device:s0
 /dev/block/platform/30b50000\.usdhc/by-name/vendor_[ab]      u:object_r:system_block_device:s0
+/dev/block/platform/30b50000\.usdhc/by-name/product_[ab]     u:object_r:system_block_device:s0
 /dev/block/platform/30b50000\.usdhc/by-name/misc        u:object_r:misc_block_device:s0
 /dev/block/platform/30b50000\.usdhc/by-name/metadata    u:object_r:metadata_block_device:s0
 /dev/block/platform/30b50000\.usdhc/by-name/presistdata u:object_r:frp_block_device:s0
@@ -14,6 +15,7 @@
 /dev/block/platform/30b40000\.usdhc/by-name/boot_[ab]        u:object_r:boot_block_device:s0
 /dev/block/platform/30b40000\.usdhc/by-name/system_[ab]      u:object_r:system_block_device:s0
 /dev/block/platform/30b40000\.usdhc/by-name/vendor_[ab]      u:object_r:system_block_device:s0
+/dev/block/platform/30b40000\.usdhc/by-name/product_[ab]     u:object_r:system_block_device:s0
 /dev/block/platform/30b40000\.usdhc/by-name/misc        u:object_r:misc_block_device:s0
 /dev/block/platform/30b40000\.usdhc/by-name/metadata    u:object_r:metadata_block_device:s0
 /dev/block/platform/30b40000\.usdhc/by-name/presistdata u:object_r:frp_block_device:s0
@@ -32,4 +34,7 @@
 /dev/sda[0-8]*                  u:object_r:fuse:s0
 
 #Neural Network HAL service
-/vendor/bin/hw/android\.hardware\.neuralnetworks@1\.0-service-imx-nn          u:object_r:hal_neuralnetworks_imx_exec:s0
+/vendor/bin/hw/android\.hardware\.neuralnetworks@1\.2-service-vsi-npu-server      u:object_r:hal_neuralnetworks_imx_exec:s0
+
+#Thermal HAL service
+/vendor/bin/hw/android\.hardware\.thermal@2\.0-service.imx         u:object_r:hal_thermal_default_exec:s0

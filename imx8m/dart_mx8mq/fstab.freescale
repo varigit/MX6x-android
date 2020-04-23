@@ -6,8 +6,11 @@
 /devices/platform/usb@38100000/38100000.dwc3/* auto auto defaults voldmanaged=usb:auto
 /devices/platform/usb@38200000/38200000.dwc3/* auto auto defaults voldmanaged=usb:auto
 
+/devices/platform/38200000.usb/xhci-hcd.0.auto/* auto auto defaults voldmanaged=usb:auto
+/devices/platform/38100000.usb/xhci-hcd.1.auto/* auto auto defaults voldmanaged=usb:auto
+
 /dev/block/by-name/system      /      ext4    ro,barrier=1                                                                           wait,slotselect
 /dev/block/by-name/userdata    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,formattable,quota,fileencryption=software,reservedsize=128M
 /dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
-/dev/block/zram0 none swap defaults zramsize=314572800
+/dev/block/zram0 none swap defaults zramsize=629145600
 

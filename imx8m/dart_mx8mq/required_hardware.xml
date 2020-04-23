@@ -21,12 +21,13 @@
     <!-- This is Android and fully CTS compatible.  Basically this is for CTS tests to use. -->
     <feature name="android.software.cts" />
     <feature name="android.hardware.camera.any" />
-    <feature name="android.software.cant_save_state" />
     <feature name="android.software.home_screen" />
     <feature name="android.software.input_methods" />
+    <feature name="android.software.cant_save_state" />
     <feature name="android.hardware.location" />
     <feature name="android.hardware.location.network" />
     <feature name="android.hardware.bluetooth" />
     <feature name="android.software.companion_device_setup" />
     <feature name="android.software.autofill" />
+    <feature name="android.software.secure_lock_screen" />
 </permissions>
