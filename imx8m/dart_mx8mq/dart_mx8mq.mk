@@ -228,7 +228,7 @@ PRODUCT_COPY_FILES += \
 
 # Boot Animation
 PRODUCT_COPY_FILES += \
-    device/variscite/common/bootanimation-var0640.zip:system/media/bootanimation.zip
+    device/variscite/common/bootanimation-var1280.zip:system/media/bootanimation.zip
 
 # Keymaster HAL
 PRODUCT_PACKAGES += \
