@@ -6,6 +6,12 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
+# Due keymaster start very early so set prop here
+    # Also gatekeeper share same role for keymaster
+    setprop ro.hardware.keystore ${ro.boot.keystore}
+    setprop ro.hardware.gatekeeper ${ro.boot.keystore}
+    setprop vendor.storageproxyd ${ro.boot.keystore}
+
 on init
     start watchdogd
 
@@ -59,7 +65,7 @@ on early-boot
     # Enable Tethering in the Settings
     setprop ro.tether.denied false
 
-    setprop sys.hwc.disable     1
+    setprop sys.hwc.disable     0
     setprop vendor.2d.composition 0
     setprop hwc.stretch.filter  1
 
@@ -244,11 +250,10 @@ on post-fs
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
 
-    # This may have been created by the recovery system with the wrong context.
-    restorecon /cache/recovery
-
 on post-fs-data
     setprop vold.post_fs_data_done 1
+    # create temp node for secure storage proxy
+    mkdir /data/vendor/ss 0700 system system
 
     # tmp dir for opencl Compiler
     setprop TMPDIR /data/vendor/.opencl-cache
@@ -263,3 +268,12 @@ on zygote-start
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
     mkdir /data/misc/dhcp 0770 dhcp dhcp
     chown dhcp dhcp /data/misc/dhcp
+
+on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
+    start storageproxyd
+
+service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/block/mmcblk0rpmb -d /dev/trusty-ipc-dev0
+    group system
+
+on property:ro.boot.vendor.sysrq=1
+    write /proc/sys/kernel/sysrq 1

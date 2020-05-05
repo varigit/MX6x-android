@@ -21,10 +21,10 @@ readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 
-readonly BASE_BRANCH_NAME="base_p9.0.0_2.0.0"
+readonly BASE_BRANCH_NAME="base_p9.0.0_2.3.4"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="p9.0.0_2.0.0-ga-var01"
+readonly _EXTPARAM_BRANCH="p9.0.0_2.3.4-ga-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"

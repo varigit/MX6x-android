@@ -84,6 +84,10 @@ $(error "TARGET_USERIMAGES_USE_UBIFS and TARGET_USERIMAGES_USE_EXT4 config open 
 endif
 endif
 
+BOARD_AVB_ALGORITHM := SHA256_RSA4096
+# The testkey_rsa4096.pem is copied from external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_KEY_PATH := device/fsl/common/security/testkey_rsa4096.pem
+
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 
 BOARD_SEPOLICY_DIRS := \

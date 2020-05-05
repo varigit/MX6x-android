@@ -23,6 +23,10 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 #Enable this to choose 32 bit user space build
 #IMX8_BUILD_32BIT_ROOTFS := true
 
+# Include keystore attestation keys and certificates.
+-include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
+
+
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/fsl-proprietary/gpu-viv/lib/egl/egl.cfg:$(TARGET_COPY_OUT_VENDOR)/lib/egl/egl.cfg \
@@ -42,6 +46,11 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/privapp-permissions-imx.xml \
     device/fsl/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     device/fsl/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+
+# Copy rpmb test key and AVB test public key
+PRODUCT_COPY_FILES += \
+    device/fsl/common/security/rpmb_key_test.bin:rpmb_key_test.bin \
+    device/fsl/common/security/testkey_public_rsa4096.bin:testkey_public_rsa4096.bin
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \
@@ -197,6 +206,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.gatekeeper@1.0-impl \
     android.hardware.gatekeeper@1.0-service
+
+# Add Trusty OS backed gatekeeper and secure storage proxy
+PRODUCT_PACKAGES += \
+    gatekeeper.trusty \
+    storageproxyd
 
 ifneq ($(BUILD_TARGET_FS),ubifs)
 PRODUCT_PROPERTY_OVERRIDES += \
