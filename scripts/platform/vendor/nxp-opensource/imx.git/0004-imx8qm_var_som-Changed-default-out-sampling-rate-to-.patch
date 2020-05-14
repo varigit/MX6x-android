@@ -1,0 +1,38 @@
+From 81e824bb4888cc3f8a24b3db6e8c6d2018987018 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Wed, 13 May 2020 17:28:36 -0700
+Subject: [PATCH] imx8qm_var_som: Changed default out sampling rate to 48kHz
+
+---
+ alsa/tinyalsa_hal.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/alsa/tinyalsa_hal.c b/alsa/tinyalsa_hal.c
+index c8cdbab..fde6f13 100755
+--- a/alsa/tinyalsa_hal.c
++++ b/alsa/tinyalsa_hal.c
+@@ -4391,6 +4391,7 @@ static int adev_open(const hw_module_t* module, const char* name,
+     int ret = 0;
+     int i,j,k;
+     bool found;
++    char productName[128];
+ 
+     if (strcmp(name, AUDIO_HARDWARE_INTERFACE) != 0)
+         return -EINVAL;
+@@ -4421,7 +4422,12 @@ static int adev_open(const hw_module_t* module, const char* name,
+     adev->hw_device.get_microphones         = adev_get_microphones;
+ #endif
+     adev->hw_device.dump                    = adev_dump;
+-    adev->mm_rate                           = 44100;
++    memset(productName, 0, sizeof(productName));
++    property_get("ro.product.name", productName, DEFAULT_ERROR_NAME_str);
++    if(strncasecmp(productName, "som_mx8qm", strlen("som_mx8qm")) == 0)
++        adev->mm_rate                           = 48000;
++    else
++        adev->mm_rate                           = 44100;
+     adev->support_multichannel              = false;
+ 
+     ret = scan_available_device(adev, true, true);
+-- 
+2.25.0
+

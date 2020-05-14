@@ -1,0 +1,24 @@
+From 76cbbc20015218af26e064a623d970bf13ddb567 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Tue, 21 Apr 2020 12:15:49 -0700
+Subject: [PATCH] remove AUDIO_DEVICE_OUT_AUX_DIGITAL from wm8904.
+
+---
+ alsa/config_wm8904.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/alsa/config_wm8904.h b/alsa/config_wm8904.h
+index 6b8bd3d..8952922 100644
+--- a/alsa/config_wm8904.h
++++ b/alsa/config_wm8904.h
+@@ -66,7 +66,6 @@ static struct audio_card  wm8904_card = {
+             AUDIO_DEVICE_OUT_WIRED_HEADPHONE |
+             AUDIO_DEVICE_OUT_ANLG_DOCK_HEADSET |
+             AUDIO_DEVICE_OUT_ALL_SCO |
+-			AUDIO_DEVICE_OUT_AUX_DIGITAL |
+             AUDIO_DEVICE_OUT_DEFAULT ),
+     .supported_in_devices = (
+             AUDIO_DEVICE_IN_COMMUNICATION |
+-- 
+2.25.0
+
