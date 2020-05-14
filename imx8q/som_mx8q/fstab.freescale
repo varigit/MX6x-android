@@ -6,6 +6,7 @@
 /devices/platform/5b0d0000.usb/ci_hdrc.0/* auto auto defaults voldmanaged=usb:auto
 /devices/platform/5b0e0000.usb/ci_hdrc.1/* auto auto defaults voldmanaged=usb:auto
 /devices/platform/5b110000.usb3/* auto auto defaults voldmanaged=usb:auto
+/devices/platform/5b020000.usdhc/mmc_host/* auto auto defaults voldmanaged=extsd:auto
 
 /dev/block/by-name/system      /      ext4    ro,barrier=1                                                                           wait,slotselect
 /dev/block/by-name/userdata    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    wait,formattable,quota,fileencryption=software,reservedsize=128M
