@@ -44,7 +44,7 @@ define build_imx_uboot
 		MKIMAGE_PLATFORM=`echo iMX8QM`; \
 		SCFW_PLATFORM=`echo 8qm`;  \
 		ATF_PLATFORM=`echo imx8qm`; \
-		FLASH_TARGET=`echo flash_b0`;  \
+		FLASH_TARGET=`echo flash_spl`;  \
 		cp  $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/seco/mx8qm-ahab-container.img $(IMX_MKIMAGE_PATH)/imx-mkimage/$$MKIMAGE_PLATFORM/mx8qm-ahab-container.img; \
 		cp  $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_0_default.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/$$MKIMAGE_PLATFORM/m4_image.bin; \
 		cp  $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_1_default.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/$$MKIMAGE_PLATFORM/m4_1_image.bin; \
