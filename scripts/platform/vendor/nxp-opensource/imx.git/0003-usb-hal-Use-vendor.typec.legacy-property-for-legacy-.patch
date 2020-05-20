@@ -1,0 +1,45 @@
+From 3d627d57dae17a92825ee7e5a018a16e5d485f03 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 19 May 2020 19:49:35 -0700
+Subject: [PATCH] usb hal:  Use vendor.typec.legacy property for legacy type c
+
+- For some boards that doesn't have Type C PD option, use property to
+fix the role and pd option.
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ usb/Usb.cpp | 5 +++++
+ usb/Usb.h   | 1 +
+ 2 files changed, 6 insertions(+)
+
+diff --git a/usb/Usb.cpp b/usb/Usb.cpp
+index 336e83d..21829db 100644
+--- a/usb/Usb.cpp
++++ b/usb/Usb.cpp
+@@ -378,6 +378,11 @@ Status getCurrentRoleHelper(const std::string &portName, bool connected,
+ 
+ Status getTypeCPortNamesHelper(std::unordered_map<std::string, bool> *names) {
+   DIR *dp;
++  /* Enable Typ USB Legacy Support via vendor.typec.legacy property */
++  if (property_get_bool("vendor.typec.legacy", false)) {
++    ALOGE("Force Legacy device enabled");
++    return Status::ERROR;
++  }
+ 
+   dp = opendir("/sys/class/typec");
+   if (dp != NULL) {
+diff --git a/usb/Usb.h b/usb/Usb.h
+index 4722e88..8e9b64f 100644
+--- a/usb/Usb.h
++++ b/usb/Usb.h
+@@ -21,6 +21,7 @@
+ #include <android/hardware/usb/1.1/IUsb.h>
+ #include <android/hardware/usb/1.1/types.h>
+ #include <android/hardware/usb/1.1/IUsbCallback.h>
++#include <cutils/properties.h>
+ #include <hidl/Status.h>
+ #include <utils/Log.h>
+ 
+-- 
+2.21.0.4.g36eb1cb
+
