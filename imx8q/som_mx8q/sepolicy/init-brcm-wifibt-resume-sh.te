@@ -1,0 +1,41 @@
+type init-brcm-wifibt-resume-sh, domain;
+permissive init-brcm-wifibt-resume-sh;
+type init-brcm-wifibt-resume-sh_exec, exec_type, vendor_file_type, file_type;
+permissive init-brcm-wifibt-resume-sh_exec;
+
+init_daemon_domain(init-brcm-wifibt-resume-sh)
+
+allow init-brcm-wifibt-resume-sh vendor_shell_exec:file rx_file_perms;
+allow init-brcm-wifibt-resume-sh vendor_toolbox_exec:file rx_file_perms;
+
+set_prop(init-brcm-wifibt-resume-sh, public_vendor_system_prop)
+
+# Allow insmod
+allow init-brcm-wifibt-resume-sh self:capability sys_module;
+allow init-brcm-wifibt-resume-sh system_file:system module_load;
+allow init-brcm-wifibt-resume-sh vendor_file:system module_load;
+
+# some more permissions
+# extending the rules under system/sepolicy
+allow init-brcm-wifibt-resume-sh init:unix_stream_socket connectto;
+allow init-brcm-wifibt-resume-sh property_socket:sock_file write;
+allow init-brcm-wifibt-resume-sh proc:file { getattr open read };
+allow init-brcm-wifibt-resume-sh proc_modules:file { getattr open read };
+allow init-brcm-wifibt-resume-sh self:capability net_admin;
+allow init-brcm-wifibt-resume-sh sysfs:dir { add_name write };
+allow init-brcm-wifibt-resume-sh sysfs:file { create getattr open read write };
+allow init-brcm-wifibt-resume-sh sysfs_net:dir search;
+allow init-brcm-wifibt-resume-sh sysfs_rfkill:dir search;
+allow init-brcm-wifibt-resume-sh sysfs_rfkill:file { open write };
+allow init-brcm-wifibt-resume-sh vendor_file:file execute_no_trans;
+
+allow init-brcm-wifibt-resume-sh storage_file:file getattr;
+#allow init-brcm-wifibt-resume-sh shell_exec:file { execute open read };
+allow init-brcm-wifibt-resume-sh system_file:file execute_no_trans;
+
+allow init-brcm-wifibt-resume-sh storage_file:dir remove_name;
+allow init-brcm-wifibt-resume-sh storage_file:file { unlink write };
+allow init-brcm-wifibt-resume-sh storage_file:dir write;
+allow init-brcm-wifibt-resume-sh storage_file:dir add_name;
+allow init-brcm-wifibt-resume-sh storage_file:file create;
+allow init-brcm-wifibt-resume-sh storage_file:file { open read };
