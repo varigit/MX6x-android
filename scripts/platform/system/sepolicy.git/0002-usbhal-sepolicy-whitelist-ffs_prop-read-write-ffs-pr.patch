@@ -1,0 +1,56 @@
+From 3c234857fe78175c8c4a06a8b0ec72086b778f36 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 19 May 2020 17:00:21 -0700
+Subject: [PATCH] usbhal sepolicy: whitelist ffs_prop read / write ffs property
+
+- Fixes avc denied required by USB HAL
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ prebuilts/api/28.0/public/property.te | 2 ++
+ public/property.te                    | 2 ++
+ 2 files changed, 4 insertions(+)
+
+diff --git a/prebuilts/api/28.0/public/property.te b/prebuilts/api/28.0/public/property.te
+index b0397e957..3c7723a9c 100644
+--- a/prebuilts/api/28.0/public/property.te
++++ b/prebuilts/api/28.0/public/property.te
+@@ -180,6 +180,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -ffs_prop
+   }:property_service set;
+ 
+   neverallow {
+@@ -272,6 +273,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -ffs_prop
+   }:file no_rw_file_perms;
+ 
+   neverallow {
+diff --git a/public/property.te b/public/property.te
+index b0397e957..3c7723a9c 100644
+--- a/public/property.te
++++ b/public/property.te
+@@ -180,6 +180,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -ffs_prop
+   }:property_service set;
+ 
+   neverallow {
+@@ -272,6 +273,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -ffs_prop
+   }:file no_rw_file_perms;
+ 
+   neverallow {
+-- 
+2.25.0
+
