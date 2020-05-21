@@ -220,7 +220,8 @@ endif
 
 # ro.product.first_api_level indicates the first api level the device has commercially launched on.
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.product.first_api_level=28
+    ro.product.first_api_level=28 \
+    vendor.typec.legacy=true
 
 PRODUCT_PACKAGES += \
     libvpu-malone \
