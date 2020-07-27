@@ -130,15 +130,9 @@ wifi_down()
 # Return true if SOM has WIFI module assembled
 wifi_is_available()
 {
-	# Read SOM options EEPROM field
-	opt=$(/system/bin/i2cget -f -y 0x0 0x52 0x20)
+	# For now assume WIFI is always available
+	return 0
 
-	# Check WIFI bit in SOM options
-	if [ $((opt & 0x1)) -eq 1 ]; then
-		return 0
-	else
-		return 1
-	fi
 }
 
 # Return true if WIFI should not be started
