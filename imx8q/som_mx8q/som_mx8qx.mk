@@ -12,8 +12,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8qxp.rc \
-    $(IMX_DEVICE_PATH)/ueventd.freescale.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    $(IMX_DEVICE_PATH)/init.brcm.wifibt.8qxp.sh:vendor/bin/init.brcm.wifibt.sh
+    $(IMX_DEVICE_PATH)/ueventd.freescale.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qx-var-som-wifi.img
 
@@ -27,3 +26,7 @@ TARGET_BOOTLOADER_CONFIG := \
         imx8qxp-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig \
         imx8qxpb0-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig
 
+
+#WiFI BT script tools
+PRODUCT_PACKAGES += \
+    init.brcm.wifibt.8qxp.sh
