@@ -15,7 +15,8 @@ PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:vendor/firmware/hdp/hdmitxfw.bin \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin:vendor/firmware/hdp/hdmirxfw.bin \
     $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8qm.rc \
-    $(IMX_DEVICE_PATH)/ueventd.freescale.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
+    $(IMX_DEVICE_PATH)/ueventd.freescale.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    $(IMX_DEVICE_PATH)/audio_policy_configuration_8qm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds.img
 
