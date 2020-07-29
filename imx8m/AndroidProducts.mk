@@ -31,3 +31,5 @@ PRODUCT_MAKEFILES := \
   $(LOCAL_DIR)/dart_mx8mq/dart_mx8mq_drm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm_drm.mk \
+  $(LOCAL_DIR)/som_mx8mn/som_mx8mn.mk \
+  $(LOCAL_DIR)/som_mx8mn/som_mx8mn_drm.mk \
