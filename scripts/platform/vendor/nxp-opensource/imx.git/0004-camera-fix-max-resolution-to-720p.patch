@@ -1,0 +1,31 @@
+From 74eabad455450e8c2b0414d879173e1301a8be18 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Tue, 28 Jul 2020 15:00:28 -0700
+Subject: [PATCH] camera: fix max resolution to 720p
+
+---
+ libcamera3/Ov5640Imx8MN.cpp | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/libcamera3/Ov5640Imx8MN.cpp b/libcamera3/Ov5640Imx8MN.cpp
+index e0cd6ca..0ba595e 100644
+--- a/libcamera3/Ov5640Imx8MN.cpp
++++ b/libcamera3/Ov5640Imx8MN.cpp
+@@ -161,10 +161,10 @@ status_t Ov5640Imx8MN::initSensorStaticData()
+     mFocalLength = 3.37f;
+     mPhysicalWidth = 3.6288f;   // 2592 x 1.4u
+     mPhysicalHeight = 2.7216f;  // 1944 x 1.4u
+-    mActiveArrayWidth = 1920;
+-    mActiveArrayHeight = 1080;
+-    mPixelArrayWidth = 1920;
+-    mPixelArrayHeight = 1080;
++    mActiveArrayWidth = 1280;
++    mActiveArrayHeight = 720;
++    mPixelArrayWidth = 1280;
++    mPixelArrayHeight = 720;
+     mMaxJpegSize = 4 * 1024 * 1024;
+ 
+     ALOGI("ImxdpuCsi, mFocalLength:%f, mPhysicalWidth:%f, mPhysicalHeight %f",
+-- 
+2.25.0
+
