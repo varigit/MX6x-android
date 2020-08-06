@@ -230,6 +230,26 @@ service start_hci_filter /vendor/bin/wcnss_filter
     group bluetooth diag
     disabled
 
+on property:vendor.force.suspend=true
+    stop  init_brcm_wifibt_resume_sh
+    start init_brcm_wifibt_suspend_sh
+
+on property:vendor.force.suspend=false
+    stop  init_brcm_wifibt_suspend_sh
+    start init_brcm_wifibt_resume_sh
+
+service init_brcm_wifibt_suspend_sh /vendor/bin/init.brcm.wifibt.suspend.sh suspend
+    user root
+    group root system
+    disabled
+    oneshot
+
+service init_brcm_wifibt_resume_sh /vendor/bin/init.brcm.wifibt.resume.sh resume
+    user root
+    group root system
+    disabled
+    oneshot
+
 on property:vendor.wc_transport.start_root=true
     start hci_filter_root
 
