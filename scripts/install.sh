@@ -5,7 +5,7 @@
 # This script must be run from the Android main directory.
 # variscite/install must be at ~/q1000_100_build
 #
-# Variscite DART-MX8M patches for Android 10.0.0 1.0.0
+# Variscite DART-MX8M patches for Android 10.0.0 2.3.0
 
 set -e
 #set -x
@@ -20,11 +20,14 @@ readonly ABSOLUTE_DIRECTORY=$(dirname ${ABSOLUTE_FILENAME})
 readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
+readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu
+readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
+readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
 
-readonly BASE_BRANCH_NAME="base_q10.0.0_1.0.0"
+readonly BASE_BRANCH_NAME="base_q10.0.0_2.3.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="q10.0.0_1.0.0-ga-var01"
+readonly _EXTPARAM_BRANCH="q10.0.0_2.3.0-ga-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
@@ -146,6 +149,18 @@ pr_info "#######################"
 pr_info "# Copy shell utilites #"
 pr_info "#######################"
 cp -r ${VARISCITE_SH_DIR}/* ${ANDROID_DIR}/
+
+pr_info "#######################"
+pr_info "# Copy ARM tool chain #"
+pr_info "#######################"
+# get arm toolchain
+(( `ls ${G_CROSS_COMPILER_PATH} 2>/dev/null | wc -l` == 0 )) && {
+	pr_info "Get and unpack cross compiler";
+	cd ${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
+	wget ${G_EXT_CROSS_COMPILER_LINK}
+	tar -xJf ${G_CROSS_COMPILER_ARCHIVE} \
+		-C .
+};
 
 pr_info "#####################"
 pr_info "# Done             #"
