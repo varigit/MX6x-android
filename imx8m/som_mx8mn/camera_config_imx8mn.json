@@ -1,0 +1,44 @@
+{
+  "__readme": [
+    "Basic Camera HAL v3 configuration."
+  ],
+
+  "hal_version": "3",
+  "cam_blit_copy": "GPU_3D",
+  "cam_blit_csc": "CPU",
+
+  "camera_metadata": [
+    {
+      "camera_type": "back",
+      "camera_name": "mxc-isi-cap",
+      "orientation": "0",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1920",
+      "ActiveArrayHeight": "1080",
+      "PixelArrayWidth": "1920",
+      "PixelArrayHeight": "1080",
+      "PhysicalWidth": "2.688",
+      "PhysicalHeight": "1.512",
+      "FocalLength": "3.42",
+      "MaxJpegSize": "4194304",
+      "MinFrameDuration": "33331760",
+      "MaxFrameDuration": "300000000"
+    },
+    {
+      "camera_type": "front",
+      "camera_name": "uvc",
+      "orientation": "0",
+      "buffer_type": "dma",
+      "ActiveArrayWidth": "1920",
+      "ActiveArrayHeight": "1080",
+      "PixelArrayWidth": "1920",
+      "PixelArrayHeight": "1080",
+      "PhysicalWidth": "2.688",
+      "PhysicalHeight": "1.512",
+      "FocalLength": "3.42",
+      "MaxJpegSize": "4194304",
+      "MinFrameDuration": "33331760",
+      "MaxFrameDuration": "300000000"
+    }
+  ]
+}

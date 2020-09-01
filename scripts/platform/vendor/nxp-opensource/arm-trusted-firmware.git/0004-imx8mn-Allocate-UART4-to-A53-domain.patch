@@ -1,0 +1,29 @@
+From 0a24a981cb23bd06d6b96f748a6edbc39e3ba6f2 Mon Sep 17 00:00:00 2001
+From: Nate Drude <nate.d@variscite.com>
+Date: Thu, 20 Aug 2020 08:59:03 -0500
+Subject: [PATCH 4/4] imx8mn: Allocate UART4 to A53 domain
+
+i.MX8MN ATF code unconditionally allocates UART2 and UART4 to M4 domain.
+On Variscite i.MX8MN boards UART4 is used by Linux running on A53 domain.
+Allocate only UART2 to M4 domain.
+
+Signed-off-by: Nate Drude <nate.d@variscite.com>
+---
+ plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+index 2f40004db..2b4c55acc 100644
+--- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+@@ -57,7 +57,6 @@ static const struct imx_rdc_cfg rdc[] = {
+ 	RDC_MDAn(RDC_MDA_M7, DID1),
+ 
+ 	/* peripherals domain permission */
+-	RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),
+ 	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
+ 
+ 	/* memory region */
+-- 
+2.25.0
+

@@ -1,0 +1,4 @@
+# public_vendor_system_prop
+# They are public_vendor_system_props for vendor-specific extension.
+sys.brcm.wifibt.completed    u:object_r:public_vendor_system_prop:s0
+vendor.imx.camera.max-res    u:object_r:public_vendor_default_prop:s0

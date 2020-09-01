@@ -1,0 +1,37 @@
+From 17cc77a6d405156605254d68df025fbb5cda6766 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Thu, 27 Aug 2020 14:56:26 -0700
+Subject: [PATCH] camera: fix max resolution to 720p
+
+---
+ libcamera3/ImxCamera.cpp | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/libcamera3/ImxCamera.cpp b/libcamera3/ImxCamera.cpp
+index bd45cec..d0d699c 100644
+--- a/libcamera3/ImxCamera.cpp
++++ b/libcamera3/ImxCamera.cpp
+@@ -96,6 +96,10 @@ status_t ImxCamera::initSensorStaticData()
+     int previewCnt = 0, pictureCnt = 0;
+     struct v4l2_frmsizeenum cam_frmsize;
+     struct v4l2_frmivalenum vid_frmval;
++    char value[PROPERTY_VALUE_MAX] = {0};
++
++    property_get("ro.build.product", value, "0");
++
+     while (ret == 0) {
+         memset(TmpStr, 0, 20);
+         memset(&cam_frmsize, 0, sizeof(struct v4l2_frmsizeenum));
+@@ -139,6 +143,9 @@ status_t ImxCamera::initSensorStaticData()
+             mPreviewResolutions[previewCnt++] = cam_frmsize.discrete.width;
+             mPreviewResolutions[previewCnt++] = cam_frmsize.discrete.height;
+         }
++	if(cam_frmsize.discrete.height == 720 &&
++           (strncasecmp("som_mx8mn", value, strlen(value)) == 0))
++            break;
+     }  // end while
+ 
+     mPreviewResolutionCount = previewCnt;
+-- 
+2.25.0
+
