@@ -1,0 +1,25 @@
+From 62dd1c1c9e0c91044d8692b7a4ac4afc95e18745 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Wed, 14 Oct 2020 18:36:06 -0700
+Subject: [PATCH] WifiSupplicant:Set default power save to false.
+
+---
+ service/java/com/android/server/wifi/SupplicantStaIfaceHal.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/service/java/com/android/server/wifi/SupplicantStaIfaceHal.java b/service/java/com/android/server/wifi/SupplicantStaIfaceHal.java
+index 86518c761..5065757b5 100644
+--- a/service/java/com/android/server/wifi/SupplicantStaIfaceHal.java
++++ b/service/java/com/android/server/wifi/SupplicantStaIfaceHal.java
+@@ -1621,7 +1621,7 @@ public class SupplicantStaIfaceHal {
+             ISupplicantStaIface iface = checkSupplicantStaIfaceAndLogFailure(ifaceName, methodStr);
+             if (iface == null) return false;
+             try {
+-                SupplicantStatus status = iface.setPowerSave(enable);
++	         SupplicantStatus status = iface.setPowerSave(false);
+                 return checkStatusAndLogFailure(status, methodStr);
+             } catch (RemoteException e) {
+                 handleRemoteException(e, methodStr);
+-- 
+2.25.0
+
