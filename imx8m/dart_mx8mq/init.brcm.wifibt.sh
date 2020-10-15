@@ -9,7 +9,7 @@ WIFI_EN_GPIO=66
 BT_BUF_GPIO=133
 #BT_EN_GPIO=68
 BT_EN_RFKILL=0
-WIFI_MMC_HOST=30b50000.usdhc
+WIFI_MMC_HOST=30b50000.mmc
 
 ######################################
 # /etc/wifi/variscite-wifi-common.sh #
@@ -111,6 +111,21 @@ wifi_down()
 	echo 0 > /sys/class/gpio/gpio${WIFI_PWR_GPIO}/value
 }
 
+# Return true if SOM has WIFI module assembled
+wifi_is_available()
+{
+        # Read SOM options EEPROM field
+        opt=$(i2cget -f -y 0x0 0x52 0x20)
+
+        # Check WIFI bit in SOM options
+        if [ $((opt & 0x1)) -eq 1 ]; then
+                return 0
+        else
+                return 1
+        fi
+}
+
+
 # Return true if WIFI should not be started
 wifi_should_not_be_started()
 {
@@ -123,6 +138,12 @@ wifi_should_not_be_started()
 		return 0
 	fi
 
+	# Do not start WIFI if it is not available
+	if ! wifi_is_available; then
+	        modprobe fec
+	        return 0
+	fi
+	
 	# Enable ethernet and exit if booting from eMMC without WIFI
 	if ! grep -q WIFI /sys/devices/soc0/machine; then
 		modprobe -d /vendor/lib/modules fec
@@ -139,6 +160,12 @@ wifi_should_not_be_stopped()
 	if grep -q mmcblk1 /proc/cmdline; then
 		return 0
 	fi
+
+        # Do not stop WIFI if it is not available          
+        if ! wifi_is_available; then
+                modprobe fec                       
+                return 0                               
+        fi
 
 	# Do not stop WIFI if booting from eMMC without WIFI
 	if ! grep -q WIFI /sys/devices/soc0/machine; then

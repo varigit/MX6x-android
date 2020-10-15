@@ -27,6 +27,8 @@ CFG_RDC_SECURE_DATA_PATH ?= y
 
 ifeq ($(CFG_DRM_SECURE_DATA_PATH),y)
 CFG_SECURE_DATA_PATH := y
+SOONG_CONFIG_IMXPLUGIN += CFG_SECURE_DATA_PATH
+SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_DATA_PATH = y
 CFG_TEE_SDP_MEM_BASE := 0xcc000000
 CFG_TEE_SDP_MEM_SIZE := 0x02000000
 ifeq ($(CFG_RDC_SECURE_DATA_PATH),y)
@@ -38,12 +40,12 @@ endif
 endif
 
 TARGET_BOARD_DTS_CONFIG := \
-        imx8mq-var-dart-emmc-wifi-lvds:fsl-imx8mq-var-dart-emmc-wifi-lvds.dtb \
-        imx8mq-var-dart-emmc-wifi-dual-display:fsl-imx8mq-var-dart-emmc-wifi-dual-display.dtb \
-        imx8mq-var-dart-emmc-wifi-hdmi:fsl-imx8mq-var-dart-emmc-wifi-hdmi.dtb \
-        imx8mq-var-dart-sd-emmc-lvds:fsl-imx8mq-var-dart-sd-emmc-lvds.dtb \
-        imx8mq-var-dart-sd-emmc-dual-display:fsl-imx8mq-var-dart-sd-emmc-dual-display.dtb \
-        imx8mq-var-dart-sd-emmc-hdmi:fsl-imx8mq-var-dart-sd-emmc-hdmi.dtb
+        imx8mq-var-dart-emmc-wifi-lvds:imx8mq-var-dart-emmc-wifi-lvds.dtb \
+        imx8mq-var-dart-emmc-wifi-dual-display:imx8mq-var-dart-emmc-wifi-dual-display.dtb \
+        imx8mq-var-dart-emmc-wifi-hdmi:imx8mq-var-dart-emmc-wifi-hdmi.dtb \
+        imx8mq-var-dart-sd-emmc-lvds:imx8mq-var-dart-sd-emmc-lvds.dtb \
+        imx8mq-var-dart-sd-emmc-dual-display:imx8mq-var-dart-sd-emmc-dual-display.dtb \
+        imx8mq-var-dart-sd-emmc-hdmi:imx8mq-var-dart-sd-emmc-hdmi.dtb
 
 # Exoplayer
 PRODUCT_PACKAGES += \

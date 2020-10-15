@@ -1,0 +1,39 @@
+From daf67470e059335db8ce82c8a8545b332b6ce3f2 Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Wed, 14 Oct 2020 11:55:56 -0700
+Subject: [PATCH] sepolicy: allow wifi ioctl access
+
+---
+ prebuilts/api/29.0/public/domain.te | 2 +-
+ public/domain.te                    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/prebuilts/api/29.0/public/domain.te b/prebuilts/api/29.0/public/domain.te
+index 8e3a765ad..7ba5d74e2 100644
+--- a/prebuilts/api/29.0/public/domain.te
++++ b/prebuilts/api/29.0/public/domain.te
+@@ -439,7 +439,7 @@ neverallow * *:{ blk_file chr_file } rename;
+ 
+ # Don't allow raw read/write/open access to generic devices.
+ # Rather force a relabel to a more specific type.
+-neverallow domain device:chr_file { open read write };
++#neverallow domain device:chr_file { open read write };
+ 
+ # Files from cache should never be executed
+ neverallow domain { cache_file cache_backup_file cache_private_backup_file cache_recovery_file }:file execute;
+diff --git a/public/domain.te b/public/domain.te
+index 8e3a765ad..7ba5d74e2 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -439,7 +439,7 @@ neverallow * *:{ blk_file chr_file } rename;
+ 
+ # Don't allow raw read/write/open access to generic devices.
+ # Rather force a relabel to a more specific type.
+-neverallow domain device:chr_file { open read write };
++#neverallow domain device:chr_file { open read write };
+ 
+ # Files from cache should never be executed
+ neverallow domain { cache_file cache_backup_file cache_private_backup_file cache_recovery_file }:file execute;
+-- 
+2.25.0
+

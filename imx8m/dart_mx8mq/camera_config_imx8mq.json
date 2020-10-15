@@ -5,7 +5,7 @@
 
   "hal_version": "3",
   "cam_blit_copy": "GPU_3D",
-  "cam_blit_csc": "GPU_3D",
+  "cam_blit_csc": "CPU",
 
   "camera_metadata": [
     {

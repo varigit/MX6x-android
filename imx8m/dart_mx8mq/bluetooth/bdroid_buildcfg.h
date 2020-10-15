@@ -33,5 +33,4 @@
 
 //Enable A2DPSink AVRCPController
 #define BTA_AV_SINK_INCLUDED TRUE
-
 #endif

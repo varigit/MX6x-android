@@ -1,0 +1,25 @@
+From 3922a8b299cc5da7a5a08e16824709b99318dc9e Mon Sep 17 00:00:00 2001
+From: Mohit Singh <mohit.p@variscite.com>
+Date: Wed, 30 Sep 2020 11:01:24 -0700
+Subject: [PATCH] soc.mak: Add support for imx8mq_var_dart
+
+---
+ iMX8M/soc.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index 5a42555..88a6f7f 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -135,7 +135,7 @@ clean:
+ 
+ dtbs = evk.dtb
+ $(dtbs):
+-	./$(DTB_PREPROC) $(PLAT)-evk.dtb $(dtbs)
++	./$(DTB_PREPROC) $(PLAT)-var-dart.dtb $(dtbs)
+ 
+ u-boot.itb: $(dtbs)
+ 	./$(PAD_IMAGE) tee.bin
+-- 
+2.25.0
+

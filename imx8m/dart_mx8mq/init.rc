@@ -5,9 +5,25 @@ on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-on early-init
+    start early_init_sh
     start init_brcm_wifibt_sh
 
+    # Mount binderfs
+    mkdir /dev/binderfs
+    mount binder binder /dev/binderfs stats=global
+    chmod 0755 /dev/binderfs
+
+    symlink /dev/binderfs/binder /dev/binder
+    symlink /dev/binderfs/hwbinder /dev/hwbinder
+    symlink /dev/binderfs/vndbinder /dev/vndbinder
+
+    chmod 0666 /dev/binderfs/hwbinder
+    chmod 0666 /dev/binderfs/binder
+    chmod 0666 /dev/binderfs/vndbinder
+
+
+on early-init
+    
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
     setprop ro.hardware.keystore ${ro.boot.keystore}
@@ -59,7 +75,7 @@ on init
     write /dev/stune/rt/schedtune.prefer_idle 1
 
     # force USB2740 autosuspend
-    write /sys/devices/platform/usb@38200000/38200000.dwc3/xhci-hcd.0.auto/usb1/1-1/1-1.5/power/control auto
+    write /sys/devices/platform/soc@0/38200000.usb/xhci-hcd.0.auto/usb1/1-1/1-1.5/power/control auto
 
 on late-fs
     # Start keymaster service
@@ -94,7 +110,6 @@ on early-boot
     # fsl omx graphic manager media framework property
     setprop rw.VIDEO_RENDER_NAME video_render.surface
     setprop media.fsl_codec.flag 7
-    setprop debug.stagefright.ccodec 0
 
     #Define the config for dual camera
     #For landscape mode, orient is 0
@@ -106,8 +121,6 @@ on early-boot
     setprop front_camera_name mx6s-csi
     setprop front_camera_orient 0
 
-    #Enable GPU 2D do CSC on imx8mm platform
-    setprop vendor.camera.2d.enable true
 
    # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk0/queue/read_ahead_kb 2048
@@ -118,7 +131,10 @@ on early-boot
 
     # Prepare for wifi
     setprop wifi.interface wlan0
-    setprop wifi.ap.interface wlan0
+    setprop wifi.direct.interface p2p0
+    setprop wifi.concurrent.interface wlan0
+
+    setprop persist.service.bdroid.bdaddr 22:22:67:C6:69:73
 
     # Prepare for bluetooth
     chmod 665 /sys/class/rfkill/rfkill0/state
@@ -191,7 +207,7 @@ service sensor_fusion /vendor/bin/fsl_sensor_fusion
     oneshot
 
 # Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
-service watchdogd /sbin/watchdogd 10 20
+service watchdogd /system/bin/watchdogd 10 20
     class core
     seclabel u:r:watchdogd:s0
 
@@ -293,6 +309,10 @@ on post-fs
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
 
+    # Grant permission for fetching available_pages info of statsd
+    chown system system /proc/pagetypeinfo
+    chmod 0440 /proc/pagetypeinfo
+
 on post-fs-data
     setprop vold.post_fs_data_done 1
     # create temp node for secure storage proxy
@@ -324,6 +344,7 @@ on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk0rpmb -d /dev/trusty-ipc-dev0
    group system
+
 
 on property:ro.boot.vendor.sysrq=1
     write /proc/sys/kernel/sysrq 1

@@ -8,7 +8,7 @@ BCM_FIRMWARE_PATH := vendor/variscite/bcm_4343w_fw
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
 -include device/fsl/common/imx_path/ImxPathConfig.mk
-$(call inherit-product, device/fsl/imx8m/ProductConfigCommon.mk)
+include device/fsl/imx8m/ProductConfigCommon.mk
 
 ifneq ($(wildcard $(IMX_DEVICE_PATH)/fstab_nand.freescale),)
 $(shell touch $(IMX_DEVICE_PATH)/fstab_nand.freescale)
@@ -27,6 +27,32 @@ PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 #Enable this to choose 32 bit user space build
 #IMX8_BUILD_32BIT_ROOTFS := true
+
+#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
+TARGET_USE_DYNAMIC_PARTITIONS ?= true
+#If the device is retrofit to have dynamic partition feature, set this variable to true to build
+#the images and OTA package. Here is a demo to update 10.0.0_1.0.0 to 10.0.0_2.0.0 or higher
+TARGET_USE_RETROFIT_DYNAMIC_PARTITION ?= false
+
+ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+  PRODUCT_USE_DYNAMIC_PARTITIONS := true
+  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
+  BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
+  ifeq ($(TARGET_USE_RETROFIT_DYNAMIC_PARTITION),true)
+    PRODUCT_RETROFIT_DYNAMIC_PARTITIONS := true
+    BOARD_SUPER_PARTITION_METADATA_DEVICE := system
+    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+      BOARD_SUPER_PARTITION_BLOCK_DEVICES := system vendor
+      BOARD_SUPER_PARTITION_SYSTEM_DEVICE_SIZE := 2952790016
+      BOARD_SUPER_PARTITION_VENDOR_DEVICE_SIZE := 536870912
+    else
+      BOARD_SUPER_PARTITION_BLOCK_DEVICES := system vendor product
+      BOARD_SUPER_PARTITION_SYSTEM_DEVICE_SIZE := 1610612736
+      BOARD_SUPER_PARTITION_VENDOR_DEVICE_SIZE := 536870912
+      BOARD_SUPER_PARTITION_PRODUCT_DEVICE_SIZE := 1879048192
+    endif
+  endif
+endif
 
 # Include keystore attestation keys and certificates.
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -50,6 +76,18 @@ PRODUCT_COPY_FILES += \
     device/fsl/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
     device/fsl/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     device/fsl/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
+
+ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/dynamic_partiton_tools/lpmake:lpmake \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/dynamic_partiton_tools/lpmake.exe:lpmake.exe
+endif
+
+# Audio card json
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
+    device/fsl/common/audio-json/cdnhdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cdnhdmi_config.json \
+    device/fsl/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_COPY_FILES += \
@@ -75,6 +113,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
     frameworks/native/data/etc/android.software.app_widgets.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_widgets.xml \
     frameworks/native/data/etc/android.software.backup.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.backup.xml \
     frameworks/native/data/etc/android.software.device_admin.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_admin.xml \
@@ -108,7 +147,7 @@ DEVICE_PACKAGE_OVERLAYS := $(IMX_DEVICE_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi
+PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
 PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
@@ -144,14 +183,14 @@ PRODUCT_PACKAGES += \
         libEGL_VIVANTE \
         libGLESv1_CM_VIVANTE \
         libGLESv2_VIVANTE \
-        gralloc_viv.imx8 \
+        gralloc_viv.imx \
         libGAL \
         libGLSLC \
         libVSC \
         libgpuhelper \
         libSPIRV_viv \
         libvulkan_VIVANTE \
-        vulkan.imx8 \
+        vulkan.imx \
         libCLC \
         libLLVM_viv \
         libOpenCL \
@@ -160,12 +199,16 @@ PRODUCT_PACKAGES += \
         libOpenVX \
         libOpenVXU \
         libNNVXCBinary-evis \
+        libNNVXCBinary-evis2 \
         libNNVXCBinary-lite \
         libOvx12VXCBinary-evis \
+        libOvx12VXCBinary-evis2 \
         libOvx12VXCBinary-lite \
         libNNGPUBinary-evis \
+        libNNGPUBinary-evis2 \
         libNNGPUBinary-lite \
-        gatekeeper.imx8
+        libNNGPUBinary-ulite \
+        gatekeeper.imx
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@5.0-impl:32 \
@@ -207,6 +250,11 @@ PRODUCT_PACKAGES += \
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+
+# Wifi regulatory
+PRODUCT_COPY_FILES += \
+    external/wireless-regdb/regulatory.db:vendor/firmware/regulatory.db \
+    external/wireless-regdb/regulatory.db.p7s:vendor/firmware/regulatory.db.p7s
 
 PRODUCT_COPY_FILES += \
     $(BCM_FIRMWARE_PATH)/bcm4339.hcd:vendor/firmware/bcm/bcm4339.hcd \
@@ -265,7 +313,6 @@ endif
 
 ifneq ($(BUILD_TARGET_FS),ubifs)
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.internel.storage_size=/sys/block/mmcblk0/size \
     ro.frp.pst=/dev/block/by-name/presistdata
 endif
 
@@ -278,6 +325,20 @@ PRODUCT_PACKAGES += \
     libg1 \
     libhantro \
     libcodec
+
+# imx c2 codec binary
+PRODUCT_PACKAGES += \
+    lib_vpu_wrapper \
+    lib_imx_c2_videodec_common \
+    lib_imx_c2_videodec \
+    lib_imx_c2_vpuwrapper_dec \
+    lib_imx_c2_process \
+    lib_imx_c2_process_dummy_post \
+    c2_component_register \
+    c2_component_register_ms \
+    c2_component_register_wmv9 \
+    c2_component_register_ra \
+    c2_component_register_rv
 
 # CANbus tools
 PRODUCT_PACKAGES += \
@@ -302,6 +363,7 @@ PRODUCT_PACKAGES += \
 
 # Multi-Display launcher
 PRODUCT_PACKAGES += \
+    MultiClientInputMethod \
     MultiDisplay
 
 # Specify rollback index for bootloader and for AVB
@@ -328,3 +390,10 @@ PRODUCT_PACKAGES += \
 endif
 
 IMX-DEFAULT-G2D-LIB := libg2d-viv
+
+ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
+ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
+INSTALL_64BIT_LIBRARY := true
+endif
+-include $(FSL_CODEC_PATH)/fsl-codec/fsl-codec.mk
+endif

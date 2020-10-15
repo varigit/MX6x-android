@@ -30,3 +30,15 @@ allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
 allow init-brcm-wifibt-sh sysfs_net:dir search;
 allow init-brcm-wifibt-sh sysfs_rfkill:dir search;
 allow init-brcm-wifibt-sh sysfs_rfkill:file { open write };
+allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
+
+allow init-brcm-wifibt-sh sysfs_soc:dir search;
+allow init-brcm-wifibt-sh sysfs_soc:file { getattr open read };
+
+allow init-brcm-wifibt-sh debugfs_mmc:dir search;
+
+allow hal_wifi_supplicant_default vendor_data_file:file setattr;
+
+allow init-brcm-wifibt-sh proc_cmdline:file { getattr open read };
+
+allow init-brcm-wifibt-sh device:chr_file { ioctl open read };

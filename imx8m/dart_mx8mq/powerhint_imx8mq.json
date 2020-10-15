@@ -4,10 +4,9 @@
       "Name": "CPULittleClusterMaxFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
       "Values": [
-        "1500000",
-        "1300000",
-        "1000000",
-        "800000"
+        "1800000",
+        "1600000",
+        "1200000"
       ],
       "DefaultIndex": 0,
       "ResetOnInit": true
@@ -16,10 +15,9 @@
       "Name": "CPULittleClusterMinFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
       "Values": [
-        "1500000",
-        "1300000",
-        "1000000",
-        "800000"
+        "1800000",
+        "1600000",
+        "1200000"
       ],
       "ResetOnInit": true
     },
@@ -76,13 +74,13 @@
       "PowerHint": "SUSTAINED_PERFORMANCE",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1000000"
+      "Value": "1600000"
     },
     {
       "PowerHint": "INTERACTION",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 0,
-      "Value": "1300000"
+      "Value": "1600000"
     },
     {
       "PowerHint": "INTERACTION",
@@ -94,13 +92,13 @@
       "PowerHint": "LAUNCH",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 5000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "LAUNCH",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 5000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "LAUNCH",
@@ -112,13 +110,13 @@
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 1000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 1000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
@@ -136,19 +134,19 @@
       "PowerHint": "CAMERA_STREAMING",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1300000"
+      "Value": "1600000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 1000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 1000,
-      "Value": "1500000"
+      "Value": "1800000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
@@ -160,13 +158,13 @@
       "PowerHint": "LOW_POWER",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 0,
-      "Value": "800000"
+      "Value": "1200000"
     },
     {
       "PowerHint": "LOW_POWER",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1300000"
+      "Value": "1200000"
     },
     {
       "PowerHint": "AUDIO_STREAMING",
