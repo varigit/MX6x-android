@@ -111,7 +111,7 @@ pr_info "#########################"
 pr_info "clone ${VENDOR_BASE_DIR}/bcm_4343w_fw"
 git clone https://github.com/varigit/bcm_4343w_fw.git ${VENDOR_BASE_DIR}/bcm_4343w_fw
 cd ${VENDOR_BASE_DIR}/bcm_4343w_fw
-git checkout 7080491e10b82661ca4a67237fdb361190775d2f -b ${BASE_BRANCH_NAME}
+git checkout 8081cd2bddb1569abe91eb50bd687a2066a33342 -b ${BASE_BRANCH_NAME}
 
 pr_info "###############################"
 pr_info "# Misc. external repositories #"

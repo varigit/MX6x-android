@@ -253,8 +253,8 @@ PRODUCT_COPY_FILES += \
 
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
-    $(BCM_FIRMWARE_PATH)/bcm4339.hcd:vendor/firmware/bcm/bcm4339.hcd \
-    $(BCM_FIRMWARE_PATH)/bcm43430a1.hcd:vendor/firmware/bcm/bcm43430a1.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM4335C0.hcd:vendor/firmware/brcm/BCM4335C0.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM43430A1.hcd:vendor/firmware/brcm/BCM43430A1.hcd \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.bin:vendor/firmware/brcm/brcmfmac4339-sdio.bin \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.txt:vendor/firmware/brcm/brcmfmac4339-sdio.txt \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.bin:vendor/firmware/brcm/brcmfmac43430-sdio.bin \
