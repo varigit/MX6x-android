@@ -1,10 +1,10 @@
-From 7568f909823ee41e1b1a238acf58977e803c42cd Mon Sep 17 00:00:00 2001
+From 01371cc5850c1b10aea63a2fb959680edf8a61b5 Mon Sep 17 00:00:00 2001
 From: Nate Drude <nate.d@variscite.com>
-Date: Thu, 20 Aug 2020 10:38:07 -0500
-Subject: [PATCH 2/4] imx8m: Disable ATF console_imx_uart_register for
+Date: Tue, 10 Nov 2020 14:49:33 -0800
+Subject: [PATCH 1/2] imx8m: Disable ATF console_imx_uart_register for
  compatibility with all Variscite imx8m SOMs
 
-Signed-off-by: Nate Drude <nate.d@variscite.com>
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
  plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c | 5 ++++-
  plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 4 ++++
@@ -12,7 +12,7 @@ Signed-off-by: Nate Drude <nate.d@variscite.com>
  3 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
-index 1eeab7e9d..b46fd62a4 100644
+index 1eeab7e..b46fd62 100644
 --- a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
 @@ -150,7 +150,9 @@ static void bl31_tzc380_setup(void)
@@ -40,7 +40,7 @@ index 1eeab7e9d..b46fd62a4 100644
  	/*
  	 * tell BL3-1 where the non-secure software image is located
 diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-index 841ec5a3a..2f40004db 100644
+index 841ec5a..2f40004 100644
 --- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
 @@ -131,7 +131,9 @@ static void bl31_tzc380_setup(void)
@@ -67,10 +67,10 @@ index 841ec5a3a..2f40004db 100644
  	/*
  	 * tell BL3-1 where the non-secure software image is located
 diff --git a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-index 1e5d64da3..462d1430c 100644
+index 2683371..9915b30 100644
 --- a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-@@ -130,7 +130,9 @@ void bl31_tzc380_setup(void)
+@@ -132,7 +132,9 @@ void bl31_tzc380_setup(void)
  void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  		u_register_t arg2, u_register_t arg3)
  {
@@ -80,7 +80,7 @@ index 1e5d64da3..462d1430c 100644
  	int i;
  
  	/* Enable CSU NS access permission */
-@@ -149,10 +151,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+@@ -151,10 +153,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  
  	imx8m_caam_init();
  
@@ -94,5 +94,5 @@ index 1e5d64da3..462d1430c 100644
  	/*
  	 * tell BL3-1 where the non-secure software image is located
 -- 
-2.25.0
+2.25.1
 

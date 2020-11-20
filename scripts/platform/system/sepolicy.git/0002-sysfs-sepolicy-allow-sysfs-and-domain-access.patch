@@ -1,7 +1,7 @@
-From a89cc4f328c7f1e3ebb470365c8a73290e2efbfe Mon Sep 17 00:00:00 2001
+From 96df82645d521cd277a055345fc91fad940488d0 Mon Sep 17 00:00:00 2001
 From: Mohit Singh <pal.mohit.singh@gmail.com>
 Date: Fri, 27 Mar 2020 14:16:47 -0700
-Subject: [PATCH] sysfs sepolicy: allow sysfs and domain access.
+Subject: [PATCH 2/5] sysfs sepolicy: allow sysfs and domain access.
 
 - It is required for bt_vendor.conf
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH] sysfs sepolicy: allow sysfs and domain access.
  2 files changed, 2 insertions(+), 3 deletions(-)
 
 diff --git a/prebuilts/api/29.0/public/domain.te b/prebuilts/api/29.0/public/domain.te
-index 98fcc63d8..5914ac1eb 100644
+index f348701..8e3a765 100644
 --- a/prebuilts/api/29.0/public/domain.te
 +++ b/prebuilts/api/29.0/public/domain.te
-@@ -1035,7 +1035,7 @@ full_treble_only(`
+@@ -1030,7 +1030,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {
@@ -22,7 +22,7 @@ index 98fcc63d8..5914ac1eb 100644
      -appdomain
      -coredomain
      -vendor_executes_system_violators
-@@ -1348,7 +1348,6 @@ full_treble_only(`
+@@ -1344,7 +1344,6 @@ full_treble_only(`
  # to do so should never be granted.
  neverallow domain {
    proc_type
@@ -31,10 +31,10 @@ index 98fcc63d8..5914ac1eb 100644
  
  # cgroupfs directories can be created, but not files within them.
 diff --git a/public/domain.te b/public/domain.te
-index fea62ee7c..5914ac1eb 100644
+index 4adc8cc..8e3a765 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1035,7 +1035,7 @@ full_treble_only(`
+@@ -1030,7 +1030,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {
@@ -44,5 +44,5 @@ index fea62ee7c..5914ac1eb 100644
      -coredomain
      -vendor_executes_system_violators
 -- 
-2.25.0
+2.25.1
 

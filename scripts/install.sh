@@ -5,7 +5,7 @@
 # This script must be run from the Android main directory.
 # variscite/install must be at ~/q1000_100_build
 #
-# Variscite DART-MX8M patches for Android 10.0.0 2.3.0
+# Variscite DART-MX8M patches for Android 10.0.0 2.5.0
 
 set -e
 #set -x
@@ -24,10 +24,10 @@ readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gc
 readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
 
-readonly BASE_BRANCH_NAME="base_q10.0.0_2.3.0"
+readonly BASE_BRANCH_NAME="base_q10.0.0_2.5.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="q10.0.0_2.3.0-ga-var01"
+readonly _EXTPARAM_BRANCH="q10.0.0_2.5.0-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
@@ -111,7 +111,7 @@ pr_info "#########################"
 pr_info "clone ${VENDOR_BASE_DIR}/bcm_4343w_fw"
 git clone https://github.com/varigit/bcm_4343w_fw.git ${VENDOR_BASE_DIR}/bcm_4343w_fw
 cd ${VENDOR_BASE_DIR}/bcm_4343w_fw
-git checkout 7080491e10b82661ca4a67237fdb361190775d2f -b ${BASE_BRANCH_NAME}
+git checkout 8081cd2bddb1569abe91eb50bd687a2066a33342 -b ${BASE_BRANCH_NAME}
 
 pr_info "###############################"
 pr_info "# Misc. external repositories #"

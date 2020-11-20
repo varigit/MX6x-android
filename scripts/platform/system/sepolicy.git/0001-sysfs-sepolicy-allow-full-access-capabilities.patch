@@ -1,7 +1,7 @@
-From 48010e06461827dc28c2714f3b7749b35954467d Mon Sep 17 00:00:00 2001
+From 2876b7fc77ae32a6483621a754d59b4e36616ff5 Mon Sep 17 00:00:00 2001
 From: Pierluigi Passaro <pierluigi.p@variscite.com>
 Date: Sun, 17 Mar 2019 11:40:53 +0100
-Subject: [PATCH] sysfs sepolicy: allow full access capabilities
+Subject: [PATCH 1/5] sysfs sepolicy: allow full access capabilities
 
 Managing GPIOs using sysfs requires full access to:
 - write
@@ -14,10 +14,10 @@ Managing GPIOs using sysfs requires full access to:
  2 files changed, 2 deletions(-)
 
 diff --git a/prebuilts/api/28.0/public/domain.te b/prebuilts/api/28.0/public/domain.te
-index 158eef78..da66fd20 100644
+index e9337b6..d74c25d 100644
 --- a/prebuilts/api/28.0/public/domain.te
 +++ b/prebuilts/api/28.0/public/domain.te
-@@ -1378,7 +1378,6 @@ neverallow { domain -traced_probes } self:capability dac_read_search;
+@@ -1373,7 +1373,6 @@ neverallow { domain -traced_probes } self:capability dac_read_search;
  # to do so should never be granted.
  neverallow domain {
    proc_type
@@ -26,10 +26,10 @@ index 158eef78..da66fd20 100644
  
  # cgroupfs directories can be created, but not files within them.
 diff --git a/public/domain.te b/public/domain.te
-index 158eef78..da66fd20 100644
+index f348701..4adc8cc 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1378,7 +1378,6 @@ neverallow { domain -traced_probes } self:capability dac_read_search;
+@@ -1344,7 +1344,6 @@ full_treble_only(`
  # to do so should never be granted.
  neverallow domain {
    proc_type
@@ -38,5 +38,5 @@ index 158eef78..da66fd20 100644
  
  # cgroupfs directories can be created, but not files within them.
 -- 
-2.17.1
+2.25.1
 

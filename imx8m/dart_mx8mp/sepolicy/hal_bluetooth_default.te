@@ -1,0 +1,4 @@
+allow hal_bluetooth_default system_file:file read;
+allow hal_bluetooth_default system_file:file open;
+allow hal_bluetooth_default system_file:file getattr;
+allow hal_bluetooth_default sysfs_rfkill:file write;

@@ -65,6 +65,9 @@ if [[ "${soc_name}" = *"mx8mm"* ]]; then
 elif [[ "${soc_name}" = *"mx8mn"* ]]; then
 	imagesdir="out/target/product/som_mx8mn"
 	sdshared=false
+elif [[ "${soc_name}" = *"mx8mp"* ]]; then
+	imagesdir="out/target/product/dart_mx8mp"
+	sdshared=false
 elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 	imagesdir="out/target/product/dart_mx8mq"
 	sdshared=true
@@ -150,6 +153,11 @@ fi
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
 	bootloader_offset=32
 	bootloader_file="u-boot-imx8mn-var-som.imx"
+fi
+
+if [[ "${soc_name}" = *"mx8mp"* ]]; then
+	bootloader_offset=32
+	bootloader_file="u-boot-imx8mp-var-dart.imx"
 fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then

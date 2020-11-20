@@ -1,20 +1,22 @@
-From 5d9f4f6e33855191363923d62b98db8741124e41 Mon Sep 17 00:00:00 2001
-From: Nate Drude <nate.d@variscite.com>
-Date: Thu, 20 Aug 2020 08:52:52 -0500
-Subject: [PATCH 1/4] imx8m: Adjust struct dram_timing_info to match u-boot
+From 40a669fac3e9599bc09e1abd9f969c4e01a43ef7 Mon Sep 17 00:00:00 2001
+From: Felix Radensky <felix.r@variscite.com>
+Date: Tue, 10 Nov 2020 14:52:51 -0800
+Subject: [PATCH 2/2] imx8m: Adjust struct dram_timing_info to match u-boot
 
 ATF struct dram_timing_info holds DRAM configuration created by
 u-boot. Variscite u-boot code added additional member to this structure.
 Make ATF definition mirror the u-boot one.
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
  plat/imx/imx8m/include/dram.h | 2 ++
  1 file changed, 2 insertions(+)
 
 diff --git a/plat/imx/imx8m/include/dram.h b/plat/imx/imx8m/include/dram.h
-index d0d5bf81e..70fb46165 100644
+index 144316a..22edb3b 100644
 --- a/plat/imx/imx8m/include/dram.h
 +++ b/plat/imx/imx8m/include/dram.h
-@@ -29,6 +29,8 @@ struct dram_cfg_param {
+@@ -31,6 +31,8 @@ struct dram_cfg_param {
  };
  
  struct dram_timing_info {
@@ -24,5 +26,5 @@ index d0d5bf81e..70fb46165 100644
  	struct dram_cfg_param *ddrc_cfg;
  	unsigned int ddrc_cfg_num;
 -- 
-2.25.0
+2.25.1
 

@@ -1,16 +1,17 @@
-From 343a643cbb0534d3cbd8fd3a37d2f4f1bdc98b30 Mon Sep 17 00:00:00 2001
-From: Mohit Singh <mohit.p@variscite.com>
-Date: Thu, 27 Aug 2020 17:16:06 -0700
-Subject: [PATCH] Android: Changes required to compile Android 10.2.3.0 for
+From a2b638326afa96689046c8caf53b7e1ca17001c2 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 19 Nov 2020 14:15:09 -0800
+Subject: [PATCH] Android: Changes required to compile Android 10 2.5.0 for 
  device/variscite.
 
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
  common/build/Makefile    | 7 ++++---
- common/tools/imx-make.sh | 5 +++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
+ common/tools/imx-make.sh | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
 
 diff --git a/common/build/Makefile b/common/build/Makefile
-index 0e21be26..4b76366e 100644
+index b2c9a41..cf5547e 100644
 --- a/common/build/Makefile
 +++ b/common/build/Makefile
 @@ -23,13 +23,14 @@ HOST_PREBUILT_TAG := $(HOST_OS)-${HOST_PREBUILT_ARCH}
@@ -32,11 +33,11 @@ index 0e21be26..4b76366e 100644
  -include ${product_path}/AndroidTee.mk
  -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index ad778ab5..e816fd55 100755
+index 45fa713..ee7b83f 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
-@@ -108,10 +108,11 @@ if [ ${build_bootloader_kernel_flag} -eq 0 ] && [ ${build_android_flag} -eq 0 ];
-     build_android_flag=1
+@@ -117,10 +117,11 @@ if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
+     build_vvcam="vvcam";
  fi
  
 -product_makefile=`pwd`/`find device/fsl -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
@@ -48,15 +49,20 @@ index ad778ab5..e816fd55 100755
  
  # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
  if [ -n "${build_bootloader}" ]; then
-@@ -144,7 +145,7 @@ apply_patch
+@@ -153,11 +154,11 @@ apply_patch
  
  # redirect standard input to /dev/null to avoid manually input in kernel configuration stage
  soc_path=${soc_path} product_path=${product_path} fsl_git_path=${fsl_git_path} clean_build=${clean_build} \
 -    make -C ./ -f ${fsl_git_path}/common/build/Makefile ${parallel_option} \
 +    make -C ./ -f ${fsl_git_path}/../fsl/common/build/Makefile ${parallel_option} \
-     ${build_bootloader} ${build_kernel} ${build_galcore} </dev/null || exit
+     ${build_bootloader} ${build_kernel} </dev/null || exit
+ 
+ soc_path=${soc_path} product_path=${product_path} fsl_git_path=${fsl_git_path} clean_build=${clean_build} \
+-    make -C ./ -f ${fsl_git_path}/common/build/Makefile ${parallel_option} \
++    make -C ./ -f ${fsl_git_path}/../fsl/common/build/Makefile ${parallel_option} \
+     ${build_vvcam} ${build_galcore} </dev/null || exit
  
  if [ ${build_android_flag} -eq 1 ]; then
 -- 
-2.25.0
+2.25.1
 

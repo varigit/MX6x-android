@@ -1,0 +1,47 @@
+From d72a654f55a102f9f83aae83ac64c7f9ec344801 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 24 Nov 2020 14:52:00 -0800
+Subject: [PATCH] framework/base: Remove first boot ImmersiveMode UI popup
+
+- Workaround for ImmersiveMode ui popup during first boot
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ services/core/java/com/android/server/EntropyMixer.java  | 1 +
+ .../core/java/com/android/server/wm/DisplayPolicy.java   | 9 ++++++---
+ 2 files changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/services/core/java/com/android/server/EntropyMixer.java b/services/core/java/com/android/server/EntropyMixer.java
+index 5e6e9d34dc2..12679abcfb5 100644
+--- a/services/core/java/com/android/server/EntropyMixer.java
++++ b/services/core/java/com/android/server/EntropyMixer.java
+@@ -136,6 +136,7 @@ public class EntropyMixer extends Binder {
+             RandomBlock.fromFile(entropyFile).toFile(randomDevice, false);
+         } catch (FileNotFoundException e) {
+             Slog.w(TAG, "No existing entropy file -- first boot?");
++            SystemProperties.set("sys.firstboot", "true");
+         } catch (IOException e) {
+             Slog.w(TAG, "Failure loading existing entropy file", e);
+         }
+diff --git a/services/core/java/com/android/server/wm/DisplayPolicy.java b/services/core/java/com/android/server/wm/DisplayPolicy.java
+index 2d835d3bb1b..5c17531ab82 100644
+--- a/services/core/java/com/android/server/wm/DisplayPolicy.java
++++ b/services/core/java/com/android/server/wm/DisplayPolicy.java
+@@ -3412,9 +3412,12 @@ public class DisplayPolicy {
+         boolean newImmersiveMode = isImmersiveMode(vis);
+         if (oldImmersiveMode != newImmersiveMode) {
+             final String pkg = win.getOwningPackage();
+-            mImmersiveModeConfirmation.immersiveModeChangedLw(pkg, newImmersiveMode,
+-                    mService.mPolicy.isUserSetupComplete(),
+-                    isNavBarEmpty(win.getSystemUiVisibility()));
++	    boolean firstboot = SystemProperties.getBoolean("sys.firstboot", false);
++	    if (!firstboot) {
++		mImmersiveModeConfirmation.immersiveModeChangedLw(pkg, newImmersiveMode,
++			mService.mPolicy.isUserSetupComplete(),
++			isNavBarEmpty(win.getSystemUiVisibility()));
++	    }
+         }
+ 
+         vis = mNavigationBarController.updateVisibilityLw(transientNavBarAllowed, oldVis, vis);
+-- 
+2.25.1
+

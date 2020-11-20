@@ -31,6 +31,7 @@ PRODUCT_MAKEFILES := \
   $(LOCAL_DIR)/dart_mx8mq/dart_mx8mq_drm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm.mk \
   $(LOCAL_DIR)/dart_mx8mm/dart_mx8mm_drm.mk \
+  $(LOCAL_DIR)/dart_mx8mp/dart_mx8mp.mk \
   $(LOCAL_DIR)/som_mx8mn/som_mx8mn.mk \
 
 COMMON_LUNCH_CHOICES := \
@@ -42,5 +43,7 @@ COMMON_LUNCH_CHOICES := \
   dart_mx8mm-userdebug \
   dart_mx8mm_drm-user \
   dart_mx8mm_drm-userdebug \
+  dart_mx8mp-user \
+  dart_mx8mp-userdebug \
   som_mx8mn-user \
   som_mx8mn-userdebug

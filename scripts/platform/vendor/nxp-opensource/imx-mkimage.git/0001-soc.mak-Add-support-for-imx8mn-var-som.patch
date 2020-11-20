@@ -1,7 +1,7 @@
-From dccf7bd3759d7ed5fe1ac7609de7e7606e5f92ad Mon Sep 17 00:00:00 2001
+From 7bbdb437135e39c8f6027dbe97bcc4fbec973dbe Mon Sep 17 00:00:00 2001
 From: Nate Drude <nate.d@variscite.com>
 Date: Mon, 24 Aug 2020 15:44:53 -0700
-Subject: [PATCH] soc.mak: Add support for imx8mn-var-som
+Subject: [PATCH 1/2] soc.mak: Add support for imx8mn-var-som
 
 ---
  iMX8M/soc.mak | 6 +++---
@@ -39,5 +39,5 @@ index b7b3986..5a42555 100644
  	./$(DTB_PREPROC) $(PLAT)-ddr4-evk.dtb $(dtbs_ddr4_evk)
  
 -- 
-2.25.0
+2.25.1
 
