@@ -17,6 +17,7 @@ PRODUCT_ROM_SIZE=1792
 FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=7168
+FIRMWARE_SIZE=1
 
 sdshared=false
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
@@ -172,6 +173,11 @@ if [[ -f ${imagesdir}/${superimage_file} ]] ; then
 	dynamic_part="SUPER           : ${SUPER_ROM_SIZE} MiB"
 fi
 
+firmware=""
+if [[ "${soc_name}" = *"mx8qm"* ]]; then
+firmware="FIRMWARE	 : ${FIRMWARE_SIZE} MiB"
+fi
+
 # Get total device size
 seprate=100
 total_size=`sfdisk -s ${node}`
@@ -179,7 +185,11 @@ total_size=`expr ${total_size} \/ 1024`
 boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	if [[ "${soc_name}" = *"mx8qm"* ]]; then
+        	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
+	else
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	fi
 else
 	extend_size=`expr ${SYSTEM_ROM_SIZE} \* 2 + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${VENDOR_ROM_SIZE} \* 2 + ${PRODUCT_ROM_SIZE} \* 2 + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 fi
@@ -202,6 +212,7 @@ USERDATA         : ${data_size} MiB
 FBMISC           : ${FBMISC_SIZE} MiB
 VBMETA_A         : ${VBMETA_SIZE} MiB
 VBMETA_B         : ${VBMETA_SIZE} MiB
+$firmware
 EOF
 
 echo
@@ -319,8 +330,10 @@ function create_parts
 		sgdisk -n 10:0:+${FBMISC_SIZE}M                     -c 10:"fbmisc"     -t 8:8300 $node
 		sgdisk -n 11:0:+${VBMETA_SIZE}M                     -c 11:"vbmeta_a"   -t 9:8300 $node
 		sgdisk -n 12:0:+${VBMETA_SIZE}M                     -c 12:"vbmeta_b"   -t 10:8300 $node
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			sgdisk -n 13:0:+${FIRMWARE_SIZE}M	    -c 13:"firmware"   -t 11:8300 $node
+		fi
 	fi
-
 
 	sync; sleep 2
 
@@ -367,6 +380,11 @@ function format_android
 		dd if=/dev/zero of=${node}${part}6 bs=1M count=${METADATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Formating userdata partition"
 		mkfs.ext4 -F ${node}${part}9 -Ldata
+
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			blue_underlined_bold_echo "Formating firmware partition"
+			mkfs.ext4 -F ${node}${part}13 -Lfirmware
+		fi
 	fi
 	sync; sleep 1
 }
@@ -420,9 +438,19 @@ function install_android
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}11 bs=1M
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}12 bs=1M
 		sync;
+
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			echo
+			blue_underlined_bold_echo "Installing firmware image"
+			mkdir -p /tmp/firmware_mnt
+			mount ${node}${part}13 /tmp/firmware_mnt
+			mkdir -p /tmp/firmware_mnt/firmware/hdp
+			cp ${imagesdir}/*.bin /tmp/firmware_mnt/firmware/hdp
+			sync;
+			umount /tmp/firmware_mnt
+			rm -rf /tmp/firmware_mnt
+		fi
 	fi
-
-
 
 	sleep 1
 }
