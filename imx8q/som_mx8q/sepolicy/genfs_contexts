@@ -1,9 +1,15 @@
-genfscon sysfs /devices/platform/5b010000.usdhc/mmc_host/mmc0/mmc0:0001/block/mmcblk0 u:object_r:sysfs_block_devices:s0
+genfscon sysfs /devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-1/i2c-1/1-0050/power_supply/tcpm-source-psy-1-0050 u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/bus@5a000000/5a800000.i2c/i2c-2/2-0051/power_supply/tcpm-source-psy-2-0051 u:object_r:sysfs_batteryinfo:s0
+genfscon sysfs /devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-1/i2c-1/1-0050/extcon    u:object_r:sysfs_extcon:s0
+genfscon sysfs /devices/platform/bus@5a000000/5a800000.i2c/i2c-2/2-0051/extcon u:object_r:sysfs_extcon:s0
+genfscon sysfs /devices/platform/bus@5b000000/5b010000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0 u:object_r:sysfs_block_devices:s0
+genfscon sysfs /devices/platform/bus@5b000000/5b020000.mmc/mmc_host/mmc1/mmc1:aaaa/block/mmcblk1 u:object_r:sysfs_block_devices:s0
+
+
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
 genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0
 # RTC on SPEAR-MX8
-genfscon sysfs /devices/platform/5a800000.i2c/i2c-0/0-0068/rtc u:object_r:sysfs_rtc:s0
-# RTC on VAR-SOM-MX8X
-genfscon sysfs /devices/platform/5a820000.i2c/i2c-2/2-0068/rtc u:object_r:sysfs_rtc:s0
+genfscon sysfs /devices/platform/bus@5a000000/5a800000.i2c/i2c-0/0-0068/rtc u:object_r:sysfs_rtc:s0
+
 # RTC on VAR-SOM-MX8
-genfscon sysfs /devices/platform/5a840000.i2c/i2c-4/4-0068/rtc u:object_r:sysfs_rtc:s0
+genfscon sysfs /devices/platform/bus@5a000000/5a840000.i2c/i2c-4/4-0068/rtc u:object_r:sysfs_rtc:s0

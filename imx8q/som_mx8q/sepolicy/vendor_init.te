@@ -1,0 +1,3 @@
+allow vendor_init self:capability sys_module;
+#allow vendor_init wifi_data_file:dir { search setattr };
+#allow vendor_init dhcp_data_file:dir setattr;

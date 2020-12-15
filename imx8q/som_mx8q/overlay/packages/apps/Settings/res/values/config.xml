@@ -15,7 +15,8 @@
 -->
 
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="additional_system_update" translatable="false">com.fsl.android.ota</string>
-    <string name="additional_system_update_menu" translatable="false">com.fsl.android.ota.OtaAppActivity</string>
+    <string name="additional_system_update" translatable="false">com.example.android.systemupdatersample</string>
+    <string name="additional_system_update_menu" translatable="false">com.example.android.systemupdatersample.ui.MainActivity</string>
+    <string name="config_work_policy_info_intent_action" translatable="false">com.google.android.settings.privacy.ACTION_SHOW_WORK_POLICY_INFO</string>
 
 </resources>

@@ -29,3 +29,7 @@
 PRODUCT_MAKEFILES := \
   $(LOCAL_DIR)/som_mx8q/som_mx8qm.mk \
   $(LOCAL_DIR)/som_mx8q/som_mx8qx.mk
+
+COMMON_LUNCH_CHOICES := \
+  som_mx8qm-user \
+  som_mx8qm-userdebug 

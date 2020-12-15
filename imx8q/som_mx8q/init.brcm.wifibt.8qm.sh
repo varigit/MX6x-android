@@ -8,8 +8,7 @@ WIFI_EN_GPIO=31
 BT_BUF_GPIO=154
 #BT_EN_GPIO=30
 BT_EN_RFKILL=0
-WIFI_MMC_HOST=5b030000.usdhc
-
+WIFI_MMC_HOST=5b030000.mmc
 ######################################
 # /etc/wifi/variscite-wifi-common.sh #
 ######################################
@@ -179,9 +178,6 @@ wifi_stop()
 #################################################
 #              Execution starts here            #
 #################################################
-
-# always load Ethernet driver
-modprobe -d /vendor/lib/modules fec
 
 wifi_start
 
