@@ -8,8 +8,6 @@ on early-init
     mount debugfs none /sys/kernel/debug/ mode=0755
 
 on early-init
-    start init_brcm_wifibt_sh
-
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
     setprop ro.hardware.keystore ${ro.boot.keystore}
@@ -64,6 +62,7 @@ on late-fs
     # Start keymaster service
     start vendor.keymaster-3-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
+    start init_brcm_wifibt_sh
 
 on late-fs && property:vendor.storageproxyd=trusty
     start vendor.oemlock-1-0
