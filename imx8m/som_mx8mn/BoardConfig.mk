@@ -120,11 +120,11 @@ BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8mn/dtbo-imx8mn-var-som.img
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG := \
 	imx8mn-var-som:imx8mn-var-som.dtb \
-	imx8mn-var-som-v10:imx8mn-var-som-rev10.dtb
+	imx8mn-var-som-legacy:imx8mn-var-som-legacy.dtb
 else
     TARGET_BOARD_DTS_CONFIG :=  \
 	imx8mn-var-som:imx8mn-var-som-no-dynamic_partition.dtb \
-	imx8mn-var-som-v10:imx8mn-var-som-rev10-no-dynamic_partition.dtb
+	imx8mn-var-som-legacy:imx8mn-var-som-no-dynamic_partition-legacy.dtb
 endif
 
 BOARD_SEPOLICY_DIRS := \

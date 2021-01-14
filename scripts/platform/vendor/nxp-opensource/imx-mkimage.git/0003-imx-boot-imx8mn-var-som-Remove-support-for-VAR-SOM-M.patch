@@ -1,0 +1,26 @@
+From 32b805ebe061dbf5b44624d479c642a6acec9c05 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 12 Jan 2021 17:17:28 -0800
+Subject: [PATCH] imx-boot: imx8mn-var-som: Remove support for
+ VAR-SOM-MX8M-NANO SOM revision 1.0
+
+---
+ iMX8M/soc.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index 88a6f7f..908c85f 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -169,7 +169,7 @@ u-boot-ddr4.itb: $(dtbs_ddr4)
+ 	./mkimage_uboot -E -p 0x3000 -f u-boot-ddr4.its u-boot-ddr4.itb
+ 	@rm -f u-boot.its $(dtbs_ddr4)
+ 
+-dtbs_ddr4_evk = $(PLAT)-var-som.dtb $(PLAT)-var-som-rev10.dtb
++dtbs_ddr4_evk = $(PLAT)-var-som-symphony.dtb
+ $(dtbs_ddr4_evk):
+ 	./$(DTB_PREPROC) $(PLAT)-ddr4-evk.dtb $(dtbs_ddr4_evk)
+ 
+-- 
+2.25.1
+
