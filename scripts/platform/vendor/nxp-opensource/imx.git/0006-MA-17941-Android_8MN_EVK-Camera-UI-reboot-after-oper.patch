@@ -1,0 +1,27 @@
+From 2dbf4254ca3ddf27cf624df68e9965dc24402058 Mon Sep 17 00:00:00 2001
+From: fang hui <hui.fang@nxp.com>
+Date: Thu, 14 Jan 2021 14:49:47 -0800
+Subject: [PATCH 2/2] MA-17941 [Android_8MN_EVK]Camera: UI reboot after
+ operating camera for a while.
+
+---
+ libcamera3/USPStream.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/libcamera3/USPStream.cpp b/libcamera3/USPStream.cpp
+index d5aae1d..2889116 100644
+--- a/libcamera3/USPStream.cpp
++++ b/libcamera3/USPStream.cpp
+@@ -227,7 +227,8 @@ int32_t USPStream::allocateBuffersLocked()
+         return 0;
+     }
+ 
+-    int32_t size = getFormatSize();
++//    int32_t size = getFormatSize();
++    int32_t size = ALIGN_PIXEL_16(mWidth) * ALIGN_PIXEL_16(mHeight) * 4;
+     if ((mWidth == 0) || (mHeight == 0) || (size == 0)) {
+         ALOGE("%s: width, height or size is 0", __func__);
+         return BAD_VALUE;
+-- 
+2.25.1
+
