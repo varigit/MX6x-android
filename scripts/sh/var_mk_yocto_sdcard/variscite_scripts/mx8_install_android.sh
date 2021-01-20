@@ -142,9 +142,16 @@ if [[ "${soc_name}" = *"mx8mp"* ]]; then
 	bootloader_file="u-boot-imx8mp-var-dart.imx"
 fi
 
+
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qxp.imx"
+	if [[ -f "${imagesdir}/u-boot-imx8qxpb0-var-som.imx" ]]; then
+		bootloader_file="u-boot-imx8qxpb0-var-som.imx"
+	elif [[ -f "${imagesdir}/u-boot-imx8qxp-var-som.imx" ]]; then
+		bootloader_file="u-boot-imx8qxp-var-som.imx"
+	else
+		echo; red_bold_echo "ERROR: no bootloader image present"
+	fi
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then

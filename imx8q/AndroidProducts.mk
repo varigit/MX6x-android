@@ -32,4 +32,6 @@ PRODUCT_MAKEFILES := \
 
 COMMON_LUNCH_CHOICES := \
   som_mx8qm-user \
-  som_mx8qm-userdebug 
+  som_mx8qm-userdebug \
+  som_mx8qx-user \
+  som_mx8qx-userdebug
