@@ -35,6 +35,13 @@ readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
 VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
 
 
+SC_MX8_FAMILY=$1
+readonly SCFW_BRANCH="1.5.1"
+readonly SRCREV="495e846a5e1ff5d4208c2fb6529397d80c40ebf7"
+readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
+readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
+readonly PRE_BUILTS_GCC_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
+
 # print error message
 # p1 - printing string
 function pr_error() {
@@ -93,6 +100,45 @@ function is_branch_exist()
 
 	cd ${HERE} > /dev/null
 	return
+}
+
+#Download SCFW and tools
+function scfw_tools_setup()
+{
+	pr_info "####################################"
+	pr_info "# Copy SCFW FW code and tool chain #"
+	pr_info "####################################"
+
+	case $1 in
+	      $"qx")
+		cd ${PRE_BUILTS_GCC_PATH}
+		if [[ ! -d "imx-sc-firmware" ]] ; then
+			git clone git://github.com/varigit/imx-sc-firmware.git
+		fi
+
+		if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then
+			wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/${GCC_ARM_NONE_TOOL}
+		fi
+
+		checksum=`md5sum ${GCC_ARM_NONE_TOOL} | awk '{ print $1 }'`
+
+		if [[ ${GCC_ARM_NONE_EABI_MD5SUM} = ${checksum} ]]; then
+			tar xf ${GCC_ARM_NONE_TOOL}
+		else
+			echo; red_bold_echo "Bad md5sum for ${GCC_ARM_NONE_TOOL}"
+			exit 1
+		fi
+
+		cd imx-sc-firmware/
+		existed_in_local=$(git branch --list ${SCFW_BRANCH})
+		if [[ -z ${existed_in_local} ]]; then
+			git checkout ${SRCREV} -b ${SCFW_BRANCH}
+		else
+		    echo "${SCFW_BRANCH} already exists"
+		fi
+	   ;;
+	*)
+	esac
 }
 
 ############### main code ##############
@@ -161,6 +207,10 @@ pr_info "#######################"
 	tar -xJf ${G_CROSS_COMPILER_ARCHIVE} \
 		-C .
 };
+
+if [[ ! -z $SC_MX8_FAMILY ]] ; then
+	scfw_tools_setup ${SC_MX8_FAMILY}
+fi
 
 pr_info "#####################"
 pr_info "# Done             #"
