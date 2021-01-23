@@ -25,10 +25,8 @@ endif
 
 TARGET_BOOTLOADER_CONFIG := \
 	imx8qxp-var-som:imx8qxp_var_som_android_defconfig \
-        imx8qxpb0-var-som:imx8qxp_var_som_android_defconfig
+        imx8qxpb0-var-som:imx8qxp_var_som_android_defconfig \
+        imx8qxp-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig \
+        imx8qxpb0-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig
 
-#        imx8qxp-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig \
-#        imx8qxpb0-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig
 
-#        imx8qxp:imx8qxp_var_som_android_defconfig
-#        imx8qxp-som-uuu:imx8qxp_var_som_android_uuu_defconfig
