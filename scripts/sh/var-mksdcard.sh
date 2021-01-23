@@ -72,9 +72,15 @@ elif [[ "${soc_name}" = *"mx8mp"* ]]; then
 elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 	imagesdir="out/target/product/dart_mx8mq"
 	sdshared=true
+elif [[ "${soc_name}" = *"mx8qxpb0"* ]]; then
+	imagesdir="out/target/product/som_mx8q"
+	sdshared=true
+	bootloader_file="u-boot-imx8qxpb0-var-som.imx"
+	socname_dtbo_mismatch=true
 elif [[ "${soc_name}" = *"mx8qx"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 	sdshared=true
+	bootloader_file="u-boot-imx8qxp-var-som.imx"
 elif [[ "${soc_name}" = *"mx8qm"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 fi
@@ -96,7 +102,9 @@ done
 
 # check for dtb
 if [[ $soc_name != "showoptions" ]] && [[ ! ${img_list[@]} =~ $soc_name ]] ; then
-	echo; red_bold_echo "ERROR: invalid dtb $soc_name"
+	if [ "$socname_dtbo_mismatch" != true ] ; then
+		echo; red_bold_echo "ERROR: invalid dtb $soc_name"
+	fi
 	soc_name=showoptions
 fi
 
@@ -163,7 +171,6 @@ fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qxp.imx"
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then
