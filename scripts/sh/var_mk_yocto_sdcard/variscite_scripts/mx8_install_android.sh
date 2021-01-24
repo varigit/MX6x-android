@@ -70,15 +70,18 @@ img_list=()
 # generate options list
 for img in $(eval $img_search_str)
 do
-	img=$(basename $img .img)
-	img=${img#${img_prefix}}
+	img=$(basename $img)
 
-	if [ "$img" = "imx8mm-var-dart" ]; then
-		img_list+=("$img.dtb  (DART-MX8M-MINI)")
-	elif [ "$img" = "imx8mm-var-som-legacy" ]; then
-		img_list+=("$img.dtb (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
-	elif  [ "$img" = "imx8mm-var-som" ]; then
-		img_list+=("$img.dtb (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
+	if [[ "$img" == *"imx8mm-var-dart"* ]]; then
+		img_list+=("$img  (DART-MX8M-MINI)")
+	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
+	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
+	elif  [[ "$img" == *"imx8mn-var-som-legacy"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
+	elif  [[ "$img" == *"imx8mn-var-som"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4A and above)")
 	else
 		img_list+=($img)
 	fi
@@ -95,15 +98,16 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} == 1 ]] ; then
 fi
 
 if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
-	PS3='Please choose your configuration: '
+	PS3='Please choose the correct dtbo image for your board configuration: '
 	select opt in "${img_list[@]}"
 	do
 		if [[ -z "$opt" ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN" /sys/devices/soc0/soc_id; then
 				soc_name=`echo $opt | cut -d "." -f1`
+				soc_name=${soc_name#${img_prefix}}
 			else
 				soc_name=$opt
 			fi
