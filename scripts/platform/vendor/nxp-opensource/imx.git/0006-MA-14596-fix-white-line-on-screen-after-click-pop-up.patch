@@ -1,0 +1,35 @@
+From 7e1697fe875a217063392dfe6509ada9cc328377 Mon Sep 17 00:00:00 2001
+From: Jessie Hao <juan.hao@nxp.com>
+Date: Thu, 11 Apr 2019 17:28:03 +0800
+Subject: [PATCH] MA-14596 fix white line on screen after click pop up window.
+
+When click pop up window, the dim layer buffer is allocated from ION.
+Found this issue happened if not flush cache.
+Here add USAGE_SW_WRITE_OFTEN and USAGE_SW_READ_OFTEN to make sure ION won't
+skip flush cache.
+
+Change-Id: I05b5c268e5191a59dc4c17a06a507fd010aca6f6
+Signed-off-by: Jessie Hao <juan.hao@nxp.com>
+Reviewed-on: http://androidsource.ap.freescale.net/project/8137
+Reviewed-by: Xuegang Liu <xuegang.liu@nxp.com>
+---
+ display/display/Composer.cpp | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/display/display/Composer.cpp b/display/display/Composer.cpp
+index b7e3d98..7e7a6b0 100644
+--- a/display/display/Composer.cpp
++++ b/display/display/Composer.cpp
+@@ -225,7 +225,8 @@ int Composer::checkDimBuffer()
+     desc.mFormat = mTarget->format;
+     desc.mFslFormat = mTarget->fslFormat;
+     desc.mProduceUsage |= USAGE_HW_COMPOSER |
+-                          USAGE_HW_2D | USAGE_HW_RENDER;
++                          USAGE_HW_2D | USAGE_HW_RENDER |
++                          USAGE_SW_WRITE_OFTEN | USAGE_SW_READ_OFTEN;
+     desc.mFlag = FLAGS_DIMBUFFER;
+     desc.checkFormat();
+     int ret = pManager->allocMemory(desc, &mDimBuffer);
+-- 
+2.7.4
+
