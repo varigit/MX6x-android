@@ -72,8 +72,10 @@ for img in $(eval $img_search_str)
 do
 	img=$(basename $img)
 
-	if [[ "$img" == *"imx8mm-var-dart"* ]]; then
-		img_list+=("$img  (DART-MX8M-MINI)")
+	if [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
+		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
+	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard"* ]]; then
+		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x)")
 	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then
