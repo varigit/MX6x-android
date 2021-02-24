@@ -108,10 +108,11 @@ $(error "TARGET_USERIMAGES_USE_UBIFS and TARGET_USERIMAGES_USE_EXT4 config open 
 endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart-dt8mcustomboard.img
 
 TARGET_BOARD_DTS_CONFIG := \
-        imx8mm-var-dart:fsl-imx8mm-var-dart.dtb \
+        imx8mm-var-dart-dt8mcustomboard:fsl-imx8mm-var-dart-dt8mcustomboard.dtb \
+        imx8mm-var-dart-dt8mcustomboard-legacy:fsl-imx8mm-var-dart-dt8mcustomboard-legacy.dtb \
 	imx8mm-var-som:fsl-imx8mm-var-som.dtb \
 	imx8mm-var-som-legacy:fsl-imx8mm-var-som-legacy.dtb \
 
