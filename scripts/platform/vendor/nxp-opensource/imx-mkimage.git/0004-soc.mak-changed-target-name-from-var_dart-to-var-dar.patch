@@ -1,0 +1,26 @@
+From d689d9bb4e62c6ccce757dad761afc1a2598552e Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 2 Mar 2021 11:19:15 -0800
+Subject: [PATCH] soc.mak: changed target name from var_dart to
+ var-dart-customboard
+
+---
+ iMX8M/soc.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index 908c85f..9bab8a1 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -135,7 +135,7 @@ clean:
+ 
+ dtbs = evk.dtb
+ $(dtbs):
+-	./$(DTB_PREPROC) $(PLAT)-var-dart.dtb $(dtbs)
++	./$(DTB_PREPROC) $(PLAT)-var-dart-customboard.dtb $(dtbs)
+ 
+ u-boot.itb: $(dtbs)
+ 	./$(PAD_IMAGE) tee.bin
+-- 
+2.25.1
+

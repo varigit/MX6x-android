@@ -73,7 +73,23 @@ do
 	img=$(basename $img)
 
 	if [[ "$img" == *"imx8mm-var-dart"* ]]; then
-		img_list+=("$img  (DART-MX8M-MINI)")
+		img_list+=("$img (DART-MX8M-MINI)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+HDMI)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+HDMI)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+DP)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+DP)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS+HDMI)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
 	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then

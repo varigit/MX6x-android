@@ -114,44 +114,26 @@ endif
 endif
 
 #BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-sd-lvds.img
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-wifi-lvds.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mq/dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG := \
-	 imx8mq-var-dart-wifi-lvds:imx8mq-var-dart-wifi-lvds.dtb \
-	 imx8mq-var-dart-wifi-hdmi:imx8mq-var-dart-wifi-hdmi.dtb \
-	 imx8mq-var-dart-wifi-lvds-hdmi:imx8mq-var-dart-wifi-lvds-hdmi.dtb \
-	 imx8mq-var-dart-wifi-dp:imx8mq-var-dart-wifi-dp.dtb \
-         imx8mq-var-dart-wifi-lvds-cb12:imx8mq-var-dart-wifi-lvds-cb12.dtb \
-         imx8mq-var-dart-wifi-lvds-hdmi-cb12:imx8mq-var-dart-wifi-lvds-hdmi-cb12.dtb \
-         imx8mq-var-dart-wifi-hdmi-cb12:imx8mq-var-dart-wifi-hdmi-cb12.dtb \
-         imx8mq-var-dart-sd-lvds-cb12:imx8mq-var-dart-sd-lvds-cb12.dtb \
-         imx8mq-var-dart-sd-lvds-hdmi-cb12:imx8mq-var-dart-sd-lvds-hdmi-cb12.dtb \
-         imx8mq-var-dart-sd-hdmi-cb12:imx8mq-var-dart-sd-hdmi-cb12.dtb \
-         imx8mq-var-dart-wifi-lvds-dp:imx8mq-var-dart-wifi-lvds-dp.dtb \
-         imx8mq-var-dart-sd-lvds:imx8mq-var-dart-sd-lvds.dtb \
-         imx8mq-var-dart-sd-lvds-hdmi:imx8mq-var-dart-sd-lvds-hdmi.dtb \
-         imx8mq-var-dart-sd-lvds-dp:imx8mq-var-dart-sd-lvds-dp.dtb \
-         imx8mq-var-dart-sd-hdmi:imx8mq-var-dart-sd-hdmi.dtb \
-         imx8mq-var-dart-sd-dp:imx8mq-var-dart-sd-dp.dtb
-else # no dynamic parition feature
-    TARGET_BOARD_DTS_CONFIG := \
-	 imx8mq-var-dart-wifi-lvds:imx8mq-var-dart-wifi-lvds-no-dynamic_partition.dtb \
-	 imx8mq-var-dart-wifi-hdmi:imx8mq-var-dart-wifi-hdmi-no-dynamic_partition.dtb \
-	 imx8mq-var-dart-wifi-lvds-hdmi:imx8mq-var-dart-wifi-lvds-hdmi-no-dynamic_partition.dtb \
-	 imx8mq-var-dart-wifi-dp:imx8mq-var-dart-wifi-dp-no-dynamic_partition.dtb \
-         imx8mq-var-dart-wifi-lvds-cb12:imx8mq-var-dart-wifi-lvds-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-wifi-lvds-hdmi-cb12:imx8mq-var-dart-wifi-lvds-hdmi-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-wifi-hdmi-cb12:imx8mq-var-dart-wifi-hdmi-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-lvds-cb12:imx8mq-var-dart-sd-lvds-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-lvds-hdmi-cb12:imx8mq-var-dart-sd-lvds-hdmi-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-hdmi-cb12:imx8mq-var-dart-sd-hdmi-cb12-no-dynamic_partition.dtb \
-         imx8mq-var-dart-wifi-lvds-dp:imx8mq-var-dart-wifi-lvds-dp-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-lvds:imx8mq-var-dart-sd-lvds-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-lvds-hdmi:imx8mq-var-dart-sd-lvds-hdmi-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-lvds-dp:imx8mq-var-dart-sd-lvds-dp-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-hdmi:imx8mq-var-dart-sd-hdmi-no-dynamic_partition.dtb \
-         imx8mq-var-dart-sd-dp:imx8mq-var-dart-sd-dp-no-dynamic_partition.dtb
+	imx8mq-var-dart-dt8mcustomboard-wifi-lvds:imx8mq-var-dart-dt8mcustomboard-wifi-lvds.dtb \
+	imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi:imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-wifi-hdmi:imx8mq-var-dart-dt8mcustomboard-wifi-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-sd-lvds-hdmi:imx8mq-var-dart-dt8mcustomboard-sd-lvds-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-sd-lvds:imx8mq-var-dart-dt8mcustomboard-sd-lvds.dtb \
+	imx8mq-var-dart-dt8mcustomboard-sd-hdmi:imx8mq-var-dart-dt8mcustomboard-sd-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-sd-dp:imx8mq-var-dart-dt8mcustomboard-legacy-sd-dp.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-sd-hdmi:imx8mq-var-dart-dt8mcustomboard-legacy-sd-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds-dp:imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds-dp.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds:imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds-hdmi:imx8mq-var-dart-dt8mcustomboard-legacy-sd-lvds-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp:imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi:imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp:imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds:imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds.dtb \
+	imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi:imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi.dtb
 endif
 
 BOARD_SEPOLICY_DIRS := \
