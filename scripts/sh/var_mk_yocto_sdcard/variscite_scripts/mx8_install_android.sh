@@ -72,8 +72,10 @@ for img in $(eval $img_search_str)
 do
 	img=$(basename $img)
 
-	if [[ "$img" == *"imx8mm-var-dart"* ]]; then
-		img_list+=("$img (DART-MX8M-MINI)")
+	if [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
+		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
+	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard"* ]]; then
+		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+HDMI)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
@@ -121,7 +123,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM\|i.MX8MN" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ" /sys/devices/soc0/soc_id; then
 				soc_name=`echo $opt | cut -d "." -f1`
 				soc_name=${soc_name#${img_prefix}}
 			else
