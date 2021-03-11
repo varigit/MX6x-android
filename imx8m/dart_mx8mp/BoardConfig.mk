@@ -109,16 +109,17 @@ $(error "TARGET_USERIMAGES_USE_UBIFS and TARGET_USERIMAGES_USE_EXT4 config open 
 endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mp/dtbo-imx8mp-var-dart.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mp/dtbo-imx8mp-var-dart-dt8mcustomboard.img
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
     TARGET_BOARD_DTS_CONFIG := \
-	 imx8mp-var-dart:imx8mp-var-dart.dtb \
-	 imx8mp-var-som:imx8mp-var-som.dtb
-else # no dynamic parition feature
-    TARGET_BOARD_DTS_CONFIG := \
-	 imx8mp-var-dart:imx8mp-var-dart-no-dynamic_partition.dtb \
-	 imx8mp-var-som:imx8mp-var-som-no-dynamic_partition.dtb
+	 imx8mp-var-som-symphony:imx8mp-var-som-symphony.dtb \
+	 imx8mp-var-som-symphony-hdmi:imx8mp-var-som-symphony-hdmi.dtb \
+	 imx8mp-var-som-symphony-2nd-ov5640:imx8mp-var-som-symphony-2nd-ov5640.dtb \
+	 imx8mp-var-dart-dt8mcustomboard:imx8mp-var-dart-dt8mcustomboard.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-legacy:imx8mp-var-dart-dt8mcustomboard-legacy.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-hdmi:imx8mp-var-dart-dt8mcustomboard-hdmi.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-legacy-hdmi:imx8mp-var-dart-dt8mcustomboard-legacy-hdmi.dtb
 endif
 
 BOARD_SEPOLICY_DIRS := \

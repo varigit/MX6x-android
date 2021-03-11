@@ -11,6 +11,7 @@
     {
       "camera_type": "back",
       "camera_name": "mxc-isi-cap",
+      "device_node": "/dev/video1",
       "orientation": "0",
       "buffer_type": "dma",
       "ActiveArrayWidth": "2592",
@@ -27,6 +28,7 @@
     {
       "camera_type": "front",
       "camera_name": "mxc-isi-cap",
+      "device_node": "/dev/video2",
       "orientation": "0",
       "buffer_type": "dma",
       "ActiveArrayWidth": "2592",

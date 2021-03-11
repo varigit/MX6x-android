@@ -1,7 +1,7 @@
-From 774a5368b07f9f0a6336032c82c25f5cbc197180 Mon Sep 17 00:00:00 2001
-From: Mohit Singh <mohit.p@variscite.com>
-Date: Thu, 10 Dec 2020 15:40:30 -0800
-Subject: [PATCH] Camera: OV5640 auto focus support.
+From 8b6a50e36665bceaf328bc3815fdd812715ff0ac Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Mon, 8 Feb 2021 16:21:02 -0800
+Subject: [PATCH] imx8mp_var_dart: ov5640 auto focus support
 
 ---
  libcamera3/Camera.cpp    |  62 ++++++++++++++++++---
@@ -13,7 +13,7 @@ Subject: [PATCH] Camera: OV5640 auto focus support.
  6 files changed, 201 insertions(+), 14 deletions(-)
 
 diff --git a/libcamera3/Camera.cpp b/libcamera3/Camera.cpp
-index 77691b1..e735fe6 100644
+index 6894316..d339bd8 100644
 --- a/libcamera3/Camera.cpp
 +++ b/libcamera3/Camera.cpp
 @@ -41,6 +41,11 @@
@@ -86,7 +86,7 @@ index 77691b1..e735fe6 100644
      settings->addUInt8(ANDROID_CONTROL_AF_STATE, 1, &m3aState.afState);
  
      // auto white balance control.
-     m3aState.awbState = ANDROID_CONTROL_AWB_STATE_INACTIVE;
+     m3aState.awbState = ANDROID_CONTROL_AWB_STATE_CONVERGED;
      settings->addUInt8(ANDROID_CONTROL_AWB_STATE, 1, &m3aState.awbState);
  
 -    entry = settings->find(ANDROID_CONTROL_AF_TRIGGER_ID);
@@ -99,7 +99,7 @@ index 77691b1..e735fe6 100644
  
      notifyShutter(frame, timestamp);
 diff --git a/libcamera3/Camera.h b/libcamera3/Camera.h
-index d913094..9d2d1d1 100644
+index 2c4cb3c..5aea55d 100644
 --- a/libcamera3/Camera.h
 +++ b/libcamera3/Camera.h
 @@ -88,6 +88,16 @@ protected:
@@ -288,7 +288,7 @@ index 17878ce..b5169a1 100644
      class ImxCameraMMAPStream : public MMAPStream
      {
 diff --git a/libcamera3/Metadata.cpp b/libcamera3/Metadata.cpp
-index a3dc117..d3ddcc1 100644
+index 816db72..b05216a 100644
 --- a/libcamera3/Metadata.cpp
 +++ b/libcamera3/Metadata.cpp
 @@ -203,7 +203,7 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
@@ -325,10 +325,10 @@ index a3dc117..d3ddcc1 100644
 +    m.addUInt8(ANDROID_CONTROL_AF_AVAILABLE_MODES, sizeof(availableAfModes),
 +               availableAfModes);
 +
-     /* android.request */
-     int32_t android_request_max_num_output_streams[] = {0, 3, 1};
-     m.addInt32(ANDROID_REQUEST_MAX_NUM_OUTPUT_STREAMS,
-@@ -492,9 +506,6 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
+     uint8_t android_lens_info_focus_distance_calibration[] = {
+             ANDROID_LENS_INFO_FOCUS_DISTANCE_CALIBRATION_CALIBRATED};
+     m.addUInt8(ANDROID_LENS_INFO_FOCUS_DISTANCE_CALIBRATION,
+@@ -512,9 +526,6 @@ camera_metadata_t* Metadata::createStaticInfo(SensorData& sensor, camera_info &c
      static const uint8_t availableAeModes[] = {ANDROID_CONTROL_AE_MODE_OFF, ANDROID_CONTROL_AE_MODE_ON};
      m.addUInt8(ANDROID_CONTROL_AE_AVAILABLE_MODES, ARRAY_SIZE(availableAeModes), availableAeModes);
  
@@ -353,5 +353,5 @@ index 41337d3..2ad7050 100644
  private:
      // message type.
 -- 
-2.25.0
+2.25.1
 

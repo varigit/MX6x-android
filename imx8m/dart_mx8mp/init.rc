@@ -249,7 +249,7 @@ on boot
     start drm
 
 on property:sys.brcm.wifibt.completed=1
-    start early_init_sh
+   start early_init_sh
 
 on property:vendor.wc_transport.start_hci=true
     start start_hci_filter
