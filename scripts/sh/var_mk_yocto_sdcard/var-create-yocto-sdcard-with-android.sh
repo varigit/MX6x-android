@@ -9,18 +9,17 @@ readonly SCRIPT_VERSION="0.8"
 #### global variables ####
 readonly ABSOLUTE_FILENAME=`readlink -e "$0"`
 readonly ABSOLUTE_DIRECTORY=`dirname ${ABSOLUTE_FILENAME}`
-readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-fslc/scripts/
+readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-imx/scripts/
 
 ANDROID_SCRIPTS_PATH=${SCRIPT_POINT}/var_mk_yocto_sdcard/variscite_scripts
-#ANDROID_BUILD_ROOT=~/var_imx-android-10.0.0_2.5.0/android_build
-ANDROID_BUILD_ROOT=/media/nvme1/Android_10_2_5_Clean_Jan_21/android_build
+ANDROID_BUILD_ROOT=~/var_imx-android-10.0.0_2.6.0/android_build
 
 TEMP_DIR=./var_tmp
 ROOTFS_MOUNT_DIR=${TEMP_DIR}/rootfs
 
 help() {
 	bn=`basename $0`
-	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-som> $bn device_node"
+	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn device_node"
 	echo
 }
 
