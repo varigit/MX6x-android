@@ -110,19 +110,22 @@ git checkout ee653d2845b0029c14f49ca83a2f6c02037ec239 -b ${BASE_BRANCH_NAME}
 
 pr_info "clone ${VENDOR_BASE_DIR}/wlan"
 git clone http://git.omapzoom.org/platform/hardware/ti/wlan.git ${VENDOR_BASE_DIR}/wlan || \
-git clone  git://git.omapzoom.org/platform/hardware/ti/wlan.git ${VENDOR_BASE_DIR}/wlan
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/hardware/ti/wlan.git ${VENDOR_BASE_DIR}/wlan)
 cd ${VENDOR_BASE_DIR}/wlan > /dev/null
 git checkout 419996bb80d88f39e4587c746cb45c3af9a7eef3 -b ${BASE_BRANCH_NAME}
 
 pr_info "clone ${VENDOR_BASE_DIR}/wpan"
 git clone http://git.omapzoom.org/platform/hardware/ti/wpan.git ${VENDOR_BASE_DIR}/wpan || \
-git clone  git://git.omapzoom.org/platform/hardware/ti/wpan.git ${VENDOR_BASE_DIR}/wpan
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/hardware/ti/wpan.git ${VENDOR_BASE_DIR}/wpan)
 cd ${VENDOR_BASE_DIR}/wpan > /dev/null
 git checkout a13583ac4b7bb513d1329a98f063272f01f1855e -b ${BASE_BRANCH_NAME}
 
 pr_info "clone externel/crda"
 git clone http://git.omapzoom.org/platform/external/crda.git ${VENDOR_BASE_DIR}/crda || \
-git clone  git://git.omapzoom.org/platform/external/crda.git ${VENDOR_BASE_DIR}/crda
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/external/crda.git ${VENDOR_BASE_DIR}/crda)
 cd ${VENDOR_BASE_DIR}/crda > /dev/null
 git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058 -b ${BASE_BRANCH_NAME}
 
