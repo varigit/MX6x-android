@@ -113,7 +113,8 @@ cd ${ANDROID_DIR}/hardware/ti > /dev/null
 
 pr_info "clone hardware/ti/wlan"
 git clone http://git.omapzoom.org/platform/hardware/ti/wlan.git ${ANDROID_DIR}/hardware/ti/wlan || \
-git clone  git://git.omapzoom.org/platform/hardware/ti/wlan.git ${ANDROID_DIR}/hardware/ti/wlan
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/hardware/ti/wlan.git ${ANDROID_DIR}/hardware/ti/wlan)
 cd ${ANDROID_DIR}/hardware/ti/wlan > /dev/null
 git checkout f5d0bf6a7f7955c0a06d0719555fba4b89ddcfc1 -b ${BASE_BRANCH_NAME}
 
@@ -124,7 +125,8 @@ git checkout 2fda42511e5ebcc48ea4b1996782d5cff263ef23 -b ${BASE_BRANCH_NAME}
 
 pr_info "clone hardware/ti/wpan"
 git clone http://git.omapzoom.org/platform/hardware/ti/wpan.git ${ANDROID_DIR}/hardware/ti/wpan || \
-git clone  git://git.omapzoom.org/platform/hardware/ti/wpan.git ${ANDROID_DIR}/hardware/ti/wpan
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/hardware/ti/wpan.git ${ANDROID_DIR}/hardware/ti/wpan)
 cd ${ANDROID_DIR}/hardware/ti/wpan > /dev/null
 git checkout 32acb67605cb0d91955427fc4195205e8bc8eaf4 -b ${BASE_BRANCH_NAME}
 
@@ -139,7 +141,8 @@ git checkout 0e13f1bf114dc6220e6a94f80bedb3f6169e1bf1 -b ${BASE_BRANCH_NAME}
 pr_info "clone externel/crda"
 mkdir -p ${ANDROID_DIR}/external && :;
 git clone http://git.omapzoom.org/platform/external/crda.git ${ANDROID_DIR}/external/crda || \
-git clone  git://git.omapzoom.org/platform/external/crda.git ${ANDROID_DIR}/external/crda
+(echo "Trying another URL:" && \
+git clone  git://git.omapzoom.org/platform/external/crda.git ${ANDROID_DIR}/external/crda)
 cd ${ANDROID_DIR}/external/crda > /dev/null
 git checkout c49a083c96fe60682ddf2ba9cddc9003b5564058 -b ${BASE_BRANCH_NAME}
 
