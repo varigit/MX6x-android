@@ -203,6 +203,23 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
+# ro.product.first_api_level indicates the first api level the device has commercially launched on.
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.typec.legacy=true
+
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
+
 PRODUCT_PACKAGES += \
     libEGL_VIVANTE \
     libGLESv1_CM_VIVANTE \
