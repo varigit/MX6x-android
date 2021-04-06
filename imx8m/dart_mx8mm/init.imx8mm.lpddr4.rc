@@ -1,0 +1,32 @@
+on early-boot
+    # Prepare for wifi
+    setprop wifi.interface wlan0
+    setprop wifi.direct.interface p2p0
+    setprop wifi.concurrent.interface wlan1
+
+    setprop vendor.qcom.bluetooth.soc rome_uart
+    setprop vendor.wc_transport.start_hci false
+
+on property:vendor.wc_transport.start_hci=true
+    start start_hci_filter
+
+on property:vendor.wc_transport.start_hci=false
+    stop start_hci_filter
+
+service start_hci_filter /vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth diag
+    disabled
+
+on property:vendor.wc_transport.start_root=true
+    start hci_filter_root
+
+on property:vendor.wc_transport.start_root=false
+    stop hci_filter_root
+
+service hci_filter_root /vendor/bin/wcnss_filter
+    class late_start
+    user bluetooth
+    group bluetooth diag system
+    disabled

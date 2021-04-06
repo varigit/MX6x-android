@@ -1,0 +1,67 @@
+From e1462557b9563ca768a9971c0942eeee0bce57d4 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Mon, 22 Mar 2021 12:34:47 -0700
+Subject: [PATCH] Android: Changes required to compile android-11.0.0_1.0.0
+
+---
+ common/build/Makefile    | 7 ++++---
+ common/tools/imx-make.sh | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/common/build/Makefile b/common/build/Makefile
+index f27136ce..c7132b51 100644
+--- a/common/build/Makefile
++++ b/common/build/Makefile
+@@ -23,13 +23,14 @@ HOST_PREBUILT_TAG := $(HOST_OS)-${HOST_PREBUILT_ARCH}
+ 
+ # firstly to include UbootKernelCommonConfig.mk, then SharedBoardConfig.mk, finally UbootKernelBoardConfig.mk
+ 
+-include ${nxp_git_path}/common/imx_path/ImxPathConfig.mk
++include ${fsl_git_path}/../nxp/common/imx_path/ImxPathConfig.mk
++include ${fsl_git_path}/common/VarPathConfig.mk
+ include ${soc_path}/UbootKernelCommonConfig.mk
+ include ${product_path}/SharedBoardConfig.mk
+ include ${product_path}/UbootKernelBoardConfig.mk
+ 
+-include ${nxp_git_path}/common/build/kernel.mk
+-include ${nxp_git_path}/common/build/uboot.mk
++include ${fsl_git_path}/../nxp/common/build/kernel.mk
++include ${fsl_git_path}/../nxp/common/build/uboot.mk
+ -include ${product_path}/AndroidUboot.mk
+ -include ${product_path}/AndroidTee.mk
+ -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index ba38da3b..be309a6b 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -126,10 +126,11 @@ if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
+     build_kernel_module_flag=1;
+ fi
+ 
+-product_makefile=`pwd`/`find device/nxp -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
++product_makefile=`pwd`/`find device/variscite -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
+ product_path=${product_makefile%/*}
+ soc_path=${product_path%/*}
+ nxp_git_path=${soc_path%/*}
++export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
+ 
+ # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
+ if [ -n "${build_bootloader}" ]; then
+@@ -138,12 +139,12 @@ fi
+ 
+ # redirect standard input to /dev/null to avoid manually input in kernel configuration stage
+ soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-    make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++    make -C ./ -f ${nxp_git_path}../nxp/common/build/Makefile ${parallel_option} \
+     ${build_bootloader} ${build_kernel} </dev/null || exit
+ 
+ if [ ${build_kernel_module_flag} -eq 1 ]; then
+     soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-        make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++        make -C ./ -f ${nxp_git_path}/../nxp/common/build/Makefile ${parallel_option} \
+         ${build_vvcam} ${build_galcore} </dev/null || exit
+ fi
+ 
+-- 
+2.25.1
+

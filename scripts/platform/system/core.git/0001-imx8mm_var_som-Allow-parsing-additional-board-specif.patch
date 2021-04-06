@@ -1,6 +1,6 @@
-From 3eb421c28bbffbdd805f4c069426c77021635542 Mon Sep 17 00:00:00 2001
-From: Mohit Singh <pal.mohit.singh@gmail.com>
-Date: Fri, 27 Mar 2020 14:25:59 -0700
+From 4e7c86ba74926b1584d6d4cc6f432c42fbc65afd Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Mon, 22 Mar 2021 12:22:30 -0700
 Subject: [PATCH] imx8mm_var_som: Allow parsing additional board specific
  permissions.
 
@@ -9,18 +9,18 @@ Subject: [PATCH] imx8mm_var_som: Allow parsing additional board specific
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/init/ueventd.cpp b/init/ueventd.cpp
-index 399ea4c5c..f42c4c28d 100644
+index d2b503b4f..f4bcfad78 100644
 --- a/init/ueventd.cpp
 +++ b/init/ueventd.cpp
-@@ -238,9 +238,10 @@ int ueventd_main(int argc, char** argv) {
+@@ -287,9 +287,10 @@ int ueventd_main(int argc, char** argv) {
      // allow it to override everything.
      // TODO: cleanup platform ueventd.rc to remove vendor specific device node entries (b/34968103)
      auto hardware = android::base::GetProperty("ro.hardware", "");
 +    auto board = android::base::GetProperty("ro.boot.board", "");
  
-     auto ueventd_configuration = ParseConfig({"/ueventd.rc", "/vendor/ueventd.rc",
+     auto ueventd_configuration = ParseConfig({"/system/etc/ueventd.rc", "/vendor/ueventd.rc",
 -                                              "/odm/ueventd.rc", "/ueventd." + hardware + ".rc"});
-+                                              "/odm/ueventd.rc", "/ueventd." + hardware + ".rc", "/vendor/ueventd."+ board + ".rc" });
++                                              "/odm/ueventd.rc", "/ueventd." + hardware + ".rc", "/vendor/ueventd."+ board + ".rc"});
  
      uevent_handlers.emplace_back(std::make_unique<DeviceHandler>(
              std::move(ueventd_configuration.dev_permissions),

@@ -24,10 +24,10 @@ readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gc
 readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
 
-readonly BASE_BRANCH_NAME="base_q10.0.0_2.6.0"
+readonly BASE_BRANCH_NAME="android-11.0.0_1.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="q10.0.0_2.6.0-var01"
+readonly _EXTPARAM_BRANCH="android-11.0.0_1.0.0-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"

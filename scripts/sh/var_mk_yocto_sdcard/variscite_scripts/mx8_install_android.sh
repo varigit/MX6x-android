@@ -10,14 +10,14 @@ DTBO_ROM_SIZE=4
 BOOT_ROM_SIZE=70
 SYSTEM_ROM_SIZE=1792
 MISC_SIZE=4
-METADATA_SIZE=2
+METADATA_SIZE=16
 PRESISTDATA_SIZE=1
 VENDOR_ROM_SIZE=512
 PRODUCT_ROM_SIZE=1792
 FBMISC_SIZE=1
 VBMETA_SIZE=1
-SUPER_ROM_SIZE=7168
-FIRMWARE_SIZE=1
+SUPER_ROM_SIZE=3584
+VENDOR_BOOT_SIZE=70
 
 sdshared=false
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
@@ -153,6 +153,7 @@ fi
 
 dtboimage_file="dtbo-${soc_name}.img"
 bootimage_file="boot.img"
+vendor_bootimage_file="vendor_boot.img"
 vbmeta_file="vbmeta-${soc_name}.img"
 systemimage_file="system.img"
 vendorimage_file="vendor.img"
@@ -238,14 +239,10 @@ fi
 seprate=100
 total_size=`sfdisk -s ${node}`
 total_size=`expr ${total_size} \/ 1024`
-boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2`
+boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	if [[ "${soc_name}" = *"mx8qm"* ]]; then
-        	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
-	else
-		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
-	fi
+	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 else
 	extend_size=`expr ${SYSTEM_ROM_SIZE} \* 2 + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${VENDOR_ROM_SIZE} \* 2 + ${PRODUCT_ROM_SIZE} \* 2 + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 fi
@@ -260,6 +257,8 @@ DTBO_A           : ${DTBO_ROM_SIZE} MiB
 DTBO_B           : ${DTBO_ROM_SIZE} MiB
 BOOT_A           : ${BOOT_ROM_SIZE} MiB
 BOOT_B           : ${BOOT_ROM_SIZE} MiB
+VENDOR_BOOT_A    : ${VENDOR_BOOT_SIZE} MiB
+VENDOR_BOOT_B    : ${VENDOR_BOOT_SIZE} MiB
 MISC             : ${MISC_SIZE} MiB
 METADATA         : ${METADATA_SIZE} MiB
 PRESISTDATA      : ${PRESISTDATA_SIZE} MiB
@@ -292,6 +291,11 @@ function check_images
 
 	if [[ ! -f ${imagesdir}/${bootimage_file} ]] ; then
 		red_bold_echo "ERROR: ${bootimage_file} image does not exist"
+		exit 1
+	fi
+	
+	if [[ ! -f ${imagesdir}/${vendor_bootimage_file} ]] ; then
+		red_bold_echo "ERROR: ${vendor_bootimage_file} image does not exist"
 		exit 1
 	fi
 
@@ -360,6 +364,8 @@ function create_parts
 	sgdisk -n 2:0:+${DTBO_ROM_SIZE}M                    -c 2:"dtbo_b"      -t 2:8300  $node
 	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 1:8300  $node
 	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 2:8300  $node
+	sgdisk -n 5:0:+${VENDOR_BOOT_SIZE}M                 -c 5:"vendor_boot_a"      -t 1:8300  $node
+	sgdisk -n 6:0:+${VENDOR_BOOT_SIZE}M                 -c 6:"vendor_boot_b"      -t 2:8300  $node
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 5:0:+${SYSTEM_ROM_SIZE}M                  -c 5:"system_a"    -t 3:8300  $node
 		sgdisk -n 6:0:+${SYSTEM_ROM_SIZE}M                  -c 6:"system_b"    -t 4:8300  $node
@@ -367,9 +373,9 @@ function create_parts
 		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 6:8300  $node
 		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 7:8300  $node
 	else
-		sgdisk -n 5:0:+${MISC_SIZE}M                        -c 5:"misc"        -t 3:8300  $node
-		sgdisk -n 6:0:+${METADATA_SIZE}M                    -c 6:"metadata"    -t 4:8300  $node
-		sgdisk -n 7:0:+${PRESISTDATA_SIZE}M                 -c 7:"presistdata" -t 5:8300  $node
+		sgdisk -n 7:0:+${MISC_SIZE}M                        -c 7:"misc"        -t 3:8300  $node
+		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 4:8300  $node
+		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 5:8300  $node
 	fi
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 10:0:+${VENDOR_ROM_SIZE}M                 -c 10:"vendor_a"   -t 8:8300  $node
@@ -381,15 +387,13 @@ function create_parts
 		sgdisk -n 16:0:+${VBMETA_SIZE}M                     -c 16:"vbmeta_a"   -t 14:8300 $node
 		sgdisk -n 17:0:+${VBMETA_SIZE}M                     -c 17:"vbmeta_b"   -t 15:8300 $node
 	else
-		sgdisk -n 8:0:+${SUPER_ROM_SIZE}M                  -c 8:"super"        -t 6:8300  $node
-		sgdisk -n 9:0:+${data_size}M                       -c 9:"userdata"     -t 7:8300 $node
-		sgdisk -n 10:0:+${FBMISC_SIZE}M                     -c 10:"fbmisc"     -t 8:8300 $node
-		sgdisk -n 11:0:+${VBMETA_SIZE}M                     -c 11:"vbmeta_a"   -t 9:8300 $node
-		sgdisk -n 12:0:+${VBMETA_SIZE}M                     -c 12:"vbmeta_b"   -t 10:8300 $node
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			sgdisk -n 13:0:+${FIRMWARE_SIZE}M	    -c 13:"firmware"   -t 11:8300 $node
-		fi
+		sgdisk -n 10:0:+${SUPER_ROM_SIZE}M                  -c 10:"super"        -t 6:8300  $node
+		sgdisk -n 11:0:+${data_size}M                       -c 11:"userdata"     -t 7:8300 $node
+		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 8:8300 $node
+		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 9:8300 $node
+		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 10:8300 $node
 	fi
+
 
 	sync; sleep 2
 
@@ -427,20 +431,15 @@ function format_android
 		mkfs.ext4 -F ${node}${part}14 -Ldata
 	else
 		blue_underlined_bold_echo "Erasing presistdata partition"
-		dd if=/dev/zero of=${node}${part}7 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Erasing fbmisc partition"
-		dd if=/dev/zero of=${node}${part}10 bs=1M count=${FBMISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}12 bs=1M count=${FBMISC_SIZE} conv=fsync
 		blue_underlined_bold_echo "Erasing misc partition"
-		dd if=/dev/zero of=${node}${part}5 bs=1M count=${MISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync
 		blue_underlined_bold_echo "Erasing metadata partition"
-		dd if=/dev/zero of=${node}${part}6 bs=1M count=${METADATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Formating userdata partition"
-		mkfs.ext4 -F ${node}${part}9 -Ldata
-
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			blue_underlined_bold_echo "Formating firmware partition"
-			mkfs.ext4 -F ${node}${part}13 -Lfirmware
-		fi
+		mkfs.ext4 -F ${node}${part}11 -Ldata
 	fi
 	sync; sleep 1
 }
@@ -457,6 +456,12 @@ function install_android
 	blue_underlined_bold_echo "Installing Android boot image: $bootimage_file"
 	dd if=${imagesdir}/${bootimage_file} of=${node}${part}3 bs=1M
 	dd if=${imagesdir}/${bootimage_file} of=${node}${part}4 bs=1M
+	sync
+	
+	echo
+	blue_underlined_bold_echo "Installing Android vendor boot image: $vendor_bootimage_file"
+	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}5 bs=1M
+	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}6 bs=1M
 	sync
 
 	if [[ "${dynamic_img}" = false ]]; then
@@ -486,27 +491,17 @@ function install_android
 	else
 		echo
 		blue_underlined_bold_echo "Installing Android super image: $superimage_file"
-		simg2img ${imagesdir}/${superimage_file} ${node}${part}8
+		simg2img ${imagesdir}/${superimage_file} ${node}${part}10
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}11 bs=1M
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}12 bs=1M
+		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}13 bs=1M
+		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
 		sync;
-
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			echo
-			blue_underlined_bold_echo "Installing firmware image"
-			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}13 /tmp/firmware_mnt
-			mkdir -p /tmp/firmware_mnt/firmware/hdp
-			cp ${imagesdir}/*.bin /tmp/firmware_mnt/firmware/hdp
-			sync;
-			umount /tmp/firmware_mnt
-			rm -rf /tmp/firmware_mnt
-		fi
 	fi
+
+
 
 	sleep 1
 }
