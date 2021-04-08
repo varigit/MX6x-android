@@ -2,9 +2,8 @@ TARGET_BOOTLOADER_POSTFIX := bin
 UBOOT_POST_PROCESS := true
 
 TARGET_BOOTLOADER_CONFIG := \
-	imx8mm-var-dart:imx8mm_var_dart_android_defconfig
-
-#       imx8mm-var-dart-uuu:imx8mm_var_dart_android_uuu_defconfig
+	imx8mm-var-dart:imx8mm_var_dart_android_defconfig \
+        imx8mm-var-dart-uuu:imx8mm_var_dart_android_uuu_defconfig
 
 # imx8mm kernel defconfig
 ifneq ($(IMX8MM_USES_GKI),)

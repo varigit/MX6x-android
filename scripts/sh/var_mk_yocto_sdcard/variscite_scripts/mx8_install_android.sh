@@ -7,7 +7,7 @@ set -e
 # Partition sizes in MiB
 BOOTLOAD_RESERVE=8
 DTBO_ROM_SIZE=4
-BOOT_ROM_SIZE=70
+BOOT_ROM_SIZE=64
 SYSTEM_ROM_SIZE=1792
 MISC_SIZE=4
 METADATA_SIZE=16
@@ -17,7 +17,7 @@ PRODUCT_ROM_SIZE=1792
 FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=3584
-VENDOR_BOOT_SIZE=70
+VENDOR_BOOT_SIZE=64
 
 sdshared=false
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
@@ -362,10 +362,10 @@ function create_parts
 
 	sgdisk -n 1:${BOOTLOAD_RESERVE}M:+${DTBO_ROM_SIZE}M -c 1:"dtbo_a"      -t 1:8300  $node
 	sgdisk -n 2:0:+${DTBO_ROM_SIZE}M                    -c 2:"dtbo_b"      -t 2:8300  $node
-	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 1:8300  $node
-	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 2:8300  $node
-	sgdisk -n 5:0:+${VENDOR_BOOT_SIZE}M                 -c 5:"vendor_boot_a"      -t 1:8300  $node
-	sgdisk -n 6:0:+${VENDOR_BOOT_SIZE}M                 -c 6:"vendor_boot_b"      -t 2:8300  $node
+	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 3:8300  $node
+	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 4:8300  $node
+	sgdisk -n 5:0:+${VENDOR_BOOT_SIZE}M                 -c 5:"vendor_boot_a"      -t 5:8300  $node
+	sgdisk -n 6:0:+${VENDOR_BOOT_SIZE}M                 -c 6:"vendor_boot_b"      -t 6:8300  $node
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 5:0:+${SYSTEM_ROM_SIZE}M                  -c 5:"system_a"    -t 3:8300  $node
 		sgdisk -n 6:0:+${SYSTEM_ROM_SIZE}M                  -c 6:"system_b"    -t 4:8300  $node
@@ -373,9 +373,9 @@ function create_parts
 		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 6:8300  $node
 		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 7:8300  $node
 	else
-		sgdisk -n 7:0:+${MISC_SIZE}M                        -c 7:"misc"        -t 3:8300  $node
-		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 4:8300  $node
-		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 5:8300  $node
+		sgdisk -n 7:0:+${MISC_SIZE}M                        -c 7:"misc"        -t 7:8300  $node
+		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 8:8300  $node
+		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 9:8300  $node
 	fi
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 10:0:+${VENDOR_ROM_SIZE}M                 -c 10:"vendor_a"   -t 8:8300  $node
@@ -387,11 +387,11 @@ function create_parts
 		sgdisk -n 16:0:+${VBMETA_SIZE}M                     -c 16:"vbmeta_a"   -t 14:8300 $node
 		sgdisk -n 17:0:+${VBMETA_SIZE}M                     -c 17:"vbmeta_b"   -t 15:8300 $node
 	else
-		sgdisk -n 10:0:+${SUPER_ROM_SIZE}M                  -c 10:"super"        -t 6:8300  $node
-		sgdisk -n 11:0:+${data_size}M                       -c 11:"userdata"     -t 7:8300 $node
-		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 8:8300 $node
-		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 9:8300 $node
-		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 10:8300 $node
+		sgdisk -n 10:0:+${SUPER_ROM_SIZE}M                  -c 10:"super"        -t 10:8300  $node
+		sgdisk -n 11:0:+${data_size}M                       -c 11:"userdata"     -t 11:8300 $node
+		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
+		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
+		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
 	fi
 
 
@@ -432,6 +432,7 @@ function format_android
 	else
 		blue_underlined_bold_echo "Erasing presistdata partition"
 		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
+		mkfs.ext4 -F ${node}${part}9 -Lmetadata
 		blue_underlined_bold_echo "Erasing fbmisc partition"
 		dd if=/dev/zero of=${node}${part}12 bs=1M count=${FBMISC_SIZE} conv=fsync
 		blue_underlined_bold_echo "Erasing misc partition"
