@@ -141,7 +141,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     chmod 0664 /sys/kernel/debug/sync/sw_sync
 
     # Default backlight device
-    setprop hw.backlight.dev "backlight"
+    setprop vendor.hw.backlight.dev "backlight"
     # Chmod/chown FSL specific sys entry
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0660 /sys/class/backlight/backlight/brightness
