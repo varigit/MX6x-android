@@ -9,3 +9,7 @@
 /dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
 /dev/block/zram0 none swap defaults zramsize=629145600
 
+
+/devices/platform/soc@0/soc@0:bus@32c00000/32e40000.usb/ci_hdrc.1/*  auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc@0/soc@0:bus@32c00000/32e50000.usb/ci_hdrc.0/*  auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc@0/soc@0:bus@32c00000/32e50000.usb/ci_hdrc.1/*  auto auto defaults voldmanaged=usb:auto
