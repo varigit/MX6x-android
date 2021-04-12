@@ -142,32 +142,9 @@ function scfw_tools_setup()
 }
 
 ############### main code ##############
-pr_info "Script version ${SCRIPT_VERSION} (g:20200401)"
-
-# disable NXP kernel Android.mk
-cd ${ANDROID_DIR} > /dev/null
-mv vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk vendor/nxp-opensource/kernel_imx/drivers/staging/greybus/tools/Android.mk__
+pr_info "Script version ${SCRIPT_VERSION} (g:20210409)"
 
 cd ${ANDROID_DIR} > /dev/null
-######## extended create repositories #######
-pr_info "#########################"
-pr_info "# Laird FW repositories #"
-pr_info "#########################"
-
-pr_info "clone ${VENDOR_BASE_DIR}/bcm_4343w_fw"
-git clone https://github.com/varigit/bcm_4343w_fw.git ${VENDOR_BASE_DIR}/bcm_4343w_fw
-cd ${VENDOR_BASE_DIR}/bcm_4343w_fw
-git checkout 8081cd2bddb1569abe91eb50bd687a2066a33342 -b ${BASE_BRANCH_NAME}
-
-pr_info "###############################"
-pr_info "# Misc. external repositories #"
-pr_info "###############################"
-
-pr_info "clone ${VENDOR_BASE_DIR}/can-utils"
-git clone https://github.com/linux-can/can-utils.git ${VENDOR_BASE_DIR}/can-utils
-cd ${VENDOR_BASE_DIR}/can-utils > /dev/null
-git checkout 791890542ac1ce99131f36435e72af5635afc2fa -b ${BASE_BRANCH_NAME}
-
 pr_info "###########################"
 pr_info "# Apply framework patches #"
 pr_info "###########################"
@@ -180,13 +157,22 @@ do
 	_git_p=$(echo ${_ddd} | sed 's/.git//g')
 	cd ${ANDROID_DIR}/${_git_p}/ > /dev/null
 	
-	pr_info "Apply patches for this git: \"${_git_p}/\""
-	
-	git checkout -b ${_EXTPARAM_BRANCH} || {
-		pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
-	};
+	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
+		git checkout tags/${BASE_BRANCH_NAME}
+		git branch -D ${_EXTPARAM_BRANCH}
+		git checkout -b ${_EXTPARAM_BRANCH} || {
+			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
+		};
 
+	else
+		git checkout -b ${_EXTPARAM_BRANCH} || {
+			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
+		};
+	fi
+
+	pr_info "Apply patches for this git: \"${_git_p}/\""
 	git am ${VARISCITE_PATCHS_DIR}/${_ddd}/*
+
 
 	cd - > /dev/null
 done
