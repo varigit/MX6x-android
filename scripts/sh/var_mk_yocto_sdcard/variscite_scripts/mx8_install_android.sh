@@ -18,6 +18,8 @@ FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=3584
 VENDOR_BOOT_SIZE=64
+MCU_OS_BOOT_SIZE=6
+mcu_image_offset=5120
 
 sdshared=false
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
@@ -109,9 +111,13 @@ do
 		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
-	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
+	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-MINI-M4 on a Symphony-Board V1.4 and below)")
+	elif  [[ "$img" == *"imx8mm-var-som-symphony-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-MINI-M4 on a Symphony-Board V1.4A and above)")
+	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then
+	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
 	elif  [[ "$img" == *"imx8mn-var-som-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
@@ -159,6 +165,7 @@ systemimage_file="system.img"
 vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
+mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 
 block=`basename $node`
 part=""
@@ -239,7 +246,7 @@ fi
 seprate=100
 total_size=`sfdisk -s ${node}`
 total_size=`expr ${total_size} \/ 1024`
-boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
+boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
 	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
@@ -268,6 +275,7 @@ FBMISC           : ${FBMISC_SIZE} MiB
 VBMETA_A         : ${VBMETA_SIZE} MiB
 VBMETA_B         : ${VBMETA_SIZE} MiB
 $firmware
+MCU_OS         : ${MCU_OS_BOOT_SIZE} MiB
 EOF
 
 echo
@@ -325,6 +333,11 @@ function check_images
 		red_bold_echo "ERROR: ${vbmeta_file} image does not exist"
 		exit 1
 	fi
+
+	if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
+		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
+		exit 1
+	fi
 }
 
 function delete_device
@@ -360,7 +373,8 @@ function create_parts
 	echo
 	blue_underlined_bold_echo "Creating Android partitions"
 
-	sgdisk -n 1:${BOOTLOAD_RESERVE}M:+${DTBO_ROM_SIZE}M -c 1:"dtbo_a"      -t 1:8300  $node
+	MCU_OFFSET=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE}`
+	sgdisk -n 1:${MCU_OFFSET}M:+${DTBO_ROM_SIZE}M		-c 1:"dtbo_a"      -t 1:8300  $node
 	sgdisk -n 2:0:+${DTBO_ROM_SIZE}M                    -c 2:"dtbo_b"      -t 2:8300  $node
 	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 3:8300  $node
 	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 4:8300  $node
@@ -413,6 +427,12 @@ function install_bootloader
 	blue_underlined_bold_echo "Installing booloader"
 
 	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset}; sync
+
+	echo
+	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
+	
+	dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	sync
 }
 
 function format_android
