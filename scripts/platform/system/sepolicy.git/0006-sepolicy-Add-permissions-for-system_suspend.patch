@@ -1,7 +1,7 @@
 From fc1fd2a37558eed3550ee075e38778be7e05718f Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Mon, 5 Apr 2021 17:53:43 -0700
-Subject: [PATCH] sepolicy: Add permissions for system_suspend
+Subject: [PATCH 6/6] sepolicy: Add permissions for system_suspend
 
 ---
  prebuilts/api/30.0/private/coredomain.te     |  1 +
