@@ -20,7 +20,6 @@ on early-init
     mount debugfs none /sys/kernel/debug/ mode=0755
 
 on early-init
-    start early_init_sh
     # Set the host name which used in console
     export HOSTNAME imx8mm-var-dart
 
@@ -86,7 +85,6 @@ on late-fs && property:vendor.skip.charger_not_need=0
     start vendor.gatekeeper-1-0-${ro.boot.keystore}
     start vendor.keymaster-4-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
-    start init_brcm_wifibt_sh
 
     # Wait for keymaster
     exec_start wait_for_keymaster
@@ -126,7 +124,8 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     # Prepare for wifi
     setprop wifi.interface wlan0
-    setprop wifi.ap.interface wlan0
+    setprop wifi.direct.interface p2p0
+    setprop wifi.concurrent.interface wlan0
 
     # Prepare for bluetooth
     chmod 665 /sys/class/rfkill/rfkill0/state
@@ -315,6 +314,9 @@ service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg vend
 
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start storageproxyd
+
+on property:sys.boot_completed=1
+    start init_brcm_wifibt_sh
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system
