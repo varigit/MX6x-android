@@ -204,7 +204,8 @@ PRODUCT_PACKAGES += \
 
 # ro.product.first_api_level indicates the first api level the device has commercially launched on.
 PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.typec.legacy=true
+    vendor.typec.legacy=true \
+    ro.vendor.wifi.sap.interface=wlan0
 
 # CANbus tools
 PRODUCT_PACKAGES += \
