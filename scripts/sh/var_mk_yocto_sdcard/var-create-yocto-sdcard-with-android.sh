@@ -127,6 +127,14 @@ function copy_android
                 pv ${ANDROID_IMGS_PATH}/vendor_boot.img >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor_boot.img
                 sync | pv -t
 	fi
+
+	if [[ "${MACHINE}" = "imx8mm-var-dart" ]]; then
+                echo "Copying M4 demo images to /opt/images/"
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/common/rpmsg_lite_pingpong_rtos_linux_remote.bin >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.bin
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/common/rpmsg_lite_pingpong_rtos_linux_remote.elf >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/common/hello_world.elf >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/hello_world.elf
+                sync | pv -t
+	fi
 }
 
 function copy_android_scripts
