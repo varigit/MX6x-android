@@ -5,8 +5,7 @@ ifneq ($(AARCH64_GCC_CROSS_COMPILE),)
 ATF_CROSS_COMPILE := $(strip $(AARCH64_GCC_CROSS_COMPILE))
 IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mp
 else
-ATF_TOOLCHAIN_ABS := $(realpath prebuilts/gcc/$(HOST_PREBUILT_TAG)/aarch64/aarch64-linux-android-4.9/bin)
-ATF_CROSS_COMPILE := $(ATF_TOOLCHAIN_ABS)/aarch64-linux-androidkernel-
+  $(error shell env AARCH64_GCC_CROSS_COMPILE is not set)
 endif
 
 define build_imx_uboot

@@ -1,7 +1,7 @@
-From 01371cc5850c1b10aea63a2fb959680edf8a61b5 Mon Sep 17 00:00:00 2001
+From a8b5cb4cfe340dd7903a0b3fa006db8e8ef0800f Mon Sep 17 00:00:00 2001
 From: Nate Drude <nate.d@variscite.com>
 Date: Tue, 10 Nov 2020 14:49:33 -0800
-Subject: [PATCH 1/2] imx8m: Disable ATF console_imx_uart_register for
+Subject: [PATCH 2/3] imx8m: Disable ATF console_imx_uart_register for
  compatibility with all Variscite imx8m SOMs
 
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
@@ -12,7 +12,7 @@ Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
  3 files changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
-index 1eeab7e..b46fd62 100644
+index 1eeab7e9d..b46fd62a4 100644
 --- a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
 @@ -150,7 +150,9 @@ static void bl31_tzc380_setup(void)
@@ -40,10 +40,10 @@ index 1eeab7e..b46fd62 100644
  	/*
  	 * tell BL3-1 where the non-secure software image is located
 diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-index 841ec5a..2f40004 100644
+index 88c576f40..7f4a1fcbe 100644
 --- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
-@@ -131,7 +131,9 @@ static void bl31_tzc380_setup(void)
+@@ -138,7 +138,9 @@ static void bl31_tzc380_setup(void)
  void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  		u_register_t arg2, u_register_t arg3)
  {
@@ -53,7 +53,7 @@ index 841ec5a..2f40004 100644
  	int i;
  
  	/* Enable CSU NS access permission */
-@@ -150,10 +152,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+@@ -157,10 +159,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  
  	imx8m_caam_init();
  
@@ -67,10 +67,10 @@ index 841ec5a..2f40004 100644
  	/*
  	 * tell BL3-1 where the non-secure software image is located
 diff --git a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-index 2683371..9915b30 100644
+index 10eb2b315..f99260a39 100644
 --- a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
 +++ b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
-@@ -132,7 +132,9 @@ void bl31_tzc380_setup(void)
+@@ -139,7 +139,9 @@ void bl31_tzc380_setup(void)
  void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  		u_register_t arg2, u_register_t arg3)
  {
@@ -80,7 +80,7 @@ index 2683371..9915b30 100644
  	int i;
  
  	/* Enable CSU NS access permission */
-@@ -151,10 +153,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+@@ -158,10 +160,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
  
  	imx8m_caam_init();
  

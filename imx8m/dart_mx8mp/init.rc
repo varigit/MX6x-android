@@ -1,27 +1,29 @@
 import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
 
+service vendor.charger /system/bin/charger
+    class charger
+    user system
+    group system wakelock input
+    capabilities SYS_BOOT
+    file /dev/kmsg w
+    file /sys/fs/pstore/console-ramoops-0 r
+    file /sys/fs/pstore/console-ramoops r
+    file /proc/last_kmsg r
+
+on charger
+    start vendor.charger
+
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
-    # Mount binderfs
-    mkdir /dev/binderfs
-    mount binder binder /dev/binderfs stats=global
-    chmod 0755 /dev/binderfs
-
-    symlink /dev/binderfs/binder /dev/binder
-    symlink /dev/binderfs/hwbinder /dev/hwbinder
-    symlink /dev/binderfs/vndbinder /dev/vndbinder
-
-    chmod 0666 /dev/binderfs/hwbinder
-    chmod 0666 /dev/binderfs/binder
-    chmod 0666 /dev/binderfs/vndbinder
-
-
 on early-init
     start init_brcm_wifibt_sh
     start early_init_sh
+
+    # Set the host name which used in console
+    export HOSTNAME imx8mp-var-dart
 
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
@@ -36,7 +38,11 @@ service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
     disabled
     oneshot
 
-on init
+# Skip charger_not_need trigger for charger mode
+on early-init && property:ro.boot.mode=charger
+    setprop vendor.skip.charger_not_need 1
+
+on init && property:vendor.skip.charger_not_need=0
     start watchdogd
 
     # Support legacy paths
@@ -73,42 +79,40 @@ on init
     write /dev/stune/rt/schedtune.boost 50
     write /dev/stune/rt/schedtune.prefer_idle 1
 
-    # force USB2740 autosuspend
-    write /sys/devices/platform/soc@0/38200000.usb/xhci-hcd.0.auto/usb1/1-1/1-1.5/power/control auto
+#    # force USB2740 autosuspend
+#    write /sys/devices/platform/soc@0/38200000.usb/xhci-hcd.0.auto/usb1/1-1/1-1.5/power/control auto
 
-on late-fs
-    # Start keymaster service
-    start vendor.keymaster-3-0-${ro.boot.keystore}
+on late-fs && property:vendor.skip.charger_not_need=0
+    # Start keymaster/gatekeeper service
+    start vendor.gatekeeper-1-0-${ro.boot.keystore}
+    start vendor.keymaster-4-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
 
-    mount_all /vendor/etc/fstab.freescale --late
+    # Wait for keymaster
+    exec_start wait_for_keymaster
 
-on late-fs && property:vendor.storageproxyd=trusty
+    mount_all /vendor/etc/fstab.nxp --late
+
+on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start vendor.oemlock-1-0
 
-on early-boot
+on early-boot && property:vendor.skip.charger_not_need=0
     # For evk_8mp, when swap used about 400M, upgrade the level.
     setprop ro.lmk.upgrade_pressure 93
     setprop ro.lmk.downgrade_pressure 99
     setprop ro.lmk.critical_upgrade true
 
-    # Set the host name which used in console
-    export HOSTNAME imx8mp-var-dart
-
     # Set permission for IIM node
     symlink /dev/mxs_viim /dev/mxc_mem
 
-    # Enable Tethering in the Settings
-    setprop ro.tether.denied false
-
-    setprop hwc.stretch.filter  1
+    setprop vendor.hwc.stretch.filter  1
 
     # Default g2d [dpu|pxp|viv] lib to be used
     setprop vendor.imx.default-g2d viv
 
     # fsl omx graphic manager media framework property
-    setprop rw.VIDEO_RENDER_NAME video_render.surface
-    setprop media.fsl_codec.flag 7
+    setprop vendor.rw.VIDEO_RENDER_NAME video_render.surface
+    setprop vendor.media.fsl_codec.flag 7
 
     setprop camera.disable_zsl_mode 1
 
@@ -118,9 +122,6 @@ on early-boot
    # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
     write /sys/block/mmcblk2/queue/read_ahead_kb 2048
-
-    # Set period_us for usb audio
-    setprop ro.audio.usb.period_us 20000
 
     # Prepare for wifi
     setprop wifi.interface wlan0
@@ -134,8 +135,7 @@ on early-boot
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 0
 
-    # prepare for ril
-    setprop ro.ril.wake_lock_timeout 300
+
 
     # Set the density to 160 dpi to match LCD.
     setprop ro.sf.lcd_density 160
@@ -148,26 +148,20 @@ on early-boot
     chmod 0664 /sys/kernel/debug/sync/sw_sync
 
     # Default backlight device
-    setprop hw.backlight.dev "backlight"
+    setprop vendor.hw.backlight.dev "backlight"
     # Chmod/chown FSL specific sys entry
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0660 /sys/class/backlight/backlight/brightness
 
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
-    setprop ro.lightsensor.threshold  20
-
-    # Dectect DSF streams when scanning media
-    setprop ro.FSL_DSF_PARSER 1
+    setprop vendor.ro.lightsensor.threshold  20
 
     # Allow DSD file(duration larger than 10s) can play
     setprop audio.offload.min.duration.secs 10
 
     # Enlarge limition of audio buffer allocation
     setprop ro.af.client_heap_size_kbyte 32768
-
-    # enlarge media max memory size to 3G.
-    setprop ro.media.maxmem 3221225471
 
     start vendor.wifi_hal_legacy
 
@@ -177,6 +171,7 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     interface android.hardware.wifi.supplicant@1.0::ISupplicant default
     interface android.hardware.wifi.supplicant@1.1::ISupplicant default
     interface android.hardware.wifi.supplicant@1.2::ISupplicant default
+    interface android.hardware.wifi.supplicant@1.3::ISupplicant default
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled
@@ -186,7 +181,7 @@ service sensor_fusion /vendor/bin/fsl_sensor_fusion
     class late_start
     seclabel u:r:sensors:s0
     user system
-    group input
+    group system uhid
     oneshot
 
 # Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
@@ -242,7 +237,7 @@ service bugreport /system/bin/dumpstate -d -p -B -z \
     oneshot
     keycodes 114 115 116
 
-on boot
+on boot && property:vendor.skip.charger_not_need=0
     start audioserver
     start mediadrm
     start media
@@ -275,9 +270,9 @@ service hci_filter_root /vendor/bin/wcnss_filter
     group bluetooth diag system
     disabled
 
-on fs
+on fs && property:vendor.skip.charger_not_need=0
 # mount ext4 partitions
-    mount_all /vendor/etc/fstab.freescale --early
+    mount_all /vendor/etc/fstab.nxp --early
 
     # Adjust parameters for dm-verity device
     write /sys/block/dm-0/queue/read_ahead_kb 4096
@@ -285,15 +280,15 @@ on fs
     # Update dm-verity state and set partition.*.verified properties
     verity_update_state
 
-on verity-logging
+on verity-logging && property:vendor.skip.charger_not_need=0
     exec u:r:slideshow:s0 -- /sbin/slideshow warning/verity_red_1 warning/verity_red_2
 
-on post-fs
+on post-fs && property:vendor.skip.charger_not_need=0
     # Set netd memlock rlimit to 8MB
     setrlimit 8 8388608 8388608
 
     # Turn on swap
-    swapon_all /vendor/etc/fstab.freescale
+    swapon_all /vendor/etc/fstab.nxp
 
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
@@ -302,41 +297,46 @@ on post-fs
     chown system system /proc/pagetypeinfo
     chmod 0440 /proc/pagetypeinfo
 
-on post-fs-data
+on post-fs-data && property:vendor.skip.charger_not_need=0
     setprop vold.post_fs_data_done 1
     # create temp node for secure storage proxy
     mkdir /data/vendor/ss 0700 system system
 
     # tmp dir for opencl Compiler
-    setprop TMPDIR /data/vendor/.opencl-cache
+    setprop vendor.TMPDIR /data/vendor/.opencl-cache
     mkdir /data/vendor/.opencl-cache 0771 system camera
 
-on zygote-start
+on zygote-start && property:vendor.skip.charger_not_need=0
     # Create the directories used by the Wireless subsystem
-    mkdir /data/misc/wifi 0770 wifi wifi
-    mkdir /data/misc/wifi/wpa_supplicant 0770 wifi wifi
     mkdir /data/vendor/wifi 0771 wifi wifi
     mkdir /data/vendor/wifi/wpa 0770 wifi wifi
     mkdir /data/vendor/wifi/wpa/sockets 0770 wifi wifi
-    mkdir /data/misc/dhcp 0770 dhcp dhcp
-    chown dhcp dhcp /data/misc/dhcp
 
-service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg sys.all.early_init.ready
+service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg vendor.all.early_init.ready
     class main
     user root
     group root system
     disabled
     oneshot
 
-on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
+on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start storageproxyd
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system
 
-on property:ro.boot.vendor.sysrq=1
+on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
     write /proc/sys/kernel/sysrq 1
 
 # setenv append_bootargs androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
+
+# setenv append_bootargs androidboot.powersave.usb=true
+on property:ro.boot.powersave.usb=true
+    # enable platform/32f10100.usb runtime_pm
+    write /sys/devices/platform/32f10100.usb/38100000.dwc3/power/control auto
+
+    #enable platform/32f10108.usb runtime_pm
+    write /sys/devices/platform/32f10108.usb/38200000.dwc3/power/control auto
+    write /sys/devices/platform/32f10108.usb/38200000.dwc3/xhci-hcd.0.auto/power/control auto

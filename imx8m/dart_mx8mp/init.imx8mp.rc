@@ -25,6 +25,7 @@ on property:sys.boot_completed=1
     # Set up and down limit to 200us/200us
     write /sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us 200
     write /sys/devices/system/cpu/cpufreq/schedutil/down_rate_limit_us 200
+    write /proc/sys/kernel/sched_util_clamp_min 512
 
 on property:sys.boot_completed=1
     # update cpuset now that processors are up

@@ -1,0 +1,123 @@
+From fc1fd2a37558eed3550ee075e38778be7e05718f Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Mon, 5 Apr 2021 17:53:43 -0700
+Subject: [PATCH 6/6] sepolicy: Add permissions for system_suspend
+
+---
+ prebuilts/api/30.0/private/coredomain.te     |  1 +
+ prebuilts/api/30.0/private/system_suspend.te | 18 ++++++++++++++++++
+ prebuilts/api/30.0/public/domain.te          |  1 +
+ private/coredomain.te                        |  1 +
+ private/system_suspend.te                    | 18 ++++++++++++++++++
+ public/domain.te                             |  1 +
+ 6 files changed, 40 insertions(+)
+
+diff --git a/prebuilts/api/30.0/private/coredomain.te b/prebuilts/api/30.0/private/coredomain.te
+index 57f72d595..5d1852487 100644
+--- a/prebuilts/api/30.0/private/coredomain.te
++++ b/prebuilts/api/30.0/private/coredomain.te
+@@ -109,6 +109,7 @@ full_treble_only(`
+     -ueventd
+     -vold
+     -system_server
++    -system_suspend
+   } sysfs:file no_rw_file_perms;
+ 
+   # /dev
+diff --git a/prebuilts/api/30.0/private/system_suspend.te b/prebuilts/api/30.0/private/system_suspend.te
+index d33dc8e85..ea57daab6 100644
+--- a/prebuilts/api/30.0/private/system_suspend.te
++++ b/prebuilts/api/30.0/private/system_suspend.te
+@@ -16,6 +16,24 @@ r_dir_file(system_suspend, sysfs_wakeup)
+ # To resolve arbitrary sysfs paths from /sys/class/wakeup/* symlinks.
+ allow system_suspend sysfs_type:dir search;
+ 
++allow system_suspend sysfs:dir read;
++allow system_suspend sysfs_batteryinfo:dir read;
++
++allow system_suspend sysfs_suspend_stats:dir read;
++allow system_suspend sysfs_wakeup:dir read;
++
++allow system_suspend sysfs:dir open;
++allow system_suspend sysfs_batteryinfo:dir open;
++
++allow system_suspend sysfs:file read;
++allow system_suspend sysfs_batteryinfo:file read;
++
++allow system_suspend sysfs:file open;
++allow system_suspend sysfs_batteryinfo:file open;
++
++allow system_suspend sysfs:file getattr;
++allow system_suspend sysfs_batteryinfo:file getattr;
++
+ neverallow {
+     domain
+     -atrace # tracing
+diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
+index 714a6fc75..208e87e93 100644
+--- a/prebuilts/api/30.0/public/domain.te
++++ b/prebuilts/api/30.0/public/domain.te
+@@ -1400,6 +1400,7 @@ full_treble_only(`
+     -charger
+     # TODO(b/110891300): remove this exception
+     -incidentd
++    -system_suspend_server
+   } sysfs_batteryinfo:file { open read };
+ ')
+ 
+diff --git a/private/coredomain.te b/private/coredomain.te
+index 57f72d595..5d1852487 100644
+--- a/private/coredomain.te
++++ b/private/coredomain.te
+@@ -109,6 +109,7 @@ full_treble_only(`
+     -ueventd
+     -vold
+     -system_server
++    -system_suspend
+   } sysfs:file no_rw_file_perms;
+ 
+   # /dev
+diff --git a/private/system_suspend.te b/private/system_suspend.te
+index d33dc8e85..ea57daab6 100644
+--- a/private/system_suspend.te
++++ b/private/system_suspend.te
+@@ -16,6 +16,24 @@ r_dir_file(system_suspend, sysfs_wakeup)
+ # To resolve arbitrary sysfs paths from /sys/class/wakeup/* symlinks.
+ allow system_suspend sysfs_type:dir search;
+ 
++allow system_suspend sysfs:dir read;
++allow system_suspend sysfs_batteryinfo:dir read;
++
++allow system_suspend sysfs_suspend_stats:dir read;
++allow system_suspend sysfs_wakeup:dir read;
++
++allow system_suspend sysfs:dir open;
++allow system_suspend sysfs_batteryinfo:dir open;
++
++allow system_suspend sysfs:file read;
++allow system_suspend sysfs_batteryinfo:file read;
++
++allow system_suspend sysfs:file open;
++allow system_suspend sysfs_batteryinfo:file open;
++
++allow system_suspend sysfs:file getattr;
++allow system_suspend sysfs_batteryinfo:file getattr;
++
+ neverallow {
+     domain
+     -atrace # tracing
+diff --git a/public/domain.te b/public/domain.te
+index 714a6fc75..208e87e93 100644
+--- a/public/domain.te
++++ b/public/domain.te
+@@ -1400,6 +1400,7 @@ full_treble_only(`
+     -charger
+     # TODO(b/110891300): remove this exception
+     -incidentd
++    -system_suspend_server
+   } sysfs_batteryinfo:file { open read };
+ ')
+ 
+-- 
+2.25.1
+

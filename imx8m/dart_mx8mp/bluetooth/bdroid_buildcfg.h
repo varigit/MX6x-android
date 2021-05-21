@@ -20,10 +20,6 @@
 
 #define BTM_DEF_LOCAL_NAME "DART-MX8MP"
 
-// Wide-band speech support
-#define BTM_WBS_INCLUDED TRUE
-#define BTIF_HF_WBS_PREFERRED TRUE
-
 // Disables Interleave scan
 #define BTA_HOST_INTERLEAVE_SEARCH  FALSE
 // skips conn update at conn completion

@@ -1,19 +1,19 @@
-From 96df82645d521cd277a055345fc91fad940488d0 Mon Sep 17 00:00:00 2001
-From: Mohit Singh <pal.mohit.singh@gmail.com>
-Date: Fri, 27 Mar 2020 14:16:47 -0700
-Subject: [PATCH 2/5] sysfs sepolicy: allow sysfs and domain access.
+From 40a32a5e908570453f92505103cf83c60aba8c75 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 23 Mar 2021 09:13:13 -0700
+Subject: [PATCH 2/6] sysfs sepolicy: allow sysfs and domain access.
 
 - It is required for bt_vendor.conf
 ---
- prebuilts/api/29.0/public/domain.te | 3 +--
+ prebuilts/api/30.0/public/domain.te | 2 +-
  public/domain.te                    | 2 +-
- 2 files changed, 2 insertions(+), 3 deletions(-)
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/prebuilts/api/29.0/public/domain.te b/prebuilts/api/29.0/public/domain.te
-index f348701..8e3a765 100644
---- a/prebuilts/api/29.0/public/domain.te
-+++ b/prebuilts/api/29.0/public/domain.te
-@@ -1030,7 +1030,7 @@ full_treble_only(`
+diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
+index 963bf4ef6..5f4055884 100644
+--- a/prebuilts/api/30.0/public/domain.te
++++ b/prebuilts/api/30.0/public/domain.te
+@@ -1021,7 +1021,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {
@@ -22,19 +22,11 @@ index f348701..8e3a765 100644
      -appdomain
      -coredomain
      -vendor_executes_system_violators
-@@ -1344,7 +1344,6 @@ full_treble_only(`
- # to do so should never be granted.
- neverallow domain {
-   proc_type
--  sysfs_type
- }:dir { add_name create link remove_name rename reparent rmdir write };
- 
- # cgroupfs directories can be created, but not files within them.
 diff --git a/public/domain.te b/public/domain.te
-index 4adc8cc..8e3a765 100644
+index 963bf4ef6..5f4055884 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1030,7 +1030,7 @@ full_treble_only(`
+@@ -1021,7 +1021,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {

@@ -43,6 +43,8 @@
 # Media Codec2 service
 /vendor/bin/hw/android\.hardware\.media\.c2@1\.0-service    u:object_r:mediacodec_exec:s0
 
+/dev/block/pmem0  u:object_r:rebootescrow_device:s0
+
 # isp related
 /vendor/bin/vvext                           u:object_r:isp_exec:s0
 /vendor/bin/video_test                      u:object_r:isp_exec:s0

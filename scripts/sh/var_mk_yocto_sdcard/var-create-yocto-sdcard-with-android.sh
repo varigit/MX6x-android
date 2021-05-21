@@ -9,10 +9,10 @@ readonly SCRIPT_VERSION="0.8"
 #### global variables ####
 readonly ABSOLUTE_FILENAME=`readlink -e "$0"`
 readonly ABSOLUTE_DIRECTORY=`dirname ${ABSOLUTE_FILENAME}`
-readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-imx/scripts/
+readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-fslc/scripts/
 
 ANDROID_SCRIPTS_PATH=${SCRIPT_POINT}/var_mk_yocto_sdcard/variscite_scripts
-ANDROID_BUILD_ROOT=~/var_imx-android-10.0.0_2.6.0/android_build
+ANDROID_BUILD_ROOT=~/var_imx-android-11.0.0_1.0.0/android_build
 
 TEMP_DIR=./var_tmp
 ROOTFS_MOUNT_DIR=${TEMP_DIR}/rootfs
@@ -121,6 +121,11 @@ function copy_android
 		echo "Copying product image to /opt/images/"
 		pv ${ANDROID_IMGS_PATH}/product.img >		${ROOTFS_MOUNT_DIR}/opt/images/Android/product.img
 		sync | pv -t
+	fi
+	if [ -e "${ANDROID_IMGS_PATH}/vendor_boot.img" ]; then
+                echo "Copying super image to /opt/images/"
+                pv ${ANDROID_IMGS_PATH}/vendor_boot.img >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor_boot.img
+                sync | pv -t
 	fi
 }
 
