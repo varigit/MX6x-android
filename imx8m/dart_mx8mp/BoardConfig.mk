@@ -123,7 +123,11 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 	 imx8mp-var-dart-dt8mcustomboard:imx8mp-var-dart-dt8mcustomboard.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-legacy:imx8mp-var-dart-dt8mcustomboard-legacy.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-hdmi:imx8mp-var-dart-dt8mcustomboard-hdmi.dtb \
-	 imx8mp-var-dart-dt8mcustomboard-legacy-hdmi:imx8mp-var-dart-dt8mcustomboard-legacy-hdmi.dtb
+	 imx8mp-var-dart-dt8mcustomboard-legacy-hdmi:imx8mp-var-dart-dt8mcustomboard-legacy-hdmi.dtb \
+	 imx8mp-var-som-symphony-m7:imx8mp-var-som-symphony-m7.dtb \
+	 imx8mp-var-som-symphony-2nd-ov5640-m7:imx8mp-var-som-symphony-2nd-ov5640-m7.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-m7:imx8mp-var-dart-dt8mcustomboard-m7.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-legacy-m7:imx8mp-var-dart-dt8mcustomboard-legacy-m7.dtb
 
 endif
 	 
