@@ -219,6 +219,7 @@ fi
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
        bootloader_offset=32
        bootloader_file="u-boot-imx8mn-var-som.imx"
+       mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 echo "${soc_name} bootloader is: ${bootloader_file}"

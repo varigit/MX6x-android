@@ -12,6 +12,7 @@
       "camera_type": "back",
       "camera_name": "mxc-isi-cap",
       "orientation": "0",
+      "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "1920",
       "ActiveArrayHeight": "1080",

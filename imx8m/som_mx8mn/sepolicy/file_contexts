@@ -42,3 +42,5 @@
 
 #Neural Network HAL service
 /vendor/bin/hw/android\.hardware\.neuralnetworks@1\.2-service-vsi-npu-server      u:object_r:hal_neuralnetworks_imx_exec:s0
+
+/dev/block/pmem0  u:object_r:rebootescrow_device:s0

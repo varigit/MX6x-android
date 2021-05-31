@@ -300,9 +300,11 @@ function check_images
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
-		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
-		exit 1
+	if [[ "${soc_name}" = *"mx8mm"* ]]; then
+		if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
+			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
+			exit 1
+		fi
 	fi
 }
 
@@ -397,7 +399,9 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 	
-	dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	if [[ "${soc_name}" = *"mx8mm"* ]]; then
+		dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	fi
 	sync
 }
 
