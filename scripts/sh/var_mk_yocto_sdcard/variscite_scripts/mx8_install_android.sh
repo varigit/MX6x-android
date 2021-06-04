@@ -55,6 +55,14 @@ function help() {
 	echo " -f soc_name		flash android image [optional]."
 }
 
+function rename_remoteproc_images {
+	if [[ "$1" == *"imx8mp-var-som"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
+	fi	
+}
+
 moreoptions=1
 while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	case $1 in
@@ -80,16 +88,24 @@ do
 
 	if [[ "$img" == *"imx8mp-var-som-symphony-hdmi"* ]]; then
 		img_list+=("$img (Variscite VAR-SOM-MX8M-PLUS HDMI on Symphony-Board)")
+	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640-m7"* ]]; then
+		img_list+=("$img (Variscite VAR-SOM-MX8M-PLUS M7 with 2nd OV5640 on Symphony-Board)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640"* ]]; then
 		img_list+=("$img (Variscite VAR-SOM-MX8M-PLUS with 2nd OV5640 on Symphony-Board)")
+	elif [[ "$img" == *"imx8mp-var-som-symphony-m7"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-PLUS M7 LVDS on Symphony-Board)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-PLUS LVDS on Symphony-Board)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-hdmi"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M-PLUS HDMI on DT8MCustomBoard 1.x)")
+	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-m7"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 1.x)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M-PLUS LVDS on DT8MCustomBoard 1.x)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-hdmi"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M-PLUS HDMI on DT8MCustomBoard 2.x)")
+	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-m7"* ]]; then
+		img_list+=("$img (Variscite DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 2.x)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M-PLUS LVDS on DT8MCustomBoard 2.x)")
 	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
@@ -167,6 +183,8 @@ vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
+mcu_os_demo_file_8mp_dart="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart"
+mcu_os_demo_file_8mp_som="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som"
 
 block=`basename $node`
 part=""
@@ -339,6 +357,7 @@ function check_images
 		exit 1
 	fi
 
+	rename_remoteproc_images ${soc_name}
 	if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
 		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 		exit 1
