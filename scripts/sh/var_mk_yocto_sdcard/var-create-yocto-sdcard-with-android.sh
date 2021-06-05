@@ -136,11 +136,11 @@ function copy_android
                 sync | pv -t
 	elif [[ "${MACHINE}" = "imx8mn-var-som" ]]; then
                 echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/mcu/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/mcu/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/mcu/cm_hello_world.elf.debug > \
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_hello_world.elf.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.elf.debug
                 sync | pv -t
 	fi
