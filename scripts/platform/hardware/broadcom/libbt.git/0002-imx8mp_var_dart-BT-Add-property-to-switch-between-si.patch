@@ -1,0 +1,43 @@
+From 655e9660a96126da826686f098c074100a811831 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Mon, 7 Jun 2021 12:54:09 -0700
+Subject: [PATCH] imx8mp_var_dart:BT: Add property to switch between single and
+ dual band.
+
+---
+ src/bt_vendor_brcm.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/src/bt_vendor_brcm.c b/src/bt_vendor_brcm.c
+index 3fcdbd4..58f1f18 100644
+--- a/src/bt_vendor_brcm.c
++++ b/src/bt_vendor_brcm.c
+@@ -106,6 +106,7 @@ static int init(const bt_vendor_callbacks_t* p_cb, unsigned char *local_bdaddr)
+     char fw_path_value[PROPERTY_VALUE_MAX];
+     char fw_id_value[PROPERTY_VALUE_MAX];
+     char fw_file_value[PROPERTY_VALUE_MAX];
++    char imx8mp_value[PROPERTY_VALUE_MAX];
+     int  fd, sz;
+     char buf[CONF_MAX_LINE_LEN];
+ 
+@@ -165,6 +166,17 @@ static int init(const bt_vendor_callbacks_t* p_cb, unsigned char *local_bdaddr)
+            }
+        }
+     }
++    /* check for som_imx8mp present */
++    property_get("ro.boot.dart_imx8mp", imx8mp_value, "0");
++    if ((strcmp(imx8mp_value, "0") != 0))
++    {
++               property_get("ro.boot.bt_firmware", fw_file_value, "0");
++               if (strcmp(fw_file_value, "0") != 0)
++               {
++                   hw_set_patch_file_name(NULL, fw_file_value, 0);
++               }
++    }
++
+     /* store reference to user callbacks */
+     bt_vendor_cbacks = (bt_vendor_callbacks_t *) p_cb;
+ 
+-- 
+2.25.1
+
