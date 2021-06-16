@@ -1,0 +1,48 @@
+uuu_version 1.2.39
+
+# This command will be run when i.MX6/7 i.MX8MM, i.MX8MQ
+SDP: boot -f u-boot-imx8mq-var-dart-uuu.imx
+
+# This command will be run when ROM support stream mode
+# i.MX8QXP, i.MX8QM
+SDPS: boot -f u-boot-imx8mq-var-dart-uuu.imx
+
+# These commands will be run when use SPL and will be skipped if no spl
+# SDPU will be deprecated. please use SDPV instead of SDPU
+# {
+SDPU: delay 1000
+SDPU: write -f u-boot-imx8mq-var-dart-uuu.imx -offset 0x57c00
+SDPU: jump
+# }
+
+# These commands will be run when use SPL and will be skipped if no spl
+# if (SPL support SDPV)
+# {
+SDPV: delay 1000
+SDPV: write -f u-boot-imx8mq-var-dart-uuu.imx -skipspl
+SDPV: jump
+# }
+
+
+FB: ucmd mmc dev 0
+FB: ucmd setenv mmcdev 0
+FB: ucmd setenv fastboot_dev mmc
+FB: ucmd mmc partconf 0 0 0 0
+FB: ucmd mmc partconf 0 0 0 0
+FB: flash bootloader0 u-boot-imx8mq-var-dart.imx
+FB: flash gpt partition-table.img
+FB: flash dtbo_a dtbo-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img
+FB: flash dtbo_b dtbo-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img
+FB: flash boot_a boot.img
+FB: flash boot_b boot.img
+FB: flash vbmeta_a vbmeta-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img --disable-verity
+FB: flash vbmeta_b vbmeta-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img --disable-verity
+FB[-t 600000]: flash super super.img
+FB[-t 600000]: erase misc
+FB[-t 600000]: erase presistdata
+FB[-t 600000]: erase fbmisc
+FB[-t 600000]: erase metadata
+FB[-t 600000]: erase userdata
+FB: ucmd mmc partconf 0 0 0 0
+FB: set_active _a
+FB: done
