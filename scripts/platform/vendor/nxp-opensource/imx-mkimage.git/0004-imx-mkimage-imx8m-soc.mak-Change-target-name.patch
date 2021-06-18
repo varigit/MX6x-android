@@ -1,0 +1,25 @@
+From f4aed574db008b8c65b006088bcca3c7d4138d9d Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Wed, 16 Jun 2021 12:31:37 -0700
+Subject: [PATCH] imx-mkimage: imx8m: soc.mak: Change target name.
+
+---
+ iMX8M/soc.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index 8da3fbf..41224e9 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -150,7 +150,7 @@ clean:
+ 
+ dtbs = evk.dtb
+ $(dtbs):
+-	./$(DTB_PREPROC) $(PLAT)-evk.dtb $(dtbs)
++	./$(DTB_PREPROC) $(PLAT)-var-dart-customboard.dtb $(dtbs)
+ 
+ u-boot.itb: $(dtbs)
+ 	./$(PAD_IMAGE) tee.bin
+-- 
+2.25.1
+

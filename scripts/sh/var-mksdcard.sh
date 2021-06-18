@@ -300,7 +300,7 @@ function check_images
 		exit 1
 	fi
 
-	if [[ "${soc_name}" = *"mx8mm"* ]]; then
+	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]]; then
 		if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
 			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 			exit 1

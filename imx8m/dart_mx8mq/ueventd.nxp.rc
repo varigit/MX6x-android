@@ -6,7 +6,6 @@
 /dev/video*               0660   system     camera
 /dev/mxc_hantro           0660   media      drmrpc
 /dev/imxdpu               0660   media      drmrpc
-/dev/uinput               0660   system     bluetooth
 /dev/ion                  0666   media      drmrpc
 /dev/galcore              0666 	 system     graphics
 /dev/graphics/fb0         0660   system     graphics

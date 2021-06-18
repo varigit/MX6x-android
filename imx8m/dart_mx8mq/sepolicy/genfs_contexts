@@ -1,4 +1,5 @@
 #genfscon sysfs /devices/platform/soc@0/soc@0:bus@30000000/30370000.snvs/30370000.snvs:snvs-rtc-lp/rtc/rtc0/hctosys     u:object_r:sysfs_rtc:s0
+
 genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30a20000.i2c/i2c-0/0-0050/power_supply u:object_r:sysfs_batteryinfo:s0
 genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30a20000.i2c/i2c-0/0-0050/extcon   u:object_r:sysfs_extcon:s0
 genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30b40000.mmc/mmc_host/mmc0/mmc0:0001/block/mmcblk0 u:object_r:sysfs_block_devices:s0
@@ -13,7 +14,16 @@ genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkil
 #/sys/class/net
 genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30be0000.ethernet/net               u:object_r:sysfs_net:s0
 genfscon sysfs /devices/platform/soc@0/33800000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net u:object_r:sysfs_net:s0
+genfscon sysfs /devices/platform/soc@0/33c00000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net u:object_r:sysfs_net:s0
 
 #RTC
 genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30a30000.i2c/i2c-1/1-0068/rtc u:object_r:sysfs_rtc:s0
 
+# android.system.suspend@1.0-service
+genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30be0000.ethernet/net/eth0/wakeup0                                       u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/soc@0:bus@30000000/30370000.snvs/30370000.snvs:snvs-powerkey/wakeup                         u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/soc@0:bus@30000000/30370000.snvs/30370000.snvs:snvs-rtc-lp/wakeup                           u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/soc@0:bus@30000000/30370000.snvs/30370000.snvs:snvs-rtc-lp/rtc/rtc0/wakeup3                 u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/battery/wakeup4                                                                       u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/usb/wakeup5                                                                           u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/soc@0/soc@0:bus@30800000/30a20000.i2c/i2c-0/0-0050/power_supply/tcpm-source-psy-0-0050/wakeup6    u:object_r:sysfs_wakeup:s0

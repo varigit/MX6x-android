@@ -12,7 +12,7 @@ readonly ABSOLUTE_DIRECTORY=`dirname ${ABSOLUTE_FILENAME}`
 readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-fslc/scripts/
 
 ANDROID_SCRIPTS_PATH=${SCRIPT_POINT}/var_mk_yocto_sdcard/variscite_scripts
-ANDROID_BUILD_ROOT=~/var_imx-android-11.0.0_1.0.0/android_build
+ANDROID_BUILD_ROOT=/media/nvme1/Android_11.0.0_1.0.0_8M/android_build
 
 TEMP_DIR=./var_tmp
 ROOTFS_MOUNT_DIR=${TEMP_DIR}/rootfs
