@@ -301,6 +301,10 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_COPY_FILES += \
+device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin \
+device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf
+
+PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx8mq.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mq.json \
     device/nxp/imx8m/evk_8mq/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 

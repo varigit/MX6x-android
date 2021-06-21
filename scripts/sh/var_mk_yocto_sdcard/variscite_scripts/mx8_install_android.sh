@@ -187,6 +187,7 @@ if [[ "${soc_name}" = *"mx8mq"* ]]; then
 	else
 		bootloader_file="u-boot-imx8mq-var-dart.imx"
 	fi
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8mm"* ]]; then
