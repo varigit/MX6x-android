@@ -136,7 +136,7 @@ systemimage_file="system.img"
 vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
-mcu_os_demo_file="imx8mm_mcu_demo.img"
+mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 
 block=`basename $node`
 part=""
@@ -156,6 +156,7 @@ if [[ "${soc_name}" = *"mx8mq"* ]]; then
 	else
 		bootloader_file="u-boot-imx8mq-var-dart.imx"
 	fi
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8mm"* ]]; then
@@ -301,7 +302,7 @@ function check_images
 	fi
 
 	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]]; then
-		if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
+		if [[ ! -f ${imagesdir}/vendor/firmware/${mcu_os_demo_file} ]] ; then
 			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 			exit 1
 		fi
@@ -399,8 +400,8 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 	
-	if [[ "${soc_name}" = *"mx8mm"* ]]; then
-		dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]]; then
+		dd if=${imagesdir}/vendor/firmware/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
 	fi
 	sync
 }
