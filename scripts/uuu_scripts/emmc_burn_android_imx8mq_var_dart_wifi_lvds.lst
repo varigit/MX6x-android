@@ -35,6 +35,8 @@ FB: flash dtbo_a dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img
 FB: flash dtbo_b dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img
 FB: flash boot_a boot.img
 FB: flash boot_b boot.img
+FB: flash vendor_boot_a vendor_boot.img
+FB: flash vendor_boot_b vendor_boot.img
 FB: flash vbmeta_a vbmeta-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img --disable-verity
 FB: flash vbmeta_b vbmeta-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img --disable-verity
 FB[-t 600000]: flash super super.img
