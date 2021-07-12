@@ -8,6 +8,8 @@ TARGET_DEVICE_DIR := $(patsubst %/, %, $(dir $(realpath $(lastword $(MAKEFILE_LI
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 
-# define bootloader rollback index
-BOOTLOADER_RBINDEX ?= 0
+# define rollback index in container
+ifeq ($(PRODUCT_IMX_CAR),true)
+  BOOTLOADER_RBINDEX ?= 0
+endif
 

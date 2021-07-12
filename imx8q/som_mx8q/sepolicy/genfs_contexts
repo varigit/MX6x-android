@@ -6,6 +6,20 @@ genfscon sysfs /devices/platform/bus@5b000000/5b010000.mmc/mmc_host/mmc0/mmc0:00
 genfscon sysfs /devices/platform/bus@5b000000/5b020000.mmc/mmc_host/mmc1/mmc1:aaaa/block/mmcblk1 u:object_r:sysfs_block_devices:s0
 
 
+# android.system.suspend@1.0-service
+genfscon sysfs /devices/platform/bus@5b000000/5b040000.ethernet/net/eth0/wakeup5    u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/bus@5b000000/5b040000.ethernet/net/eth0/wakeup0    u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/sc-powerkey/wakeup                  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/scu/scu:rtc/wakeup                  u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/scu/scu:rtc/rtc/rtc0/wakeup2        u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/scu/scu:rtc/rtc/rtc0/wakeup3        u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/battery/wakeup3         u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/battery/wakeup4         u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/usb/wakeup4             u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/virtual/power_supply/usb/wakeup5             u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/bus@5a000000/5a800000.i2c/i2c-2/2-0051/power_supply/tcpm-source-psy-2-0051/wakeup6    u:object_r:sysfs_wakeup:s0
+genfscon sysfs /devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-1/i2c-1/1-0050/power_supply/tcpm-source-psy-1-0050/wakeup6    u:object_r:sysfs_wakeup:s0
+
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
 genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0
 # RTC on SPEAR-MX8

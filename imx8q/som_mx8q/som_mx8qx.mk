@@ -11,16 +11,23 @@ PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/bluetooth/qx/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8qx.rc \
-    $(IMX_DEVICE_PATH)/ueventd.freescale.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
+    $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qx.rc \
+    $(IMX_DEVICE_PATH)/ueventd.nxp.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
     $(IMX_DEVICE_PATH)/init.brcm.wifibt.8qx.sh:vendor/bin/init.brcm.wifibt.sh
+
+
+PRODUCT_COPY_FILES += \
+device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin \
+device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qxp-var-som-symphony-wifi.img
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 TARGET_BOARD_DTS_CONFIG := \
         imx8qxp-var-som-symphony-sd:imx8qxp-var-som-symphony-sd.dtb \
-        imx8qxp-var-som-symphony-wifi:imx8qxp-var-som-symphony-wifi.dtb
+        imx8qxp-var-som-symphony-wifi:imx8qxp-var-som-symphony-wifi.dtb \
+        imx8qxp-var-som-symphony-sd-m4:imx8qxp-var-som-symphony-sd-m4.dtb \
+        imx8qxp-var-som-symphony-wifi-m4:imx8qxp-var-som-symphony-wifi-m4.dtb
 endif
 
 TARGET_BOOTLOADER_CONFIG := \

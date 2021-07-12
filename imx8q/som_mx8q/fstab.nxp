@@ -9,9 +9,8 @@
 
 /devices/platform/bus@5b000000/5b110000.usb3/xhci-cdns3/* auto auto defaults voldmanaged=usb:auto
 
-/dev/block/by-name/userdata    /data        ext4    nosuid,nodev,nodiratime,noatime,nomblk_io_submit,noauto_da_alloc,errors=panic    latemount,wait,formattable,quota,fileencryption=software,reservedsize=128M,checkpoint=block
-/dev/block/by-name/metadata    /metadata    ext4    noatime,nosuid,nodev,discard,sync                                                wait,formattable,first_stage_mount
+/dev/block/by-name/userdata    /data        ext4    nosuid,nodev,nodiratime,noatime,noauto_da_alloc,errors=panic    latemount,wait,formattable,quota,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,reservedsize=128M,checkpoint=block,metadata_csum
+/dev/block/by-name/metadata    /metadata    ext4    noatime,nosuid,nodev,discard,sync                                                wait,formattable,first_stage_mount,check
 /dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
 /dev/block/zram0 none swap defaults zramsize=629145600
-
 
