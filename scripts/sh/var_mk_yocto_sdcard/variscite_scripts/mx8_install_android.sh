@@ -139,6 +139,10 @@ do
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mn-var-som"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4A and above)")
+	elif  [[ "$img" == *"imx8qxp-var-som-symphony-wifi-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8QXP-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qxp-var-som-symphony-wifi"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8QXP on a Symphony-Board)")
 	else
 		img_list+=($img)
 	fi
@@ -162,7 +166,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QXP" /sys/devices/soc0/soc_id; then
 				soc_name=`echo $opt | cut -d "." -f1`
 				soc_name=${soc_name#${img_prefix}}
 			else
@@ -226,6 +230,7 @@ if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	else
 		echo; red_bold_echo "ERROR: no bootloader image present"
 	fi
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then

@@ -151,6 +151,14 @@ function copy_android
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf
 
                 sync | pv -t
+	elif [[ "${MACHINE}" = "imx8qxp-var-som" || "imx8qxpb0-var-som" ]]; then
+                echo "Copying M4 demo images to /opt/images/"
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf
+
+                sync | pv -t
 	fi
 }
 
