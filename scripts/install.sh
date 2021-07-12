@@ -36,8 +36,8 @@ VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
 
 
 SC_MX8_FAMILY=$1
-readonly SCFW_BRANCH="1.5.1"
-readonly SRCREV="495e846a5e1ff5d4208c2fb6529397d80c40ebf7"
+readonly SCFW_BRANCH="1.6.0"
+readonly SRCREV="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
 readonly PRE_BUILTS_GCC_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
