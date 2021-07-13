@@ -26,6 +26,8 @@
 
 #peripheral
 /vendor/bin/init\.brcm\.wifibt\.sh u:object_r:init-brcm-wifibt-sh_exec:s0
+/vendor/bin/init\.brcm\.wifibt\.suspend\.sh u:object_r:init-brcm-wifibt-suspend-sh_exec:s0
+/vendor/bin/init\.brcm\.wifibt\.resume\.sh u:object_r:init-brcm-wifibt-resume-sh_exec:s0
 /vendor/bin/magd                u:object_r:sensors_exec:s0
 /vendor/bin/fsl_sensor_fusion   u:object_r:sensors_exec:s0
 /dev/mma8x5x                    u:object_r:sensors_device:s0

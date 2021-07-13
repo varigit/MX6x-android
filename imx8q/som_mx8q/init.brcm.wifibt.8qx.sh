@@ -11,6 +11,8 @@ BT_BUF_GPIO=61
 #BT_EN_GPIO=106
 BT_EN_RFKILL=0
 WIFI_MMC_HOST=5b020000.mmc
+SUSPEND=0
+RESUME=0
 ######################################
 # /etc/wifi/variscite-wifi-common.sh #
 ######################################
@@ -63,28 +65,30 @@ wifi_up()
 	# WLAN_EN up
 	echo 1 > /sys/class/gpio/gpio${WIFI_EN_GPIO}/value
 
-	# BT_EN up
-	#echo 1 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 1 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	if [ $RESUME -eq 0 ]; then
+		# BT_EN up
+		#echo 1 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
+		echo 1 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
 
-	# BT_BUF up
-	echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
-	
-	# Wait at least 150ms
+		# BT_BUF up
+		echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
+	fi
 	usleep 200000
 
-	# BT_BUF down
-	echo 1 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
+	if [ $RESUME -eq 0 ]; then
+		# BT_BUF down
+		echo 1 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
 
-	# BT_EN down
-	#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+		# BT_EN down
+		#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
+		echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	fi
 	
 	# Bind WIFI device to MMC controller
 	echo ${WIFI_MMC_HOST} > /sys/bus/platform/drivers/sdhci-esdhc-imx/bind
 	
 	# Load WIFI driver
-	modprobe -d /vendor/lib/modules brcmfmac p2pon=1
+	modprobe -d /vendor/lib/modules brcmfmac
 }
 
 # Power down WIFI chip
@@ -102,11 +106,13 @@ wifi_down()
 	echo 0 > /sys/class/gpio/gpio${WIFI_EN_GPIO}/value
 
 	# BT_BUF down
-	echo 1 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
+	if [ $SUSPEND -eq 0 ]; then
+		echo 1 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
 
-	# BT_EN down
-	#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+		# BT_EN down
+		#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
+		echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	fi
 
 	usleep 10000
 
@@ -215,13 +221,32 @@ wifi_stop()
 #              Execution starts here            #
 #################################################
 
-wifi_start
+if [ "$#" -ne 0 ]; then
 
-# BT_BUF up
-echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
+	case $1 in
+	"suspend")
+		SUSPEND=1
+                wifi_down
+		SUSPEND=0
+        ;;
+	"resume")
+		RESUME=1
+		wifi_up
+		RESUME=0
+        ;;
+	esac
+else
+	# always load Ethernet driver
+	modprobe -d /vendor/lib/modules fec
 
-# always set property even if wifi failed
-# as property value "1" is expected in early-boot trigger
-setprop sys.brcm.wifibt.completed 1
+	wifi_start
+
+	# BT_BUF up
+	echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
+
+	# always set property even if wifi failed
+	# as property value "1" is expected in early-boot trigger
+	setprop sys.brcm.wifibt.completed 1
+fi
 
 exit 0

@@ -12,8 +12,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qx.rc \
-    $(IMX_DEVICE_PATH)/ueventd.nxp.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    $(IMX_DEVICE_PATH)/init.brcm.wifibt.8qx.sh:vendor/bin/init.brcm.wifibt.sh
+    $(IMX_DEVICE_PATH)/ueventd.nxp.8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
 
 PRODUCT_COPY_FILES += \
@@ -36,4 +35,6 @@ TARGET_BOOTLOADER_CONFIG := \
         imx8qxp-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig \
         imx8qxpb0-var-som-uuu:imx8qxp_var_som_android_uuu_defconfig
 
-
+#WiFI BT script tools
+PRODUCT_PACKAGES += \
+    init.brcm.wifibt.8qx.sh
