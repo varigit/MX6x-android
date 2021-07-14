@@ -1,0 +1,38 @@
+From bd0db1e23276c553844cc1139268f45e12b9f677 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Wed, 14 Jul 2021 10:42:52 -0700
+Subject: [PATCH] sepolicy: Whitelist domain. It is a fix for WiFi upon resume
+ from suspend.
+
+---
+ prebuilts/api/30.0/public/property.te | 1 +
+ public/property.te                    | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/prebuilts/api/30.0/public/property.te b/prebuilts/api/30.0/public/property.te
+index 9a93518d6..ab8c51255 100644
+--- a/prebuilts/api/30.0/public/property.te
++++ b/prebuilts/api/30.0/public/property.te
+@@ -565,6 +565,7 @@ compatible_property_only(`
+   # Neverallow coredomain to set vendor properties
+   neverallow {
+     coredomain
++    -domain
+     -init
+     -system_writes_vendor_properties_violators
+   } {
+diff --git a/public/property.te b/public/property.te
+index 9a93518d6..ab8c51255 100644
+--- a/public/property.te
++++ b/public/property.te
+@@ -565,6 +565,7 @@ compatible_property_only(`
+   # Neverallow coredomain to set vendor properties
+   neverallow {
+     coredomain
++    -domain
+     -init
+     -system_writes_vendor_properties_violators
+   } {
+-- 
+2.25.1
+
