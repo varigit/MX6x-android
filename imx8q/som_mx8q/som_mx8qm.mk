@@ -14,9 +14,8 @@ PRODUCT_COPY_FILES += \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/dpfw.bin:vendor/firmware/hdp/dpfw.bin \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:vendor/firmware/hdp/hdmitxfw.bin \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin:vendor/firmware/hdp/hdmirxfw.bin \
-    $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8qm.rc \
-    $(IMX_DEVICE_PATH)/ueventd.freescale.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc \
-    $(IMX_DEVICE_PATH)/init.brcm.wifibt.8qm.sh:vendor/bin/init.brcm.wifibt.sh
+    $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qm.rc \
+    $(IMX_DEVICE_PATH)/ueventd.nxp.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds.img
 
@@ -32,6 +31,9 @@ TARGET_BOARD_DTS_CONFIG := \
 endif
 
 TARGET_BOOTLOADER_CONFIG := \
-         imx8qm:imx8qm_var_som_android_defconfig \
-         imx8qm-som-uuu:imx8qm_var_som_android_uuu_defconfig
+         imx8qm-var-som:imx8qm_var_som_android_defconfig \
+         imx8qm-var-som-uuu:imx8qm_var_som_android_uuu_defconfig
 
+#WiFI BT script tools
+PRODUCT_PACKAGES += \
+    init.brcm.wifibt.8qm.sh

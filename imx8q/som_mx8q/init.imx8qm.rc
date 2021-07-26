@@ -45,11 +45,14 @@ on property:sys.boot_completed=1
     # Set up and down limit to 200us/30ms
     write /sys/devices/system/cpu/cpufreq/schedutil/up_rate_limit_us 200
     write /sys/devices/system/cpu/cpufreq/schedutil/down_rate_limit_us 30000
+    write /proc/sys/kernel/sched_util_clamp_min 512
 
-on property:sys.boot_completed=1
+# Android Automotve have boot time tuning
+# which set the A72 core as CPU0 and CPU1
+on property:sys.boot_completed=1 && property:vendor.all.car=false
     # update cpuset now that processors are up
     # Foreground should contain most cores
-    write /dev/cpuset/foreground/cpus 0-5
+    write /dev/cpuset/foreground/cpus 0-4
 
     # top-app gets all cpus
     write /dev/cpuset/top-app/cpus 0-5
@@ -62,3 +65,18 @@ on property:sys.boot_completed=1
     # system-background is for system tasks that should only run on
     # little cores, not on bigs to be used only by init
     write /dev/cpuset/system-background/cpus 0-3
+
+on property:sys.boot_completed=1 && property:vendor.all.car=true
+    # update cpuset now that processors are up
+    # Foreground should contain most cores
+    write /dev/cpuset/foreground/cpus 0,2-5
+
+    # top-app gets all cpus
+    write /dev/cpuset/top-app/cpus 0-5
+
+    # background assign cpu0 which is the A72 in Android Automotive. As the interrupt routes to CPU0.
+    write /dev/cpuset/background/cpus 0
+
+    # add system-background cpuset, a new cpuset for system services
+    # that should not run on more cores than foreground
+    write /dev/cpuset/system-background/cpus 0,2-4

@@ -1,7 +1,7 @@
 /dev/block/platform/bus@5b000000/5b020000\.mmc/by-name/presistdata 0600   system     system
 /dev/block/platform/bus@5b000000/5b010000\.mmc/by-name/presistdata 0600   system     system
-/dev/block/platform/passthrough/bus@5b000000/5b020000\.mmc/by-name/presistdata 0600   system     system
-/dev/block/platform/passthrough/bus@5b000000/5b010000\.mmc/by-name/presistdata 0600   system     system
+/dev/block/platform/passthrough/passthrough:bus@5b000000/5b020000\.mmc/by-name/presistdata 0600   system     system
+/dev/block/platform/passthrough/passthrough:bus@5b000000/5b010000\.mmc/by-name/presistdata 0600   system     system
 /dev/ttyLP*               0660   system     system
 /dev/ttyLP1               0660   bluetooth  bluetooth
 /dev/snd/*                0660   system     audio
@@ -9,14 +9,13 @@
 /dev/mxc_hifi4            0660   media      drmrpc
 /dev/imxdpu               0660   media      drmrpc
 /dev/mxc_vpu_malone       0660   media      drmrpc
-/dev/uinput               0660   system     bluetooth
 /dev/ion                  0666   media      drmrpc
 /dev/galcore	          0666 	 system     graphics
 /dev/graphics/fb0         0660   system     graphics
 /dev/watchdog             0660   system     root
-/dev/input/event*         0660   system     system
 /dev/trusty-ipc-dev0      0660   system     drmrpc
 /dev/mmcblk0rpmb    0600   system     system
+/dev/block/pmem0          0660 system system
 
 # sensors sysfs
 /dev/FreescaleAccelerometer                     0660  system   system

@@ -20,13 +20,13 @@
 
 #define BTM_DEF_LOCAL_NAME "SOM-MX8QM"
 
-//#define KERNEL_MISSING_CLOCK_BOOTTIME_ALARM TRUE
+// Disables Interleave scan
+#define BTA_HOST_INTERLEAVE_SEARCH  FALSE
+// skips conn update at conn completion
+#define BTA_BLE_SKIP_CONN_UPD  TRUE
+// Disables read remote device feature
+#define BTA_SKIP_BLE_READ_REMOTE_FEAT TRUE
 
-// Wide-band speech support
-#define BTM_WBS_INCLUDED TRUE
-#define BTIF_HF_WBS_PREFERRED TRUE
-
-// Enable A2dp Sink
+//Enable A2DPSink AVRCPController
 #define BTA_AV_SINK_INCLUDED TRUE
-
 #endif
