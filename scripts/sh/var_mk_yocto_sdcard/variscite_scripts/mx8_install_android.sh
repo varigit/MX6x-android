@@ -20,6 +20,7 @@ SUPER_ROM_SIZE=3584
 VENDOR_BOOT_SIZE=64
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
+FIRMWARE_SIZE=1
 
 sdshared=false
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
@@ -143,6 +144,30 @@ do
 		img_list+=("$img (VAR-SOM-MX8QXP-M4 on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qxp-var-som-symphony-wifi"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8QXP on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-dp-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-DP-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-dp"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-DP on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-hdmi-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-HDMI-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-hdmi"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-HDMI on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-lvds-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-LVDS-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-som-lvds"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8-LVDS on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qm-var-spear-dp-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8-DP-M4)")
+	elif  [[ "$img" == *"imx8qm-var-spear-dp"* ]]; then
+		img_list+=("$img (SPEAR-MX8-DP)")
+	elif  [[ "$img" == *"imx8qm-var-spear-hdmi-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8-HDMI-M4)")
+	elif  [[ "$img" == *"imx8qm-var-spear-hdmi"* ]]; then
+		img_list+=("$img (SPEAR-MX8-HDMI)")
+	elif  [[ "$img" == *"imx8qm-var-spear-lvds-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8-LVDS-M4)")
+	elif  [[ "$img" == *"imx8qm-var-spear-lvds"* ]]; then
+		img_list+=("$img (SPEAR-MX8-LVDS)")
 	else
 		img_list+=($img)
 	fi
@@ -166,7 +191,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QXP" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QXP\|i.MX8QM" /sys/devices/soc0/soc_id; then
 				soc_name=`echo $opt | cut -d "." -f1`
 				soc_name=${soc_name#${img_prefix}}
 			else
@@ -235,7 +260,9 @@ fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qm.imx"
+	bootloader_file="u-boot-imx8qm-var-som.imx"
+
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
@@ -272,7 +299,11 @@ total_size=`expr ${total_size} \/ 1024`
 boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
+	else
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	fi
 else
 	extend_size=`expr ${SYSTEM_ROM_SIZE} \* 2 + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${VENDOR_ROM_SIZE} \* 2 + ${PRODUCT_ROM_SIZE} \* 2 + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 fi
@@ -429,8 +460,10 @@ function create_parts
 		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
 		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
 		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			sgdisk -n 15:0:+${FIRMWARE_SIZE}M	      -c 15:"firmware"	    -t 15:8300 $node
+		fi
 	fi
-
 
 	sync; sleep 2
 
@@ -484,6 +517,11 @@ function format_android
 		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Formating userdata partition"
 		mkfs.ext4 -F ${node}${part}11 -Ldata
+
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			blue_underlined_bold_echo "Formating firmware partition"
+			mkfs.ext4 -F ${node}${part}15 -Lfirmware
+		fi
 	fi
 	sync; sleep 1
 }
@@ -543,6 +581,19 @@ function install_android
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}13 bs=1M
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
 		sync;
+
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			echo
+			blue_underlined_bold_echo "Installing firmware image"
+			mkdir -p /tmp/firmware_mnt
+			mount ${node}${part}15 /tmp/firmware_mnt
+			mkdir -p /tmp/firmware_mnt/firmware/hdp
+			cp ${imagesdir}/*.bin /tmp/firmware_mnt/firmware/hdp
+			sync;
+			umount /tmp/firmware_mnt
+			rm -rf /tmp/firmware_mnt
+		fi
+
 	fi
 
 

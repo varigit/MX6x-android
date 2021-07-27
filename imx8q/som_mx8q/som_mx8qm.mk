@@ -17,17 +17,28 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qm.rc \
     $(IMX_DEVICE_PATH)/ueventd.nxp.8qm.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds.img
+PRODUCT_COPY_FILES += \
+device/variscite/imx8q/som_mx8q/freertos/8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin \
+device/variscite/imx8q/som_mx8q/freertos/8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf \
+device/variscite/imx8q/som_mx8q/freertos/8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin \
+device/variscite/imx8q/som_mx8q/freertos/8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf
 
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds.img
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 TARGET_BOARD_DTS_CONFIG := \
-        imx8qm-var-som-dp:imx8qm-var-som-dp.dtb \
-        imx8qm-var-som-hdmi:imx8qm-var-som-hdmi.dtb \
-        imx8qm-var-som-lvds:imx8qm-var-som-lvds.dtb \
-        imx8qm-var-spear-dp:imx8qm-var-spear-dp.dtb \
-        imx8qm-var-spear-hdmi:imx8qm-var-spear-hdmi.dtb \
-        imx8qm-var-spear-lvds:imx8qm-var-spear-lvds.dtb
+	imx8qm-var-som-dp:imx8qm-var-som-dp.dtb \
+	imx8qm-var-som-dp-m4:imx8qm-var-som-dp-m4.dtb \
+	imx8qm-var-som-hdmi:imx8qm-var-som-hdmi.dtb \
+	imx8qm-var-som-hdmi-m4:imx8qm-var-som-hdmi-m4.dtb \
+	imx8qm-var-som-lvds:imx8qm-var-som-lvds.dtb \
+	imx8qm-var-som-lvds-m4:imx8qm-var-som-lvds-m4.dtb \
+	imx8qm-var-spear-dp:imx8qm-var-spear-dp.dtb \
+	imx8qm-var-spear-dp-m4:imx8qm-var-spear-dp-m4.dtb \
+	imx8qm-var-spear-hdmi:imx8qm-var-spear-hdmi.dtb \
+	imx8qm-var-spear-hdmi-m4:imx8qm-var-spear-hdmi-m4.dtb \
+	imx8qm-var-spear-lvds:imx8qm-var-spear-lvds.dtb \
+	imx8qm-var-spear-lvds-m4:imx8qm-var-spear-lvds-m4.dtb
 endif
 
 TARGET_BOOTLOADER_CONFIG := \

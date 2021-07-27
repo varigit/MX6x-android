@@ -153,10 +153,22 @@ function copy_android
                 sync | pv -t
 	elif [[ "${MACHINE}" = "imx8qxp-var-som" || "imx8qxpb0-var-som" ]]; then
                 echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8x/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8x/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf
+
+                sync | pv -t
+	elif [[ "${MACHINE}" = "imx8qm-var-som" ]]; then
+                echo "Copying M4 demo images to /opt/images/"
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8m/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8m/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8m/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/freertos/8m/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf
 
                 sync | pv -t
 	fi
