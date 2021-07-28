@@ -37,7 +37,8 @@ VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.6.0"
-readonly SRCREV="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
+readonly SRCREV_8X="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
+readonly SRCREV_8M="9626cacced29ffa24b06847f1e54fc4eb137a282"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
 readonly PRE_BUILTS_GCC_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
@@ -111,34 +112,39 @@ function scfw_tools_setup()
 
 	case $1 in
 	      $"qx")
-		cd ${PRE_BUILTS_GCC_PATH}
-		if [[ ! -d "imx-sc-firmware" ]] ; then
-			git clone git://github.com/varigit/imx-sc-firmware.git
-		fi
-
-		if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then
-			wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/${GCC_ARM_NONE_TOOL}
-		fi
-
-		checksum=`md5sum ${GCC_ARM_NONE_TOOL} | awk '{ print $1 }'`
-
-		if [[ ${GCC_ARM_NONE_EABI_MD5SUM} = ${checksum} ]]; then
-			tar xf ${GCC_ARM_NONE_TOOL}
-		else
-			echo; red_bold_echo "Bad md5sum for ${GCC_ARM_NONE_TOOL}"
-			exit 1
-		fi
-
-		cd imx-sc-firmware/
-		existed_in_local=$(git branch --list ${SCFW_BRANCH})
-		if [[ -z ${existed_in_local} ]]; then
-			git checkout ${SRCREV} -b ${SCFW_BRANCH}
-		else
-		    echo "${SCFW_BRANCH} already exists"
-		fi
+		SRCREV=${SRCREV_8X}
+	   ;;
+	      $"qm")
+		SRCREV=${SRCREV_8M}
 	   ;;
 	*)
 	esac
+
+	cd ${PRE_BUILTS_GCC_PATH}
+	if [[ ! -d "imx-sc-firmware" ]] ; then
+		git clone git://github.com/varigit/imx-sc-firmware.git
+	fi
+
+	if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then
+		wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/8-2018q4/${GCC_ARM_NONE_TOOL}
+	fi
+
+	checksum=`md5sum ${GCC_ARM_NONE_TOOL} | awk '{ print $1 }'`
+
+	if [[ ${GCC_ARM_NONE_EABI_MD5SUM} = ${checksum} ]]; then
+		tar xf ${GCC_ARM_NONE_TOOL}
+	else
+		echo; red_bold_echo "Bad md5sum for ${GCC_ARM_NONE_TOOL}"
+		exit 1
+	fi
+
+	cd imx-sc-firmware/
+	existed_in_local=$(git branch --list ${SCFW_BRANCH})
+	if [[ -z ${existed_in_local} ]]; then
+		git checkout ${SRCREV} -b ${SCFW_BRANCH}
+	else
+	    echo "${SCFW_BRANCH} already exists"
+	fi
 }
 
 ############### main code ##############
