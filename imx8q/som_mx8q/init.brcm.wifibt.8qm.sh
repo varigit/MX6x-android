@@ -70,7 +70,7 @@ wifi_up()
 	echo ${WIFI_MMC_HOST} > /sys/bus/platform/drivers/sdhci-esdhc-imx/bind
 	
 	# Load WIFI driver
-	modprobe -d /vendor/lib/modules brcmfmac p2pon=1
+	modprobe -d /vendor/lib/modules brcmfmac
 }
 
 # Power down WIFI chip
