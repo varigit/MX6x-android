@@ -33,6 +33,7 @@ SUPER_ROM_SIZE=3584
 VENDOR_BOOT_SIZE=64
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
+FIRMWARE_SIZE=1
 
 help() {
 
@@ -180,7 +181,9 @@ fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qm.imx"
+	bootloader_file="u-boot-imx8qm-var-som.imx"
+
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin"
 fi
 
 echo "${soc_name} image dir is: ${imagesdir}"
@@ -212,7 +215,11 @@ total_size=`expr ${total_size} \/ 1024`
 boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
+	else
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
+	fi
 else
 	extend_size=`expr ${SYSTEM_ROM_SIZE} \* 2 + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${VENDOR_ROM_SIZE} \* 2 + ${PRODUCT_ROM_SIZE} \* 2 + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 fi
@@ -301,7 +308,7 @@ function check_images
 		exit 1
 	fi
 
-	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]]; then
+	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]] || [[ "${soc_name}" = *"mx8qm"* ]]; then
 		if [[ ! -f ${imagesdir}/vendor/firmware/${mcu_os_demo_file} ]] ; then
 			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 			exit 1
@@ -375,6 +382,9 @@ function create_parts
 		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
 		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
 		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			sgdisk -n 15:0:+${FIRMWARE_SIZE}M	      -c 15:"firmware"	    -t 15:8300 $node
+		fi
 	fi
 
 
@@ -400,7 +410,7 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 	
-	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]]; then
+	if [[ "${soc_name}" = *"mx8mm"* ]] || [[ "${soc_name}" = *"mx8mq"* ]] || [[ "${soc_name}" = *"mx8qm"* ]]; then
 		dd if=${imagesdir}/vendor/firmware/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
 	fi
 	sync
@@ -432,6 +442,11 @@ function format_android
 		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Formating userdata partition"
 		mkfs.ext4 -F ${node}${part}11 -Ldata
+
+		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+			blue_underlined_bold_echo "Formating firmware partition"
+			mkfs.ext4 -F ${node}${part}15 -Lfirmware
+		fi
 	fi
 	sync; sleep 1
 }
@@ -496,7 +511,7 @@ function install_android
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
 			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}13 /tmp/firmware_mnt
+			mount ${node}${part}15 /tmp/firmware_mnt
 			mkdir -p /tmp/firmware_mnt/firmware
 			cp -ar ${imagesdir}/vendor/firmware/hdp /tmp/firmware_mnt/firmware
 			sync;

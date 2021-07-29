@@ -262,7 +262,7 @@ if [[ "${soc_name}" = *"mx8qm"* ]]; then
 	bootloader_offset=32
 	bootloader_file="u-boot-imx8qm-var-som.imx"
 
-	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
