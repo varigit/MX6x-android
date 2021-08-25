@@ -1,0 +1,29 @@
+From 3cd7012f404f53e421c75d9e75125836d5b5831b Mon Sep 17 00:00:00 2001
+From: Nate Drude <nate.d@variscite.com>
+Date: Fri, 28 Aug 2020 13:07:23 -0500
+Subject: [PATCH 3/5] imx8mn: Remove uart2 and uart4 domain restrictions
+
+i.MX8MN ATF code assigns UART2 to the A53 Domain and UART4 to the M7 domain.
+Remove these assignments to allow for usage in either domain.
+
+Signed-off-by: Nate Drude <nate.d@variscite.com>
+---
+ plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+index 074c5fa7e..525b5cbde 100644
+--- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+@@ -52,8 +52,6 @@ static const struct imx_rdc_cfg rdc[] = {
+ 	RDC_MDAn(RDC_MDA_M7, DID1),
+ 
+ 	/* peripherals domain permission */
+-	RDC_PDAPn(RDC_PDAP_UART4, D1R | D1W),
+-	RDC_PDAPn(RDC_PDAP_UART2, D0R | D0W),
+ 
+ 	/* memory region */
+ 	RDC_MEM_REGIONn(16, 0x0, 0x0, 0xff),
+-- 
+2.25.1
+
