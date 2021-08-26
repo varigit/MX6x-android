@@ -3,9 +3,8 @@
 # install
 #
 # This script must be run from the Android main directory.
-# variscite/install must be at ~/q1000_100_build
 #
-# Variscite DART-MX8M patches for Android 10.0.0 2.5.0
+# Variscite DART-MX8M patches for Android 11.0.0 2.2.0
 
 set -e
 #set -x
@@ -23,11 +22,13 @@ readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu
 readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
+readonly C_LANG_LINK="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
+readonly C_LANG_DIR="/opt/prebuilt-android-clang-var"
 
-readonly BASE_BRANCH_NAME="android-11.0.0_1.0.0"
+readonly BASE_BRANCH_NAME="android-11.0.0_2.2.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="android-11.0.0_1.0.0-var01"
+readonly _EXTPARAM_BRANCH="android-11.0.0_2.2.0-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
@@ -193,6 +194,15 @@ pr_info "#######################"
 	tar -xJf ${G_CROSS_COMPILER_ARCHIVE} \
 		-C .
 };
+
+pr_info "#######################"
+pr_info "# Clang setup #"
+pr_info "#######################"
+if [[ ! -d ${C_LANG_DIR} ]] ; then
+	sudo git clone ${C_LANG_LINK} ${C_LANG_DIR} -b master
+	cd ${C_LANG_DIR}
+	sudo git checkout 007c96f100c5322acc37b84669c032c0121e68d0
+fi
 
 if [[ ! -z $SC_MX8_FAMILY ]] ; then
 	scfw_tools_setup ${SC_MX8_FAMILY}

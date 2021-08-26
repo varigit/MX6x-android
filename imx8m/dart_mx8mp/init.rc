@@ -45,15 +45,6 @@ on early-init && property:ro.boot.mode=charger
 on init && property:vendor.skip.charger_not_need=0
     start watchdogd
 
-    # Support legacy paths
-    symlink /sdcard /mnt/sdcard
-    symlink /sdcard /storage/sdcard0
-
-    # setup the global environment
-    export CORE_REGISTER_FILE /vendor/etc/core_register
-    export COMPONENT_REGISTER_FILE /vendor/etc/component_register
-    export CONTENTPIPE_REGISTER_FILE /vendor/etc/contentpipe_register
-
     # disable cursor blink for fbcon, if no splash screen support
     write /sys/class/graphics/fbcon/cursor_blink 0
 
@@ -95,15 +86,14 @@ on late-fs && property:vendor.skip.charger_not_need=0
 
 on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
     start vendor.oemlock-1-0
+    start confirmationui-1-0
+    start securedisplayd-imx
 
 on early-boot && property:vendor.skip.charger_not_need=0
     # For evk_8mp, when swap used about 400M, upgrade the level.
     setprop ro.lmk.upgrade_pressure 93
     setprop ro.lmk.downgrade_pressure 99
     setprop ro.lmk.critical_upgrade true
-
-    # Set permission for IIM node
-    symlink /dev/mxs_viim /dev/mxc_mem
 
     setprop vendor.hwc.stretch.filter  1
 
@@ -125,9 +115,9 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     # Prepare for wifi
     setprop wifi.interface wlan0
-    setprop wifi.direct.interface p2p0
-    setprop wifi.concurrent.interface wlan0
-
+   setprop wifi.direct.interface p2p0
+#    setprop wifi.concurrent.interface wlan0
+    
     setprop persist.service.bdroid.bdaddr 22:22:67:C6:69:73
 
     # Prepare for bluetooth
@@ -163,7 +153,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     # Enlarge limition of audio buffer allocation
     setprop ro.af.client_heap_size_kbyte 32768
 
-    start vendor.wifi_hal_legacy
+    setprop wlan.interface wlan0	
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
@@ -230,8 +220,7 @@ service iprenew_bt-pan /system/bin/dhcpcd -n
     oneshot
 
 # bugreport is triggered by holding down volume down, volume up and power
-service bugreport /system/bin/dumpstate -d -p -B -z \
-        -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
+service bugreport /system/bin/dumpstate -d -p -z
     class main
     disabled
     oneshot
@@ -245,30 +234,8 @@ on boot && property:vendor.skip.charger_not_need=0
 
 on property:sys.brcm.wifibt.completed=1
    start early_init_sh
-
-on property:vendor.wc_transport.start_hci=true
-    start start_hci_filter
-
-on property:vendor.wc_transport.start_hci=false
-    stop start_hci_filter
-
-service start_hci_filter /vendor/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth diag
-    disabled
-
-on property:vendor.wc_transport.start_root=true
-    start hci_filter_root
-
-on property:vendor.wc_transport.start_root=false
-    stop hci_filter_root
-
-service hci_filter_root /vendor/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth diag system
-    disabled
+   stop vendor.wifi_hal_legacy
+   start vendor.wifi_hal_legacy
 
 on fs && property:vendor.skip.charger_not_need=0
 # mount ext4 partitions
@@ -279,9 +246,6 @@ on fs && property:vendor.skip.charger_not_need=0
 
     # Update dm-verity state and set partition.*.verified properties
     verity_update_state
-
-on verity-logging && property:vendor.skip.charger_not_need=0
-    exec u:r:slideshow:s0 -- /sbin/slideshow warning/verity_red_1 warning/verity_red_2
 
 on post-fs && property:vendor.skip.charger_not_need=0
     # Set netd memlock rlimit to 8MB
@@ -335,8 +299,14 @@ on property:ro.boot.usb.debugging=1
 # setenv append_bootargs androidboot.powersave.usb=true
 on property:ro.boot.powersave.usb=true
     # enable platform/32f10100.usb runtime_pm
-    write /sys/devices/platform/32f10100.usb/38100000.dwc3/power/control auto
+    write /sys/devices/platform/soc@0/32f10100.usb/38100000.dwc3/power/control auto
 
     #enable platform/32f10108.usb runtime_pm
-    write /sys/devices/platform/32f10108.usb/38200000.dwc3/power/control auto
-    write /sys/devices/platform/32f10108.usb/38200000.dwc3/xhci-hcd.0.auto/power/control auto
+    write /sys/devices/platform/soc@0/32f10108.usb/38200000.dwc3/power/control auto
+    write /sys/devices/platform/soc@0/32f10108.usb/38200000.dwc3/xhci-hcd.0.auto/power/control auto
+
+# setenv append_bootargs androidboot.lpa.enable=1
+on property:ro.boot.lpa.enable=1
+    setprop vendor.audio.lpa.hold_second 20
+    setprop vendor.audio.lpa.period_ms 500
+    setprop vendor.audio.lpa.enable 1

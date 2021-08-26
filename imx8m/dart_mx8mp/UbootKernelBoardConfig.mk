@@ -3,12 +3,13 @@ TARGET_BOOTLOADER_POSTFIX := bin
 UBOOT_POST_PROCESS := true
 
 TARGET_BOOTLOADER_CONFIG := \
-         imx8mp-var-dart:imx8mp_var_dart_android_defconfig \
-         imx8mp-var-dart-uuu:imx8mp_var_dart_android_uuu_defconfig
+         imx8mp-var-dart:imx8mp_var_dart_android_defconfig
+         
+#         imx8mp-var-dart-uuu:imx8mp_var_dart_android_uuu_defconfig
 
-ifneq ($(IMX8MP_USES_GKI),)
+ifeq ($(IMX8MP_USES_GKI),true)
 TARGET_KERNEL_DEFCONFIG := gki_defconfig
-TARGET_KERNEL_GKI_DEFCONF:= android_gki_defconfig
+TARGET_KERNEL_GKI_DEFCONF:= imx8mp_gki.fragment
 else
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig
 endif
