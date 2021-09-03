@@ -267,8 +267,8 @@ PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
 
 # ISP camera feature demo
-#PRODUCT_PACKAGES += \
-#    CameraXBasic
+PRODUCT_PACKAGES += \
+    CameraXBasic
 
 # -------@block_display-------
 
@@ -376,7 +376,7 @@ PRODUCT_COPY_FILES += \
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
-    android.hardware.bluetooth@1.0-service 
+    android.hardware.bluetooth@1.0-service
 
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
