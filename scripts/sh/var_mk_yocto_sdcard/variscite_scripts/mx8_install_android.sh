@@ -183,8 +183,8 @@ vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
-mcu_os_demo_file_8mp_dart="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart"
-mcu_os_demo_file_8mp_som="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som"
+mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
+mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
 
 block=`basename $node`
 part=""

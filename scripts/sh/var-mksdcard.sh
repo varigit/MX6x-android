@@ -46,6 +46,14 @@ help() {
 	echo " -f soc_name		flash android image."
 }
 
+function rename_remoteproc_images {
+	if [[ "$1" == *"imx8mp-var-som"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
+	fi
+}
+
 # Parse command line
 moreoptions=1
 node="na"
@@ -138,6 +146,8 @@ vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart"
+mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
+mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
 
 block=`basename $node`
 part=""
@@ -305,6 +315,7 @@ function check_images
 		exit 1
 	fi
 
+	rename_remoteproc_images ${soc_name}
 	if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
 		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 		exit 1

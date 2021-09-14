@@ -130,10 +130,10 @@ function copy_android
 
 	if [[ "${MACHINE}" = "imx8mp-var-dart" ]]; then
                 echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart >         ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.elf.dart >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf.dart
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som >          ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.elf.som >              ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf.som
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart >         ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart >          ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som >              ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
                 sync | pv -t
 	fi
 

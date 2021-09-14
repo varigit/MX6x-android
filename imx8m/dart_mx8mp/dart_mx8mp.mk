@@ -385,13 +385,10 @@ PRODUCT_PACKAGES += \
 endif
 
 PRODUCT_COPY_FILES += \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr.dart:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr.dart \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr.som:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr.som \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.som \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.elf.dart:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.elf.dart \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.elf.som:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.elf.som \
-device/variscite/imx8m/dart_mx8mp/rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart:rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart \
+device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart \
+device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som \
+device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart:cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart \
+device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som:cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
 
 # Boot Animation
 PRODUCT_COPY_FILES += \
