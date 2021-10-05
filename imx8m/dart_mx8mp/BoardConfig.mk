@@ -133,8 +133,8 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 	 imx8mp-var-som-symphony-2nd-ov5640-m7:imx8mp-var-som-symphony-2nd-ov5640-m7.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-m7:imx8mp-var-dart-dt8mcustomboard-m7.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-legacy-m7:imx8mp-var-dart-dt8mcustomboard-legacy-m7.dtb \
-	 imx8mp-var-som-symphony-basler-isi0:imx8mp-var-som-symphony-basler-isi0.dtb \
 	 imx8mp-var-som-symphony-basler-isp0:imx8mp-var-som-symphony-basler-isp0.dtb \
+	 imx8mp-var-dart-dt8mcustomboard-basler-isp0:imx8mp-var-dart-dt8mcustomboard-basler-isp0.dtb
 
 endif
 
