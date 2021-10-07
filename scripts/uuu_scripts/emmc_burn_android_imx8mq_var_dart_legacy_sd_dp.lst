@@ -29,7 +29,7 @@ FB: ucmd setenv mmcdev 0
 FB: ucmd setenv fastboot_dev mmc
 FB: ucmd mmc partconf 0 0 0 0
 FB: ucmd mmc partconf 0 0 0 0
-FB: flash bootloader0 u-boot-imx8mq-var-dart.imx
+FB: flash bootloader0 u-boot-imx8mq-var-dart-dp.imx
 FB: flash gpt partition-table.img
 FB: flash dtbo_a dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-sd-dp.img
 FB: flash dtbo_b dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-sd-dp.img
