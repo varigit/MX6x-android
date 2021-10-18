@@ -13,7 +13,9 @@ PRODUCT_IMX_TRUSTY := true
 # BCM fmac wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
+    $(KERNEL_OUT)/drivers/net/can/flexcan.ko \
+    $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
 
 # isp vvcam driver module
 #BOARD_VENDOR_KERNEL_MODULES += \
