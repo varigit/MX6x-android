@@ -109,9 +109,9 @@ do
 		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
 		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
-	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
+	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then
+	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
 	elif  [[ "$img" == *"imx8mn-var-som-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")

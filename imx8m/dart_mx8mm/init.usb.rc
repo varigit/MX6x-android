@@ -50,3 +50,6 @@ on early-boot
 
 on boot
     setprop sys.usb.configfs 2
+
+on post-fs-data && property:vendor.gki.enable=true
+    setprop sys.usb.controller "ci_hdrc.0"

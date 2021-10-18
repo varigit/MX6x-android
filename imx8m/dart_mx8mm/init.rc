@@ -1,14 +1,29 @@
 import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
-import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.storage_type}.rc
-#import /vendor/etc/init/hw/init.${ro.hardware}.additional.rc
+import /vendor/etc/init/hw/init.${ro.hardware}.additional.rc
 
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
 
+    # Mount binderfs
+    mkdir /dev/binderfs
+    mount binder binder /dev/binderfs stats=global
+    chmod 0755 /dev/binderfs
+
+    symlink /dev/binderfs/binder /dev/binder
+    symlink /dev/binderfs/hwbinder /dev/hwbinder
+    symlink /dev/binderfs/vndbinder /dev/vndbinder
+
+    chmod 0666 /dev/binderfs/hwbinder
+    chmod 0666 /dev/binderfs/binder
+    chmod 0666 /dev/binderfs/vndbinder
+
+
 on early-init
-    start init_brcm_wifibt_sh
+    # Set the host name which used in console
+    export HOSTNAME imx8mm-var-dart
+    start early_init_sh
 
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
@@ -65,6 +80,8 @@ on late-fs
     start vendor.keymaster-3-0-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
 
+    mount_all /vendor/etc/fstab.freescale --late
+
 on late-fs && property:vendor.storageproxyd=trusty
     start vendor.oemlock-1-0
 
@@ -73,9 +90,6 @@ on early-boot
     setprop ro.lmk.upgrade_pressure 80
     setprop ro.lmk.downgrade_pressure 95
     setprop ro.lmk.critical_upgrade true
-
-    # Set the host name which used in console
-    export HOSTNAME imx8mm-var-dart
 
     # Set permission for IIM node
     symlink /dev/mxs_viim /dev/mxc_mem
@@ -91,17 +105,8 @@ on early-boot
     # fsl omx graphic manager media framework property
     setprop rw.VIDEO_RENDER_NAME video_render.surface
     setprop media.fsl_codec.flag 7
-    setprop debug.stagefright.ccodec 0
 
-    #Define the config for dual camera
-    #For landscape mode, orient is 0
-    #For portrait mode, orient is 90
-    #the android before honycomb are all in portrait mode
     setprop camera.disable_zsl_mode 1
-    setprop back_camera_name mx6s-csi
-    setprop back_camera_orient 0
-    setprop front_camera_name uvc
-    setprop front_camera_orient 0
 
     #Enable GPU 2D do CSC on imx8mm platform
     setprop vendor.camera.2d.enable true
@@ -115,19 +120,19 @@ on early-boot
 
     # Prepare for wifi
     setprop wifi.interface wlan0
-    setprop wifi.ap.interface wlan0
+    setprop wifi.direct.interface p2p0
+    setprop wifi.concurrent.interface wlan0
 
     # Prepare for bluetooth
     chmod 665 /sys/class/rfkill/rfkill0/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 0
 
-
-    # Set the density to 160 dpi to match LCD.
+ # Set the density to 160 dpi to match LCD.
     setprop ro.sf.lcd_density 160
 
-    # prepare for ril
-    setprop ro.ril.wake_lock_timeout 300
+  # prepare for ril
+    setprop ro.ril.wake_lock_timeout 30
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
@@ -144,7 +149,7 @@ on early-boot
 
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
-    setprop ro.lightsensor.threshold  20
+    setprop vendor.ro.lightsensor.threshold  20
 
     # Dectect DSF streams when scanning media
     setprop ro.FSL_DSF_PARSER 1
@@ -160,6 +165,7 @@ on early-boot
 
     setprop wlan.interface wlan0
     start vendor.wifi_hal_legacy
+
 
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
@@ -180,7 +186,7 @@ service sensor_fusion /vendor/bin/fsl_sensor_fusion
     oneshot
 
 # Set watchdog timer to 30 seconds and pet it every 10 seconds to get a 20 second margin
-service watchdogd /sbin/watchdogd 10 20
+service watchdogd /system/bin/watchdogd 10 20
     class core
     seclabel u:r:watchdogd:s0
 
@@ -267,7 +273,7 @@ service hci_filter_root /vendor/bin/wcnss_filter
 
 on fs
 # mount ext4 partitions
-    mount_all /vendor/etc/fstab.freescale
+    mount_all /vendor/etc/fstab.freescale --early
 
     # Adjust parameters for dm-verity device
     write /sys/block/dm-0/queue/read_ahead_kb 4096
@@ -287,6 +293,10 @@ on post-fs
 
     # Swap in only 1 page at a time
     write /proc/sys/vm/page-cluster 0
+
+    # Grant permission for fetching available_pages info of statsd
+    chown system system /proc/pagetypeinfo
+    chmod 0440 /proc/pagetypeinfo
 
 on post-fs-data
     setprop vold.post_fs_data_done 1
@@ -313,8 +323,15 @@ service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg sys.
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start storageproxyd
 
+on property:sys.boot_completed=1
+    start init_brcm_wifibt_sh
+
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system
 
 on property:ro.boot.vendor.sysrq=1
     write /proc/sys/kernel/sysrq 1
+
+# setenv append_bootargs androidboot.usb.debugging=1
+on property:ro.boot.usb.debugging=1
+    setprop persist.sys.usb.config adb

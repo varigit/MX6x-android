@@ -8,7 +8,7 @@ BCM_FIRMWARE_PATH := vendor/variscite/bcm_4343w_fw
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
 -include device/fsl/common/imx_path/ImxPathConfig.mk
-$(call inherit-product, device/fsl/imx8m/ProductConfigCommon.mk)
+include device/fsl/imx8m/ProductConfigCommon.mk
 
 ifneq ($(wildcard $(IMX_DEVICE_PATH)/fstab.freescale),)
 $(shell touch $(IMX_DEVICE_PATH)/fstab.freescale)
@@ -17,16 +17,47 @@ endif
 # Overrides
 PRODUCT_NAME := dart_mx8mm
 PRODUCT_DEVICE := dart_mx8mm
-PRODUCT_MODEL := variscite
+PRODUCT_MODEL := Variscite
 
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 
 #Enable this to choose 32 bit user space build
 #IMX8_BUILD_32BIT_ROOTFS := true
 
+#Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
+TARGET_USE_DYNAMIC_PARTITIONS ?= true
+#If the device is retrofit to have dynamic partition feature, set this variable to true to build
+#the images and OTA package. Here is a demo to update 10.0.0_1.0.0 to 10.0.0_2.0.0 or higher
+TARGET_USE_RETROFIT_DYNAMIC_PARTITION ?= false
+
+ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+  PRODUCT_USE_DYNAMIC_PARTITIONS := true
+  BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
+  BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
+  ifeq ($(TARGET_USE_RETROFIT_DYNAMIC_PARTITION),true)
+    PRODUCT_RETROFIT_DYNAMIC_PARTITIONS := true
+    BOARD_SUPER_PARTITION_METADATA_DEVICE := system
+    ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+      BOARD_SUPER_PARTITION_BLOCK_DEVICES := system vendor
+      BOARD_SUPER_PARTITION_SYSTEM_DEVICE_SIZE := 2952790016
+      BOARD_SUPER_PARTITION_VENDOR_DEVICE_SIZE := 536870912
+    else
+      BOARD_SUPER_PARTITION_BLOCK_DEVICES := system vendor product
+      BOARD_SUPER_PARTITION_SYSTEM_DEVICE_SIZE := 1610612736
+      BOARD_SUPER_PARTITION_VENDOR_DEVICE_SIZE := 536870912
+      BOARD_SUPER_PARTITION_PRODUCT_DEVICE_SIZE := 1879048192
+    endif
+  endif
+endif
+
 # Include keystore attestation keys and certificates.
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 -include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
+endif
+
+# Include Android Go config for low memory device.
+ifeq ($(LOW_MEMORY),true)
+$(call inherit-product, build/target/product/go_defaults.mk)
 endif
 
 # Copy device related config and binary to board
@@ -38,6 +69,7 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml \
     $(IMX_DEVICE_PATH)/fstab.freescale:$(TARGET_COPY_OUT_VENDOR)/etc/fstab.freescale \
     $(IMX_DEVICE_PATH)/init.imx8mm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8mm.rc \
+    $(IMX_DEVICE_PATH)/init.recovery.freescale.rc:root/init.recovery.freescale.rc \
     $(IMX_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
     $(IMX_DEVICE_PATH)/init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.rc \
     $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.usb.rc \
@@ -46,8 +78,24 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/ueventd.varsommx8mmini.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.varsommx8mmini.rc \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/sdma/sdma-imx7d.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/imx/sdma/sdma-imx7d.bin \
     device/fsl/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
-    device/fsl/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf \
     device/fsl/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh
+
+ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/dynamic_partiton_tools/lpmake:lpmake \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/dynamic_partiton_tools/lpmake.exe:lpmake.exe
+endif
+
+# Audio card json
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
+    device/fsl/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
+    device/fsl/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
+
+
+#LPDDR4 board, NXP wifi supplicant overlay
+PRODUCT_COPY_FILES += \
+    device/fsl/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_COPY_FILES += \
@@ -56,12 +104,14 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
-    device/variscite/imx8m/dart_mx8mm/camera_config_imx8mm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mm.json
+    device/variscite/imx8m/dart_mx8mm/camera_config_imx8mm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mm.json \
+    device/fsl/imx8m/evk_8mm/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
+    frameworks/native/data/etc/android.hardware.camera.external.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.external.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.camera.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.camera.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
@@ -74,6 +124,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.usb.host.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.usb.host.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
+    frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
     frameworks/native/data/etc/android.software.app_widgets.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_widgets.xml \
     frameworks/native/data/etc/android.software.backup.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.backup.xml \
     frameworks/native/data/etc/android.software.device_admin.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.device_admin.xml \
@@ -101,6 +152,11 @@ PRODUCT_COPY_FILES += \
     device/fsl/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
     device/fsl/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
 
+# Copy media_codecs.xml for 1GB evk_imx8mm board
+ifeq ($(LOW_MEMORY),true)
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/media-profile/imx8mm/media_codecs_no_vpu.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml
+endif
 
 USE_XML_AUDIO_POLICY_CONF := 1
 
@@ -108,7 +164,7 @@ DEVICE_PACKAGE_OVERLAYS := $(IMX_DEVICE_PATH)/overlay
 
 PRODUCT_CHARACTERISTICS := tablet
 
-PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi
+PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
 PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
@@ -127,17 +183,34 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.renderscript@1.0-impl
 
+# ro.product.first_api_level indicates the first api level the device has commercially launched on.
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.typec.legacy=true
+
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
+
 PRODUCT_PACKAGES += \
     libEGL_VIVANTE \
     libGLESv1_CM_VIVANTE \
     libGLESv2_VIVANTE \
-    gralloc_viv.imx8 \
+    gralloc_viv.imx \
     libGAL \
     libGLSLC \
     libVSC \
     libg2d-viv \
     libgpuhelper \
-    gatekeeper.imx8
+    gatekeeper.imx
 
 PRODUCT_PACKAGES += \
     android.hardware.audio@5.0-impl:32 \
@@ -153,7 +226,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     android.hardware.thermal@2.0-service.imx
 PRODUCT_COPY_FILES += \
-    device/variscite/imx8m/dart_mx8mm/thermal_info_config_imx8mm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mm.json
+    device/fsl/imx8m/evk_8mm/thermal_info_config_imx8mm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mm.json
 
 # Usb HAL
 PRODUCT_PACKAGES += \
@@ -170,22 +243,31 @@ PRODUCT_PACKAGES += \
     wifilogd \
     wificond
 
+# WiFi RRO
+PRODUCT_PACKAGES += \
+    WifiOverlay
+
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
 
 PRODUCT_COPY_FILES += \
-    $(BCM_FIRMWARE_PATH)/bcm4339.hcd:vendor/firmware/bcm/bcm4339.hcd \
-    $(BCM_FIRMWARE_PATH)/bcm43430a1.hcd:vendor/firmware/bcm/bcm43430a1.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM4335C0.hcd:vendor/firmware/brcm/BCM4335C0.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM43430A1.hcd:vendor/firmware/brcm/BCM43430A1.hcd \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.bin:vendor/firmware/brcm/brcmfmac4339-sdio.bin \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.txt:vendor/firmware/brcm/brcmfmac4339-sdio.txt \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.bin:vendor/firmware/brcm/brcmfmac43430-sdio.bin \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.txt:vendor/firmware/brcm/brcmfmac43430-sdio.txt \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.clm_blob:vendor/firmware/brcm/brcmfmac43430-sdio.clm_blob
 
-# Boot Animation
+# Wifi regulatory
 PRODUCT_COPY_FILES += \
-    device/variscite/common/bootanimation-var1280.zip:system/media/bootanimation.zip
+    external/wireless-regdb/regulatory.db:vendor/firmware/regulatory.db \
+    external/wireless-regdb/regulatory.db.p7s:vendor/firmware/regulatory.db.p7s
+
+#Boot Animation
+PRODUCT_COPY_FILES += \
+   device/variscite/common/bootanimation-var1280.zip:system/media/bootanimation.zip
 
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -210,14 +292,12 @@ PRODUCT_PACKAGES += \
 
 ifneq ($(BUILD_TARGET_FS),ubifs)
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.internel.storage_size=/sys/block/mmcblk2/size \
     ro.frp.pst=/dev/block/by-name/presistdata
 endif
 
 # ro.product.first_api_level indicates the first api level the device has commercially launched on.
 PRODUCT_PROPERTY_OVERRIDES += \
-    ro.product.first_api_level=28 \
-    vendor.typec.legacy=true
+    ro.product.first_api_level=28
 
 PRODUCT_PACKAGES += \
     libg1 \
@@ -227,18 +307,21 @@ PRODUCT_PACKAGES += \
     libcodec_enc \
     DirectAudioPlayer
 
-# CANbus tools
+# imx c2 codec binary
 PRODUCT_PACKAGES += \
-    candump \
-    cansend \
-    cangen \
-    canfdtest \
-    cangw \
-    canplayer \
-    cansniffer \
-    isotprecv \
-    isotpsend \
-    isotpserver
+    lib_vpu_wrapper \
+    lib_imx_c2_videodec \
+    lib_imx_c2_vpuwrapper_dec \
+    lib_imx_c2_videodec_common \
+    lib_imx_c2_videoenc_common \
+    lib_imx_c2_vpuwrapper_enc \
+    lib_imx_c2_videoenc \
+    lib_imx_c2_process \
+    lib_imx_c2_process_dummy_post \
+    lib_imx_c2_process_g2d_pre \
+    c2_component_register \
+    c2_component_register_ms \
+    c2_component_register_ra
 
 # Add oem unlocking option in settings.
 PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
@@ -281,10 +364,13 @@ else
 BOARD_AVB_ROLLBACK_INDEX := 0
 endif
 
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-$(call inherit-product, $(SRC_TARGET_DIR)/product/gsi_keys.mk)
-PRODUCT_PACKAGES += \
-    adb_debug.prop
+IMX-DEFAULT-G2D-LIB := libg2d-viv
+
+ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
+ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
+INSTALL_64BIT_LIBRARY := true
+endif
+-include $(FSL_CODEC_PATH)/fsl-codec/fsl-codec.mk
 endif
 
-IMX-DEFAULT-G2D-LIB := libg2d-viv
+$(call  inherit-product-if-exists, vendor/nxp-private/security/nxp_security.mk)

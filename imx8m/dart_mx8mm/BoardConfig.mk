@@ -6,6 +6,7 @@ BOARD_SOC_TYPE := IMX8MM
 BOARD_TYPE := DART-IMX8MM
 BOARD_HAVE_VPU := true
 BOARD_VPU_TYPE := hantro
+FSL_VPU_OMX_ONLY := true
 HAVE_FSL_IMX_GPU2D := true
 HAVE_FSL_IMX_GPU3D := true
 HAVE_FSL_IMX_IPU := false
@@ -26,6 +27,7 @@ SOONG_CONFIG_IMXPLUGIN += \
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX8MM
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = true
 SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_TYPE = hantro
+SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 
 #
 # Product-specific compile-time definitions.
@@ -34,9 +36,6 @@ SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_TYPE = hantro
 IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mm
 
 include device/fsl/imx8m/BoardConfigCommon.mk
-ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
--include $(FSL_CODEC_PATH)/fsl-codec/fsl-codec.mk
-endif
 
 BUILD_TARGET_FS ?= ext4
 TARGET_USERIMAGES_USE_EXT4 := true
@@ -44,16 +43,23 @@ TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_RECOVERY_FSTAB = $(IMX_DEVICE_PATH)/fstab.freescale
 
 # Support gpt
-ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
-BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions-13GB-ab-no-product.bpt
-ADDITION_BPT_PARTITION = partition-table-28GB:device/fsl/common/partition/device-partitions-28GB-ab-no-product.bpt \
-                         partition-table-dual:device/fsl/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
-                         partition-table-28GB-dual:device/fsl/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
+ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
+  BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions-13GB-ab_super.bpt
+  ADDITION_BPT_PARTITION = partition-table-28GB:device/fsl/common/partition/device-partitions-28GB-ab_super.bpt \
+                           partition-table-dual:device/fsl/common/partition/device-partitions-13GB-ab-dual-bootloader_super.bpt \
+                           partition-table-28GB-dual:device/fsl/common/partition/device-partitions-28GB-ab-dual-bootloader_super.bpt
 else
-BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions-13GB-ab.bpt
-ADDITION_BPT_PARTITION = partition-table-28GB:device/fsl/common/partition/device-partitions-28GB-ab.bpt \
-                         partition-table-dual:device/fsl/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
-                         partition-table-28GB-dual:device/fsl/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
+  ifeq ($(IMX_NO_PRODUCT_PARTITION),true)
+    BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions-13GB-ab-no-product.bpt
+    ADDITION_BPT_PARTITION = partition-table-28GB:device/fsl/common/partition/device-partitions-28GB-ab-no-product.bpt \
+                             partition-table-dual:device/fsl/common/partition/device-partitions-13GB-ab-dual-bootloader-no-product.bpt \
+                             partition-table-28GB-dual:device/fsl/common/partition/device-partitions-28GB-ab-dual-bootloader-no-product.bpt
+  else
+    BOARD_BPT_INPUT_FILES += device/fsl/common/partition/device-partitions-13GB-ab.bpt
+    ADDITION_BPT_PARTITION = partition-table-28GB:device/fsl/common/partition/device-partitions-28GB-ab.bpt \
+                             partition-table-dual:device/fsl/common/partition/device-partitions-13GB-ab-dual-bootloader.bpt \
+                             partition-table-28GB-dual:device/fsl/common/partition/device-partitions-28GB-ab-dual-bootloader.bpt
+  endif
 endif
 
 # Vendor Interface manifest and compatibility
@@ -68,16 +74,18 @@ BOARD_WLAN_DEVICE            := bcmdhd
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
 BOARD_HOSTAPD_DRIVER         := NL80211
-
 BOARD_HOSTAPD_PRIVATE_LIB               := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
-#BOARD_USE_SENSOR_FUSION := true
+BOARD_USE_SENSOR_FUSION := true
 
 # we don't support sparse image.
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
+
 BOARD_HAVE_USB_CAMERA := true
+BOARD_HAVE_USB_MJPEG_CAMERA := false
 
 USE_ION_ALLOCATOR := true
 USE_GPU_ALLOCATOR := false
@@ -108,12 +116,13 @@ $(error "TARGET_USERIMAGES_USE_UBIFS and TARGET_USERIMAGES_USE_EXT4 config open 
 endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart-dt8mcustomboard.img
 
 TARGET_BOARD_DTS_CONFIG := \
-        imx8mm-var-dart:fsl-imx8mm-var-dart.dtb \
-	imx8mm-var-som:fsl-imx8mm-var-som.dtb \
-	imx8mm-var-som-v10:fsl-imx8mm-var-som-rev10.dtb
+	imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
+	imx8mm-var-dart-dt8mcustomboard-legacy:imx8mm-var-dart-dt8mcustomboard-legacy.dtb \
+	imx8mm-var-som-symphony:imx8mm-var-som-symphony.dtb \
+	imx8mm-var-som-symphony-legacy:imx8mm-var-som-symphony-legacy.dtb \
 
 BOARD_SEPOLICY_DIRS := \
        device/fsl/imx8m/sepolicy \
@@ -127,3 +136,6 @@ endif
 TARGET_BOARD_KERNEL_HEADERS := device/fsl/common/kernel-headers
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
+
+BOARD_USES_METADATA_PARTITION := true
+BOARD_ROOT_EXTRA_FOLDERS += metadata

@@ -18,7 +18,7 @@ WIFI_MMC_HOST=30b40000.mmc
 # Return true if board is DART-MX8M-MINI
 board_is_dart_mx8m_mini()
 {
-	grep -q DART-MX8MM /sys/devices/soc0/machine
+	grep -q DART-MX8M-MINI /sys/devices/soc0/machine
 }
 
 # Setup WIFI control GPIOs
@@ -97,7 +97,7 @@ wifi_up()
 	echo ${WIFI_MMC_HOST} > /sys/bus/platform/drivers/sdhci-esdhc-imx/bind
 	
 	# Load WIFI driver
-	modprobe -d /vendor/lib/modules brcmfmac p2pon=1
+	modprobe -d /vendor/lib/modules brcmfmac
 }
 
 # Power down WIFI chip
