@@ -213,6 +213,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
     $(KERNEL_OUT)/drivers/media/platform/imx8/basler-camera-driver.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
+    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko
 
 endif
 
