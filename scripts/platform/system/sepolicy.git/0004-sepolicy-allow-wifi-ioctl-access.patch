@@ -1,7 +1,7 @@
-From be038a8e6b2f94e42990cae6ab9b9d961158c091 Mon Sep 17 00:00:00 2001
+From cdd80734e1c0d6041a4c7c1d9a947568f077aa2e Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Tue, 23 Mar 2021 09:22:37 -0700
-Subject: [PATCH 4/6] sepolicy: allow wifi ioctl access
+Subject: [PATCH 4/8] sepolicy: allow wifi ioctl access
 
 ---
  prebuilts/api/30.0/public/domain.te | 2 +-
@@ -9,10 +9,10 @@ Subject: [PATCH 4/6] sepolicy: allow wifi ioctl access
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
-index 5f4055884..714a6fc75 100644
+index 7b839712e..08d823833 100644
 --- a/prebuilts/api/30.0/public/domain.te
 +++ b/prebuilts/api/30.0/public/domain.te
-@@ -437,7 +437,7 @@ neverallow * *:{ blk_file chr_file } rename;
+@@ -441,7 +441,7 @@ neverallow * *:{ blk_file chr_file } rename;
  
  # Don't allow raw read/write/open access to generic devices.
  # Rather force a relabel to a more specific type.
@@ -22,10 +22,10 @@ index 5f4055884..714a6fc75 100644
  # Files from cache should never be executed
  neverallow domain { cache_file cache_backup_file cache_private_backup_file cache_recovery_file }:file execute;
 diff --git a/public/domain.te b/public/domain.te
-index 5f4055884..714a6fc75 100644
+index 7b839712e..08d823833 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -437,7 +437,7 @@ neverallow * *:{ blk_file chr_file } rename;
+@@ -441,7 +441,7 @@ neverallow * *:{ blk_file chr_file } rename;
  
  # Don't allow raw read/write/open access to generic devices.
  # Rather force a relabel to a more specific type.

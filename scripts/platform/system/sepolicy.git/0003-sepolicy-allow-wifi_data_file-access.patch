@@ -1,7 +1,7 @@
-From 8ed1b107109321401e96c89cd6d022c8e0a69bac Mon Sep 17 00:00:00 2001
+From f52d41191426396dff769db1717063ae65c5be1f Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Tue, 23 Mar 2021 09:19:24 -0700
-Subject: [PATCH 3/6] sepolicy: allow wifi_data_file access.
+Subject: [PATCH 3/8] sepolicy: allow wifi_data_file access.
 
 ---
  prebuilts/api/30.0/public/vendor_init.te | 1 +

@@ -1,13 +1,12 @@
-From d67e80872c4f2c4ba0706375916ccd1927b4dc48 Mon Sep 17 00:00:00 2001
+From da110211ca94d18b0cae497ecf7ea55dac18a04d Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
-Date: Wed, 25 Aug 2021 12:28:36 -0700
-Subject: [PATCH] NXP: build script changes required for
- android-11.0.0_2.2.0-var01
+Date: Fri, 12 Nov 2021 10:05:36 -0800
+Subject: [PATCH] Android: Changes required to compile android-11.0.0_2.4.0
 
 ---
- common/build/Makefile    |  7 ++++---
- common/tools/imx-make.sh | 10 ++++++----
- 2 files changed, 10 insertions(+), 7 deletions(-)
+ common/build/Makefile    | 7 ++++---
+ common/tools/imx-make.sh | 8 +++++---
+ 2 files changed, 9 insertions(+), 6 deletions(-)
 
 diff --git a/common/build/Makefile b/common/build/Makefile
 index b4449a58..b3a4ee49 100644
@@ -32,18 +31,9 @@ index b4449a58..b3a4ee49 100644
  -include ${product_path}/AndroidTee.mk
  -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index dfc906d8..911a5ab3 100755
+index dfc906d8..480f1199 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
-@@ -126,7 +126,7 @@ if [ ${build_bootloader_kernel_flag} -eq 0 ] && [ ${build_android_flag} -eq 0 ];
- fi
- 
- # vvcam.ko need build with kernel each time to make sure "insmod vvcam.ko" works
--if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
-+if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "dart_mx8mp" ]; then
-     build_vvcam="vvcam";
-     build_kernel_module_flag=1;
- fi
 @@ -137,10 +137,12 @@ if [ -n "${build_kernel}" ]; then
      build_kernel_module_flag=1;
  fi
@@ -54,7 +44,7 @@ index dfc906d8..911a5ab3 100755
  soc_path=${product_path%/*}
  nxp_git_path=${soc_path%/*}
 +export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
-+export CLANG_PATH=/opt/prebuilt-android-clang-var
++export CLANG_PATH=/opt/prebuilt-android-clang-var-bceb7274dda5b
  
  # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
  if [ -n "${build_bootloader}" ]; then

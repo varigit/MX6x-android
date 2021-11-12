@@ -1,7 +1,7 @@
-From 40a32a5e908570453f92505103cf83c60aba8c75 Mon Sep 17 00:00:00 2001
+From 9cf61564eaaf513b1c571b8cd6956867ee579355 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Tue, 23 Mar 2021 09:13:13 -0700
-Subject: [PATCH 2/6] sysfs sepolicy: allow sysfs and domain access.
+Subject: [PATCH 2/8] sysfs sepolicy: allow sysfs and domain access.
 
 - It is required for bt_vendor.conf
 ---
@@ -10,10 +10,10 @@ Subject: [PATCH 2/6] sysfs sepolicy: allow sysfs and domain access.
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
-index 963bf4ef6..5f4055884 100644
+index 415a51df5..7b839712e 100644
 --- a/prebuilts/api/30.0/public/domain.te
 +++ b/prebuilts/api/30.0/public/domain.te
-@@ -1021,7 +1021,7 @@ full_treble_only(`
+@@ -1025,7 +1025,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {
@@ -23,10 +23,10 @@ index 963bf4ef6..5f4055884 100644
      -coredomain
      -vendor_executes_system_violators
 diff --git a/public/domain.te b/public/domain.te
-index 963bf4ef6..5f4055884 100644
+index 415a51df5..7b839712e 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1021,7 +1021,7 @@ full_treble_only(`
+@@ -1025,7 +1025,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
    # ones whitelisted here.
    neverallow {

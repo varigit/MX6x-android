@@ -1,0 +1,99 @@
+From 1b974134c08bc6bd2d33f369a966bf792107dc67 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Fri, 29 Oct 2021 11:52:03 -0700
+Subject: [PATCH 2/3] imx8m: Disable ATF console_imx_uart_register for 
+ compatibility with all Variscite imx8m SOMs
+
+---
+ plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c | 5 ++++-
+ plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 5 ++++-
+ plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c | 5 ++++-
+ 3 files changed, 12 insertions(+), 3 deletions(-)
+
+diff --git a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
+index d577dfd27..b5733513b 100644
+--- a/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mm/imx8mm_bl31_setup.c
+@@ -159,7 +159,9 @@ static void bl31_tzc380_setup(void)
+ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 		u_register_t arg2, u_register_t arg3)
+ {
++#if VAR_ENABLE_IMX_UART	
+ 	static console_t console;
++#endif
+ #ifndef SPD_trusty
+ 	unsigned int val;
+ #endif
+@@ -178,11 +180,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 
+ 	imx8m_caam_init();
+ 
++#if VAR_ENABLE_IMX_UART
+ 	console_imx_uart_register(IMX_BOOT_UART_BASE, IMX_BOOT_UART_CLK_IN_HZ,
+ 		IMX_CONSOLE_BAUDRATE, &console);
+ 	/* This console is only used for boot stage */
+ 	console_set_scope(&console, CONSOLE_FLAG_BOOT);
+-
++#endif
+ 	/*
+ 	 * tell BL3-1 where the non-secure software image is located
+ 	 * and the entry state information.
+diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+index f8e690618..5a52982a6 100644
+--- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+@@ -149,7 +149,9 @@ static void bl31_tzc380_setup(void)
+ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 		u_register_t arg2, u_register_t arg3)
+ {
++#if VAR_ENABLE_IMX_UART
+ 	static console_t console;
++#endif
+ 	unsigned int val;
+ 	int i;
+ 
+@@ -177,11 +179,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 
+ 	imx8m_caam_init();
+ 
++#if VAR_ENABLE_IMX_UART
+ 	console_imx_uart_register(IMX_BOOT_UART_BASE, IMX_BOOT_UART_CLK_IN_HZ,
+ 		IMX_CONSOLE_BAUDRATE, &console);
+ 	/* This console is only used for boot stage */
+ 	console_set_scope(&console, CONSOLE_FLAG_BOOT);
+-
++#endif
+ 	/*
+ 	 * tell BL3-1 where the non-secure software image is located
+ 	 * and the entry state information.
+diff --git a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
+index d751570b1..bb4e220b0 100644
+--- a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
+@@ -165,7 +165,9 @@ static void bl31_tzc380_setup(void)
+ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 		u_register_t arg2, u_register_t arg3)
+ {
++#if VAR_ENABLE_IMX_UART
+ 	static console_t console;
++#endif
+ 	unsigned int val;
+ 	unsigned int i;
+ 
+@@ -187,11 +189,12 @@ void bl31_early_platform_setup2(u_register_t arg0, u_register_t arg1,
+ 
+ 	imx8m_caam_init();
+ 
++#if VAR_ENABLE_IMX_UART
+ 	console_imx_uart_register(IMX_BOOT_UART_BASE, IMX_BOOT_UART_CLK_IN_HZ,
+ 		IMX_CONSOLE_BAUDRATE, &console);
+ 	/* This console is only used for boot stage */
+ 	console_set_scope(&console, CONSOLE_FLAG_BOOT);
+-
++#endif
+ 	/*
+ 	 * tell BL3-1 where the non-secure software image is located
+ 	 * and the entry state information.
+-- 
+2.25.1
+
