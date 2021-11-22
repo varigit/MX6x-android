@@ -1,0 +1,5 @@
+on early-boot
+    # Prepare for wifi
+    setprop wifi.interface wlan0
+    setprop wifi.direct.interface p2p0
+    setprop wifi.concurrent.interface wlan1

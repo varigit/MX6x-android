@@ -1,12 +1,12 @@
 # uboot.imx in android combine scfw.bin and uboot.bin
 MAKE += SHELL=/bin/bash
 
-#ifneq ($(AARCH64_GCC_CROSS_COMPILE),)
-#ATF_CROSS_COMPILE := $(strip $(AARCH64_GCC_CROSS_COMPILE))
-#else
-ATF_TOOLCHAIN_ABS := $(realpath prebuilts/gcc/$(HOST_PREBUILT_TAG)/aarch64/aarch64-linux-android-4.9/bin)
-ATF_CROSS_COMPILE := $(ATF_TOOLCHAIN_ABS)/aarch64-linux-androidkernel-
-#endif
+ifneq ($(AARCH64_GCC_CROSS_COMPILE),)
+  ATF_CROSS_COMPILE := $(strip $(AARCH64_GCC_CROSS_COMPILE))
+  IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mm
+else
+  $(error shell env AARCH64_GCC_CROSS_COMPILE is not set)
+endif
 
 define build_imx_uboot
 	$(hide) echo Building i.MX U-Boot with firmware; \
@@ -14,9 +14,8 @@ define build_imx_uboot
 	cp $(UBOOT_OUT)/spl/u-boot-spl.bin  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(UBOOT_OUT)/tools/mkimage  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/mkimage_uboot; \
 	cp $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/signed_hdmi_imx8m.bin  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
-	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-dart.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
-	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-som.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
-	cp $(UBOOT_OUT)/arch/arm/dts/fsl-imx8mm-var-som-rev10.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
+	cp $(UBOOT_OUT)/arch/arm/dts/imx8mm-var-dart-customboard.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
+	cp $(UBOOT_OUT)/arch/arm/dts/imx8mm-var-som-symphony.dtb  $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/ddr/synopsys/lpddr4_pmu_train_* $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/ddr/synopsys/ddr4_* $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	$(MAKE) -C $(IMX_PATH)/arm-trusted-firmware/ PLAT=`echo $(2) | cut -d '-' -f1` clean; \

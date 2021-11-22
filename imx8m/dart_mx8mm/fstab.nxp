@@ -1,0 +1,17 @@
+# Android fstab file.
+#<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+
+/dev/block/by-name/userdata    /data        ext4    nosuid,nodev,nodiratime,noatime,noauto_da_alloc,errors=panic    latemount,wait,formattable,quota,fileencryption=aes-256-xts:aes-256-cts:v2,keydirectory=/metadata/vold/metadata_encryption,reservedsize=128M,checkpoint=block
+/dev/block/by-name/metadata    /metadata    ext4    noatime,nosuid,nodev,discard,sync                                                wait,formattable,first_stage_mount,check
+/dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
+/dev/block/zram0 none swap defaults zramsize=629145600
+
+
+/devices/platform/soc@0/32c00000.bus/32e40000.usb/ci_hdrc.1/*  auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc@0/32c00000.bus/32e50000.usb/ci_hdrc.0/*  auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc@0/32c00000.bus/32e50000.usb/ci_hdrc.1/*  auto auto defaults voldmanaged=usb:auto
+
+/devices/platform/soc@0/32c00000.bus/32e40000.usb/* auto auto defaults voldmanaged=usb:auto
