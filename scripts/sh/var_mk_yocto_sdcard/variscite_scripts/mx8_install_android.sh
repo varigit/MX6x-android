@@ -145,29 +145,53 @@ do
 	elif  [[ "$img" == *"imx8qxp-var-som-symphony-wifi"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8QXP on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-dp-m4"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-DP-M4 on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-DP-M4 on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-dp"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-DP on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-DP on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-hdmi-m4"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-HDMI-M4 on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-HDMI-M4 on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-hdmi"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-HDMI on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-HDMI on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-lvds-m4"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-LVDS-M4 on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-LVDS-M4 on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-som-lvds"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8-LVDS on a Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QM-LVDS on a Symphony-Board)")
 	elif  [[ "$img" == *"imx8qm-var-spear-dp-m4"* ]]; then
-		img_list+=("$img (SPEAR-MX8-DP-M4)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-DP-M4)")
 	elif  [[ "$img" == *"imx8qm-var-spear-dp"* ]]; then
-		img_list+=("$img (SPEAR-MX8-DP)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-DP)")
 	elif  [[ "$img" == *"imx8qm-var-spear-hdmi-m4"* ]]; then
-		img_list+=("$img (SPEAR-MX8-HDMI-M4)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-HDMI-M4)")
 	elif  [[ "$img" == *"imx8qm-var-spear-hdmi"* ]]; then
-		img_list+=("$img (SPEAR-MX8-HDMI)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-HDMI)")
 	elif  [[ "$img" == *"imx8qm-var-spear-lvds-m4"* ]]; then
-		img_list+=("$img (SPEAR-MX8-LVDS-M4)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-LVDS-M4)")
 	elif  [[ "$img" == *"imx8qm-var-spear-lvds"* ]]; then
-		img_list+=("$img (SPEAR-MX8-LVDS)")
+		img_list+=("$img (SPEAR-MX8 i.MX8QM-LVDS)")
+	elif  [[ "$img" == *"imx8qp-var-som-dp-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-DP-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-som-dp"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-DP on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-som-hdmi-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-HDMI-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-som-hdmi"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-HDMI on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-som-lvds-m4"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-LVDS-M4 on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-som-lvds"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8 i.MX8QP-LVDS on a Symphony-Board)")
+	elif  [[ "$img" == *"imx8qp-var-spear-dp-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-DP-M4)")
+	elif  [[ "$img" == *"imx8qp-var-spear-dp"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-DP)")
+	elif  [[ "$img" == *"imx8qp-var-spear-hdmi-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-HDMI-M4)")
+	elif  [[ "$img" == *"imx8qp-var-spear-hdmi"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-HDMI)")
+	elif  [[ "$img" == *"imx8qp-var-spear-lvds-m4"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-LVDS-M4)")
+	elif  [[ "$img" == *"imx8qp-var-spear-lvds"* ]]; then
+		img_list+=("$img (SPEAR-MX8 i.MX8QP-LVDS)")
 	else
 		img_list+=($img)
 	fi
@@ -258,7 +282,7 @@ if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
-if [[ "${soc_name}" = *"mx8qm"* ]]; then
+if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 	bootloader_offset=32
 	bootloader_file="u-boot-imx8qm-var-som.imx"
 
@@ -288,7 +312,7 @@ if [[ -f ${imagesdir}/${superimage_file} ]] ; then
 fi
 
 firmware=""
-if [[ "${soc_name}" = *"mx8qm"* ]]; then
+if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 firmware="FIRMWARE	 : ${FIRMWARE_SIZE} MiB"
 fi
 
@@ -299,7 +323,7 @@ total_size=`expr ${total_size} \/ 1024`
 boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	if [[ "${soc_name}" = *"mx8qm"* ]]; then
+	if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
 	else
 		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
@@ -460,7 +484,7 @@ function create_parts
 		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
 		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
 		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			sgdisk -n 15:0:+${FIRMWARE_SIZE}M	      -c 15:"firmware"	    -t 15:8300 $node
 		fi
 	fi
@@ -518,7 +542,7 @@ function format_android
 		blue_underlined_bold_echo "Formating userdata partition"
 		mkfs.ext4 -F ${node}${part}11 -Ldata
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"
 			mkfs.ext4 -F ${node}${part}15 -Lfirmware
 		fi
@@ -582,7 +606,7 @@ function install_android
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
 		sync;
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
 			mkdir -p /tmp/firmware_mnt

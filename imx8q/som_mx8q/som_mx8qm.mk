@@ -38,7 +38,19 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8qm-var-spear-hdmi:imx8qm-var-spear-hdmi.dtb \
 	imx8qm-var-spear-hdmi-m4:imx8qm-var-spear-hdmi-m4.dtb \
 	imx8qm-var-spear-lvds:imx8qm-var-spear-lvds.dtb \
-	imx8qm-var-spear-lvds-m4:imx8qm-var-spear-lvds-m4.dtb
+	imx8qm-var-spear-lvds-m4:imx8qm-var-spear-lvds-m4.dtb \
+	imx8qp-var-som-dp:imx8qp-var-som-dp.dtb \
+	imx8qp-var-som-hdmi:imx8qp-var-som-hdmi.dtb \
+	imx8qp-var-som-lvds:imx8qp-var-som-lvds.dtb \
+	imx8qp-var-spear:imx8qp-var-spear-dp.dtb \
+	imx8qp-var-spear-hdmi:imx8qp-var-spear-hdmi.dtb \
+	imx8qp-var-spear-lvds:imx8qp-var-spear-lvds.dtb \
+	imx8qp-var-som-dp-m4:imx8qp-var-som-dp-m4.dtb \
+	imx8qp-var-som-hdmi-m4:imx8qp-var-som-hdmi-m4.dtb \
+	imx8qp-var-som-lvds-m4:imx8qp-var-som-lvds-m4.dtb \
+	imx8qp-var-spear-dp-m4:imx8qp-var-spear-dp-m4.dtb \
+	imx8qp-var-spear-hdmi-m4:imx8qp-var-spear-hdmi-m4.dtb \
+	imx8qp-var-spear-lvds-m4:imx8qp-var-spear-lvds-m4.dtb
 endif
 
 TARGET_BOOTLOADER_CONFIG := \
