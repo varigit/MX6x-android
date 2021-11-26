@@ -125,13 +125,11 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
 	imx8mm-var-som-symphony:imx8mm-var-som-symphony.dtb \
 	imx8mm-var-dart-dt8mcustomboard-legacy:imx8mm-var-dart-dt8mcustomboard-legacy.dtb \
-	imx8mm-var-som-symphony-legacy:imx8mm-var-som-symphony-legacy.dtb
-
-#	imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb
-
-#	imx8mm-var-dart-dt8mcustomboard-legacy-m4:imx8mm-var-dart-dt8mcustomboard-legacy-m4.dtb \
-#	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
-#	imx8mm-var-som-symphony-legacy-m4:imx8mm-var-som-symphony-legacy-m4.dtb \
+	imx8mm-var-som-symphony-legacy:imx8mm-var-som-symphony-legacy.dtb \
+	imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-dt8mcustomboard-legacy-m4:imx8mm-var-dart-dt8mcustomboard-legacy-m4.dtb \
+	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
+	imx8mm-var-som-symphony-legacy-m4:imx8mm-var-som-symphony-legacy-m4.dtb
 
 # -------@block_sepolicy-------
 BOARD_SEPOLICY_DIRS := \
