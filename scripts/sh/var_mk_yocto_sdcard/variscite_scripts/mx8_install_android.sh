@@ -149,6 +149,20 @@ do
 	fi
 done
 
+min=0
+max=$(( ${#img_list[@]} -1 ))
+
+while [[ min -lt max ]]
+do
+    # Swap current first and last elements
+    x="${img_list[$min]}"
+    img_list[$min]="${img_list[$max]}"
+    img_list[$max]="$x"
+
+    # Move closer
+    (( min++, max-- ))
+done
+
 # check for dtb
 if [[ $soc_name != "showoptions" ]] && [[ ! ${img_list[@]} =~ $soc_name ]] ; then
 	echo; red_bold_echo "ERROR: invalid dtb $soc_name"
