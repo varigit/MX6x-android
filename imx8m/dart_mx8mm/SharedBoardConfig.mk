@@ -34,7 +34,8 @@ IMX8MM_USES_GKI ?= true
 ifeq ($(IMX8MM_USES_GKI),true)
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/gpu-viv/galcore.ko \
-    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
+    $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mx6s_capture.ko \
+    $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mxc_mipi_csi.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma-v2.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-micfil.ko \
@@ -63,13 +64,10 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/hantro_v4l2/vsiv4l2.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
-    $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
-    $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mx6s_capture.ko \
-    $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mxc_mipi_csi.ko
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 
 
 
@@ -137,6 +135,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
     $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx.ko \
+    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
     $(KERNEL_OUT)/drivers/spi/spidev.ko \
     $(KERNEL_OUT)/drivers/spi/spi-bitbang.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
@@ -182,9 +181,11 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/drivers/media/platform/mxc/capture/ov5640_camera_mipi_v2.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
+    $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko
 
 endif
+
 
 
 # -------@block_memory-------
