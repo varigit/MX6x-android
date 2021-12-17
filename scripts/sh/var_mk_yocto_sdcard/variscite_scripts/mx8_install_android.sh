@@ -136,9 +136,9 @@ do
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
-	elif  [[ "$img" == *"imx8mn-var-som-legacy"* ]]; then
+	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mn-var-som"* ]]; then
+	elif  [[ "$img" == *"imx8mn-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4A and above)")
 	elif  [[ "$img" == *"imx8qxp-var-som-symphony-wifi-m4"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8QXP-M4 on a Symphony-Board)")
