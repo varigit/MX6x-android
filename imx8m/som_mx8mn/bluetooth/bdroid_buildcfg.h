@@ -20,7 +20,7 @@
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME "DART-MX8M"
+#define BTM_DEF_LOCAL_NAME "SOM-IMX8MN"
 
 // Disables Interleave scan
 #define BTA_HOST_INTERLEAVE_SEARCH  FALSE
