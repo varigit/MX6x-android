@@ -113,7 +113,7 @@ function scfw_tools_setup()
 	      $"qx")
 		cd ${PRE_BUILTS_GCC_PATH}
 		if [[ ! -d "imx-sc-firmware" ]] ; then
-			git clone git://github.com/varigit/imx-sc-firmware.git
+			git clone https://github.com/varigit/imx-sc-firmware.git
 		fi
 
 		if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then
