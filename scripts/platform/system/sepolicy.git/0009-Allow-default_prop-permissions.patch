@@ -1,0 +1,37 @@
+From 1b8dd4ad9339aa51d3a302a39dd30270bda78ad7 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 25 Jan 2022 09:56:56 -0800
+Subject: [PATCH] Allow default_prop permissions.
+
+---
+ prebuilts/api/30.0/public/property.te | 1 +
+ public/property.te                    | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/prebuilts/api/30.0/public/property.te b/prebuilts/api/30.0/public/property.te
+index 4f9200751..025ceaddc 100644
+--- a/prebuilts/api/30.0/public/property.te
++++ b/prebuilts/api/30.0/public/property.te
+@@ -523,6 +523,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -default_prop
+   }:file no_rw_file_perms;
+ 
+   neverallow {
+diff --git a/public/property.te b/public/property.te
+index 4f9200751..025ceaddc 100644
+--- a/public/property.te
++++ b/public/property.te
+@@ -523,6 +523,7 @@ compatible_property_only(`
+     -nfc_prop
+     -powerctl_prop
+     -radio_prop
++    -default_prop
+   }:file no_rw_file_perms;
+ 
+   neverallow {
+-- 
+2.25.1
+
