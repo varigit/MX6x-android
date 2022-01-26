@@ -55,8 +55,6 @@ else
   endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8mn.img
-
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
 
@@ -96,32 +94,6 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x40400000
-
-CMASIZE=800M
-
-# NXP default config
-BOARD_KERNEL_CMDLINE := init=/init androidboot.console=ttymxc1 androidboot.hardware=nxp firmware_class.path=/vendor/firmware loop.max_part=7
-
-# memory config
-BOARD_KERNEL_CMDLINE += transparent_hugepage=never
-
-# display config
-BOARD_KERNEL_CMDLINE += androidboot.lcd_density=240 androidboot.primary_display=imx-drm
-
-# wifi config
-BOARD_KERNEL_CMDLINE += androidboot.wificountrycode=CN moal.mod_para=wifi_mod_para_sd8987.conf
-
-# low memory device build config
-ifeq ($(LOW_MEMORY),true)
-BOARD_KERNEL_CMDLINE += cma=320M@0x400M-0xb80M androidboot.displaymode=720p galcore.contiguousSize=33554432
-else
-BOARD_KERNEL_CMDLINE += cma=$(CMASIZE)@0x400M-0xb80M
-endif
-
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-BOARD_KERNEL_CMDLINE += androidboot.vendor.sysrq=1
-endif
-
 
 # Broadcom BT
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
