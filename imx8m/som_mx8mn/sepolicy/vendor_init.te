@@ -1,2 +1,4 @@
 allow vendor_init self:capability sys_module;
 #allow vendor_init wifi_data_file:dir { search setattr };
+allow vendor_init public_vendor_system_prop:file read;
+#allow vendor_init wifi_prop:property_service set;

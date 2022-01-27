@@ -1,0 +1,6 @@
+#============= hal_camera_default ==============
+allow hal_camera_default default_prop:file read;
+allow hal_camera_default default_prop:file open;
+allow hal_camera_default default_prop:file getattr;
+allow hal_camera_default default_prop:file map;
+#allow hal_camera_default hal_thermal_hwservice:hwservice_manager find;
