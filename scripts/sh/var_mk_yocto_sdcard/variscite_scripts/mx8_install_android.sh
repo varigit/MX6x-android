@@ -140,9 +140,13 @@ do
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
-	elif  [[ "$img" == *"imx8mn-var-som-legacy"* ]]; then
+	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy-m7"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-NANO-M7 on a Symphony-Board V1.4 and below)")
+	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mn-var-som"* ]]; then
+	elif  [[ "$img" == *"imx8mn-var-som-symphony-m7"* ]]; then
+		img_list+=("$img (VAR-SOM-MX8M-NANO-M7 on a Symphony-Board V1.4A and above)")
+	elif  [[ "$img" == *"imx8mn-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4A and above)")
 	else
 		img_list+=($img)
@@ -256,6 +260,7 @@ fi
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
        bootloader_offset=32
        bootloader_file="u-boot-imx8mn-var-som.imx"
+       mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
 echo "${soc_name} bootloader is: ${bootloader_file}"
