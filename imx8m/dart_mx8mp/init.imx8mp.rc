@@ -34,6 +34,10 @@ on property:sys.boot_completed=1
     write /sys/devices/platform/soc@0/32c00000.bus/32ec0000.media-blk-ctrl/power/control auto
     write /sys/devices/platform/soc@0/30c00000.bus/32fc0000.hdmi-blk-ctrl/power/control auto
     write /sys/clk_ctrl/enable_clk_disable_unused 1
+    chown mediacodec mediacodec /sys/class/remoteproc/remoteproc0/state
+    chmod 0660 /sys/class/remoteproc/remoteproc0/state
+    chown mediacodec mediacodec /sys/class/remoteproc/remoteproc0/name
+    chmod 0660 /sys/class/remoteproc/remoteproc0/name
 
 on property:sys.boot_completed=1
     # update cpuset now that processors are up
@@ -56,6 +60,12 @@ on post-fs-data
 
 on early-boot
     export ISP_LOG_LEVEL 4
+    start isp_media_server
+
+on property:vendor.rw.camera.isp.control=0
+    stop isp_media_server
+
+on property:vendor.rw.camera.isp.control=1
     start isp_media_server
 
 service isp_media_server /vendor/bin/isp_media_server

@@ -60,6 +60,11 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/thermal_info_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp.json
 
 
+# Task Profiles
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/task_profiles.json:$(TARGET_COPY_OUT_VENDOR)/etc/task_profiles.json
+
+
 # -------@block_app-------
 
 #Enable this to choose 32 bit user space build
@@ -256,14 +261,10 @@ PRODUCT_COPY_FILES += \
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
-# Copy isp files to board
-ifeq ($(PREBUILT_FSL_IMX_ISP),true)
-ISP_PROPRIETARY := $(FSL_PROPRIETARY_PATH)/fsl-proprietary/isp
-PRODUCT_COPY_FILES += \
-    $(call find-copy-subdir-files,*,$(ISP_PROPRIETARY)/bin,$(TARGET_COPY_OUT_VENDOR)/bin) \
-    $(call find-copy-subdir-files,*,$(ISP_PROPRIETARY)/lib64,$(TARGET_COPY_OUT_VENDOR)/lib64) \
-    $(call find-copy-subdir-files,*,$(ISP_PROPRIETARY)/config,$(TARGET_COPY_OUT_VENDOR)/etc/configs/isp)
-endif
+PRODUCT_PACKAGES += \
+    media_profiles_8mp-ov5640.xml \
+    media_profiles_8mp-basler-ov5640.xml
+
 PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
 
@@ -479,10 +480,6 @@ ifeq ($(PREBUILT_FSL_IMX_CODEC),true)
 ifneq ($(IMX8_BUILD_32BIT_ROOTFS),true)
 INSTALL_64BIT_LIBRARY := true
 endif
--include $(FSL_CODEC_PATH)/fsl-codec/fsl-codec.mk
--include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/imx_dsp_aacp_dec/imx_dsp_aacp_dec.mk
--include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/imx_dsp_codec/imx_dsp_codec.mk
--include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/imx_dsp_wma_dec/imx_dsp_wma_dec.mk
 -include $(FSL_RESTRICTED_CODEC_PATH)/fsl-restricted-codec/imx_dsp/imx_dsp_8mp.mk
 endif
 
@@ -570,3 +567,70 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
 
+
+# isp block
+# lib
+PRODUCT_PACKAGES += \
+    DAA3840_30MC_1080P \
+    liba2dnr \
+    liba3dnr \
+    libadpcc \
+    libadpf \
+    libaec \
+    libaee \
+    libaflt \
+    libaf \
+    libahdr \
+    libappshell_ebase \
+    libappshell_hal \
+    libappshell_ibd \
+    libappshell_oslayer \
+    libavs \
+    libawb \
+    libawdr3 \
+    libbase64 \
+    libbufferpool \
+    libbufsync_ctrl \
+    libcam_calibdb \
+    libcam_device \
+    libcam_engine \
+    libcameric_drv \
+    libcameric_reg_drv \
+    libcim_ctrl \
+    libcommon \
+    libdaA3840_30mc \
+    libdewarp_hal \
+    libebase \
+    libfpga \
+    libhal \
+    libi2c_drv \
+    libibd \
+    libisi \
+    libmedia_server \
+    libmim_ctrl \
+    libmipi_drv \
+    libmom_ctrl \
+    libos08a20 \
+    liboslayer \
+    libov2775 \
+    libsom_ctrl \
+    libversion \
+    libvom_ctrl \
+    libvvdisplay_shared
+
+# bin
+PRODUCT_PACKAGES += \
+    isp_media_server \
+    vvext
+
+# config
+PRODUCT_PACKAGES += \
+    DAA3840_30MC_1080P-linear.xml \
+    DAA3840_30MC_1080P-hdr.xml \
+    DAA3840_30MC_4K-linear.xml \
+    DAA3840_30MC_4K-hdr.xml \
+    Sensor0_Entry.cfg \
+    Sensor1_Entry.cfg \
+    Sensor0_Entry-4K.cfg \
+    daA3840_30mc_1080P.json \
+    daA3840_30mc_4K.json

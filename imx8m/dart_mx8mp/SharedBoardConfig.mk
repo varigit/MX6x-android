@@ -2,12 +2,9 @@
 KERNEL_NAME := Image
 TARGET_KERNEL_ARCH := arm64
 IMX8MP_USES_GKI := true
-VVCAM_PATH := vendor/nxp-opensource/verisilicon_sw_isp_vvcam
+#VVCAM_PATH := vendor/nxp-opensource/verisilicon_sw_isp_vvcam
 
 # BCM fmac wifi driver module
-BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 
 # CONFIG_IMX_SDMA: imx-sdma.ko, sdma used for audio
 # CONFIG_SND_SOC_IMX_PCM_DMA: imx-pcm-dma-common.ko, used for fsl_micfil
@@ -38,7 +35,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma-v2.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-micfil.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-micfil.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-aud2htx.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asrc.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-easrc.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-sai.ko \
@@ -46,31 +42,24 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/synopsys/dw-hdmi-gp-audio.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-hdmi-codec.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-cdnhdmi.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8960.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-bt-sco.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-dsp-audiomix.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-dsp.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_vc8000e/hx280enc_vc8000e.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_845/hantrodec_845s.ko \
+    $(KERNEL_OUT)/drivers/mxc/hantro_v4l2/vsiv4l2.ko \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
-    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
-    $(KERNEL_OUT)/drivers/i2c/busses/i2c-rpmsg-imx.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg-i2s.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/imx-i2s-rpmsg.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-rpmsg-wm8960-i2c.ko \
-    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/rpmsg_raw.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko
 else
 BOARD_VENDOR_KERNEL_MODULES +=     \
@@ -140,10 +129,10 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8mp.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-mxc.ko \
     $(KERNEL_OUT)/drivers/tty/serial/imx.ko \
+    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx2_wdt.ko \
     $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx.ko \
     $(KERNEL_OUT)/drivers/regulator/pca9450-regulator.ko \
-    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
     $(KERNEL_OUT)/drivers/pwm/pwm-imx27.ko \
     $(KERNEL_OUT)/drivers/video/backlight/pwm_bl.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
@@ -197,8 +186,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
-    $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mxc_mipi_csi.ko \
-    $(KERNEL_OUT)/drivers/media/platform/imx8/mxc-jpeg-encdec.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/basler-camera-driver-vvcam.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-video.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-dwe.ko \
@@ -211,9 +198,10 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/spi/spi-imx.ko \
     $(KERNEL_OUT)/drivers/net/can/flexcan.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
-    $(KERNEL_OUT)/drivers/media/platform/imx8/basler-camera-driver.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko
+    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko \
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko
 
 endif
 
