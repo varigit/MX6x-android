@@ -19,7 +19,7 @@ genfscon sysfs /devices/platform/soc@0/30800000.bus/30b40000.mmc/mmc_host/mmc0/m
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host/mmc1/mmc1:0001/mmc1:0001:1/net u:object_r:sysfs_net:s0
 
 # for dumpstate to access the stat file
-genfscon sysfs /devices/platform/b8500000.pmem/ndbus0/region0/namespace0.0/block/pmem0                                            u:object_r:sysfs_block_devices:s0
+genfscon sysfs /devices/platform/bdef0000.pmem/ndbus0/region0/namespace0.0/block/pmem0                                            u:object_r:sysfs_block_devices:s0
 
 # RTC on DART-MX8M-MINI
 genfscon sysfs /devices/platform/soc@0/30800000/30a30000.i2c/i2c-1/1-0068/rtc u:object_r:sysfs_rtc:s0

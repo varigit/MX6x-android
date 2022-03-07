@@ -347,7 +347,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
 	$(IMX_DEVICE_PATH)/rpmsg_lite_pingpong_rtos_linux_remote.bin:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.bin \
-	$(IMX_DEVICE_PATH)/rpmsg_lite_pingpong_rtos_linux_remote.elf:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.elf
+	$(IMX_DEVICE_PATH)/rpmsg_lite_pingpong_rtos_linux_remote.elf:vendor/firmware/rpmsg_lite_pingpong_rtos_linux_remote.elf \
+	$(IMX_DEVICE_PATH)/rpmsg_lite_pingpong_rtos_linux_remote.bin:rpmsg_lite_pingpong_rtos_linux_remote.bin \
+	$(IMX_DEVICE_PATH)/rpmsg_lite_pingpong_rtos_linux_remote.elf:rpmsg_lite_pingpong_rtos_linux_remote.elf
 
 #Boot Animation
 PRODUCT_COPY_FILES += \
