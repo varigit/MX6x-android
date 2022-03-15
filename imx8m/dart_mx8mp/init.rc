@@ -38,6 +38,50 @@ service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
     disabled
     oneshot
 
+on init
+    # cpuctl hierarchy for devices using utilclamp
+    mkdir /dev/cpuctl/foreground
+    mkdir /dev/cpuctl/background
+    mkdir /dev/cpuctl/top-app
+    mkdir /dev/cpuctl/rt
+    mkdir /dev/cpuctl/system
+    mkdir /dev/cpuctl/system-background
+    chown system system /dev/cpuctl
+    chown system system /dev/cpuctl/foreground
+    chown system system /dev/cpuctl/background
+    chown system system /dev/cpuctl/top-app
+    chown system system /dev/cpuctl/rt
+    chown system system /dev/cpuctl/system
+    chown system system /dev/cpuctl/system-background
+    chown system system /dev/cpuctl/tasks
+    chown system system /dev/cpuctl/foreground/tasks
+    chown system system /dev/cpuctl/background/tasks
+    chown system system /dev/cpuctl/top-app/tasks
+    chown system system /dev/cpuctl/rt/tasks
+    chown system system /dev/cpuctl/system/tasks
+    chown system system /dev/cpuctl/system-background/tasks
+    chmod 0664 /dev/cpuctl/tasks
+    chmod 0664 /dev/cpuctl/foreground/tasks
+    chmod 0664 /dev/cpuctl/background/tasks
+    chmod 0664 /dev/cpuctl/top-app/tasks
+    chmod 0664 /dev/cpuctl/rt/tasks
+    chmod 0664 /dev/cpuctl/system/tasks
+    chmod 0664 /dev/cpuctl/system-background/tasks
+
+    # Create a cpu group for NNAPI HAL processes
+    mkdir /dev/cpuctl/nnapi-hal
+    chown system system /dev/cpuctl/nnapi-hal
+    chown system system /dev/cpuctl/nnapi-hal/tasks
+    chmod 0664 /dev/cpuctl/nnapi-hal/tasks
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 1
+    write /dev/cpuctl/nnapi-hal/cpu.uclamp.latency_sensitive 1
+
+    # Create a cpu group for camera daemon processes
+    mkdir /dev/cpuctl/camera-daemon
+    chown system system /dev/cpuctl/camera-daemon
+    chown system system /dev/cpuctl/camera-daemon/tasks
+    chmod 0664 /dev/cpuctl/camera-daemon/tasks
+
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
     setprop vendor.skip.charger_not_need 1
@@ -116,9 +160,6 @@ on early-boot && property:vendor.skip.charger_not_need=0
     setprop vendor.media.fsl_codec.flag 7
 
     setprop camera.disable_zsl_mode 1
-
-    #Enable GPU 2D do CSC on imx8mp platform
-    setprop vendor.camera.2d.enable true
 
    # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048

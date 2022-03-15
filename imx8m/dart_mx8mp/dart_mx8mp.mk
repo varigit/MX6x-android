@@ -405,6 +405,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
 
+PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
+    sys.usb.mtp.batchcancel=1
+
 # -------@block_multimedia_codec-------
 
 # Vendor seccomp policy files for media components:
