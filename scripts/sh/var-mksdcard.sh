@@ -145,7 +145,7 @@ systemimage_file="system.img"
 vendorimage_file="vendor.img"
 productimage_file="product.img"
 superimage_file="super.img"
-mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin.tcm.dart"
+mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
 mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
 
@@ -316,7 +316,7 @@ function check_images
 	fi
 
 	rename_remoteproc_images ${soc_name}
-	if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
+	if [[ ! -f ${imagesdir}/vendor/firmware/${mcu_os_demo_file} ]] ; then
 		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 		exit 1
 	fi
@@ -415,7 +415,7 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 	
-	dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	dd if=${imagesdir}/vendor/firmware/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
 	sync
 }
 
