@@ -67,31 +67,46 @@ if [ "$sdshared" = true ] ; then
 fi
 img_list=()
 
+maxlen=0
+for img in $(eval $img_search_str)
+do
+	img=$(basename $img)
+	len=`expr length $img`
+	maxlen=$(( len > maxlen ? len : maxlen ))
+done
+
+spaces_to_pad=0
 # generate options list
 for img in $(eval $img_search_str)
 do
 	img=$(basename $img)
+	len=`expr length $img`
+
+	spaces_to_pad="$((maxlen-len))"
+	spaces=$(printf "%*s" "$spaces_to_pad" "")
+
+	img=$img$spaces
 
 	if [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
 		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
 	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard"* ]]; then
 		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+HDMI)")
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with WIFI+LVDS+HDMI support)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+DP)")
+                img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with WIFI+LVDS+DP support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with WIFI+LVDS support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with WIFI+HDMI support)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 1.x WIFI+DP)")
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with WIFI+DP support)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS+HDMI)")
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with WIFI+LVDS+HDMI support)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with WIFI+LVDS support)")
 	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
-		img_list+=("$img (Variscite DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with WIFI+HDMI support)")
 	elif [[ "$img" == *"imx8mm-var-som-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mm-var-som"* ]]; then
@@ -117,6 +132,7 @@ fi
 
 if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 	PS3='Please choose the correct dtbo image for your board configuration: '
+	COLUMNS=20
 	select opt in "${img_list[@]}"
 	do
 		if [[ -z "$opt" ]] ; then
