@@ -9,7 +9,7 @@ allow init-brcm-wifibt-sh vendor_shell_exec:file rx_file_perms;
 allow init-brcm-wifibt-sh vendor_toolbox_exec:file rx_file_perms;
 
 # Set the sys.brcm.wifibt.completed property
-set_prop(init-brcm-wifibt-sh, public_vendor_system_prop)
+#set_prop(init-brcm-wifibt-sh, public_vendor_system_prop)
 
 # Allow insmod
 allow init-brcm-wifibt-sh self:capability sys_module;
