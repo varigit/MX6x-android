@@ -1,35 +1,34 @@
-From d45681495a63e4d945f11f865a553bdb45151ce6 Mon Sep 17 00:00:00 2001
+From d14c11e461d739a89e9722c4c8b8eb611f11f8ac Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
-Date: Tue, 19 May 2020 19:49:35 -0700
+Date: Wed, 11 May 2022 17:23:50 -0700
 Subject: [PATCH] usb hal: Use vendor.typec.legacy property for legacy type c
 
 - For some boards that doesn't have Type C PD option, use property to
 fix the role and pd option.
-
-Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
- usb/Usb.cpp | 5 +++++
+ usb/Usb.cpp | 6 ++++++
  usb/Usb.h   | 1 +
- 2 files changed, 6 insertions(+)
+ 2 files changed, 7 insertions(+)
 
 diff --git a/usb/Usb.cpp b/usb/Usb.cpp
-index 677a255..0aa311f 100644
+index dc05340..14c7d1f 100644
 --- a/usb/Usb.cpp
 +++ b/usb/Usb.cpp
-@@ -380,6 +380,11 @@ Status getCurrentRoleHelper(const std::string &portName, bool connected,
- 
- Status getTypeCPortNamesHelper(std::unordered_map<std::string, bool> *names) {
+@@ -367,6 +367,12 @@ Status getTypeCPortNamesHelper(std::unordered_map<std::string, bool> *names) {
    DIR *dp;
+   bool has_typec_port = false;
+ 
 +  /* Enable Typ USB Legacy Support via vendor.typec.legacy property */
 +  if (property_get_bool("vendor.typec.legacy", false)) {
 +    ALOGE("Force Legacy device enabled");
 +    return Status::ERROR;
 +  }
- 
++
    dp = opendir("/sys/class/typec");
    if (dp != NULL) {
+     struct dirent *ep;
 diff --git a/usb/Usb.h b/usb/Usb.h
-index 24d7e95..0cb10e4 100644
+index b2ab4d1..67b0b06 100644
 --- a/usb/Usb.h
 +++ b/usb/Usb.h
 @@ -23,6 +23,7 @@
@@ -41,5 +40,5 @@ index 24d7e95..0cb10e4 100644
  #include <utils/Log.h>
  
 -- 
-2.25.0
+2.36.1
 

@@ -9,14 +9,14 @@ Managing GPIOs using sysfs requires full access to:
 - create folders (when exporting GPIO id)
 - remove folders (when unexporting GPIO id)
 ---
- prebuilts/api/30.0/public/domain.te | 1 -
+ prebuilts/api/31.0/public/domain.te | 1 -
  public/domain.te                    | 1 -
  2 files changed, 2 deletions(-)
 
-diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
+diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
 index e1ca737ce..415a51df5 100644
---- a/prebuilts/api/30.0/public/domain.te
-+++ b/prebuilts/api/30.0/public/domain.te
+--- a/prebuilts/api/31.0/public/domain.te
++++ b/prebuilts/api/31.0/public/domain.te
 @@ -1349,7 +1349,6 @@ full_treble_only(`
  # to do so should never be granted.
  neverallow domain {

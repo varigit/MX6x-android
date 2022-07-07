@@ -4,7 +4,7 @@
 #
 # This script must be run from the Android main directory.
 #
-# Variscite DART-MX8M patches for Android 11.0.0 2.4.0
+# Variscite DART-MX8M patches for Android 12.0.0 1.0.0
 
 set -e
 #set -x
@@ -19,22 +19,23 @@ readonly ABSOLUTE_DIRECTORY=$(dirname ${ABSOLUTE_FILENAME})
 readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
-readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu
+readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-elf
 readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
 readonly C_LANG_LINK="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
 readonly C_LANG_DIR="/opt/prebuilt-android-clang-var-bceb7274dda5b/"
 
-readonly BASE_BRANCH_NAME="android-11.0.0_2.6.0"
+readonly BASE_BRANCH_NAME="android-12.0.0_1.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="android-11.0.0_2.6.0-var01"
+readonly _EXTPARAM_BRANCH="android-12.0.0_1.0.0-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
 readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
 VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
-
+LIBBT=$(readlink -f "${ANDROID_DIR}/hardware/broadcom/libbt")
+SEPOLICY=$(readlink -f "${ANDROID_DIR}/system/sepolicy")
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.6.0"
@@ -165,7 +166,11 @@ do
 	cd ${ANDROID_DIR}/${_git_p}/ > /dev/null
 	
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
-		git checkout tags/${BASE_BRANCH_NAME}
+		if [[ ${PWD} == ${LIBBT} ]] || [[ ${PWD} == ${SEPOLICY} ]]; then
+			git checkout tags/android-12.0.0_r26
+		else
+			git checkout tags/${BASE_BRANCH_NAME}
+		fi
 		git branch -D ${_EXTPARAM_BRANCH}
 		git checkout -b ${_EXTPARAM_BRANCH} || {
 			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
@@ -179,7 +184,6 @@ do
 
 	pr_info "Apply patches for this git: \"${_git_p}/\""
 	git am ${VARISCITE_PATCHS_DIR}/${_ddd}/*
-
 
 	cd - > /dev/null
 done

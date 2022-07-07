@@ -8,10 +8,10 @@ Subject: [PATCH 4/8] sepolicy: allow wifi ioctl access
  public/domain.te                    | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
+diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
 index 7b839712e..08d823833 100644
---- a/prebuilts/api/30.0/public/domain.te
-+++ b/prebuilts/api/30.0/public/domain.te
+--- a/prebuilts/api/31.0/public/domain.te
++++ b/prebuilts/api/31.0/public/domain.te
 @@ -441,7 +441,7 @@ neverallow * *:{ blk_file chr_file } rename;
  
  # Don't allow raw read/write/open access to generic devices.

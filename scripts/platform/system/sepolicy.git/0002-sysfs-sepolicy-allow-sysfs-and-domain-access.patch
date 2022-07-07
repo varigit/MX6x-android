@@ -1,21 +1,23 @@
-From 9cf61564eaaf513b1c571b8cd6956867ee579355 Mon Sep 17 00:00:00 2001
+From fc6caeef83118c9db0b21432b4440d3c1602b4a1 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
-Date: Tue, 23 Mar 2021 09:13:13 -0700
-Subject: [PATCH 2/8] sysfs sepolicy: allow sysfs and domain access.
+Date: Thu, 12 May 2022 10:07:02 -0700
+Subject: [PATCH] sysfs sepolicy: allow sysfs and domain access.
 
 - It is required for bt_vendor.conf
+
+Change-Id: I6be48f1d2123241f88500ca66a6707402b9bbc5d
 ---
- prebuilts/api/30.0/public/domain.te | 2 +-
+ prebuilts/api/31.0/public/domain.te | 2 +-
  public/domain.te                    | 2 +-
  2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
-index 415a51df5..7b839712e 100644
---- a/prebuilts/api/30.0/public/domain.te
-+++ b/prebuilts/api/30.0/public/domain.te
-@@ -1025,7 +1025,7 @@ full_treble_only(`
+diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
+index 6c30a2e21..ac35e0a5b 100644
+--- a/prebuilts/api/31.0/public/domain.te
++++ b/prebuilts/api/31.0/public/domain.te
+@@ -1007,7 +1007,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
-   # ones whitelisted here.
+   # ones allowed here.
    neverallow {
 -    domain
 +    -domain
@@ -23,12 +25,12 @@ index 415a51df5..7b839712e 100644
      -coredomain
      -vendor_executes_system_violators
 diff --git a/public/domain.te b/public/domain.te
-index 415a51df5..7b839712e 100644
+index 6c30a2e21..ac35e0a5b 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1025,7 +1025,7 @@ full_treble_only(`
+@@ -1007,7 +1007,7 @@ full_treble_only(`
    # Do not allow vendor components access to /system files except for the
-   # ones whitelisted here.
+   # ones allowed here.
    neverallow {
 -    domain
 +    -domain
@@ -36,5 +38,5 @@ index 415a51df5..7b839712e 100644
      -coredomain
      -vendor_executes_system_violators
 -- 
-2.25.1
+2.36.1
 

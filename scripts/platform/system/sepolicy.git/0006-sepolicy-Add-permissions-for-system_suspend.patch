@@ -1,22 +1,23 @@
-From 620a3d1f5de19533c4b73bb59c40f003f5ccf4e1 Mon Sep 17 00:00:00 2001
+From 5b64b684672d832837b3e26a2d155128aae8b2e0 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
-Date: Mon, 5 Apr 2021 17:53:43 -0700
-Subject: [PATCH 6/8] sepolicy: Add permissions for system_suspend
+Date: Thu, 12 May 2022 10:40:34 -0700
+Subject: [PATCH] sepolicy: Add permissions for system_suspend
 
+Change-Id: Ib43030d54c70e021ccbe949b2fd55429b7488ed5
 ---
- prebuilts/api/30.0/private/coredomain.te     |  1 +
- prebuilts/api/30.0/private/system_suspend.te | 18 ++++++++++++++++++
- prebuilts/api/30.0/public/domain.te          |  1 +
+ prebuilts/api/31.0/private/coredomain.te     |  1 +
+ prebuilts/api/31.0/private/system_suspend.te | 33 ++++++++++++++++++++
+ prebuilts/api/31.0/public/domain.te          |  1 +
  private/coredomain.te                        |  1 +
- private/system_suspend.te                    | 18 ++++++++++++++++++
+ private/system_suspend.te                    | 33 ++++++++++++++++++++
  public/domain.te                             |  1 +
- 6 files changed, 40 insertions(+)
+ 6 files changed, 70 insertions(+)
 
-diff --git a/prebuilts/api/30.0/private/coredomain.te b/prebuilts/api/30.0/private/coredomain.te
-index 30e21d10d..1e5b7df35 100644
---- a/prebuilts/api/30.0/private/coredomain.te
-+++ b/prebuilts/api/30.0/private/coredomain.te
-@@ -111,6 +111,7 @@ full_treble_only(`
+diff --git a/prebuilts/api/31.0/private/coredomain.te b/prebuilts/api/31.0/private/coredomain.te
+index ac7843c10..2fa4d19d6 100644
+--- a/prebuilts/api/31.0/private/coredomain.te
++++ b/prebuilts/api/31.0/private/coredomain.te
+@@ -141,6 +141,7 @@ full_treble_only(`
      -ueventd
      -vold
      -system_server
@@ -24,13 +25,13 @@ index 30e21d10d..1e5b7df35 100644
    } sysfs:file no_rw_file_perms;
  
    # /dev
-diff --git a/prebuilts/api/30.0/private/system_suspend.te b/prebuilts/api/30.0/private/system_suspend.te
-index d33dc8e85..ea57daab6 100644
---- a/prebuilts/api/30.0/private/system_suspend.te
-+++ b/prebuilts/api/30.0/private/system_suspend.te
-@@ -16,6 +16,24 @@ r_dir_file(system_suspend, sysfs_wakeup)
- # To resolve arbitrary sysfs paths from /sys/class/wakeup/* symlinks.
- allow system_suspend sysfs_type:dir search;
+diff --git a/prebuilts/api/31.0/private/system_suspend.te b/prebuilts/api/31.0/private/system_suspend.te
+index caf8955bb..6dbe9ec40 100644
+--- a/prebuilts/api/31.0/private/system_suspend.te
++++ b/prebuilts/api/31.0/private/system_suspend.te
+@@ -27,6 +27,39 @@ allow system_suspend bluetooth:binder call;
+ allow system_suspend dumpstate:fd use;
+ allow system_suspend dumpstate:fifo_file write;
  
 +allow system_suspend sysfs:dir read;
 +allow system_suspend sysfs_batteryinfo:dir read;
@@ -50,14 +51,29 @@ index d33dc8e85..ea57daab6 100644
 +allow system_suspend sysfs:file getattr;
 +allow system_suspend sysfs_batteryinfo:file getattr;
 +
++allow system_suspend sysfs_net:dir read;
++allow system_suspend sysfs_rtc:dir read;
++
++allow system_suspend sysfs_net:dir open;
++allow system_suspend sysfs_rtc:dir open;
++
++allow system_suspend sysfs_net:file read;
++allow system_suspend sysfs_rtc:file read;
++
++allow system_suspend sysfs_net:file open;
++allow system_suspend sysfs_rtc:file open;
++
++allow system_suspend sysfs_net:file getattr;
++allow system_suspend sysfs_rtc:file getattr;
++
  neverallow {
      domain
      -atrace # tracing
-diff --git a/prebuilts/api/30.0/public/domain.te b/prebuilts/api/30.0/public/domain.te
-index 08d823833..25880fb93 100644
---- a/prebuilts/api/30.0/public/domain.te
-+++ b/prebuilts/api/30.0/public/domain.te
-@@ -1404,6 +1404,7 @@ full_treble_only(`
+diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
+index 68e6f7a78..b4a58fc5d 100644
+--- a/prebuilts/api/31.0/public/domain.te
++++ b/prebuilts/api/31.0/public/domain.te
+@@ -1375,6 +1375,7 @@ full_treble_only(`
      -charger
      # TODO(b/110891300): remove this exception
      -incidentd
@@ -66,10 +82,10 @@ index 08d823833..25880fb93 100644
  ')
  
 diff --git a/private/coredomain.te b/private/coredomain.te
-index 30e21d10d..1e5b7df35 100644
+index ac7843c10..2fa4d19d6 100644
 --- a/private/coredomain.te
 +++ b/private/coredomain.te
-@@ -111,6 +111,7 @@ full_treble_only(`
+@@ -141,6 +141,7 @@ full_treble_only(`
      -ueventd
      -vold
      -system_server
@@ -78,12 +94,12 @@ index 30e21d10d..1e5b7df35 100644
  
    # /dev
 diff --git a/private/system_suspend.te b/private/system_suspend.te
-index d33dc8e85..ea57daab6 100644
+index caf8955bb..6dbe9ec40 100644
 --- a/private/system_suspend.te
 +++ b/private/system_suspend.te
-@@ -16,6 +16,24 @@ r_dir_file(system_suspend, sysfs_wakeup)
- # To resolve arbitrary sysfs paths from /sys/class/wakeup/* symlinks.
- allow system_suspend sysfs_type:dir search;
+@@ -27,6 +27,39 @@ allow system_suspend bluetooth:binder call;
+ allow system_suspend dumpstate:fd use;
+ allow system_suspend dumpstate:fifo_file write;
  
 +allow system_suspend sysfs:dir read;
 +allow system_suspend sysfs_batteryinfo:dir read;
@@ -103,14 +119,29 @@ index d33dc8e85..ea57daab6 100644
 +allow system_suspend sysfs:file getattr;
 +allow system_suspend sysfs_batteryinfo:file getattr;
 +
++allow system_suspend sysfs_net:dir read;
++allow system_suspend sysfs_rtc:dir read;
++
++allow system_suspend sysfs_net:dir open;
++allow system_suspend sysfs_rtc:dir open;
++
++allow system_suspend sysfs_net:file read;
++allow system_suspend sysfs_rtc:file read;
++
++allow system_suspend sysfs_net:file open;
++allow system_suspend sysfs_rtc:file open;
++
++allow system_suspend sysfs_net:file getattr;
++allow system_suspend sysfs_rtc:file getattr;
++
  neverallow {
      domain
      -atrace # tracing
 diff --git a/public/domain.te b/public/domain.te
-index 08d823833..25880fb93 100644
+index 68e6f7a78..b4a58fc5d 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1404,6 +1404,7 @@ full_treble_only(`
+@@ -1375,6 +1375,7 @@ full_treble_only(`
      -charger
      # TODO(b/110891300): remove this exception
      -incidentd
@@ -119,5 +150,5 @@ index 08d823833..25880fb93 100644
  ')
  
 -- 
-2.25.1
+2.36.1
 

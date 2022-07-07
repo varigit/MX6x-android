@@ -8,10 +8,10 @@ Subject: [PATCH 5/8] sepolicy: Add permissions for system_server
  private/coredomain.te                    | 1 +
  2 files changed, 2 insertions(+)
 
-diff --git a/prebuilts/api/30.0/private/coredomain.te b/prebuilts/api/30.0/private/coredomain.te
+diff --git a/prebuilts/api/31.0/private/coredomain.te b/prebuilts/api/31.0/private/coredomain.te
 index 86e800962..30e21d10d 100644
---- a/prebuilts/api/30.0/private/coredomain.te
-+++ b/prebuilts/api/30.0/private/coredomain.te
+--- a/prebuilts/api/31.0/private/coredomain.te
++++ b/prebuilts/api/31.0/private/coredomain.te
 @@ -110,6 +110,7 @@ full_treble_only(`
      -init
      -ueventd
