@@ -1,14 +1,9 @@
 # -------@block_kernel_bootimg-------
 
-KERNEL_NAME := Image
+KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
 
 IMX8MM_USES_GKI ?= true
-
-# BCM fmac wifi driver module
-#BOARD_VENDOR_KERNEL_MODULES += \
-#    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-#    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 
 # CONFIG_TOUCHSCREEN_SYNAPTICS_DSX_I2C: synaptics_dsx_i2c.ko, mipi-panel touch driver module
 # CONFIG_VIDEO_MXC_CSI_CAMERA: mx6s_capture.ko, it's csi adapt driver which is the input of v4l2 framework
@@ -34,6 +29,7 @@ IMX8MM_USES_GKI ?= true
 ifeq ($(IMX8MM_USES_GKI),true)
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/gpu-viv/galcore.ko \
+    $(KERNEL_OUT)/drivers/thermal/imx8mm_thermal.ko \
     $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mx6s_capture.ko \
     $(KERNEL_OUT)/drivers/media/platform/mxc/capture/mxc_mipi_csi.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
@@ -69,25 +65,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 
-
-
-
-
-#    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
-#    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma-v2.ko \
-#    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-spdif.ko \
-#    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-spdif.ko \
-
-#    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
-
-#    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-audmix.ko \
-
-
 else
 BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko
 endif
 
+# CONFIG_ZRAM: zram.ko, lzo.ko, lzo-rle.ko compressed ram using LZ coding.
+# CONFIG_ZSMALLOC: zsmalloc.ko
 # CONFIG_CLK_IMX8MM: clk-imx8mm.ko
 # CONFIG_IMX8M_PM_DOMAINS: imx8m_pm_domains.ko, this driver still not upstream
 # CONFIG_TIMER_IMX_SYS_CTR: timer-imx-sysctr.ko
@@ -98,7 +82,9 @@ endif
 # CONFIG_GPIO_MXC: gpio-generic.ko gpio-mxc.ko
 # CONFIG_MMC_SDHCI_ESDHC_IMX: sdhci-esdhc-imx.ko cqhci.ko
 # CONFIG_I2C_IMX:i2c-imx.ko
-# CONFIG_ION_CMA_HEAP: ion_cma_heap.ko
+# CONFIG_DMABUF_HEAPS_SYSTEM: system_heap.ko
+# CONFIG_DMABUF_HEAPS_CMA: cma_heap.ko
+# CONFIG_DMABUF_IMX: dma-buf-imx.ko
 # depend on clk module: reset-dispmix.ko, it will been select as m if clk build as m.
 # CONFIG_KEYBOARD_SNVS_PWRKEY: snvs_pwrkey.ko, snvs power key driver
 # CONFIG_IMX_LCDIF_CORE: imx-lcdif-core.ko
@@ -114,6 +100,10 @@ endif
 
 ifeq ($(IMX8MM_USES_GKI),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
+    $(KERNEL_OUT)/mm/zsmalloc.ko \
+    $(KERNEL_OUT)/crypto/lzo.ko \
+    $(KERNEL_OUT)/crypto/lzo-rle.ko \
+    $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/drivers/soc/imx/soc-imx8m.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
     $(KERNEL_OUT)/drivers/clk/imx/clk-imx8mm.ko \
@@ -127,7 +117,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/regulator/pca9450-regulator.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-mxc.ko \
     $(KERNEL_OUT)/drivers/thermal/device_cooling.ko \
-    $(KERNEL_OUT)/drivers/thermal/imx8mm_thermal.ko \
     $(KERNEL_OUT)/drivers/perf/fsl_imx8_ddr_perf.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/cpufreq/imx-cpufreq-dt.ko \
@@ -144,10 +133,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/dma/mxs-dma.ko \
     $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/ion-alloc.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_sys_heap.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_cma_heap.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_unmapped_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/system_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/cma_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/dma-buf-imx.ko \
     $(KERNEL_OUT)/drivers/input/keyboard/snvs_pwrkey.ko \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko \
     $(KERNEL_OUT)/drivers/reset/reset-dispmix.ko \
@@ -185,8 +173,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko
 
 endif
-
-
 
 # -------@block_memory-------
 #Enable this to config 1GB ddr on evk_imx8mm

@@ -13,7 +13,6 @@ include $(CONFIG_REPO_PATH)/imx8m/BoardConfigCommon.mk
 # value assigned in this part should be fixed for an SoC, right?
 
 BOARD_SOC_TYPE := IMX8MM
-#BOARD_TYPE := DART-IMX8MM
 BOARD_HAVE_VPU := true
 BOARD_VPU_TYPE := hantro
 FSL_VPU_OMX_ONLY := true
@@ -66,7 +65,7 @@ else
   endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mm/dtbo-imx8mm-var-dart-dt8mcustomboard.img
+BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8mm-var-dart-dt8mcustomboard.img
 
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
@@ -131,6 +130,9 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-som-symphony-legacy:imx8mm-var-som-symphony-legacy.dtb \
 	imx8mm-var-som-symphony-legacy-m4:imx8mm-var-som-symphony-legacy-m4.dtb
 # -------@block_sepolicy-------
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
+    $(CONFIG_REPO_PATH)/imx8m/system_ext_pri_sepolicy
+
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy

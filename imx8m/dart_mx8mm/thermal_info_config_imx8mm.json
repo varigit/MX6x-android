@@ -48,7 +48,7 @@
     ],
     "CoolingDevices":[
         {
-            "Name":"thermal-devfreq-0",
+            "Name":"thermal-gpufreq-0",
             "Type":"GPU"
         },
         {
