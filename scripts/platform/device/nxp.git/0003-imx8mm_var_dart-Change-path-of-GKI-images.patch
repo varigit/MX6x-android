@@ -1,0 +1,28 @@
+From 76577eb6f1cdec55d7539c780c40081b2cd603e1 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 2 Aug 2022 13:56:12 -0700
+Subject: [PATCH 2/2] imx8mm_var_dart: Change path of GKI images
+
+---
+ imx8m/BoardConfigCommon.mk | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/imx8m/BoardConfigCommon.mk b/imx8m/BoardConfigCommon.mk
+index 04411fe0..f52a82fd 100644
+--- a/imx8m/BoardConfigCommon.mk
++++ b/imx8m/BoardConfigCommon.mk
+@@ -90,9 +90,9 @@ ifeq ($(TARGET_IMX_KERNEL),false)
+ # boot-debug.img is built by IMX, with Google released kernel Image
+ # boot.img is released by Google
+ ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
+-BOARD_PREBUILT_BOOTIMAGE := vendor/nxp/fsl-proprietary/gki/boot-debug.img
++BOARD_PREBUILT_BOOTIMAGE := device/variscite/imx8m/$(TARGET_PRODUCT)/gki/boot-debug.img
+ else
+-BOARD_PREBUILT_BOOTIMAGE := vendor/nxp/fsl-proprietary/gki/boot.img
++BOARD_PREBUILT_BOOTIMAGE := device/variscite/imx8m/$(TARGET_PRODUCT)/gki/boot.img
+ endif
+ TARGET_NO_KERNEL := true
+ endif
+-- 
+2.36.1
+
