@@ -249,6 +249,6 @@ fi
 
 # always set property even if wifi failed
 # as property value "1" is expected in early-boot trigger
-setprop sys.brcm.wifibt.completed 1
+setprop vendor.brcm.wifibt.completed 1
 
 exit 0

@@ -11,7 +11,6 @@ include $(CONFIG_REPO_PATH)/imx8m/BoardConfigCommon.mk
 #
 
 BOARD_SOC_TYPE := IMX8MP
-BOARD_TYPE := DART-IMX8MP
 BOARD_HAVE_VPU := true
 BOARD_VPU_TYPE := hantro
 HAVE_FSL_IMX_GPU2D := false
@@ -20,6 +19,7 @@ HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
 CFG_SECURE_IOCTRL_REGS := true
+ENABLE_SEC_DMABUF_HEAP := true
 
 SOONG_CONFIG_IMXPLUGIN += \
                         BOARD_VPU_TYPE \
@@ -32,7 +32,7 @@ SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = true
 SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_IOCTRL_REGS = true
-
+SOONG_CONFIG_IMXPLUGIN_ENABLE_SEC_DMABUF_HEAP = true
 
 IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mp
 
@@ -67,7 +67,7 @@ else
   endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/dart_mx8mp/dtbo-imx8mp-var-dart-dt8mcustomboard.img
+BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8mp-var-dart-dt8mcustomboard.img
 
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
@@ -116,6 +116,7 @@ BOARD_HAVE_BLUETOOTH_BCM := true
 
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x40400000
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
 
 # wifi config
 ifeq ($(POWERSAVE),true)
@@ -146,7 +147,7 @@ endif
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
 # -------@block_sepolicy-------
-BOARD_PLAT_PRIVATE_SEPOLICY_DIR += \
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS = += \
     $(CONFIG_REPO_PATH)/imx8m/system_ext_pri_sepolicy
 
 BOARD_SEPOLICY_DIRS := \

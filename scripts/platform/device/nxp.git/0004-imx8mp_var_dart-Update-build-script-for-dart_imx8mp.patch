@@ -1,0 +1,41 @@
+From 513efb648b7671ac96c57288b816cc0a3643bed7 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Sat, 13 Aug 2022 21:32:18 -0700
+Subject: [PATCH] imx8mp_var_dart: Update build script for dart_imx8mp
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 394ae225..77fed4cc 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -140,6 +140,13 @@ if [ -n "${build_kernel_modules}" ]; then
+     build_kernel_oot_module_flag=1;
+ fi
+ 
++# vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
++if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "dart_mx8mp" ]; then
++    build_vvcam="vvcam";
++    build_kernel_oot_module_flag=1;
++    build_mxmwifi="";
++fi
++
+ product_makefile=`pwd`/`find device/variscite -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
+ product_path=${product_makefile%/*}
+ soc_path=${product_path%/*}
+@@ -194,7 +201,8 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
+-        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] || [ ${TARGET_PRODUCT} = "dart_mx8mm" ] ; then
++        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] || [ ${TARGET_PRODUCT} = "dart_mx8mm" ] \
++	|| [ ${TARGET_PRODUCT} = "dart_mx8mp"] ; then
+             mv ${OUT}/boot.img ${OUT}/boot-imx.img
+             # sign prebuilt gki boot.img
+             make bootimage
+-- 
+2.25.1
+

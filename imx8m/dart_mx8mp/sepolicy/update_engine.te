@@ -1,0 +1,4 @@
+#============= update_engine ==============
+allow update_engine proc_bootconfig:file read;
+allow update_engine proc_bootconfig:file open;
+allow update_engine proc_bootconfig:file getattr;

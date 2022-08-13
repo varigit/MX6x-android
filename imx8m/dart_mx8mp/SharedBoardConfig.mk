@@ -1,5 +1,5 @@
 # -------@block_kernel_bootimg-------
-KERNEL_NAME := Image
+KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
 IMX8MP_USES_GKI := true
 #VVCAM_PATH := vendor/nxp-opensource/verisilicon_sw_isp_vvcam
@@ -30,6 +30,7 @@ IMX8MP_USES_GKI := true
 ifeq ($(IMX8MP_USES_GKI),true)
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mxc/gpu-viv/galcore.ko \
+    $(KERNEL_OUT)/drivers/thermal/imx8mm_thermal.ko \
     $(KERNEL_OUT)/drivers/dma/imx-sdma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma-v2.ko \
@@ -58,9 +59,9 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
+    $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
-    $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 else
 BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko
@@ -114,8 +115,13 @@ endif
 # CONFIG_VIDEO_OV5640: ov5640.ko, ov5640 sensor driver
 # CONFIG_VIDEO_IMX_CAPTURE: imx8-media-dev.ko, imx8-isi-cap.ko, imx8-isi-hw.ko, imx8-isi-m2m.ko, imx8-mipi-csi2-sam.ko, imx isi and mipi driver
 
+
 ifeq ($(IMX8MP_USES_GKI),true)
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
+    $(KERNEL_OUT)/mm/zsmalloc.ko \
+    $(KERNEL_OUT)/crypto/lzo.ko \
+    $(KERNEL_OUT)/crypto/lzo-rle.ko \
+    $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/drivers/soc/imx/soc-imx8m.ko \
     $(KERNEL_OUT)/drivers/soc/imx/mu/mx8_mu.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
@@ -137,10 +143,12 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/video/backlight/pwm_bl.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/ion-alloc.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_sys_heap.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_cma_heap.ko \
-    $(KERNEL_OUT)/drivers/staging/android/ion/heaps/ion_unmapped_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/system_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/cma_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/secure_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/heaps/dsp_heap.ko \
+    $(KERNEL_OUT)/drivers/dma-buf/dma-buf-imx.ko \
+    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/drivers/reset/reset-imx7.ko \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-imx8mp-lvds.ko \
     $(KERNEL_OUT)/drivers/phy/freescale/phy-fsl-samsung-hdmi.ko \
@@ -171,7 +179,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/power/supply/dummy_battery.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp.ko \
     $(KERNEL_OUT)/drivers/thermal/device_cooling.ko \
-    $(KERNEL_OUT)/drivers/thermal/imx8mm_thermal.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/cpufreq/imx-cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/media/v4l2-core/v4l2-fwnode.ko \
@@ -198,11 +205,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/spi/spi-imx.ko \
     $(KERNEL_OUT)/drivers/net/can/flexcan.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko \
-    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko
-
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
+    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 endif
 
 # -------@block_memory-------

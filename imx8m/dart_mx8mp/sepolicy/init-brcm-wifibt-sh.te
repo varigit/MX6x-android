@@ -9,7 +9,7 @@ allow init-brcm-wifibt-sh vendor_shell_exec:file rx_file_perms;
 allow init-brcm-wifibt-sh vendor_toolbox_exec:file rx_file_perms;
 
 # Set the sys.brcm.wifibt.completed property
-set_prop(init-brcm-wifibt-sh, public_vendor_system_prop)
+#set_prop(init-brcm-wifibt-sh, public_vendor_system_prop)
 
 # Allow insmod
 allow init-brcm-wifibt-sh self:capability sys_module;
@@ -30,8 +30,8 @@ allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
 allow init-brcm-wifibt-sh sysfs_net:dir search;
 allow init-brcm-wifibt-sh sysfs_rfkill:dir search;
 allow init-brcm-wifibt-sh sysfs_rfkill:file { open write };
-allow init-brcm-wifibt-sh vendor_file:file execute_no_trans;
 
+allow init-brcm-wifibt-sh proc_cmdline:file { getattr open read };
 allow init-brcm-wifibt-sh sysfs_soc:dir search;
 allow init-brcm-wifibt-sh sysfs_soc:file { getattr open read };
 

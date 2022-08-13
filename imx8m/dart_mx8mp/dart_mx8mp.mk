@@ -8,6 +8,9 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 
 #IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mp
 BCM_FIRMWARE_PATH := vendor/variscite/bcm_4343w_fw
+PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
+PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=nxp
+PRODUCT_VENDOR_PROPERTIES += ro.soc.model=IMX8MP
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -82,6 +85,12 @@ PRODUCT_COPY_FILES += \
 # Enable this to support vendor boot and boot header v3, this would be a MUST for GKI
 TARGET_USE_VENDOR_BOOT ?= true
 
+ifeq ($(IMX8MP_USES_GKI),true)
+  BOARD_RAMDISK_USE_LZ4 := true
+
+  BOARD_USES_GENERIC_KERNEL_IMAGE := true
+  $(call inherit-product, $(SRC_TARGET_DIR)/product/generic_ramdisk.mk)
+endif
 
 # We load the fstab from device tree so this is not needed, but since no kernel modules are installed to vendor
 # boot ramdisk so far, we need this step to generate the vendor-ramdisk folder or build process would fail. This
@@ -99,12 +108,22 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/ueventd.varsommx8mp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.varsommx8mp.rc
 
 # -------@block_storage-------
+ifeq ($(TARGET_USE_VENDOR_BOOT),true)
+PRODUCT_PACKAGES += \
+    linker.vendor_ramdisk \
+    resizefs.vendor_ramdisk \
+    tune2fs.vendor_ramdisk
+endif
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
-  $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+  ifeq ($(TARGET_USE_VENDOR_BOOT),true)
+    $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota/compression.mk)
+  else
+    $(call inherit-product, $(SRC_TARGET_DIR)/product/virtual_ab_ota.mk)
+  endif
   PRODUCT_USE_DYNAMIC_PARTITIONS := true
   BOARD_BUILD_SUPER_IMAGE_BY_DEFAULT := true
   BOARD_SUPER_IMAGE_IN_UPDATE_PACKAGE := true
@@ -158,17 +177,16 @@ endif
 # Keymaster HAL
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0-service.trusty
+    android.hardware.security.keymint-service.trusty
 endif
 
 PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0-service-imx
+    android.hardware.security.keymint-service-imx
 
 # Confirmation UI
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_PACKAGES += \
-    android.hardware.confirmationui@1.0-service.trusty \
-    securedisplayd-imx
+    android.hardware.confirmationui@1.0-service.trusty
 endif
 
 # new gatekeeper HAL
@@ -215,14 +233,14 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 #DRM Widevine 1.3 L1 support
 PRODUCT_PACKAGES += \
-    android.hardware.drm@1.3-service.widevine \
-    android.hardware.drm@1.3-service.clearkey \
+    android.hardware.drm@1.4-service.widevine \
+    android.hardware.drm@1.4-service.clearkey \
     libwvdrmcryptoplugin \
     libwvhidl \
     libwvdrmengine \
     liboemcrypto \
 
-$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee.mk)
+$(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8mp.mk)
 
 # -------@block_audio-------
 
@@ -233,11 +251,6 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/audio-json/hdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/hdmi_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
-
-PRODUCT_PACKAGES += \
-    android.hardware.audio@6.0-impl:32 \
-    android.hardware.audio@2.0-service \
-    android.hardware.audio.effect@6.0-impl:32
 
 
 PRODUCT_COPY_FILES += \
@@ -350,7 +363,6 @@ PRODUCT_COPY_FILES += \
 # WiFi HAL
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
-    wifilogd \
     wificond
 
 # WiFi RRO
@@ -380,11 +392,6 @@ PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.0-impl \
     android.hardware.bluetooth@1.0-service
 
-# Keymaster HAL
-ifeq ($(PRODUCT_IMX_TRUSTY),true)
-PRODUCT_PACKAGES += \
-    android.hardware.keymaster@4.0-service.trusty
-endif
 
 PRODUCT_COPY_FILES += \
 device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart \
@@ -551,6 +558,7 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.vulkan.level-0.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.level-0.xml \
     frameworks/native/data/etc/android.hardware.vulkan.version-1_1.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.vulkan.version-1_1.xml \
     frameworks/native/data/etc/android.software.vulkan.deqp.level-2020-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level-2020-03-01.xml \
+    frameworks/native/data/etc/android.software.vulkan.deqp.level-2021-03-01.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.vulkan.deqp.level.xml \
     frameworks/native/data/etc/android.hardware.wifi.direct.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.direct.xml \
     frameworks/native/data/etc/android.hardware.wifi.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.xml \
     frameworks/native/data/etc/android.hardware.wifi.passpoint.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.wifi.passpoint.xml \
@@ -569,6 +577,10 @@ PRODUCT_COPY_FILES += \
 # Included GMS package
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
+
+# trusty loadable apps
+PRODUCT_COPY_FILES += \
+    vendor/nxp/fsl-proprietary/uboot-firmware/imx8m/confirmationui.app:/vendor/firmware/tee/confirmationui.app
 
 
 # isp block
