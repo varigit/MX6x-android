@@ -73,16 +73,17 @@ while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	[ "$moreoptions" = 0 ] && [ $# -gt 2 ] && help && exit
 	[ "$moreoptions" = 1 ] && shift
 done
-
 img_prefix="dtbo-"
-img_search_str="ls ${imagesdir}/${img_prefix}*"
+img_prefix_legacy="dtbo-*legacy*"
+img_search_str_legacy="ls ${imagesdir}/${img_prefix_legacy}*"
+img_search_str="ls ${imagesdir}/${img_prefix}* | grep -v legacy"
 if [ "$sdshared" = true ] ; then
 	img_search_str+=" | grep -v sd"
 fi
 img_list=()
 
 maxlen=0
-for img in $(eval $img_search_str)
+for img in $(eval $img_search_str_legacy) $(eval $img_search_str)
 do
 	img=$(basename $img)
 	len=`expr length $img`
@@ -91,7 +92,7 @@ done
 
 spaces_to_pad=0
 # generate options list
-for img in $(eval $img_search_str)
+for img in $(eval $img_search_str_legacy) $(eval $img_search_str)
 do
 	img=$(basename $img)
 	len=`expr length $img`
@@ -102,31 +103,33 @@ do
 	img=$img$spaces
 
 	if [[ "$img" == *"imx8mp-var-som-symphony-hdmi"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS HDMI on Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with HDMI support)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony-basler-isp0"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS with Basler camera on Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and Basler camera support)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS M7 with 2nd OV5640 on Symphony-Board, with M7 support)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS, 2nd OV5640 and M7 support)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS with 2nd OV5640 on Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and 2nd OV5640 support)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS M7 LVDS on Symphony-Board, with M7 support)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and M7 support)")
 	elif [[ "$img" == *"imx8mp-var-som-symphony"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS LVDS on Symphony-Board)")
+		img_list+=("$img (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS HDMI on DT8MCustomBoard 1.x)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with HDMI support)")
+	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-basler-isp0"* ]]; then
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS and Basler camera support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-m7"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 1.x, with M7 support)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS and M7 support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS LVDS on DT8MCustomBoard 1.x)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-basler-isp0"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS with Basler camera DT8MCustomBoard 2.x and above)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS and Basler camera support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS HDMI on DT8MCustomBoard 2.x and above)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with HDMI support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-m7"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 2.x and above, with M7 support)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS and M7 support)")
 	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS LVDS on DT8MCustomBoard 2.x)")
+		img_list+=("$img (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS support)")
 	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy-m4"* ]]; then
 		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x, with M4 support)")
 	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
@@ -135,30 +138,30 @@ do
 		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with M4 support)")
 	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard"* ]]; then
 		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+DP)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+DP)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
 	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy-m4"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below, with M4 support)")
 	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mm-var-som-symphony-m4"* ]]; then
+	elif [[ "$img" == *"imx8mm-var-som-symphony-m4"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above, with M4 support)")
-	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
+	elif [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, HDMI, WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with LVDS and WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with HDMI and WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, Display Port, WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x, with Display Port and WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS, HDMI, WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS and WIFI support)")
+	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
+		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x and above, with HDMI and WIFI support)")
 	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy-m7"* ]]; then
 		img_list+=("$img (VAR-SOM-MX8M-NANO-M7 on a Symphony-Board V1.4 and below)")
 	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy"* ]]; then
