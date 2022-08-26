@@ -1,1 +1,5 @@
 allow system_server nfc:file write;
+
+allow system_server sysfs:file read;
+allow system_server sysfs:file open;
+allow system_server public_vendor_system_prop:property_service set;

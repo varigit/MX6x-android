@@ -4,9 +4,10 @@
       "Name": "CPULittleClusterMaxFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq",
       "Values": [
-        "1800000",
-        "1600000",
-        "1200000"
+        "1500000",
+        "1300000",
+        "1000000",
+        "800000"
       ],
       "DefaultIndex": 0,
       "ResetOnInit": true
@@ -15,15 +16,16 @@
       "Name": "CPULittleClusterMinFreq",
       "Path": "/sys/devices/system/cpu/cpu0/cpufreq/scaling_min_freq",
       "Values": [
-        "1800000",
-        "1600000",
-        "1200000"
+        "1500000",
+        "1300000",
+        "1000000",
+        "800000"
       ],
       "ResetOnInit": true
     },
     {
       "Name": "TASchedtuneBoost",
-      "Path": "/dev/stune/top-app/schedtune.boost",
+      "Path": "/dev/cpuctl/top-app/cpu.uclamp.min",
       "Values": [
         "60",
         "10"
@@ -45,7 +47,7 @@
       "Name": "PowerHALMainState",
       "Path": "vendor.powerhal.camera",
       "Values": [
-        "CAMERA_STREAMING",
+        "CAMERA_STREAMING_MID",
         ""
       ],
       "Type": "Property"
@@ -54,7 +56,7 @@
       "Name": "PowerHALAudioState",
       "Path": "vendor.powerhal.audio",
       "Values": [
-        "AUDIO_LOW_LATENCY",
+        "AUDIO_STREAMING_LOW_LATENCY",
         ""
       ],
       "Type": "Property"
@@ -74,13 +76,13 @@
       "PowerHint": "SUSTAINED_PERFORMANCE",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1600000"
+      "Value": "1300000"
     },
     {
       "PowerHint": "INTERACTION",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 0,
-      "Value": "1600000"
+      "Value": "1500000"
     },
     {
       "PowerHint": "INTERACTION",
@@ -89,16 +91,22 @@
       "Value": "60"
     },
     {
+      "PowerHint": "INTERACTION",
+      "Node": "PMQoSCpuDmaLatency",
+      "Duration": 500,
+      "Value": "0"
+    },
+    {
       "PowerHint": "LAUNCH",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 5000,
-      "Value": "1800000"
+      "Value": "1500000"
     },
     {
       "PowerHint": "LAUNCH",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 5000,
-      "Value": "1800000"
+      "Value": "1500000"
     },
     {
       "PowerHint": "LAUNCH",
@@ -109,14 +117,14 @@
     {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPULittleClusterMinFreq",
-      "Duration": 1000,
-      "Value": "1800000"
+      "Duration": 5000,
+      "Value": "1500000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
       "Node": "CPULittleClusterMaxFreq",
-      "Duration": 1000,
-      "Value": "1800000"
+      "Duration": 5000,
+      "Value": "1500000"
     },
     {
       "PowerHint": "CAMERA_LAUNCH",
@@ -125,28 +133,28 @@
       "Value": "0"
     },
     {
-      "PowerHint": "CAMERA_STREAMING",
+      "PowerHint": "CAMERA_STREAMING_MID",
       "Node": "PowerHALMainState",
       "Duration": 0,
-      "Value": "CAMERA_STREAMING"
+      "Value": "CAMERA_STREAMING_MID"
     },
     {
-      "PowerHint": "CAMERA_STREAMING",
+      "PowerHint": "CAMERA_STREAMING_MID",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1600000"
+      "Value": "1300000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
       "Node": "CPULittleClusterMinFreq",
-      "Duration": 1000,
-      "Value": "1800000"
+      "Duration": 5000,
+      "Value": "1500000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
       "Node": "CPULittleClusterMaxFreq",
-      "Duration": 1000,
-      "Value": "1800000"
+      "Duration": 5000,
+      "Value": "1500000"
     },
     {
       "PowerHint": "CAMERA_SHOT",
@@ -158,31 +166,37 @@
       "PowerHint": "LOW_POWER",
       "Node": "CPULittleClusterMinFreq",
       "Duration": 0,
-      "Value": "1200000"
+      "Value": "800000"
     },
     {
       "PowerHint": "LOW_POWER",
       "Node": "CPULittleClusterMaxFreq",
       "Duration": 0,
-      "Value": "1200000"
+      "Value": "1300000"
     },
     {
-      "PowerHint": "AUDIO_STREAMING",
-      "Node": "PMQoSCpuDmaLatency",
-      "Duration": 2000,
-      "Value": "0"
-    },
-    {
-      "PowerHint": "AUDIO_LOW_LATENCY",
+      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
       "Node": "PowerHALAudioState",
       "Duration": 0,
-      "Value": "AUDIO_LOW_LATENCY"
+      "Value": "AUDIO_STREAMING_LOW_LATENCY"
     },
     {
-      "PowerHint": "AUDIO_LOW_LATENCY",
+      "PowerHint": "AUDIO_STREAMING_LOW_LATENCY",
       "Node": "PMQoSCpuDmaLatency",
       "Duration": 0,
       "Value": "0"
+    },
+    {
+      "PowerHint": "FIXED_PERFORMANCE",
+      "Node": "CPULittleClusterMaxFreq",
+      "Duration": 0,
+      "Value": "1300000"
+    },
+    {
+      "PowerHint": "FIXED_PERFORMANCE",
+      "Node": "CPULittleClusterMinFreq",
+      "Duration": 0,
+      "Value": "1300000"
     }
   ]
 }

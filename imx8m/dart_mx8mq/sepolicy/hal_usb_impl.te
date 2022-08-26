@@ -1,6 +1,0 @@
-allow hal_usb_impl ffs_prop:file map;
-allow hal_usb_impl ffs_prop:file read;
-allow hal_usb_impl ffs_prop:file open;
-allow hal_usb_impl ffs_prop:file getattr;
-allow hal_usb_impl ffs_prop:property_service set;
-#allow hal_usb_impl exported_ffs_prop:file read;

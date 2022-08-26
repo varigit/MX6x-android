@@ -1,0 +1,36 @@
+From 7875b769c8dd9c07d3029943f3948fb0629066b1 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 23 Aug 2022 13:20:54 -0700
+Subject: [PATCH] imx8mq-var-dart: remove hard coded dtb names.
+
+---
+ iMX8M/soc.mak | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index 99eff7b..b44581e 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -155,9 +155,7 @@ u-boot-atf-tee.bin: u-boot.bin bl31.bin tee.bin
+ clean:
+ 	@rm -f $(MKIMG) u-boot-atf.bin u-boot-atf-tee.bin u-boot-spl-ddr.bin u-boot.itb u-boot.its u-boot-ddr3l.itb u-boot-ddr3l.its u-boot-spl-ddr3l.bin u-boot-ddr4.itb u-boot-ddr4.its u-boot-spl-ddr4.bin u-boot-ddr4-evk.itb u-boot-ivt.itb u-boot-ddr4-evk.its $(OUTIMG)
+ 
+-dtb = $(PLAT)-var-dart-dt8mcustomboard.dtb $(PLAT)-var-dart-dt8mcustomboard-legacy.dtb $(PLAT)-var-som-symphony.dtb
+-$(dtb):
+-	./$(DTB_PREPROC) $(dtb) $(dtbs)
++dtb = $(dtbs)
+ 
+ u-boot.itb: $(dtb)
+ 	./$(PAD_IMAGE) tee.bin
+@@ -215,7 +213,7 @@ u-boot-ddr4-evk.itb: $(dtb_ddr4_evk)
+ 	./mkimage_uboot -E -p 0x3000 -f u-boot-ddr4-evk.its u-boot-ddr4-evk.itb
+ 	@rm -f u-boot.its $(dtb_ddr4_evk)
+ 
+-dtbs_lpddr4_ddr4_evk = $(PLAT)-var-dart-customboard.dtb $(PLAT)-var-som-symphony.dtb
++dtbs_lpddr4_ddr4_evk ?= $(dtbs)
+ u-boot-lpddr4-ddr4-evk.itb: $(dtbs_lpddr4_ddr4_evk)
+ 	./$(PAD_IMAGE) bl31.bin
+ 	DEK_BLOB_LOAD_ADDR=$(DEK_BLOB_LOAD_ADDR) TEE_LOAD_ADDR=$(TEE_LOAD_ADDR) ATF_LOAD_ADDR=$(ATF_LOAD_ADDR) ./mkimage_fit_atf.sh $(dtbs_lpddr4_ddr4_evk) > u-boot-lpddr4-ddr4-evk.its
+-- 
+2.36.1
+
