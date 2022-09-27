@@ -278,9 +278,6 @@ PRODUCT_PACKAGES += \
     media_profiles_8mp-ov5640.xml \
     media_profiles_8mp-basler-ov5640.xml
 
-PRODUCT_COPY_FILES += \
-       $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
-
 # ISP camera feature demo
 PRODUCT_PACKAGES += \
     CameraXBasic
@@ -371,7 +368,7 @@ PRODUCT_PACKAGES += \
 
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
-       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \

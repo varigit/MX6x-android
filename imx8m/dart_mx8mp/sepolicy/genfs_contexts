@@ -11,7 +11,8 @@ genfscon sysfs /devices/platform/soc@0/33800000.pcie/pci0000:00/0000:00:00.0/000
 
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0050/extcon u:object_r:sysfs_extcon:s0
-genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0
+genfscon sysfs /devices/platform/wifi_rfkill/rfkill/rfkill0 u:object_r:sysfs_wifi_hal_writable:s0
+genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill1 u:object_r:sysfs_rfkill:s0
 
 # for dumpstate to access the stat file
 genfscon sysfs /devices/platform/94400000.pmem/ndbus0/region0/namespace0.0/block/pmem0                                       u:object_r:sysfs_block_devices:s0

@@ -1,3 +1,4 @@
 allow system_server nfc:file write;
 allow system_server sysfs:file read;
 allow system_server sysfs:file open;
+set_prop(system_server, system_prop)

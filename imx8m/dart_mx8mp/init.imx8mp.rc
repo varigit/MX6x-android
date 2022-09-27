@@ -38,6 +38,17 @@ on property:sys.boot_completed=1
     chown mediacodec mediacodec /sys/class/remoteproc/remoteproc0/name
     chmod 0660 /sys/class/remoteproc/remoteproc0/name
 
+on property:sys.force.suspend=true
+    write /sys/class/rfkill/rfkill0/state 0
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+	
+on property:sys.force.suspend=false
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown system system /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 1
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "30b40000.mmc"
+
 on property:sys.boot_completed=1
     # update cpuset now that processors are up
     write /dev/cpuset/foreground/cpus 0-3

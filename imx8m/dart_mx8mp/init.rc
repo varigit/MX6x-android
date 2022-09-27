@@ -123,6 +123,12 @@ on early-boot && property:vendor.skip.charger_not_need=0
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
     write /sys/block/mmcblk2/queue/read_ahead_kb 2048
 
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown system system /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 1
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "30b40000.mmc"
+
     # Prepare for wifi
     setprop wifi.interface wlan0
    setprop wifi.direct.interface p2p0
@@ -131,9 +137,9 @@ on early-boot && property:vendor.skip.charger_not_need=0
     setprop persist.service.bdroid.bdaddr 22:22:67:C6:69:73
 
     # Prepare for bluetooth
-    chmod 665 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    write /sys/class/rfkill/rfkill0/state 0
+    chmod 665 /sys/class/rfkill/rfkill1/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
+    write /sys/class/rfkill/rfkill1/state 0
 
 
 
