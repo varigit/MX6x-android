@@ -21,7 +21,6 @@ on early-init
 
 on early-init
     start early_init_sh
-    start init_brcm_wifibt_sh
     # Set the host name which used in console
     export HOSTNAME imx8mm-var-dart
 
@@ -37,13 +36,6 @@ on early-init
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
     setprop vendor.skip.charger_not_need 1
-
-service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
 
 on init && property:vendor.skip.charger_not_need=0
     start watchdogd
@@ -116,15 +108,21 @@ on early-boot && property:vendor.skip.charger_not_need=0
     write /sys/block/mmcblk2/queue/read_ahead_kb 2048
 
 
+
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown system system /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 1
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "30b40000.mmc"
     # Prepare for wifi
     setprop wifi.interface wlan0
     setprop wifi.direct.interface p2p0
     setprop wifi.concurrent.interface wlan0
 
     # Prepare for bluetooth
-    chmod 665 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    write /sys/class/rfkill/rfkill0/state 0
+    chmod 665 /sys/class/rfkill/rfkill1/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
+    write /sys/class/rfkill/rfkill1/state 0
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
@@ -264,9 +262,6 @@ on post-fs-data && property:vendor.storageproxyd=trusty && property:vendor.skip.
     # create temp node for secure storage proxy
     mkdir /data/vendor/ss 0700 system system
     restart storageproxyd
-
-#on property:sys.boot_completed=1
-#    start init_brcm_wifibt_sh
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system

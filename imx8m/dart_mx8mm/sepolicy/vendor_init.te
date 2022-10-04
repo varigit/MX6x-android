@@ -1,0 +1,2 @@
+allow vendor_init self:capability sys_module;
+allow vendor_init vendor_wifi_init_prop:file read;

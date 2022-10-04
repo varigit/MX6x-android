@@ -2,7 +2,6 @@
 /dev/block/mmcblk1                           u:object_r:sdcard:s0
 
 #peripheral
-/vendor/bin/init\.brcm\.wifibt\.sh u:object_r:init-brcm-wifibt-sh_exec:s0
 /vendor/bin/fsl_sensor_fusion   u:object_r:sensors_exec:s0
 /dev/ttymxc[0-9]*               u:object_r:tty_device:s0
 /dev/sda[0-8]*                  u:object_r:fuse:s0
