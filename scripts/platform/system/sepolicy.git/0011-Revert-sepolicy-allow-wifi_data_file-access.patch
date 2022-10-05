@@ -1,35 +1,35 @@
-From 5321768e6be80f2eb4315b5fa1fc4e25612d1d37 Mon Sep 17 00:00:00 2001
-From: mohit <mohit.p@variscite.com>
-Date: Thu, 12 May 2022 10:11:37 -0700
-Subject: [PATCH 03/11] sepolicy: allow wifi_data_file access.
+From f29d54649abaf266913bfe3d09d8e022482404af Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Wed, 21 Sep 2022 21:54:08 -0700
+Subject: [PATCH 11/11] Revert "sepolicy: allow wifi_data_file access."
 
-Change-Id: Iae01f537cac07d7f74da83d73d861800cc6c8c68
+This reverts commit 5321768e6be80f2eb4315b5fa1fc4e25612d1d37.
 ---
- prebuilts/api/31.0/public/vendor_init.te | 1 +
- public/vendor_init.te                    | 1 +
- 2 files changed, 2 insertions(+)
+ prebuilts/api/31.0/public/vendor_init.te | 1 -
+ public/vendor_init.te                    | 1 -
+ 2 files changed, 2 deletions(-)
 
 diff --git a/prebuilts/api/31.0/public/vendor_init.te b/prebuilts/api/31.0/public/vendor_init.te
-index 0999f4880..576a0d16b 100644
+index 576a0d16b..0999f4880 100644
 --- a/prebuilts/api/31.0/public/vendor_init.te
 +++ b/prebuilts/api/31.0/public/vendor_init.te
-@@ -77,6 +77,7 @@ allow vendor_init {
+@@ -77,7 +77,6 @@ allow vendor_init {
    -vold_metadata_file
    -gsi_metadata_file_type
    -apex_metadata_file
-+  -wifi_data_file
+-  -wifi_data_file
    -apex_info_file
    -userspace_reboot_metadata_file
    enforce_debugfs_restriction(`-debugfs_type')
 diff --git a/public/vendor_init.te b/public/vendor_init.te
-index 0999f4880..576a0d16b 100644
+index 576a0d16b..0999f4880 100644
 --- a/public/vendor_init.te
 +++ b/public/vendor_init.te
-@@ -77,6 +77,7 @@ allow vendor_init {
+@@ -77,7 +77,6 @@ allow vendor_init {
    -vold_metadata_file
    -gsi_metadata_file_type
    -apex_metadata_file
-+  -wifi_data_file
+-  -wifi_data_file
    -apex_info_file
    -userspace_reboot_metadata_file
    enforce_debugfs_restriction(`-debugfs_type')

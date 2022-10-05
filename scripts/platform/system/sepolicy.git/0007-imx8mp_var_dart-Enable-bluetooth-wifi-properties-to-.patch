@@ -1,7 +1,8 @@
-From cd130f679caa3b52046fbfc4ab16d30014880e4a Mon Sep 17 00:00:00 2001
+From bcf19e4f35a843fd0a548b60200bb1bfb71b9a48 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Tue, 16 Aug 2022 21:22:57 -0700
-Subject: [PATCH] imx8mp_var_dart: Enable bluetooth wifi properties to be set
+Subject: [PATCH 07/11] imx8mp_var_dart: Enable bluetooth wifi properties to be
+ set
 
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 Change-Id: Ib54bc74fdcde1effbf3e6ea8e3ec7cb0c74df397

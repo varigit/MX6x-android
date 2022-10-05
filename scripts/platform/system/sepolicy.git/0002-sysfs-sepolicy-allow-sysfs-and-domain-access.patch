@@ -1,7 +1,7 @@
-From fc6caeef83118c9db0b21432b4440d3c1602b4a1 Mon Sep 17 00:00:00 2001
+From 6a2b6508294d279719143a936a0066c4da43353c Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Thu, 12 May 2022 10:07:02 -0700
-Subject: [PATCH] sysfs sepolicy: allow sysfs and domain access.
+Subject: [PATCH 02/11] sysfs sepolicy: allow sysfs and domain access.
 
 - It is required for bt_vendor.conf
 
@@ -38,5 +38,5 @@ index 6c30a2e21..ac35e0a5b 100644
      -coredomain
      -vendor_executes_system_violators
 -- 
-2.36.1
+2.25.1
 

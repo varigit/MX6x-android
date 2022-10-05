@@ -1,7 +1,7 @@
-From 5b64b684672d832837b3e26a2d155128aae8b2e0 Mon Sep 17 00:00:00 2001
+From fe47183ffc513e86615589b02fd83498f54e7ce8 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Thu, 12 May 2022 10:40:34 -0700
-Subject: [PATCH] sepolicy: Add permissions for system_suspend
+Subject: [PATCH 06/11] sepolicy: Add permissions for system_suspend
 
 Change-Id: Ib43030d54c70e021ccbe949b2fd55429b7488ed5
 ---
@@ -150,5 +150,5 @@ index 68e6f7a78..b4a58fc5d 100644
  ')
  
 -- 
-2.36.1
+2.25.1
 

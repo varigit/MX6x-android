@@ -1,18 +1,18 @@
-From 6c1a20f83b4138759a70382e0861180152cc02d3 Mon Sep 17 00:00:00 2001
+From c77bf3d0d0515cb67c19ef39b46ec4f9840f0121 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Mon, 5 Apr 2021 17:32:03 -0700
-Subject: [PATCH 5/8] sepolicy: Add permissions for system_server
+Subject: [PATCH 05/11] sepolicy: Add permissions for system_server
 
 ---
- prebuilts/api/30.0/private/coredomain.te | 1 +
+ prebuilts/api/31.0/private/coredomain.te | 1 +
  private/coredomain.te                    | 1 +
  2 files changed, 2 insertions(+)
 
 diff --git a/prebuilts/api/31.0/private/coredomain.te b/prebuilts/api/31.0/private/coredomain.te
-index 86e800962..30e21d10d 100644
+index b7f4f5d18..ac7843c10 100644
 --- a/prebuilts/api/31.0/private/coredomain.te
 +++ b/prebuilts/api/31.0/private/coredomain.te
-@@ -110,6 +110,7 @@ full_treble_only(`
+@@ -140,6 +140,7 @@ full_treble_only(`
      -init
      -ueventd
      -vold
@@ -21,10 +21,10 @@ index 86e800962..30e21d10d 100644
  
    # /dev
 diff --git a/private/coredomain.te b/private/coredomain.te
-index 86e800962..30e21d10d 100644
+index b7f4f5d18..ac7843c10 100644
 --- a/private/coredomain.te
 +++ b/private/coredomain.te
-@@ -110,6 +110,7 @@ full_treble_only(`
+@@ -140,6 +140,7 @@ full_treble_only(`
      -init
      -ueventd
      -vold

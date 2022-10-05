@@ -1,7 +1,7 @@
-From 226de5b506d8ee7140704f1bad58472a2652ff6d Mon Sep 17 00:00:00 2001
+From 2960c2dbb98200d3430c20ff673b8d093a7b596e Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Tue, 23 Mar 2021 09:11:49 -0700
-Subject: [PATCH 1/8] sysfs sepolicy: allow full access capabilities
+Subject: [PATCH 01/11] sysfs sepolicy: allow full access capabilities
 
 Managing GPIOs using sysfs requires full access to:
 - write
@@ -14,10 +14,10 @@ Managing GPIOs using sysfs requires full access to:
  2 files changed, 2 deletions(-)
 
 diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
-index e1ca737ce..415a51df5 100644
+index 799a2f1c5..6c30a2e21 100644
 --- a/prebuilts/api/31.0/public/domain.te
 +++ b/prebuilts/api/31.0/public/domain.te
-@@ -1349,7 +1349,6 @@ full_treble_only(`
+@@ -1318,7 +1318,6 @@ neverallow * same_process_hwservice:hwservice_manager add;
  # to do so should never be granted.
  neverallow domain {
    proc_type
@@ -26,10 +26,10 @@ index e1ca737ce..415a51df5 100644
  
  # cgroupfs directories can be created, but not files within them.
 diff --git a/public/domain.te b/public/domain.te
-index e1ca737ce..415a51df5 100644
+index 799a2f1c5..6c30a2e21 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1349,7 +1349,6 @@ full_treble_only(`
+@@ -1318,7 +1318,6 @@ neverallow * same_process_hwservice:hwservice_manager add;
  # to do so should never be granted.
  neverallow domain {
    proc_type
