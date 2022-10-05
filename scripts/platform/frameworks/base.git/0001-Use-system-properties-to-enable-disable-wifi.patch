@@ -1,0 +1,79 @@
+From 67eda29fb5e3c00616a4fba2f317dbf1be318205 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Mon, 26 Sep 2022 18:52:40 -0700
+Subject: [PATCH] Use system properties to enable / disable wifi
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ .../java/com/android/server/power/Notifier.java | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/services/core/java/com/android/server/power/Notifier.java b/services/core/java/com/android/server/power/Notifier.java
+index c91d8dedc41b..10ab50a7bb0d 100644
+--- a/services/core/java/com/android/server/power/Notifier.java
++++ b/services/core/java/com/android/server/power/Notifier.java
+@@ -31,6 +31,7 @@ import android.media.Ringtone;
+ import android.media.RingtoneManager;
+ import android.metrics.LogMaker;
+ import android.net.Uri;
++import android.net.wifi.WifiManager;
+ import android.os.BatteryStats;
+ import android.os.Handler;
+ import android.os.Looper;
+@@ -39,7 +40,9 @@ import android.os.PowerManager;
+ import android.os.PowerManagerInternal;
+ import android.os.Process;
+ import android.os.RemoteException;
++import android.os.ServiceManager;
+ import android.os.SystemClock;
++import android.os.SystemProperties;
+ import android.os.UserHandle;
+ import android.os.VibrationEffect;
+ import android.os.Vibrator;
+@@ -166,6 +169,8 @@ public class Notifier {
+ 
+     // True if a user activity message should be sent.
+     private boolean mUserActivityPending;
++    private WifiManager mWifiManager;
++    private boolean wifi_state_pre_suspend;
+ 
+     public Notifier(Looper looper, Context context, IBatteryStats batteryStats,
+             SuspendBlocker suspendBlocker, WindowManagerPolicy policy,
+@@ -205,6 +210,7 @@ public class Notifier {
+         try {
+             mBatteryStats.noteInteractive(true);
+         } catch (RemoteException ex) { }
++	mWifiManager = (WifiManager) mContext.getSystemService(Context.WIFI_SERVICE);
+         FrameworkStatsLog.write(FrameworkStatsLog.INTERACTIVE_STATE_CHANGED,
+                 FrameworkStatsLog.INTERACTIVE_STATE_CHANGED__STATE__ON);
+     }
+@@ -750,8 +756,13 @@ public class Notifier {
+         }
+ 
+         if (mActivityManagerInternal.isSystemReady()) {
++            SystemProperties.set("sys.force.suspend", "false");
+             mContext.sendOrderedBroadcastAsUser(mScreenOnIntent, UserHandle.ALL, null,
+                     mWakeUpBroadcastDone, mHandler, 0, null, null);
++            if(wifi_state_pre_suspend) {
++                 mWifiManager.setWifiEnabled(true);
++                 wifi_state_pre_suspend = false;
++            }
+         } else {
+             EventLog.writeEvent(EventLogTags.POWER_SCREEN_BROADCAST_STOP, 2, 1);
+             sendNextBroadcast();
+@@ -775,6 +786,12 @@ public class Notifier {
+         if (mActivityManagerInternal.isSystemReady()) {
+             mContext.sendOrderedBroadcastAsUser(mScreenOffIntent, UserHandle.ALL, null,
+                     mGoToSleepBroadcastDone, mHandler, 0, null, null);
++                    SystemProperties.set("sys.force.suspend", "true");
++            if (mWifiManager != null && mWifiManager.isWifiEnabled()) {
++                 wifi_state_pre_suspend = true;
++                 mWifiManager.setWifiEnabled(false);
++            }
++
+         } else {
+             EventLog.writeEvent(EventLogTags.POWER_SCREEN_BROADCAST_STOP, 3, 1);
+             sendNextBroadcast();
+-- 
+2.25.1
+
