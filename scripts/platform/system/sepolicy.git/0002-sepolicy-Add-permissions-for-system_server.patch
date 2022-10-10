@@ -1,7 +1,7 @@
-From c77bf3d0d0515cb67c19ef39b46ec4f9840f0121 Mon Sep 17 00:00:00 2001
+From b0c0f065b60f63bda6284bc2f1aba49815352f6f Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Mon, 5 Apr 2021 17:32:03 -0700
-Subject: [PATCH 05/11] sepolicy: Add permissions for system_server
+Subject: [PATCH 2/3] sepolicy: Add permissions for system_server
 
 ---
  prebuilts/api/31.0/private/coredomain.te | 1 +

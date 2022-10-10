@@ -1,7 +1,7 @@
-From fe47183ffc513e86615589b02fd83498f54e7ce8 Mon Sep 17 00:00:00 2001
+From b60500cb900303ae03a0e2d627ab3e9829ed47f3 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Thu, 12 May 2022 10:40:34 -0700
-Subject: [PATCH 06/11] sepolicy: Add permissions for system_suspend
+Subject: [PATCH 3/3] sepolicy: Add permissions for system_suspend
 
 Change-Id: Ib43030d54c70e021ccbe949b2fd55429b7488ed5
 ---
@@ -70,10 +70,10 @@ index caf8955bb..6dbe9ec40 100644
      domain
      -atrace # tracing
 diff --git a/prebuilts/api/31.0/public/domain.te b/prebuilts/api/31.0/public/domain.te
-index 68e6f7a78..b4a58fc5d 100644
+index e7955e235..474091a57 100644
 --- a/prebuilts/api/31.0/public/domain.te
 +++ b/prebuilts/api/31.0/public/domain.te
-@@ -1375,6 +1375,7 @@ full_treble_only(`
+@@ -1376,6 +1376,7 @@ full_treble_only(`
      -charger
      # TODO(b/110891300): remove this exception
      -incidentd
@@ -138,10 +138,10 @@ index caf8955bb..6dbe9ec40 100644
      domain
      -atrace # tracing
 diff --git a/public/domain.te b/public/domain.te
-index 68e6f7a78..b4a58fc5d 100644
+index e7955e235..474091a57 100644
 --- a/public/domain.te
 +++ b/public/domain.te
-@@ -1375,6 +1375,7 @@ full_treble_only(`
+@@ -1376,6 +1376,7 @@ full_treble_only(`
      -charger
      # TODO(b/110891300): remove this exception
      -incidentd
