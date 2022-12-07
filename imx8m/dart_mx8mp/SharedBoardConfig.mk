@@ -54,6 +54,13 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_raw.ko \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_dsp_rproc.ko \
+    $(KERNEL_OUT)/drivers/i2c/busses/i2c-rpmsg-imx.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/imx-audio-rpmsg.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-rpmsg.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko \
