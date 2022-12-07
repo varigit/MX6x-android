@@ -36,6 +36,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-dma-v2.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-micfil.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-micfil.ko \
+    $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-aud2htx.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asrc.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-easrc.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-sai.ko \
