@@ -1,0 +1,44 @@
+From 900dddf3c6477c22e0c6b4f456f66b450776cd35 Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Mon, 5 Dec 2022 07:06:49 +0100
+Subject: [PATCH 1/2] Revert "MA-19306 Restrict mcu secure access"
+
+This reverts commit 9232835805b415248fc3199b09870a4072eaee68.
+
+The revert is need to remove Cortex-M7 access restrictions and
+then run the Cortex-M7 demos from U-Boot and Linux
+using remoteproc.
+---
+ plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c | 2 +-
+ plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+index da5b742a8..43c7d162c 100644
+--- a/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mn/imx8mn_bl31_setup.c
+@@ -74,7 +74,7 @@ static const struct imx_csu_cfg csu_cfg[] = {
+ 	/* master HP0~1 */
+ 
+ 	/* SA setting */
+-	CSU_SA(CSU_SA_M7, 1, LOCKED),
++//	CSU_SA(CSU_SA_M7, 1, LOCKED), /* uncomment this for SDK 2.10.0 */
+ 	CSU_SA(CSU_SA_SDMA1, 1, LOCKED),
+ 	CSU_SA(CSU_SA_USB1, 1, LOCKED),
+ 	CSU_SA(CSU_SA_GPU, 1, LOCKED),
+diff --git a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
+index 7b7133852..0ecd6fc13 100644
+--- a/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
++++ b/plat/imx/imx8m/imx8mp/imx8mp_bl31_setup.c
+@@ -87,7 +87,7 @@ static const struct imx_csu_cfg csu_cfg[] = {
+ 	/* master HP0~1 */
+ 
+ 	/* SA setting */
+-	CSU_SA(CSU_SA_M7, 1, LOCKED),
++//	CSU_SA(CSU_SA_M7, 1, LOCKED), /* uncomment this for SDK 2.10.0 */
+ 	CSU_SA(CSU_SA_SDMA1, 1, LOCKED),
+ 	CSU_SA(CSU_SA_PCIE_CTRL1, 1, LOCKED),
+ 	CSU_SA(CSU_SA_USB1, 1, LOCKED),
+-- 
+2.25.1
+
