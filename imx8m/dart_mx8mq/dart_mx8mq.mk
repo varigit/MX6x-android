@@ -335,7 +335,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
 device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin \
-device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf
+device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug \
+device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf \
+device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug
 
 # Boot Animation
 PRODUCT_COPY_FILES += \
