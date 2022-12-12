@@ -8,6 +8,8 @@ else
   $(error shell env AARCH64_GCC_CROSS_COMPILE is not set)
 endif
 
+UBOOT_DTB="imx8mm-var-dart-customboard.dtb imx8mm-var-som-symphony.dtb"
+
 define build_imx_uboot
 	$(hide) echo Building i.MX U-Boot with firmware; \
 	cp $(UBOOT_OUT)/u-boot-nodtb.$(strip $(1)) $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
@@ -30,7 +32,7 @@ define build_imx_uboot
 	fi; \
 	cp $(IMX_PATH)/arm-trusted-firmware/build/`echo $(2) | cut -d '-' -f1`/release/bl31.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/bl31.bin; \
 	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ clean; \
-	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MM  flash_lpddr4_ddr4_evk 1>/dev/null || exit 1; \
+	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MM dtbs=${UBOOT_DTB}  flash_lpddr4_ddr4_evk 1>/dev/null || exit 1; \
 	cp $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/flash.bin $(UBOOT_COLLECTION)/u-boot-$(strip $(2)).imx;
 endef
 
