@@ -4,11 +4,6 @@ KERNEL_NAME := Image
 TARGET_KERNEL_ARCH := arm64
 IMX8MQ_USES_GKI := true
 
-# BCM fmac wifi driver module
-BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
-    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
-
 # CONFIG_SND_SOC_WM8524: snd-soc-wm8524.ko, wm8524 audio codec
 # CONFIG_IMX_LCDIF_CORE: imx-lcdif-core.ko
 # CONFIG_PHY_FSL_IMX8MQ_USB: phy-fsl-imx8mq-usb.ko
@@ -62,7 +57,9 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/net/phy/at803x.ko \
-    $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko
+    $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 else
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko
@@ -183,9 +180,9 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
     $(KERNEL_OUT)/drivers/net/can/flexcan.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/drivers/media/platform/mxc/capture/ov5640_camera_mipi_v2.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
+    $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko
     
 endif

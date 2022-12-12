@@ -9,7 +9,8 @@ genfscon sysfs /devices/platform/soc@0/30800000.bus/30bb0000.spi/spi_master/spi3
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30a00000.mipi-dsi/30a00000.mipi-dsi.0/backlight u:object_r:sysfs_leds:s0
 
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
-genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill0 u:object_r:sysfs_rfkill:s0
+genfscon sysfs /devices/platform/wifi_rfkill/rfkill/rfkill0 u:object_r:sysfs_wifi_hal_writable:s0
+genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill1 u:object_r:sysfs_rfkill:s0
 
 #/sys/class/net
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30be0000.ethernet/net               u:object_r:sysfs_net:s0
