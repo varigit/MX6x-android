@@ -7,6 +7,8 @@ else
   $(error shell env AARCH64_GCC_CROSS_COMPILE is not set)
 endif
 
+UBOOT_DTB="imx8mn-var-som-symphony.dtb"
+
 define build_imx_uboot
 	$(hide) echo Building i.MX U-Boot with firmware; \
 	cp $(UBOOT_OUT)/u-boot-nodtb.$(strip $(1)) $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
