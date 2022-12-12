@@ -8,6 +8,8 @@ else
   $(error shell env AARCH64_GCC_CROSS_COMPILE is not set)
 endif
 
+UBOOT_DTB="imx8mp-var-dart-dt8mcustomboard.dtb imx8mp-var-dart-dt8mcustomboard-legacy.dtb imx8mp-var-som-symphony.dtb"
+
 define build_imx_uboot
 	$(hide) echo Building i.MX U-Boot with firmware; \
 	cp $(UBOOT_OUT)/u-boot-nodtb.$(strip $(1)) $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
@@ -29,11 +31,11 @@ define build_imx_uboot
 	fi; \
 	cp $(IMX_PATH)/arm-trusted-firmware/build/`echo $(2) | cut -d '-' -f1`/release/bl31.bin $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/bl31.bin; \
 	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ clean; \
-	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MP flash_evk || exit 1; \
+	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MP dtbs=${UBOOT_DTB} flash_evk || exit 1; \
 	cp $(UBOOT_OUT)/arch/arm/dts/imx8mp-var-dart-dt8mcustomboard.dtb $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(UBOOT_OUT)/arch/arm/dts/imx8mp-var-dart-dt8mcustomboard-legacy.dtb $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
 	cp $(UBOOT_OUT)/arch/arm/dts/imx8mp-var-som-symphony.dtb $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/.; \
-	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MP print_fit_hab || exit 1; \
+	$(MAKE) -C $(IMX_MKIMAGE_PATH)/imx-mkimage/ SOC=iMX8MP dtbs=${UBOOT_DTB} print_fit_hab || exit 1; \
 	cp $(IMX_MKIMAGE_PATH)/imx-mkimage/iMX8M/flash.bin $(UBOOT_COLLECTION)/u-boot-$(strip $(2)).imx; \
 
 endef
