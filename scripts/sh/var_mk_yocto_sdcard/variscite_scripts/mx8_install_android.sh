@@ -21,26 +21,119 @@ VENDOR_BOOT_SIZE=64
 FIRMWARE_SIZE=1
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
-
+som=""
 sdshared=false
+img_list=()
 if grep -q "i.MX8MM" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk2
+	som="imx8mm"
 elif grep -q "i.MX8MN" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk2
+	som="imx8mn"
 elif grep -q "i.MX8MP" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk2
+	som="imx8mp"
 elif grep -q "i.MX8M" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk0
 	sdshared=true
+	som="imx8mq"
 elif grep -q "i.MX8QXP" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk0
 	sdshared=true
+	som="imx8x"
 elif grep -q "i.MX8QM" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk0
+	som="imx8qm"
 else
 	red_bold_echo "ERROR: Unsupported board"
 	exit 1
 fi
+
+function add_imx8mp_menu() {
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-legacy-basler-isp0.img (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS and Basler VCAM-AR0821B camera support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-legacy-hdmi.img        (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with HDMI support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-legacy-m7.img          (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS and M7 support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-legacy.img             (DART-MX8M-PLUS on DT8MCustomBoard 1.x, with LVDS support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-basler-isp0.img        (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS and Basler VCAM-AR0821B camera support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-hdmi.img               (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with HDMI support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-m7.img                 (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS and M7 support)")
+	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard.img                    (DART-MX8M-PLUS on DT8MCustomBoard 2.x and above, with LVDS support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony-2nd-ov5640-m7.img              (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS, 2nd OV5640 and M7 support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony-2nd-ov5640.img                 (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and 2nd OV5640 support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony-basler-isp0.img                (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and Basler VCAM-AR0821B camera support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony-hdmi.img                       (VAR-SOM-MX8M-PLUS on Symphony-Board, with HDMI support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony-m7.img                         (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS and M7 support)")
+	img_list+=("dtbo-imx8mp-var-som-symphony.img                            (VAR-SOM-MX8M-PLUS on Symphony-Board, with LVDS support)")
+}
+
+function add_imx8mm_menu() {
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-legacy-m4.img (DART-MX8M-MINI on DT8MCustomBoard 1.x, with M4 support)")
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-legacy.img    (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-m4.img        (DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with M4 support)")
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard.img           (DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-legacy-m4.img         (VAR-SOM-MX8M-MINI on Symphony-Board V1.4 and below, with M4 support)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-legacy.img            (VAR-SOM-MX8M-MINI on Symphony-Board V1.4 and below)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img                (VAR-SOM-MX8M-MINI on Symphony-Board V1.4A and above, with M4 support)")
+	img_list+=("dtbo-imx8mm-var-som-symphony.img                   (VAR-SOM-MX8M-MINI on Symphony-Board V1.4A and above)")
+}
+
+function add_imx8mq_menu() {
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-m4-wifi-dp.img        (DART-MX8M on DT8MCustomBoard 1.x, with Display Port, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-m4-wifi-hdmi.img      (DART-MX8M on DT8MCustomBoard 1.x, with HDMI, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-m4-wifi-lvds-dp.img   (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, Display Port, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-m4-wifi-lvds-hdmi.img (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, HDMI, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-m4-wifi-lvds.img      (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp.img           (DART-MX8M on DT8MCustomBoard 1.x, with Display Port and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi.img         (DART-MX8M on DT8MCustomBoard 1.x, with HDMI and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp.img      (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, Display Port and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi.img    (DART-MX8M on DT8MCustomBoard 1.x, with LVDS, HDMI and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds.img         (DART-MX8M on DT8MCustomBoard 1.x, with LVDS and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-m4-wifi-hdmi.img             (DART-MX8M on DT8MCustomBoard 2.x and above, with HDMI, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-m4-wifi-lvds-hdmi.img        (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS, HDMI, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-m4-wifi-lvds.img             (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS, WiFi and M4 support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-hdmi.img                (DART-MX8M on DT8MCustomBoard 2.x and above, with HDMI and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi.img           (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS, HDMI and WiFi support)")
+	img_list+=("dtbo-imx8mq-var-dart-dt8mcustomboard-wifi-lvds.img                (DART-MX8M on DT8MCustomBoard 2.x and above, with LVDS and WiFi support)")
+}
+
+function add_imx8x_menu() {
+	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi-m4.img (VAR-SOM-MX8QXP on Symphony-Board, with LVDS, WiFi and M4 support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi.img    (VAR-SOM-MX8QXP on Symphony-Board, with LVDS and WiFi support)")
+}
+
+function add_imx8qm_menu() {
+	img_list+=("dtbo-imx8qp-var-som-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-lvds.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with LVDS support)")
+	img_list+=("dtbo-imx8qp-var-som-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-hdmi.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with HDMI support)")
+	img_list+=("dtbo-imx8qp-var-som-dp-m4.img     (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-dp.img        (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with Display Port support)")
+	img_list+=("dtbo-imx8qm-var-som-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-lvds.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with LVDS support)")
+	img_list+=("dtbo-imx8qm-var-som-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-hdmi.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-som-dp-m4.img     (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with Display port and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-dp.img        (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with Display port support)")
+	img_list+=("dtbo-imx8qp-var-spear-dp-m4.img   (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear.img         (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port)")
+	img_list+=("dtbo-imx8qp-var-spear-lvds-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear-lvds.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS support)")
+	img_list+=("dtbo-imx8qp-var-spear-hdmi-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear-hdmi.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-spear-lvds.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS support)")
+	img_list+=("dtbo-imx8qm-var-spear-lvds-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-hdmi-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-hdmi.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-spear-dp-m4.img   (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-dp.img      (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port)")
+}
+
+function add_imx8mn_menu() {
+	img_list+=("dtbo-imx8mn-var-som-symphony-legacy-m7.img (VAR-SOM-MX8M-NANO on Symphony-Board V1.4 and below, with M7 support)")
+	img_list+=("dtbo-imx8mn-var-som-symphony-legacy.img    (VAR-SOM-MX8M-NANO on Symphony-Board V1.4 and below)")
+	img_list+=("dtbo-imx8mn-var-som-symphony-m7.img        (VAR-SOM-MX8M-NANO on Symphony-Board V1.4A and above, with M7 support)")
+	img_list+=("dtbo-imx8mn-var-som-symphony.img           (VAR-SOM-MX8M-NANO on Symphony-Board V1.4A and above)")
+}
 
 imagesdir="/opt/images/Android"
 soc_name="showoptions"
@@ -74,107 +167,27 @@ while [ "$moreoptions" = 1 -a $# -gt 0 ]; do
 	[ "$moreoptions" = 1 ] && shift
 done
 
-img_prefix="dtbo-"
-img_search_str="ls ${imagesdir}/${img_prefix}*"
-if [ "$sdshared" = true ] ; then
-	img_search_str+=" | grep -v sd"
-fi
-img_list=()
-
-maxlen=0
-for img in $(eval $img_search_str)
-do
-	img=$(basename $img)
-	len=`expr length $img`
-	maxlen=$(( len > maxlen ? len : maxlen ))
-done
-
-spaces_to_pad=0
-# generate options list
-for img in $(eval $img_search_str)
-do
-	img=$(basename $img)
-	len=`expr length $img`
-
-        spaces_to_pad="$((maxlen-len))"
-	spaces=$(printf "%*s" "$spaces_to_pad" "")
-
-	img=$img$spaces
-
-	if [[ "$img" == *"imx8mp-var-som-symphony-hdmi"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS HDMI on Symphony-Board)")
-	elif [[ "$img" == *"imx8mp-var-som-symphony-basler-isp0"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS with Basler camera on Symphony-Board)")
-	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS M7 with 2nd OV5640 on Symphony-Board, with M7 support)")
-	elif [[ "$img" == *"imx8mp-var-som-symphony-2nd-ov5640"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS with 2nd OV5640 on Symphony-Board)")
-	elif [[ "$img" == *"imx8mp-var-som-symphony-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS M7 LVDS on Symphony-Board, with M7 support)")
-	elif [[ "$img" == *"imx8mp-var-som-symphony"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-PLUS LVDS on Symphony-Board)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS HDMI on DT8MCustomBoard 1.x)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy-m7"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 1.x, with M7 support)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-legacy"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS LVDS on DT8MCustomBoard 1.x)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-basler-isp0"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS with Basler camera DT8MCustomBoard 2.x and above)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS HDMI on DT8MCustomBoard 2.x and above)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard-m7"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS M7 LVDS on DT8MCustomBoard 2.x and above, with M7 support)")
-	elif [[ "$img" == *"imx8mp-var-dart-dt8mcustomboard"* ]]; then
-		img_list+=("$img (DART-MX8M-PLUS LVDS on DT8MCustomBoard 2.x)")
-	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy-m4"* ]]; then
-		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x, with M4 support)")
-	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-legacy"* ]]; then
-		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
-	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard-m4"* ]]; then
-		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with M4 support)")
-	elif [[ "$img" == *"imx8mm-var-dart-dt8mcustomboard"* ]]; then
-		img_list+=("$img (DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-lvds-dp"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+LVDS+DP)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-legacy-wifi-dp"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 1.x WIFI+DP)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS+HDMI)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-lvds"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+LVDS)")
-	elif [[ "$img" == *"imx8mq-var-dart-dt8mcustomboard-wifi-hdmi"* ]]; then
-		img_list+=("$img (DART-MX8M on DT8MCustomBoard 2.x WIFI+HDMI)")
-	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy-m4"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below, with M4 support)")
-	elif [[ "$img" == *"imx8mm-var-som-symphony-legacy"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mm-var-som-symphony-m4"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above, with M4 support)")
-	elif  [[ "$img" == *"imx8mm-var-som-symphony"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-MINI on a Symphony-Board V1.4A and above)")
-	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-NANO-M7 on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mn-var-som-symphony-legacy"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4 and below)")
-	elif  [[ "$img" == *"imx8mn-var-som-symphony-m7"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-NANO-M7 on a Symphony-Board V1.4A and above)")
-	elif  [[ "$img" == *"imx8mn-var-som-symphony"* ]]; then
-		img_list+=("$img (VAR-SOM-MX8M-NANO on a Symphony-Board V1.4A and above)")
-	else
-		img_list+=($img)
-	fi
-done
+#Prepare the menu based on SOM
+case $som in
+	"imx8mp")
+		add_imx8mp_menu;;
+	"imx8mm")
+		add_imx8mm_menu;;
+	"imx8qm")
+		add_imx8qm_menu;;
+	"imx8x")
+		add_imx8x_menu;;
+	"imx8mq")
+		add_imx8mq_menu;;
+	"imx8mn")
+		add_imx8mn_menu;;
+	*)
+		echo "Invalid SOM"; exit;;
+esac
 
 min=0
 max=$(( ${#img_list[@]} -1 ))
-
+img_prefix="dtbo-"
 while [[ min -lt max ]]
 do
     # Swap current first and last elements
@@ -205,9 +218,9 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QM\|i.MX8QP\|i.MX8QXP" /sys/devices/soc0/soc_id; then
 				soc_name=`echo $opt | cut -d "." -f1`
-				soc_name=${soc_name#${img_prefix}}
+				soc_name=`echo ${soc_name} | sed "s/${img_prefix}//"`
 			else
 				soc_name=$opt
 			fi
@@ -227,6 +240,7 @@ superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
 mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
+mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 
 block=`basename $node`
 part=""
@@ -248,6 +262,7 @@ if [[ "${soc_name}" = *"mx8mq"* ]]; then
 	else
 		bootloader_file="u-boot-imx8mq-var-dart.imx"
 	fi
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 fi
 
 if [[ "${soc_name}" = *"mx8mm"* ]]; then
@@ -270,11 +285,14 @@ if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	else
 		echo; red_bold_echo "ERROR: no bootloader image present"
 	fi
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
 fi
 
-if [[ "${soc_name}" = *"mx8qm"* ]]; then
+if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qm.imx"
+	bootloader_file="u-boot-imx8qm-var-som.imx"
+
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin"
 fi
 
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
@@ -300,7 +318,7 @@ if [[ -f ${imagesdir}/${superimage_file} ]] ; then
 fi
 
 firmware=""
-if [[ "${soc_name}" = *"mx8qm"* ]]; then
+if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 firmware="FIRMWARE	 : ${FIRMWARE_SIZE} MiB"
 fi
 
@@ -311,8 +329,8 @@ total_size=`expr ${total_size} \/ 1024`
 boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	if [[ "${soc_name}" = *"mx8qm"* ]]; then
-        	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
+	if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
+		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
 	else
 		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 	fi
@@ -473,8 +491,8 @@ function create_parts
 		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
 		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
 		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			sgdisk -n 13:0:+${FIRMWARE_SIZE}M	    -c 13:"firmware"   -t 11:8300 $node
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
+			sgdisk -n 15:0:+${FIRMWARE_SIZE}M	      -c 15:"firmware"	    -t 15:8300 $node
 		fi
 	fi
 
@@ -531,9 +549,9 @@ function format_android
 		blue_underlined_bold_echo "Formating userdata partition"
 		mkfs.ext4 -F ${node}${part}11 -Ldata
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"
-			mkfs.ext4 -F ${node}${part}13 -Lfirmware
+			mkfs.ext4 -F ${node}${part}15 -Lfirmware
 		fi
 	fi
 	sync; sleep 1
@@ -595,11 +613,11 @@ function install_android
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
 		sync;
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
+		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
 			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}13 /tmp/firmware_mnt
+			mount ${node}${part}15 /tmp/firmware_mnt
 			mkdir -p /tmp/firmware_mnt/firmware/hdp
 			cp ${imagesdir}/*.bin /tmp/firmware_mnt/firmware/hdp
 			sync;
