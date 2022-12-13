@@ -52,6 +52,10 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro/hantrodec.ko \
     $(KERNEL_OUT)/drivers/mxc/hantro_v4l2/vsiv4l2.ko \
+    $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/rpmsg_raw.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \

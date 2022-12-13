@@ -9,7 +9,7 @@ readonly SCRIPT_VERSION="0.8"
 #### global variables ####
 readonly ABSOLUTE_FILENAME=`readlink -e "$0"`
 readonly ABSOLUTE_DIRECTORY=`dirname ${ABSOLUTE_FILENAME}`
-readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-fslc/scripts/
+readonly SCRIPT_POINT=`pwd`/sources/meta-variscite-sdk/scripts/
 
 ANDROID_SCRIPTS_PATH=${SCRIPT_POINT}/var_mk_yocto_sdcard/variscite_scripts
 ANDROID_BUILD_ROOT=~/var_imx-android-11.0.0_2.6.0/android_build
@@ -150,6 +150,11 @@ function copy_android
                 pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som
                 pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart >          ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
                 pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som >              ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
+                sync | pv -t
+	elif [[ "${MACHINE}" = "imx8mq-var-dart" ]]; then
+                echo "Copying M4 demo images to /opt/images/"
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug >         ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug
+                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mq/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug >          ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug
                 sync | pv -t
 	fi
 
