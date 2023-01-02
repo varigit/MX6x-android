@@ -25,10 +25,10 @@ readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com
 readonly C_LANG_LINK="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
 readonly C_LANG_DIR="/opt/prebuilt-android-clang-var-bceb7274dda5b/"
 
-readonly BASE_BRANCH_NAME="android-12.0.0_1.0.0"
+readonly BASE_BRANCH_NAME="android-12.0.0_2.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="android-12.0.0_1.0.0-var01"
+readonly _EXTPARAM_BRANCH="android-12.0.0_2.0.0-var01"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"

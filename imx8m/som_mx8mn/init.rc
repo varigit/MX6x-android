@@ -19,7 +19,6 @@ on early-init
     mount debugfs none /sys/kernel/debug/ mode=0755
 
 on early-init
-    start init_brcm_wifibt_sh
     start early_init_sh
     # Set the host name which used in console
     export HOSTNAME imx8mn-var-som
@@ -81,13 +80,6 @@ on init
 on early-init && property:ro.boot.mode=charger
     setprop vendor.skip.charger_not_need 1
 
-service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
-
 on init && property:vendor.skip.charger_not_need=0
     start watchdogd
 
@@ -121,10 +113,14 @@ on init && property:vendor.skip.charger_not_need=0
     write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 1
     write /dev/cpuctl/background/cpu.uclamp.max 50
 
+on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
+    start storageproxyd
+    start vendor.oemlock-1-0
+    start confirmationui-1-0
 on late-fs && property:vendor.skip.charger_not_need=0
     # Start keymaster/gatekeeper service
     start vendor.gatekeeper-1-0-${ro.boot.keystore}
-    start vendor.keymaster-4-0-${ro.boot.keystore}
+    start vendor.keymint-${ro.boot.keystore}
     setprop vendor.powerhal.init 1
 
     # Wait for keymaster
@@ -132,10 +128,6 @@ on late-fs && property:vendor.skip.charger_not_need=0
 
     mount_all /vendor/etc/fstab.nxp --late
 
-on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
-    start vendor.oemlock-1-0
-    start confirmationui-1-0
-    start securedisplayd-imx
 
 on early-boot && property:vendor.skip.charger_not_need=0
     # For evk_8mn, when swap used about 400M, upgrade the level.
@@ -269,29 +261,6 @@ on boot && property:vendor.skip.charger_not_need=0
     start media
     start drm
 
-on property:vendor.wc_transport.start_hci=true
-    start start_hci_filter
-
-on property:vendor.wc_transport.start_hci=false
-    stop start_hci_filter
-
-service start_hci_filter /vendor/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth diag
-    disabled
-
-on property:vendor.wc_transport.start_root=true
-    start hci_filter_root
-
-on property:vendor.wc_transport.start_root=false
-    stop hci_filter_root
-
-service hci_filter_root /vendor/bin/wcnss_filter
-    class late_start
-    user bluetooth
-    group bluetooth diag system
-    disabled
 
 on fs && property:vendor.skip.charger_not_need=0
 # mount ext4 partitions
@@ -339,8 +308,10 @@ service early_init_sh /vendor/bin/init.insmod.sh /vendor/etc/early.init.cfg vend
     disabled
     oneshot
 
-on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
-    start storageproxyd
+on post-fs-data && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
+    # create temp node for secure storage proxy
+    mkdir /data/vendor/ss 0700 system system
+    restart storageproxyd
 
 service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcblk2rpmb -d /dev/trusty-ipc-dev0
    group system
@@ -351,3 +322,11 @@ on property:ro.boot.vendor.sysrq=1 && property:vendor.skip.charger_not_need=0
 # setenv append_bootargs androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
+service confirmationui_ta_load /vendor/bin/trusty_apploader /vendor/firmware/tee/confirmationui.app
+    user root
+    group root system
+    disabled
+    oneshot
+
+on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
+    start confirmationui_ta_load

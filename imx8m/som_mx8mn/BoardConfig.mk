@@ -70,6 +70,11 @@ BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
 BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA2048
 BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 2
 
+BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
 DEVICE_MANIFEST_FILE := $(IMX_DEVICE_PATH)/manifest.xml
@@ -104,13 +109,14 @@ BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8mn/dtbo-imx8mn-var-som-sym
 
 TARGET_BOARD_DTS_CONFIG := \
 	imx8mn-var-som-symphony:imx8mn-var-som-symphony.dtb \
-	imx8mn-var-som-symphony-legacy:imx8mn-var-som-symphony-legacy.dtb \
-	imx8mn-var-som-symphony-legacy-m7:imx8mn-var-som-symphony-legacy-m7.dtb \
 	imx8mn-var-som-symphony-m7:imx8mn-var-som-symphony-m7.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
 # -------@block_sepolicy-------
+SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS += \
+    $(CONFIG_REPO_PATH)/imx8m/system_ext_pri_sepolicy
+
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
