@@ -42,11 +42,12 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-spdif.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-spdif.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-bt-sco.ko \
-    $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
     $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card-utils.ko \
+    $(KERNEL_OUT)/sound/soc/generic/snd-soc-simple-card.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-imx-audmux.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-asoc-card.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-snvs.ko \
+    $(KERNEL_OUT)/drivers/i2c/i2c-dev.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko
 
 else
@@ -92,9 +93,15 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/soc/imx/busfreq-imx8mq.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8mn.ko \
+    $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx.ko \
+    $(KERNEL_OUT)/drivers/i2c/i2c-smbus.ko \
+    $(KERNEL_OUT)/drivers/i2c/i2c-mux.ko \
+    $(KERNEL_OUT)/drivers/i2c/muxes/i2c-mux-gpio.ko \
+    $(KERNEL_OUT)/drivers/i2c/muxes/i2c-mux-pca954x.ko \
+    $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx-lpi2c.ko \
+    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
     $(KERNEL_OUT)/drivers/tty/serial/imx.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx2_wdt.ko \
-    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
     $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
     $(KERNEL_OUT)/drivers/regulator/pca9450-regulator.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-mxc.ko \
@@ -107,7 +114,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/video/backlight/pwm_bl.ko \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/drivers/mmc/host/cqhci.ko \
-    $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx.ko \
     $(KERNEL_OUT)/drivers/spi/spidev.ko \
     $(KERNEL_OUT)/drivers/spi/spi-bitbang.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
@@ -160,6 +166,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
     $(KERNEL_OUT)/drivers/net/can/flexcan.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-gpio.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill-gpio.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko
 endif
