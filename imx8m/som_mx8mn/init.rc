@@ -143,6 +143,12 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     setprop camera.disable_zsl_mode 1
 
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "${ro.boot.wifisdio}"
+    chmod 665 /sys/class/rfkill/rfkill0/state
+    chown system system /sys/class/rfkill/rfkill0/state
+    write /sys/class/rfkill/rfkill0/state 1
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "${ro.boot.wifisdio}"
+
    # Tweak the mmc device read ahead buffer size
     write /sys/block/mmcblk1/queue/read_ahead_kb 2048
     write /sys/block/mmcblk2/queue/read_ahead_kb 2048
@@ -150,12 +156,12 @@ on early-boot && property:vendor.skip.charger_not_need=0
     # Prepare for wifi
     setprop wifi.interface wlan0
     setprop wifi.direct.interface p2p0
-    setprop wifi.concurrent.interface wlan1
+    setprop wifi.concurrent.interface wlan0
 
     # Prepare for bluetooth
-    chmod 665 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
-    write /sys/class/rfkill/rfkill0/state 0
+    chmod 665 /sys/class/rfkill/rfkill1/state
+    chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
+    write /sys/class/rfkill/rfkill1/state 0
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
