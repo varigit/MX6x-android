@@ -162,6 +162,10 @@ on early-boot && property:vendor.skip.charger_not_need=0
     chmod 665 /sys/class/rfkill/rfkill1/state
     chown bluetooth bluetooth /sys/class/rfkill/rfkill1/state
     write /sys/class/rfkill/rfkill1/state 0
+    chown bluetooth bluetooth /sys/class/mmc_host/${ro.boot.btmmchost}/\${ro.boot.btmmchost}:0001/device
+    symlink /sys/class/mmc_host/${ro.boot.btmmchost}/${ro.boot.btmmchost}:0001/device /dev/bt_mmc
+    chmod 665 /dev/bt_mmc
+    chown bluetooth bluetooth /dev/bt_mmc
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing

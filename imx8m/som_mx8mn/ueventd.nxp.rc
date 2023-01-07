@@ -23,3 +23,4 @@
 /sys/devices/virtual/thermal/thermal_zone* trip_point_1_hyst 0660 system system
 
 /dev/dmabuf_imx           0664   system     system
+/sys/class/mmc_host/mmc0/mmc0\:0001/device 0660 bluetooth bluetooth

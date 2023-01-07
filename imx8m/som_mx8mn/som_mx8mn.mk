@@ -4,7 +4,7 @@ CONFIG_REPO_PATH := device/nxp
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 IMX_DEVICE_PATH := device/variscite/imx8m/som_mx8mn
-BCM_FIRMWARE_PATH := device/variscite/laird-lwb-firmware
+BCM_FIRMWARE_PATH := device/variscite/imx8m/laird-lwb-firmware
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
@@ -328,7 +328,7 @@ PRODUCT_PACKAGES += \
     WifiOverlay
 
 PRODUCT_COPY_FILES += \
-       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf
 
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
