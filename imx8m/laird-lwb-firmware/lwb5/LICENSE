@@ -1,0 +1,277 @@
+Sterling Software License Agreement PLEASE READ THIS AGREEMENT CAREFULLY
+BEFORE USING THE SOFTWARE.
+
+AGREEMENT: BY USING THE SOFTWARE YOU ARE AGREEING TO BE BOUND BY THIS
+AGREEMENT. IF YOU ARE AGREEING TO THIS AGREEMENT ON BEHALF OF OR FOR THE
+BENEFIT OF YOUR EMPLOYER, THEN YOU REPRESENTS AND WARRANTS THAT YOU HAVE
+THE NECESSARY AUTHORITY TO AGREE TO THIS AGREEMENT ON YOUR EMPLOYER’S
+BEHALF. IF YOU DO NOT AGREE TO ALL OF THE TERMS OF THIS AGREEMENT,
+PROMPTLY RETURN AND DO NOT USE THE SOFTWARE.
+
+This agreement is between Laird Connectivity, Inc., a Delaware
+corporation (Laird Connectivity), and the Customer agreeing to these
+terms (Customer). The Laird Connectivity ‘compiled and object code’
+software, modifications, enhancements, and technical documentation
+provided or made available to Customer (Software) are licensed and are
+not sold.
+
+1. SCOPE This agreement describes the licensing of the Software and
+Support provided to Customer under an order.
+
+2. LICENSE Subject to the other terms of this agreement, Laird
+Connectivity grants Customer, under an order, a perpetual,
+non-exclusive, non-transferable license to install, reproduce, and use
+the Software only on the Authorized Products (defined below).
+Sublicensing to End Users. Once installed on the Authorized Product, the
+Software may be distributed to end users of the Authorized Product and
+may only be sublicensed under a legally enforceable license contract
+with the end user which contains at the least the minimum license terms
+on Attachment A. Customer will cooperate with Laird Connectivity (at
+Laird Connectivity’s expense) in enforcing Laird Connectivity’s
+rights if any third party violates any Laird Connectivity intellectual
+property rights or the end user license agreement.
+
+Open Source Software Licenses. Along with the Software, open source code
+will be provided to Customer. Such open source code is solely governed
+by the applicable open source license terms as listed
+https://www.lairdconnect.com/open-source-licenses. Customer may modify
+the open source code provided with the Software under the terms of the
+applicable open source licenses, if allowed by them. Customer is
+responsible for its compliance with such open source licenses.
+
+Restriction on Modification. If and to the extent that the Software is
+designed to be compliant with any published or de facto standard,
+regulatory standard, or industry specification (including, without
+limitation, DOCSIS, HomePNA, IEEE, and ITU standards), Customer may not
+make any modifications to the Software that would cause the Software or
+the Laird Connectivity Product (defined below) to be incompatible with
+such standard or specification.
+
+Authorized Product means the specific product listed in the applicable
+order (or if none is listed, then any system level product sold by
+Customer that incorporates the Software and Laird Connectivity Product
+and includes other hardware and software provided by Customer).
+
+Laird Connectivity Product means any of the proprietary hardware product
+sold by Laird Connectivity with which the Software is designed to be
+used.
+
+3. WARRANTY, REMEDY, AND DISCLAIMER DISCLAIMER. THE SOFTWARE IS PROVIDED
+AS IS WITH ALL FAULTS. LAIRD CONNECTIVITY AND ITS LICENSORS DISCLAIM ALL
+WARRANTIES, INCLUDING, WITHOUT LIMITATION, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY, NON-INFRINGEMENT, AND FITNESS FOR A PARTICULAR PURPOSE.
+CUSTOMER UNDERSTANDS THAT THE SOFTWARE MAY NOT BE ERROR FREE, AND USE
+MAY BE INTERRUPTED.
+
+4. MUTUAL CONFIDENTIALITY Definition of Confidential Information.
+Confidential Information means all non-public information disclosed by a
+party (Discloser) to the other party (Recipient), whether orally,
+visually, or in writing, that is designated as confidential or that
+reasonably should be understood to be confidential given the nature of
+the information and the circumstances of disclosure (Confidential
+Information). Laird Connectivity's Confidential Information includes,
+without limitation, the Software, its user interface design and layout,
+any Software repository password (e.g. GitHub) and pricing information.
+
+Protection of Confidential Information. The Recipient must use the same
+degree of care that it uses to protect the confidentiality of its own
+confidential information (but in no event less than reasonable care),
+and it may not disclose or use any Confidential Information of the
+Discloser for any purpose outside the scope of this agreement. The
+Recipient must make commercially reasonable efforts to limit access to
+Confidential Information of Discloser to those of its employees and
+contractors who need such access for purposes consistent with this
+agreement and who have signed confidentiality agreements with Recipient
+no less restrictive than the confidentiality terms of this agreement.
+
+Exclusions. Confidential Information excludes information that: (i) is
+or becomes generally known to the public without breach of any
+obligation owed to Discloser; (ii) was known to the Recipient prior to
+its disclosure by the Discloser without breach of any obligation owed to
+the Discloser; (iii) is received from a third party without breach of
+any obligation owed to Discloser; or (iv) was independently developed by
+the Recipient without use or access to the Confidential Information. The
+Recipient may disclose Confidential Information to the extent required
+by law or court order, but will provide Discloser with advance notice to
+seek a protective order.
+
+5. PROPERTY Reservation of Rights. The Software, workflow processes,
+user interface, designs, technical documentation, and other technologies
+provided by Laird Connectivity as part of the Software are the
+proprietary property of Laird Connectivity and its licensors, and all
+right, title, and interest in and to such items, including all
+associated intellectual property rights, remain only with Laird
+Connectivity and its licensors. The Software is protected by applicable
+copyright and other intellectual property laws. Customer may not remove
+any product identification, copyright, trademark, or other notice from
+the Software. Laird Connectivity reserves all rights unless expressly
+granted in this agreement.
+
+Restrictions. Customer may not: (i) transfer, assign, rent the Software,
+or use it in any type of service-provider environment; (ii) reverse
+engineer, decompile, disassemble, or translate the Software; (iii)
+evaluate the Software for the purpose of competing with Laird
+Connectivity; or (iv) operate the Software other than in accordance with
+its technical documentation.
+
+6. TERM AND TERMINATION Term. This agreement expires at the end of the
+license period specified in the accompanying order, unless earlier
+terminated as specified below.
+
+Mutual Termination for Material Breach. If either party is in material
+breach of this agreement, the other party may terminate this agreement
+at the end of a written 30-day notice/cure period, if the breach has not
+been cured.
+
+Return Laird Connectivity Property Upon Termination. Upon termination of
+this agreement or a license for any reason, Customer must discontinue
+using the Software, de-install, and destroy or return the Software and
+all copies within 5 days. Upon Laird Connectivity's request, Customer
+will confirm in writing its compliance with this destruction or return
+requirement.
+
+7. LIABILITY LIMIT Exclusion of Indirect Damages. Laird Connectivity and
+its licensors are not liable for any indirect, special, incidental, or
+consequential damages arising out of or related to this agreement
+(including, without limitation, costs of delay; loss of or unauthorized
+access to data or information; and lost profits, revenue, or anticipated
+cost savings), even if it knows of the possibility or foreseeability of
+such damage or loss.
+
+Total Limit on Liability. Laird Connectivity and its licensor’s total
+liability arising out of or related to this agreement (whether in
+contract, tort, or otherwise) does not exceed $500. .
+
+8. ANNUAL SUPPORT Laird Connectivity's annual technical support and
+maintenance services (Support) may be purchased if specified on an
+order. Support may be provided in subsequent years if Customer and Laird
+Connectivity agree on the support renewal for that year. Support is
+provided under the Support policies then in effect. Laird Connectivity
+may change its Support terms, but Support will not materially degrade
+during any Support term. Support is only provided to Customer and not to
+any third parties or end users of Customer. More details on Support are
+located at [https://www.lairdconnect.com/resources/support]
+
+9. Indemnity Customer must indemnify, defend and hold Laird Connectivity
+harmless against any claim, liability, damages, losses, judgment, and
+other expense (including but not limited to reasonable attorney's fees
+and court costs) incurred in connection with any claim made by a third
+party against the Laird Connectivity attributable to Customer’s gross
+negligence or willful misconduct, Customer’s breach of this agreement,
+or that any modification to the Software infringes any patent or
+copyright.
+
+10. GOVERNING LAW AND FORUM This agreement is governed by the laws of
+the State of Ohio (without regard to conflicts of law principles) for
+any dispute between the parties or relating in any way to the subject
+matter of this agreement. Any suit or legal proceeding must be
+exclusively brought in the federal or state courts for Summit County,
+Ohio, and Customer submits to this personal jurisdiction and venue.
+Nothing in this agreement prevents either party from seeking injunctive
+relief in a court of competent jurisdiction. The prevailing party in any
+litigation is entitled to recover its attorneys’ fees and costs from
+the other party.
+
+11. OTHER TERMS Entire Agreement and Changes. This agreement and the
+order constitute the entire agreement between the parties and supersede
+any prior or contemporaneous negotiations or agreements, whether oral or
+written, related to this subject matter. Customer is not relying on any
+representation concerning this subject matter, oral or written, not
+included in this agreement. No representation, promise, or inducement
+not included in this agreement is binding. No modification or waiver of
+any term of this agreement is effective unless both parties sign it.
+
+No Assignment. Neither party may assign or transfer this agreement to a
+third party, nor delegate any duty, except that the agreement and all
+orders may be assigned, without the consent of the other party, as part
+of a merger or sale of all or substantially all the businesses or assets
+of a party.
+
+Independent Contractors. The parties are independent contractors with
+respect to each other.
+
+Enforceability and Force Majeure. If any term of this agreement is
+invalid or unenforceable, the other terms remain in effect. Except for
+the payment of monies, neither party is liable for events beyond its
+reasonable control, including, without limitation, force majeure events.
+
+Money Damages Insufficient. Any breach by a party of this agreement or
+violation of the other party’s intellectual property rights could
+cause irreparable injury or harm to the other party. The other party may
+seek a court order to stop any breach or avoid any future breach of this
+agreement.
+
+No Additional Terms. Laird Connectivity rejects additional or
+conflicting terms of a Customer’s form-purchasing document.
+
+Order of Precedence. If there is an inconsistency between this agreement
+and an order, the order prevails.
+
+Survival of Terms. Any terms, that by their nature survive termination
+of this agreement for a party to assert its rights and receive the
+protections of this agreement, will survive (including, without
+limitation, the confidentiality terms). The UN Convention on Contracts
+for the International Sale of Goods does not apply.
+
+Export Compliance. Customer must comply with all applicable export
+control laws of the United States, foreign jurisdictions, and other
+applicable laws and regulations.
+
+U.S. Government Restricted Rights. If Customer is a United States
+government agency or acquired the license to the Software hereunder
+pursuant to a government contract or with government funds, then as
+defined in FAR §2.101, DFAR §252.227-7014(a)(1), and DFAR
+§252.227-7014(a)(5), or otherwise, all Software provided in connection
+with this agreement are “commercial items,” “commercial computer
+software,” or “commercial computer software documentation.”
+Consistent with DFAR §227.7202 and FAR §12.212, any use, modification,
+reproduction, release, performance, display, disclosure, or distribution
+by or for the United States government is governed solely by the terms
+of this agreement and is prohibited except to the extent permitted by
+the terms of this agreement.
+
+Feedback. If Customer provides feedback or suggestions about the
+Software, then Laird Connectivity (and those it allows to use its
+technology) may use such information without obligation to Customer.
+
+Attachment A
+
+Minimum License Terms Xcmpy grants End User a nonexclusive,
+non-transferable perpetual license to operate the software for only on
+the Xcmpy device. The Software may not be removed from the original
+device on which it is installed or copied in any manner, or onto any
+other device. Xcmpy or its suppliers retain all of its intellectual
+property rights in the software and no rights, title or interest to the
+software are transferred to the End User. The software is licensed and
+not sold. Xcmpy disclaims all express and implied warranties on its
+behalf and its licensors. End User may not modify the software, or
+reverse engineer or decompile the software or attempt to do so, copy the
+software except for necessary internal backup purposes, or transfer the
+software apart from the Xcmpy device. Neither Xcmpy nor its suppliers
+are liable to the End User for any indirect, consequential, incidental
+or special damages (including without limitation lost profits and lost
+or destruction to data) arising out of the use of the software,
+regardless of the theory of liability (including negligence and strict
+liability). Upon termination of a license, the End User must destroy the
+software. End User must confirm its compliance with the requirement upon
+request. End User must comply with applicable export control laws.
+Notwithstanding the foregoing, any open source software accompanied with
+the software will be governed by the applicable open source software
+license.
+
+WEB SUPPORT & MAINTENANCE TERMS Support Email support@lairdconnect.com
+Case Logging Email Support
+
+- Software maintenance, which includes maintenance releases,
+enhancements, new versions, additions, and modifications to the
+Software, that it provides to all other customers under support.
+
+- Bug fixes to bring the Software into substantial conformance with its
+then-current user guide.
+
+- Resolution Process for Issues of Severity Levels 1 and 2:
+
+(1) Trouble Ticket opened. (2) Assign engineer to determine and correct
+the error. (3) Periodic reports on the status of the correction. (4)
+Initiate work to correct the error.
+
