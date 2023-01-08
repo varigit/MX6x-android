@@ -227,10 +227,16 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
 
 PRODUCT_COPY_FILES += \
+	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug \
 	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug \
-	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf \
-	device/variscite/imx8m/som_mx8mn/cm_hello_world.elf.debug:vendor/firmware/hello_world.elf \
-	device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.debug:vendor/firmware/hello_world.bin
+	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug \
+	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug \
+	device/variscite/imx8m/som_mx8mn/cm_hello_world.elf.debug:vendor/firmware/cm_hello_world.elf.debug \
+	device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.debug:vendor/firmware/cm_hello_world.bin.debug \
+	device/variscite/imx8m/som_mx8mn/cm_hello_world.elf.ddr_debug:vendor/firmware/cm_hello_world.elf.ddr_debug \
+	device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.ddr_debug:vendor/firmware/cm_hello_world.bin.ddr_debug \
+	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug \
+	device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug
 
 PRODUCT_PROPERTY_OVERRIDES += \
     vendor.typec.legacy=true \

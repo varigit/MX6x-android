@@ -52,6 +52,14 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko
 
+
+#Cortex-M7
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko 
+
 else
 BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/input/touchscreen/synaptics_dsx/synaptics_dsx_i2c.ko
@@ -123,7 +131,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/lib/stmp_device.ko \
     $(KERNEL_OUT)/drivers/dma/mxs-dma.ko \
     $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko \
-    $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/dma-buf/heaps/system_heap.ko \
     $(KERNEL_OUT)/drivers/dma-buf/heaps/cma_heap.ko \
     $(KERNEL_OUT)/drivers/dma-buf/dma-buf-imx.ko \
