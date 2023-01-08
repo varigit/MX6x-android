@@ -176,7 +176,7 @@ endif
 
 # -------@block_memory-------
 #Enable this to config 1GB ddr on evk_imx8mn
-LOW_MEMORY := false
+LOW_MEMORY := true
 
 # -------@block_security-------
 #Enable this to include trusty support

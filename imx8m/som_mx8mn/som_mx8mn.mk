@@ -236,6 +236,24 @@ PRODUCT_PROPERTY_OVERRIDES += \
     vendor.typec.legacy=true \
     ro.vendor.wifi.sap.interface=wlan0
 
+#Use Low Memory Configuration
+PRODUCT_PROPERTY_OVERRIDES += ro.config.low_ram=true 
+PRODUCT_PROPERTY_OVERRIDES += ro.lmk.critical_upgrade=true
+PRODUCT_PROPERTY_OVERRIDES += ro.lmk.upgrade_pressure=40
+PRODUCT_PROPERTY_OVERRIDES += ro.lmk.downgrade_pressure=60
+PRODUCT_PROPERTY_OVERRIDES += ro.lmk.kill_heaviest_task=false
+PRODUCT_PROPERTY_OVERRIDES += ro.statsd.enable=false
+PRODUCT_PROPERTY_OVERRIDES += pm.dexopt.downgrade_after_inactive_days=10
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.jit.codecachesize=0
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heapsize=256m
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heapgrowthlimit=128m
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heaptargetutilization=0.70
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heapminfree=1m
+PRODUCT_PROPERTY_OVERRIDES += dalvik.vm.heapmaxfree=16m
+PRODUCT_PROPERTY_OVERRIDES += pm.dexopt.shared=quicken
+PRODUCT_PROPERTY_OVERRIDES += debug.sf.nobootanimation=1
+
+
 # -------@block_camera-------
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx8mn.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mn.json
@@ -386,9 +404,7 @@ endif
 
 # -------@block_memory-------
 # Include Android Go config for low memory device.
-ifeq ($(LOW_MEMORY),true)
 $(call inherit-product, build/target/product/go_defaults.mk)
-endif
 
 # -------@block_neural_network-------
 # Neural Network HAL and Lib
