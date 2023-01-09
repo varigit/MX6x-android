@@ -1,0 +1,104 @@
+From db80a47261ee2da1e7cbaeaec8e7ad5c0ce95622 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Sat, 7 Jan 2023 20:00:03 -0800
+Subject: [PATCH] Support for Dual band and single band
+
+- Merge multiple platforms and multiple properties patches
+
+TODO: For other platform add support for overwriting the /dev/ttymxcX
+uarts
+
+Applicable to dart_imx8mm, dart_imx8mp, var-som-imx8qm and SPEAR8
+
+Change-Id: Ia90d79054ee9eb1b5ff8730e5cfbd5339ed61a9a
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ src/conf.c | 58 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
+
+diff --git a/src/conf.c b/src/conf.c
+index c28c4f1..7783f5a 100644
+--- a/src/conf.c
++++ b/src/conf.c
+@@ -31,6 +31,9 @@
+ #include <string.h>
+ #include "bt_vendor_brcm.h"
+ #include <stdio.h>
++#include <cutils/properties.h>
++
++#define CONF_MAX_LINE_LEN 255
+ 
+ /******************************************************************************
+ **  Externs
+@@ -60,6 +63,59 @@ typedef struct {
+     int param;
+ } conf_entry_t;
+ 
++/*
++ *
++ * Function to load / overwrite the firmware based on /dev/bt_mmc virtual device
++ *
++ * Firmware is being overwritten by parsing both and finding the right ID for chipset
++ *
++ * Prerequisist: /dev/bt_mmc must be generated in the init.${platform}.rc 
++ * platform can be [ dart_imx8mq, dart_imx8mm, dart_imx8mp, som_imx8mn, som_imx8x, som_imx8qm
++ *
++ **/
++int hw_set_firmware_prop(char *p_conf_name, char *p_conf_value, int param)
++{
++	char fw_path_value[PROPERTY_VALUE_MAX];
++	char buf[CONF_MAX_LINE_LEN];
++	int fd = -1;
++	int sz;
++	int ret = 0;
++	snprintf(fw_path_value, sizeof(fw_path_value), "/dev/bt_mmc");
++
++	if ((strcmp(fw_path_value, "0") != 0))
++	{
++		fd = open(fw_path_value, O_RDONLY);
++		if (fd < 0)
++		{
++			ALOGE("failed to read from %s\n", fw_path_value);
++			ret = -1;
++		}
++		else {
++			sz = read(fd, &buf, sizeof(buf));
++			if (strncasecmp(buf, "0x4339", strlen("0x4339")) == 0)
++			{
++				if (strncasecmp(p_conf_name, "BT_FIRMWARE_LWB5",
++					strlen("BT_FIRMWARE_LWB5")) == 0) {
++					ALOGE("Using 5G/2.4Ghz Module\n");
++					hw_set_patch_file_name(NULL, p_conf_value, 0);
++					ret = 0;
++				}
++			}
++			else
++			{
++				if (strncasecmp(p_conf_name, "BT_FIRMWARE",
++					strlen("BT_FIRMWARE")) == 0) {
++					ALOGE("Using 2.4Ghz Module\n");
++					hw_set_patch_file_name(NULL, p_conf_value, 0);
++					ret = 0;
++				}
++			}
++		}
++		ret = -1;
++	}
++	return ret;
++}
++
+ /******************************************************************************
+ **  Static variables
+ ******************************************************************************/
+@@ -71,6 +127,8 @@ static const conf_entry_t conf_table[] = {
+     {"UartPort", userial_set_port, 0},
+     {"FwPatchFilePath", hw_set_patch_file_path, 0},
+     {"FwPatchFileName", hw_set_patch_file_name, 0},
++    {"BT_FIRMWARE_LWB5", hw_set_firmware_prop, 0},
++    {"BT_FIRMWARE_LWB", hw_set_firmware_prop, 0},
+ #if (VENDOR_LIB_RUNTIME_TUNING_ENABLED == TRUE)
+     {"FwPatchSettlementDelay", hw_set_patch_settlement_delay, 0},
+ #endif
+-- 
+2.25.1
+

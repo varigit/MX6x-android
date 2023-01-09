@@ -1,40 +1,43 @@
-From 65212f49e7a981c24f6c57122d8b13e24475ffdc Mon Sep 17 00:00:00 2001
+From ea0ee74f61778423242b540036fe61efa38333f6 Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
-Date: Wed, 17 Nov 2021 10:42:45 -0800
-Subject: [PATCH] ov5640: Auto Focus support.
+Date: Sat, 7 Jan 2023 16:51:12 -0800
+Subject: [PATCH 2/4] ov5640: Auto Focus Support
 
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
- camera/CameraDeviceHWLImpl.cpp        |  15 ++-
+ camera/CameraDeviceHWLImpl.cpp        |  14 ++-
  camera/CameraDeviceHWLImpl.h          |   2 +
  camera/CameraDeviceSessionHWLImpl.cpp | 175 ++++++++++++++++++++++++--
  camera/CameraDeviceSessionHWLImpl.h   |  12 ++
  camera/CameraMetadata.cpp             |  23 +++-
  camera/VideoStream.h                  |   4 +
- 6 files changed, 213 insertions(+), 18 deletions(-)
+ 6 files changed, 212 insertions(+), 18 deletions(-)
 
 diff --git a/camera/CameraDeviceHWLImpl.cpp b/camera/CameraDeviceHWLImpl.cpp
-index e5b9d41..a0dc34f 100644
+index eeaa72b..009961b 100644
 --- a/camera/CameraDeviceHWLImpl.cpp
 +++ b/camera/CameraDeviceHWLImpl.cpp
-@@ -85,10 +85,17 @@ CameraDeviceHwlImpl::CameraDeviceHwlImpl(
+@@ -56,6 +56,10 @@ std::unique_ptr<CameraDeviceHwl> CameraDeviceHwlImpl::Create(
+         return nullptr;
+     }
  
-     memset(mPreviewResolutions, 0, sizeof(mPreviewResolutions));
-     memset(mPictureResolutions, 0, sizeof(mPictureResolutions));
-+
 +    ctrl_fd = open(*mDevPath[0], O_RDWR);
 +    if (ctrl_fd < 0) {
-+        ALOGE("%s invalid fd handle", __func__);
++	ALOGE("%s invalid fd handle", __func__);
 +    }
- }
+     ALOGI("%s: Created CameraDeviceHwlImpl for camera %u", __func__, device->camera_id_);
  
- CameraDeviceHwlImpl::~CameraDeviceHwlImpl()
+     return std::unique_ptr<CameraDeviceHwl>(device);
+@@ -72,6 +76,8 @@ CameraDeviceHwlImpl::CameraDeviceHwlImpl(
+         physical_device_map_(std::move(physical_devices)),
+         mCallback(callback)
  {
 +    if (ctrl_fd > 0)
 +       close(ctrl_fd);
-     if(m_meta) {
-         delete m_meta;
-         m_meta = NULL;
-@@ -209,11 +216,10 @@ status_t CameraDeviceHwlImpl::Initialize()
+     mDevPath = devPaths;
+     for (int i = 0; i<mDevPath.size(); ++i) {
+         ALOGE("%s, mDevPath[%d] %s", __func__, i, *mDevPath[i]);
+@@ -213,11 +219,10 @@ status_t CameraDeviceHwlImpl::Initialize()
  
  status_t CameraDeviceHwlImpl::initSensorStaticData()
  {
@@ -49,7 +52,7 @@ index e5b9d41..a0dc34f 100644
      }
  
      // first read sensor format.
-@@ -306,7 +312,6 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
+@@ -316,7 +321,6 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
      setMaxPictureResolutions();
      ALOGI("mMaxWidth:%d, mMaxHeight:%d", mMaxWidth, mMaxHeight);
  
@@ -58,10 +61,10 @@ index e5b9d41..a0dc34f 100644
  }
  
 diff --git a/camera/CameraDeviceHWLImpl.h b/camera/CameraDeviceHWLImpl.h
-index 84af243..9181d0c 100644
+index a8cd3a8..f80119d 100644
 --- a/camera/CameraDeviceHWLImpl.h
 +++ b/camera/CameraDeviceHWLImpl.h
-@@ -84,6 +84,8 @@ public:
+@@ -85,6 +85,8 @@ public:
  
      CameraSensorMetadata* getSensorData() { return &mSensorData; }
  
@@ -71,7 +74,7 @@ index 84af243..9181d0c 100644
          int *pPreviewResolutions, int nPreviewResolutionCount, int *pPictureResolutions, int nPictureResolutionCount);
  
 diff --git a/camera/CameraDeviceSessionHWLImpl.cpp b/camera/CameraDeviceSessionHWLImpl.cpp
-index 286b879..1d0cbc0 100644
+index ab8756e..aa4020f 100644
 --- a/camera/CameraDeviceSessionHWLImpl.cpp
 +++ b/camera/CameraDeviceSessionHWLImpl.cpp
 @@ -88,7 +88,7 @@ status_t CameraDeviceSessionHwlImpl::Initialize(
@@ -109,7 +112,7 @@ index 286b879..1d0cbc0 100644
  
          if (pVideoStreams[i] == NULL)
              return BAD_VALUE;
-@@ -899,17 +904,58 @@ status_t CameraDeviceSessionHwlImpl::HandleMetaLocked(std::unique_ptr<HalCameraM
+@@ -1030,17 +1035,58 @@ status_t CameraDeviceSessionHwlImpl::HandleMetaLocked(std::unique_ptr<HalCameraM
  
      resultMeta->Set(ANDROID_CONTROL_AE_PRECAPTURE_ID, &m3aState.aeTriggerId, 1);
  
@@ -176,8 +179,8 @@ index 286b879..1d0cbc0 100644
      resultMeta->Set(ANDROID_CONTROL_AF_STATE, &m3aState.afState, 1);
  
      // auto white balance control.
-@@ -1526,4 +1572,113 @@ status_t CameraDeviceSessionHwlImpl::ConstructDefaultRequestSettings(
-     return m_meta->getRequestSettings(type, default_settings);
+@@ -1630,4 +1676,113 @@ int CameraDeviceSessionHwlImpl::getCapsMode(uint8_t sceneMode)
+     return 0;
  }
  
 +uint8_t CameraDeviceSessionHwlImpl::getAutoFocusStatus(uint8_t mode)
@@ -291,7 +294,7 @@ index 286b879..1d0cbc0 100644
 +
  }  // namespace android
 diff --git a/camera/CameraDeviceSessionHWLImpl.h b/camera/CameraDeviceSessionHWLImpl.h
-index c46f0af..3788d4a 100644
+index 2eaa3c5..5442cdb 100644
 --- a/camera/CameraDeviceSessionHWLImpl.h
 +++ b/camera/CameraDeviceSessionHWLImpl.h
 @@ -35,6 +35,11 @@
@@ -306,9 +309,9 @@ index c46f0af..3788d4a 100644
  namespace android {
  
  using google_camera_hal::CameraDeviceHwl;
-@@ -257,6 +262,13 @@ public:
-     CameraSensorMetadata* getSensorData() { return &mSensorData; }
-     char* getDevPath(int i) { return (*mDevPath[i]); }
+@@ -260,6 +265,13 @@ public:
+     int getCapsMode(uint8_t sceneMode);
+     int32_t getRawV4l2Format() { return m_raw_v4l2_format; }
  
 +private:
 +    CameraDeviceHwlImpl *m_dev;
@@ -321,10 +324,10 @@ index c46f0af..3788d4a 100644
      // Protects the API entry points
      uint32_t camera_id_ = 0;
 diff --git a/camera/CameraMetadata.cpp b/camera/CameraMetadata.cpp
-index 716bd6d..d73a36d 100644
+index 01ee032..1ae9641 100644
 --- a/camera/CameraMetadata.cpp
 +++ b/camera/CameraMetadata.cpp
-@@ -75,7 +75,7 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
+@@ -76,7 +76,7 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
                       android_control_ae_compensation_step,
                       ARRAY_SIZE(android_control_ae_compensation_step));
  
@@ -333,7 +336,7 @@ index 716bd6d..d73a36d 100644
      m_static_meta->Set(ANDROID_CONTROL_MAX_REGIONS,
                       android_control_max_regions,
                       ARRAY_SIZE(android_control_max_regions));
-@@ -92,6 +92,15 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
+@@ -93,6 +93,15 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
                       ARRAY_SIZE(android_jpeg_max_size));
  
      /* android.lens */
@@ -349,7 +352,7 @@ index 716bd6d..d73a36d 100644
      float android_lens_info_available_focal_lengths[] = {mSensorData.focallength};
      m_static_meta->Set(ANDROID_LENS_INFO_AVAILABLE_FOCAL_LENGTHS,
                       android_lens_info_available_focal_lengths,
-@@ -133,6 +142,16 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
+@@ -134,6 +143,16 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
              android_lens_info_minimum_focus_distance,
              ARRAY_SIZE(android_lens_info_minimum_focus_distance));
  
@@ -366,7 +369,7 @@ index 716bd6d..d73a36d 100644
      /* android.request */
      int32_t android_request_max_num_output_streams[] = {0, 3, 1};
      m_static_meta->Set(ANDROID_REQUEST_MAX_NUM_OUTPUT_STREAMS,
-@@ -514,8 +533,6 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
+@@ -537,8 +556,6 @@ status_t CameraMetadata::createMetadata(CameraDeviceHwlImpl *pDev, CameraSensorM
      static const uint8_t availableAeModes[] = {ANDROID_CONTROL_AE_MODE_OFF, ANDROID_CONTROL_AE_MODE_ON};
      m_static_meta->Set(ANDROID_CONTROL_AE_AVAILABLE_MODES, availableAeModes, ARRAY_SIZE(availableAeModes));
  
@@ -376,7 +379,7 @@ index 716bd6d..d73a36d 100644
      static const uint8_t availableAwbModes[] = {
          ANDROID_CONTROL_AWB_MODE_OFF,
 diff --git a/camera/VideoStream.h b/camera/VideoStream.h
-index d365c24..16077c2 100644
+index 7e807e8..69b5f8b 100644
 --- a/camera/VideoStream.h
 +++ b/camera/VideoStream.h
 @@ -35,6 +35,10 @@ public:

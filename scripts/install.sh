@@ -23,7 +23,7 @@ readonly G_CROSS_COMPILER_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/gc
 readonly G_CROSS_COMPILER_ARCHIVE=gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz
 readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com/VAR-SOM-MX8X/Software/Android/Android_iMX8_Q1000_230/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu.tar.xz"
 readonly C_LANG_LINK="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
-readonly C_LANG_DIR="/opt/prebuilt-android-clang-var-bceb7274dda5b/"
+readonly C_LANG_DIR="/opt/prebuilt-android-clang-var-0fc0715d9392c/"
 
 readonly BASE_BRANCH_NAME="android-12.0.0_2.0.0"
 
@@ -167,7 +167,7 @@ do
 	
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
 		if [[ ${PWD} == ${LIBBT} ]] || [[ ${PWD} == ${SEPOLICY} ]]; then
-			git checkout tags/android-12.0.0_r26
+			git checkout tags/android-12.0.0_r28
 		else
 			git checkout tags/${BASE_BRANCH_NAME}
 		fi
@@ -211,7 +211,7 @@ pr_info "#######################"
 if [[ ! -d ${C_LANG_DIR} ]] ; then
 	sudo git clone ${C_LANG_LINK} ${C_LANG_DIR} -b master
 	cd ${C_LANG_DIR}
-	sudo git checkout bceb7274dda5bb587a5473058bd9f52e678dde98
+	sudo git checkout 0fc0715d9392ca616605c07750211d7ca71f4e36
 fi
 
 if [[ ! -z $SC_MX8_FAMILY ]] ; then

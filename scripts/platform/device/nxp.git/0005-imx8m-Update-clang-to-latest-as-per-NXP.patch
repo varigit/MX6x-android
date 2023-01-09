@@ -1,0 +1,28 @@
+From 14ea44d4b4f266adfa89389e4951471b8f3b5189 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Sun, 8 Jan 2023 18:57:37 -0800
+Subject: [PATCH] imx8m: Update clang to latest as per NXP
+
+- Required by android-12.0.0_2.0.0 compilation
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 77fed4cc..f27d427e 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -153,7 +153,7 @@ soc_path=${product_path%/*}
+ nxp_git_path=${soc_path%/*}
+ export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
+ #export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-elf/bin/aarch64-elf-
+-#export CLANG_PATH=/opt/prebuilt-android-clang-var-bceb7274dda5b
++export CLANG_PATH=/opt/prebuilt-android-clang-var-0fc0715d9392c
+ 
+ # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
+ if [ -n "${build_bootloader}" ]; then
+-- 
+2.25.1
+

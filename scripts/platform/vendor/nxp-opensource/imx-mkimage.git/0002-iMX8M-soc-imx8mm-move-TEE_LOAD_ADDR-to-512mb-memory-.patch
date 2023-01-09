@@ -1,0 +1,31 @@
+From 5de409aaa7c11e53d51fb017f8f0f905fb9f9086 Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Sat, 22 Oct 2022 10:51:50 +0200
+Subject: [PATCH 2/4] iMX8M: soc: imx8mm: move TEE_LOAD_ADDR to 512mb memory
+ region
+
+The default memory location, 0xfe000000, requires 3GB of memory. Move
+TEE_LOAD_ADDR to 0x56000000 to work with soms down to 512MB.
+
+Signed-off-by: Nate Drude <nate.d@variscite.com>
+Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
+---
+ iMX8M/soc.mak | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
+index b591d63..778871a 100644
+--- a/iMX8M/soc.mak
++++ b/iMX8M/soc.mak
+@@ -32,7 +32,7 @@ PLAT = imx8mm
+ HDMI = no
+ SPL_LOAD_ADDR = 0x7E1000
+ SPL_FSPI_LOAD_ADDR = 0x7E2000
+-TEE_LOAD_ADDR ?= 0xbe000000
++TEE_LOAD_ADDR = 0x56000000
+ ATF_LOAD_ADDR = 0x00920000
+ VAL_BOARD = val
+ #define the F(Q)SPI header file
+-- 
+2.25.1
+
