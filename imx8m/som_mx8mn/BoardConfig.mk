@@ -121,3 +121,4 @@ BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
 
+BUILD_BROKEN_VENDOR_PROPERTY_NAMESPACE := true
