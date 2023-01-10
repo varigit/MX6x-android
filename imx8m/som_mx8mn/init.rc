@@ -80,6 +80,10 @@ on init
 on early-init && property:ro.boot.mode=charger
     setprop vendor.skip.charger_not_need 1
 
+on early-init && property:ro.boot.lowmemopt=true
+    setprop ro.config.low_ram true
+    setprop debug.sf.nobootanimation 1
+
 on init && property:vendor.skip.charger_not_need=0
     start watchdogd
 
