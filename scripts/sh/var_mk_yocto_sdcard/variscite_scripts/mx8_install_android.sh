@@ -129,10 +129,8 @@ function add_imx8qm_menu() {
 }
 
 function add_imx8mn_menu() {
-	img_list+=("dtbo-imx8mn-var-som-symphony-legacy-m7.img (VAR-SOM-MX8M-NANO on Symphony-Board V1.4 and below, with M7 support)")
-	img_list+=("dtbo-imx8mn-var-som-symphony-legacy.img    (VAR-SOM-MX8M-NANO on Symphony-Board V1.4 and below)")
-	img_list+=("dtbo-imx8mn-var-som-symphony-m7.img        (VAR-SOM-MX8M-NANO on Symphony-Board V1.4A and above, with M7 support)")
-	img_list+=("dtbo-imx8mn-var-som-symphony.img           (VAR-SOM-MX8M-NANO on Symphony-Board V1.4A and above)")
+	img_list+=("dtbo-imx8mn-var-som-symphony-m7.img        (VAR-SOM-MX8M-NANO on Symphony-Board with M7 support)")
+	img_list+=("dtbo-imx8mn-var-som-symphony.img           (VAR-SOM-MX8M-NANO on Symphony-Board)")
 }
 
 imagesdir="/opt/images/Android"
