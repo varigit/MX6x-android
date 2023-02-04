@@ -1,19 +1,19 @@
 # This is a FSL Android Reference Design platform based on i.MX8MQ board
 # It will inherit from FSL core product which in turn inherit from Google generic
 
-IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mq
+IMX_DEVICE_PATH := device/nxp/imx8m/dart_mx8mq
 
 PRODUCT_IMX_DRM := true
 
 # copy drm specific files before inherit dart_mx8mq.mk, otherwise copy is ignored
 PRODUCT_COPY_FILES += \
 	$(IMX_DEVICE_PATH)/audio_policy_configuration_drm.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-	$(IMX_DEVICE_PATH)/init.imx8mq.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8mq.main.rc \
-	$(IMX_DEVICE_PATH)/init.imx8mq.drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.freescale.imx8mq.rc \
-	$(TOPDIR)device/fsl/imx8m/tee-supplicant.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/tee-supplicant.rc \
+	$(IMX_DEVICE_PATH)/init.imx8mq.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8mq.main.rc \
+	$(IMX_DEVICE_PATH)/init.imx8mq.drm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8mq.rc \
+	$(TOPDIR)device/nxp/imx8m/tee-supplicant.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/tee-supplicant.rc \
 
 
-$(call inherit-product, $(TOPDIR)device/fsl/imx8m/optee-packages.mk)
+$(call inherit-product, $(TOPDIR)device/nxp/imx8m/optee-packages.mk)
 $(call inherit-product, $(TOPDIR)$(IMX_DEVICE_PATH)/dart_mx8mq.mk)
 
 TARGET_KERNEL_DEFCONFIG := imx8_var_android_defconfig

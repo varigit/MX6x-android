@@ -185,36 +185,12 @@
          autodetected from the Configuration. -->
     <bool name="config_showNavigationBar">true</bool>
 
-    <bool name="config_navBarCanMove">true</bool>
-
     <!-- This device is not "voice capable"; it's data-only. -->
     <bool name="config_voice_capable">false</bool>
-
-    <!-- Boolean indicating whether the wifi chipset has dual frequency band support -->
-    <bool translatable="false" name="config_wifi_dual_band_support">true</bool>
 
     <!-- Boolean indicating whether system support sustained performance mode. -->
     <bool name="config_sustainedPerformanceModeSupported">true</bool>
 
     <!-- If the system has the input method for each display - enable per-display focus. -->
     <bool name="config_perDisplayFocusEnabled">true</bool>
-
-    <!-- Enable 802.11ac for Wifi hotspot (SAP) -->
-    <bool translatable="false" name="config_wifi_softap_ieee80211ac_supported">true</bool>
-
-    <!-- Enable ACS (auto channel selection) for Wifi hotspot (SAP) -->
-    <bool translatable="false" name="config_wifi_softap_acs_supported">false</bool>
-
-    <!-- Boolean indicating whether 802.11r Fast BSS Transition is enabled on this platform -->
-    <bool translatable="false" name="config_wifi_fast_bss_transition_enabled">true</bool>
-
-    <!-- Boolean indicating whether the wifi chipset has background scan support -->
-    <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
-
-    <!-- Indicates that connected MAC randomization is supported on this device -->
-    <bool translatable="false" name="config_wifi_connected_mac_randomization_supported">true</bool>
-
-    <!-- Indicates that p2p MAC randomization is supported on this device -->
-    <bool translatable="false" name="config_wifi_p2p_mac_randomization_supported">true</bool>
-
 </resources>
