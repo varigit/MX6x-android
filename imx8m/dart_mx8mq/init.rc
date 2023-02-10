@@ -32,13 +32,6 @@ on early-init
     # Set the density to 160 dpi to match LCD.
     setprop ro.sf.lcd_density 160
 
-service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
-    class main
-    user root
-    group root system
-    disabled
-    oneshot
-
 on init
     # cpuctl hierarchy for devices using utilclamp
     mkdir /dev/cpuctl/foreground
@@ -82,6 +75,7 @@ on init
     chown system system /dev/cpuctl/camera-daemon
     chown system system /dev/cpuctl/camera-daemon/tasks
     chmod 0664 /dev/cpuctl/camera-daemon/tasks
+
 
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
@@ -191,6 +185,15 @@ on early-boot && property:vendor.skip.charger_not_need=0
     chown system system /sys/class/backlight/backlight/brightness
     chmod 0660 /sys/class/backlight/backlight/brightness
 
+    chown system system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    chown 0664 /sys/devices/system/cpu/cpu1/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+    chown 0664 /sys/devices/system/cpu/cpu2/cpufreq/scaling_max_freq
+    chown system system /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+    chown 0664 /sys/devices/system/cpu/cpu3/cpufreq/scaling_max_freq
+
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
     setprop vendor.ro.lightsensor.threshold  20
@@ -240,6 +243,45 @@ service watchdogd /system/bin/watchdogd 10 20
     class core
     seclabel u:r:watchdogd:s0
 
+service dhcpcd_wlan0 /system/bin/dhcpcd -aABDKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_p2p /system/bin/dhcpcd -aABKL
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_eth0 /system/bin/dhcpcd -ABKL eth0
+    class main
+    disabled
+    oneshot
+
+service dhcpcd_bt-pan /system/bin/dhcpcd -ABKL
+    class main
+    disabled
+    oneshot
+
+service iprenew_wlan0 /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_p2p /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
+
+service iprenew_eth0 /system/bin/dhcpcd -n eth0
+    class main
+    disabled
+    oneshot
+
+service iprenew_bt-pan /system/bin/dhcpcd -n
+    class main
+    disabled
+    oneshot
 # bugreport is triggered by holding down volume down, volume up and power
 service bugreport /system/bin/dumpstate -d -p -z
     class main
