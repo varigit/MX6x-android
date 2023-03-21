@@ -1,4 +1,4 @@
-From e6a549fe50c2c8fc192d193d23484f3d13adde9c Mon Sep 17 00:00:00 2001
+From 6d72a32c5ed66969bd28bd20874b078c5fc2825b Mon Sep 17 00:00:00 2001
 From: mohit <mohit.p@variscite.com>
 Date: Tue, 25 Jan 2022 09:35:43 -0800
 Subject: [PATCH 3/4] camera: fix max resolution to 720p
@@ -8,10 +8,10 @@ Subject: [PATCH 3/4] camera: fix max resolution to 720p
  1 file changed, 6 insertions(+)
 
 diff --git a/camera/CameraDeviceHWLImpl.cpp b/camera/CameraDeviceHWLImpl.cpp
-index 009961b..ba5c245 100644
+index fe48952..d2b6299 100644
 --- a/camera/CameraDeviceHWLImpl.cpp
 +++ b/camera/CameraDeviceHWLImpl.cpp
-@@ -252,6 +252,9 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
+@@ -262,6 +262,9 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
      int previewCnt = 0, pictureCnt = 0;
      struct v4l2_frmsizeenum cam_frmsize;
      struct v4l2_frmivalenum vid_frmval;
@@ -21,7 +21,7 @@ index 009961b..ba5c245 100644
      while (ret == 0) {
          memset(TmpStr, 0, 20);
          memset(&cam_frmsize, 0, sizeof(struct v4l2_frmsizeenum));
-@@ -298,6 +301,9 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
+@@ -308,6 +311,9 @@ status_t CameraDeviceHwlImpl::initSensorStaticData()
              mPreviewResolutions[previewCnt++] = cam_frmsize.discrete.width;
              mPreviewResolutions[previewCnt++] = cam_frmsize.discrete.height;
          }

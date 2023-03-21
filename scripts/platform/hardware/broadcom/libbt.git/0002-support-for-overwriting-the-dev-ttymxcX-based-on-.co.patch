@@ -1,0 +1,65 @@
+From a45556ccad7f055e4c4d3cb39c0174993af63384 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 16 Mar 2023 21:40:17 -0700
+Subject: [PATCH 2/2]  support for overwriting the /dev/ttymxcX based on .conf
+ file
+
+Change-Id: Ibd4977319fd7e21beb759f4dcc4f7cdd72d13454
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ src/conf.c           |  1 +
+ src/userial_vendor.c | 19 ++++++++++++++++++-
+ 2 files changed, 19 insertions(+), 1 deletion(-)
+
+diff --git a/src/conf.c b/src/conf.c
+index 7783f5a..722ea5e 100644
+--- a/src/conf.c
++++ b/src/conf.c
+@@ -129,6 +129,7 @@ static const conf_entry_t conf_table[] = {
+     {"FwPatchFileName", hw_set_patch_file_name, 0},
+     {"BT_FIRMWARE_LWB5", hw_set_firmware_prop, 0},
+     {"BT_FIRMWARE_LWB", hw_set_firmware_prop, 0},
++    {"BT_SOM_UART", userial_set_port, 0},
+ #if (VENDOR_LIB_RUNTIME_TUNING_ENABLED == TRUE)
+     {"FwPatchSettlementDelay", hw_set_patch_settlement_delay, 0},
+ #endif
+diff --git a/src/userial_vendor.c b/src/userial_vendor.c
+index c727061..75fa83b 100644
+--- a/src/userial_vendor.c
++++ b/src/userial_vendor.c
+@@ -36,6 +36,7 @@
+ #include "userial.h"
+ #include "userial_vendor.h"
+ #include <unistd.h>
++#include <cutils/properties.h>
+ 
+ /******************************************************************************
+ **  Constants & Macros
+@@ -370,7 +371,23 @@ void userial_vendor_ioctl(userial_vendor_ioctl_op_t op, void *p_data)
+ *******************************************************************************/
+ int userial_set_port(char *p_conf_name, char *p_conf_value, int param)
+ {
+-    strcpy(vnd_userial.port_name, p_conf_value);
++    char board_type[PROPERTY_VALUE_MAX];
++    property_get("ro.boot.vendor.board", board_type, "dart");
++
++    if (strncmp(p_conf_name,"BT_SOM_UART", 11) == 0) {
++        ALOGE("Board Type (%s), pconf_name = %s, pconf_value = %s", board_type, p_conf_name, p_conf_value);
++        if (strncmp(board_type, "varsom", 6) == 0) {
++            ALOGE("Updating the serial port for SOM");
++	    strcpy(vnd_userial.port_name, p_conf_value);
++            return 0;
++	}
++	else {
++            ALOGE("Returning");
++            return 0;
++	}
++    } else {
++	    strcpy(vnd_userial.port_name, p_conf_value);
++    }
+ 
+     return 0;
+ }
+-- 
+2.25.1
+

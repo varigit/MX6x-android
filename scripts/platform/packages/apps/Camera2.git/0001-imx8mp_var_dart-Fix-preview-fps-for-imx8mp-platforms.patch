@@ -1,4 +1,4 @@
-From 6aa78bc5b0722ed97d9b0612ded98e31a93615fb Mon Sep 17 00:00:00 2001
+From 1d916a4a1f2bfc88d6d487a21e6e3b5ac3f35712 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Fri, 25 Feb 2022 17:08:56 -0800
 Subject: [PATCH] imx8mp_var_dart: Fix preview fps for imx8mp platforms
@@ -9,10 +9,10 @@ Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
  1 file changed, 5 insertions(+)
 
 diff --git a/src/com/android/camera/VideoModule.java b/src/com/android/camera/VideoModule.java
-index e4e6ad0d2..21f7a891a 100644
+index 7b996147f..7aa879064 100644
 --- a/src/com/android/camera/VideoModule.java
 +++ b/src/com/android/camera/VideoModule.java
-@@ -1671,6 +1671,11 @@ public class VideoModule extends CameraModule
+@@ -1660,6 +1660,11 @@ public class VideoModule extends CameraModule
              mCameraSettings.setPreviewFrameRate(mProfile.videoFrameRate);
          }
  

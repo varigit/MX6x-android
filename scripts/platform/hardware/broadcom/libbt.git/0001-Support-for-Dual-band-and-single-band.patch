@@ -1,7 +1,7 @@
-From db80a47261ee2da1e7cbaeaec8e7ad5c0ce95622 Mon Sep 17 00:00:00 2001
+From 7a6fbcd86ed75f26aae1ef211ba9d13ef41bf527 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Sat, 7 Jan 2023 20:00:03 -0800
-Subject: [PATCH] Support for Dual band and single band
+Subject: [PATCH 1/2] Support for Dual band and single band
 
 - Merge multiple platforms and multiple properties patches
 

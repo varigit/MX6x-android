@@ -1,0 +1,33 @@
+From 1c65b7eb6cc437be9411501a6882bd5727e77b4b Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Mon, 20 Mar 2023 20:40:21 -0700
+Subject: [PATCH] Allow parsing additional board specific permissions
+
+This is needed for platforms like imx8mp,imx8mm,imx8qm
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ init/ueventd.cpp | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/init/ueventd.cpp b/init/ueventd.cpp
+index c6bf708a3..b955ab6b7 100644
+--- a/init/ueventd.cpp
++++ b/init/ueventd.cpp
+@@ -298,10 +298,12 @@ void ColdBoot::Run() {
+ 
+ static UeventdConfiguration GetConfiguration() {
+     auto hardware = android::base::GetProperty("ro.hardware", "");
++    auto board = android::base::GetProperty("ro.boot.vendor.board", "");
+     std::vector<std::string> legacy_paths{"/vendor/ueventd.rc", "/odm/ueventd.rc",
+                                           "/ueventd." + hardware + ".rc"};
+ 
+-    std::vector<std::string> canonical{"/system/etc/ueventd.rc"};
++    std::vector<std::string> canonical{"/system/etc/ueventd.rc",
++					"/vendor/etc/ueventd." + board + ".rc"};
+ 
+     if (android::base::GetIntProperty("ro.product.first_api_level", 10000) < __ANDROID_API_T__) {
+         // TODO: Remove these legacy paths once Android S is no longer supported.
+-- 
+2.25.1
+

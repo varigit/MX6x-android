@@ -1,4 +1,4 @@
-From bd6a0248854e23b3657fe2eabba2b4a2816f6e42 Mon Sep 17 00:00:00 2001
+From a58ee6df10888fb16225adf2e60802844e6e3e53 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Sat, 7 Jan 2023 16:44:52 -0800
 Subject: [PATCH 1/4] usb hal: Use vendor.typec.legacy property for legacy type

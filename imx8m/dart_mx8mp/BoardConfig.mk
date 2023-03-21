@@ -18,12 +18,11 @@ HAVE_FSL_IMX_GPU3D := true
 HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
-CFG_SECURE_IOCTRL_REGS := true
-ENABLE_SEC_DMABUF_HEAP := true
+CFG_SECURE_IOCTRL_REGS := false
+ENABLE_SEC_DMABUF_HEAP := false
 
 SOONG_CONFIG_IMXPLUGIN += \
-                        BOARD_VPU_TYPE \
-                        CFG_SECURE_IOCTRL_REGS
+                        BOARD_VPU_TYPE
 
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX8MP
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = true
@@ -80,9 +79,21 @@ BOARD_AVB_ALGORITHM := SHA256_RSA4096
 # The testkey_rsa4096.pem is copied from external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_KEY_PATH := $(CONFIG_REPO_PATH)/common/security/testkey_rsa4096.pem
 
-BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 2
+
+# Enable chained vbmeta for init_boot images
+BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 3
+
+# Use sha256 hashtree
+BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
@@ -147,10 +158,7 @@ endif
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
 # -------@block_sepolicy-------
-SYSTEM_EXT_PRIVATE_SEPOLICY_DIRS = += \
-    $(CONFIG_REPO_PATH)/imx8m/system_ext_pri_sepolicy
-
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
+       $(CONFIG_REPO_PATH)/imx8m/evk_8mp/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
-

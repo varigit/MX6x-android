@@ -1,0 +1,105 @@
+From d61a9a12ab4eab1f6a1c12449ad9b9d68eebfe9c Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Sun, 5 Mar 2023 18:57:26 -0800
+Subject: [PATCH] common: Imx-tools : Initial Support for Android 13.0.0_1.0.0
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/build/Makefile    |  7 ++++---
+ common/tools/imx-make.sh | 22 +++++++++++++++-------
+ 2 files changed, 19 insertions(+), 10 deletions(-)
+
+diff --git a/common/build/Makefile b/common/build/Makefile
+index ae046dbc..bde5eaf5 100644
+--- a/common/build/Makefile
++++ b/common/build/Makefile
+@@ -10,13 +10,14 @@ export TARGET_OUT_INTERMEDIATES
+ 
+ # firstly to include UbootKernelCommonConfig.mk, then SharedBoardConfig.mk, finally UbootKernelBoardConfig.mk
+ 
+-include ${nxp_git_path}/common/imx_path/ImxPathConfig.mk
++include ${nxp_git_path}/../nxp/common/imx_path/ImxPathConfig.mk
++include ${nxp_git_path}/common/VarPathConfig.mk
+ include ${soc_path}/UbootKernelCommonConfig.mk
+ include ${product_path}/SharedBoardConfig.mk
+ include ${product_path}/UbootKernelBoardConfig.mk
+ 
+-include ${nxp_git_path}/common/build/kernel.mk
+-include ${nxp_git_path}/common/build/uboot.mk
++include ${nxp_git_path}/../nxp/common/build/kernel.mk
++include ${nxp_git_path}/../nxp/common/build/uboot.mk
+ -include ${product_path}/AndroidTee.mk
+ -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
+ -include ${VVCAM_PATH}/vvcam/vvcam.mk
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 535c5b8f..4227ecd0 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -140,11 +140,18 @@ if [ -n "${build_kernel_modules}" ]; then
+     build_kernel_oot_module_flag=1;
+ fi
+ 
+-product_makefile=`pwd`/`find device/nxp -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
++# vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
++if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "dart_mx8mp" ]; then
++    build_vvcam="vvcam";
++    build_kernel_oot_module_flag=1;
++fi
++
++product_makefile=`pwd`/`find device/variscite -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
+ product_path=${product_makefile%/*}
+ soc_path=${product_path%/*}
+ nxp_git_path=${soc_path%/*}
+-
++export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-8.3-2019.03-x86_64-aarch64-linux-gnu/bin/aarch64-linux-gnu-
++export CLANG_PATH=/opt/prebuilt-android-clang-var-0fc0715d9392c
+ # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
+ if [ -n "${build_bootloader}" ]; then
+     rm -rf ${OUT}/obj/UBOOT_COLLECTION
+@@ -152,7 +159,7 @@ fi
+ 
+ # redirect standard input to /dev/null to avoid manually input in kernel configuration stage
+ soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-    make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++    make -C ./ -f ${nxp_git_path}/../nxp/common/build/Makefile ${parallel_option} \
+     ${build_bootloader} ${build_kernel} </dev/null || exit
+ # in the execution of this script, if the kernel build env is cleaned or configured, do not trigger that again
+ if [ -n "${build_kernel}" ]; then
+@@ -162,21 +169,21 @@ fi
+ 
+ if [ -n "${build_kernel_modules}" ]; then
+     soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/../nxp/common/build/Makefile ${parallel_option} \
+         ${build_kernel_modules} </dev/null || exit
+     skip_config_or_clean=1
+ fi
+ 
+ if [ -n "${build_kernel_dts}" ]; then
+     soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/../nxp/common/build/Makefile ${parallel_option} \
+         ${build_kernel_dts} </dev/null || exit
+     skip_config_or_clean=1
+ fi
+ 
+ if [ ${build_kernel_oot_module_flag} -eq 1 ] || [ -n "${build_kernel_modules}" ]; then
+     soc_path=${soc_path} product_path=${product_path} nxp_git_path=${nxp_git_path} clean_build=${clean_build} \
+-        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/common/build/Makefile ${parallel_option} \
++        skip_config_or_clean=${skip_config_or_clean} make -C ./ -f ${nxp_git_path}/../nxp/common/build/Makefile ${parallel_option} \
+         ${build_vvcam} ${build_galcore} ${build_mxmwifi} </dev/null || exit
+ fi
+ 
+@@ -191,7 +198,8 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
+-        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ]; then
++        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
++	|| [ ${TARGET_PRODUCT} = "dart_mx8mp"] ; then
+             mv ${OUT}/boot.img ${OUT}/boot-imx.img
+             make bootimage
+         fi
+-- 
+2.25.1
+

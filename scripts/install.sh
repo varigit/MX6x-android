@@ -25,11 +25,13 @@ readonly G_EXT_CROSS_COMPILER_LINK="ftp://customerv:Variscite1@ftp.variscite.com
 readonly C_LANG_LINK="https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86"
 readonly C_LANG_DIR="/opt/prebuilt-android-clang-var-0fc0715d9392c/"
 
-readonly BASE_BRANCH_NAME="android-12.0.0_2.0.0"
+readonly BASE_BRANCH_NAME="android-13.0.0_1.0.0"
 
 ## git variables get from base script!
-readonly _EXTPARAM_BRANCH="android-12.0.0_2.0.0-var01"
+readonly _EXTPARAM_BRANCH="android-13.0.0_1.0.0-var01"
 
+# Android TAG from release notes
+readonly ANDROID_TAG="android-13.0.0_r7"
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
 readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
@@ -167,7 +169,7 @@ do
 	
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
 		if [[ ${PWD} == ${LIBBT} ]] || [[ ${PWD} == ${SEPOLICY} ]]; then
-			git checkout tags/android-12.0.0_r28
+			git checkout tags/${ANDROID_TAG}
 		else
 			git checkout tags/${BASE_BRANCH_NAME}
 		fi
@@ -199,6 +201,7 @@ pr_info "#######################"
 # get arm toolchain
 (( `ls ${G_CROSS_COMPILER_PATH} 2>/dev/null | wc -l` == 0 )) && {
 	pr_info "Get and unpack cross compiler";
+	mkdir -p ${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
 	cd ${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
 	wget ${G_EXT_CROSS_COMPILER_LINK}
 	tar -xJf ${G_CROSS_COMPILER_ARCHIVE} \

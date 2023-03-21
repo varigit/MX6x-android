@@ -35,6 +35,8 @@ FB: flash dtbo_a dtbo-imx8mp-var-dart-dt8mcustomboard.img
 FB: flash dtbo_b dtbo-imx8mp-var-dart-dt8mcustomboard.img
 FB: flash boot_a boot.img
 FB: flash boot_b boot.img
+FB: flash init_boot_a init_boot.img
+FB: flash init_boot_b init_boot.img
 FB: flash vendor_boot_a vendor_boot.img
 FB: flash vendor_boot_b vendor_boot.img
 FB: flash vbmeta_a vbmeta-imx8mp-var-dart-dt8mcustomboard.img --disable-verity

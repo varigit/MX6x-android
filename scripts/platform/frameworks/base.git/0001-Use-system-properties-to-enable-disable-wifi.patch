@@ -1,6 +1,6 @@
-From 67eda29fb5e3c00616a4fba2f317dbf1be318205 Mon Sep 17 00:00:00 2001
+From 82e08268d1e5ef466cd8d45136f107b05fd92010 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
-Date: Mon, 26 Sep 2022 18:52:40 -0700
+Date: Tue, 14 Feb 2023 16:51:36 -0800
 Subject: [PATCH] Use system properties to enable / disable wifi
 
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
@@ -9,7 +9,7 @@ Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
  1 file changed, 17 insertions(+)
 
 diff --git a/services/core/java/com/android/server/power/Notifier.java b/services/core/java/com/android/server/power/Notifier.java
-index c91d8dedc41b..10ab50a7bb0d 100644
+index 685b744c8062..a7363d215df3 100644
 --- a/services/core/java/com/android/server/power/Notifier.java
 +++ b/services/core/java/com/android/server/power/Notifier.java
 @@ -31,6 +31,7 @@ import android.media.Ringtone;
@@ -19,8 +19,8 @@ index c91d8dedc41b..10ab50a7bb0d 100644
 +import android.net.wifi.WifiManager;
  import android.os.BatteryStats;
  import android.os.Handler;
- import android.os.Looper;
-@@ -39,7 +40,9 @@ import android.os.PowerManager;
+ import android.os.IWakeLockCallback;
+@@ -40,7 +41,9 @@ import android.os.PowerManager;
  import android.os.PowerManagerInternal;
  import android.os.Process;
  import android.os.RemoteException;
@@ -28,18 +28,18 @@ index c91d8dedc41b..10ab50a7bb0d 100644
  import android.os.SystemClock;
 +import android.os.SystemProperties;
  import android.os.UserHandle;
+ import android.os.VibrationAttributes;
  import android.os.VibrationEffect;
- import android.os.Vibrator;
-@@ -166,6 +169,8 @@ public class Notifier {
+@@ -171,6 +174,8 @@ public class Notifier {
  
      // True if a user activity message should be sent.
      private boolean mUserActivityPending;
 +    private WifiManager mWifiManager;
 +    private boolean wifi_state_pre_suspend;
  
-     public Notifier(Looper looper, Context context, IBatteryStats batteryStats,
-             SuspendBlocker suspendBlocker, WindowManagerPolicy policy,
-@@ -205,6 +210,7 @@ public class Notifier {
+     private final AtomicBoolean mIsPlayingChargingStartedFeedback = new AtomicBoolean(false);
+ 
+@@ -215,6 +220,7 @@ public class Notifier {
          try {
              mBatteryStats.noteInteractive(true);
          } catch (RemoteException ex) { }
@@ -47,7 +47,7 @@ index c91d8dedc41b..10ab50a7bb0d 100644
          FrameworkStatsLog.write(FrameworkStatsLog.INTERACTIVE_STATE_CHANGED,
                  FrameworkStatsLog.INTERACTIVE_STATE_CHANGED__STATE__ON);
      }
-@@ -750,8 +756,13 @@ public class Notifier {
+@@ -786,8 +792,13 @@ public class Notifier {
          }
  
          if (mActivityManagerInternal.isSystemReady()) {
@@ -61,7 +61,7 @@ index c91d8dedc41b..10ab50a7bb0d 100644
          } else {
              EventLog.writeEvent(EventLogTags.POWER_SCREEN_BROADCAST_STOP, 2, 1);
              sendNextBroadcast();
-@@ -775,6 +786,12 @@ public class Notifier {
+@@ -811,6 +822,12 @@ public class Notifier {
          if (mActivityManagerInternal.isSystemReady()) {
              mContext.sendOrderedBroadcastAsUser(mScreenOffIntent, UserHandle.ALL, null,
                      mGoToSleepBroadcastDone, mHandler, 0, null, null);

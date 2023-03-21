@@ -1,4 +1,4 @@
-From 5de409aaa7c11e53d51fb017f8f0f905fb9f9086 Mon Sep 17 00:00:00 2001
+From 6ff22b7060501b976279778401714d6679212f86 Mon Sep 17 00:00:00 2001
 From: FrancescoFerraro <francesco.f@variscite.com>
 Date: Sat, 22 Oct 2022 10:51:50 +0200
 Subject: [PATCH 2/4] iMX8M: soc: imx8mm: move TEE_LOAD_ADDR to 512mb memory
@@ -14,7 +14,7 @@ Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
-index b591d63..778871a 100644
+index 1cb8b7d..1857dfc 100644
 --- a/iMX8M/soc.mak
 +++ b/iMX8M/soc.mak
 @@ -32,7 +32,7 @@ PLAT = imx8mm

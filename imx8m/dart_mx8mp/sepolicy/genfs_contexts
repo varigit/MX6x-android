@@ -1,21 +1,8 @@
-genfscon sysfs /devices/platform/soc@0/30000000.bus/30370000.snvs/30370000.snvs:snvs-rtc-lp/rtc/rtc0/hctosys     u:object_r:sysfs_rtc:s0
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host/mmc1/mmc1:aaaa/block/mmcblk1 u:object_r:sysfs_block_devices:s0
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30b60000.mmc/mmc_host/mmc2/mmc2:0001/block/mmcblk2 u:object_r:sysfs_block_devices:s0
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30bb0000.spi/spi_master/spi0/spi0.0/mtd/mtd0/mtdblock0 u:object_r:sysfs_block_devices:s0
-
 #sys/class/net
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30be0000.ethernet/net                u:object_r:sysfs_net:s0
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30bf0000.ethernet/net                u:object_r:sysfs_net:s0
-genfscon sysfs /devices/platform/32f10100.usb/38100000.dwc3/gadget/net                   u:object_r:sysfs_net:s0
-genfscon sysfs /devices/platform/soc@0/33800000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/net  u:object_r:sysfs_net:s0
-
 genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
-genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0050/extcon u:object_r:sysfs_extcon:s0
+genfscon sysfs /devices/platform/extcon_usb1/extcon u:object_r:sysfs_extcon:s0
 genfscon sysfs /devices/platform/wifi_rfkill/rfkill/rfkill0 u:object_r:sysfs_wifi_hal_writable:s0
 genfscon sysfs /devices/platform/bt_rfkill/rfkill/rfkill1 u:object_r:sysfs_rfkill:s0
-
-# for dumpstate to access the stat file
-genfscon sysfs /devices/platform/94400000.pmem/ndbus0/region0/namespace0.0/block/pmem0                                       u:object_r:sysfs_block_devices:s0
 
 #RTC DART-IMX8MP
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc u:object_r:sysfs_rtc:s0
@@ -23,3 +10,6 @@ genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rt
 
 #RTC VAR-SOM-IMX8MP
 genfscon sysfs /devices/platform/soc@0/30800000.bus/30a50000.i2c/i2c-2/2-0068/rtc u:object_r:sysfs_rtc:s0
+
+#USB extcon
+genfscon sysfs /devices/platform/soc@0/30800000.bus/30a40000.i2c/i2c-2/2-003d/extcon u:object_r:sysfs_extcon:s0

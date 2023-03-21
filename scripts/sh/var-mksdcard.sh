@@ -21,9 +21,10 @@ red_bold_echo()
 BOOTLOAD_RESERVE=8
 DTBO_ROM_SIZE=4
 BOOT_ROM_SIZE=64
+INIT_BOOT_SIZE=8
 SYSTEM_ROM_SIZE=1792
 MISC_SIZE=4
-METADATA_SIZE=16
+METADATA_SIZE=64
 PRESISTDATA_SIZE=1
 VENDOR_ROM_SIZE=512
 PRODUCT_ROM_SIZE=1792
@@ -139,6 +140,7 @@ fi
 
 dtboimage_file="dtbo-${soc_name}.img"
 bootimage_file="boot.img"
+initboot_image_file="init_boot.img"
 vendor_bootimage_file="vendor_boot.img"
 vbmeta_file="vbmeta-${soc_name}.img"
 systemimage_file="system.img"
@@ -219,7 +221,7 @@ fi
 seprate=100
 total_size=`sfdisk -s ${node}`
 total_size=`expr ${total_size} \/ 1024`
-boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
+boot_rom_sizeb=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE} + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${INIT_BOOT_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
 	if [[ "${soc_name}" = *"mx8qm"* ]]; then
@@ -241,6 +243,8 @@ DTBO_A           : ${DTBO_ROM_SIZE} MiB
 DTBO_B           : ${DTBO_ROM_SIZE} MiB
 BOOT_A           : ${BOOT_ROM_SIZE} MiB
 BOOT_B           : ${BOOT_ROM_SIZE} MiB
+INIT_BOOT_A      : ${INIT_BOOT_SIZE} MiB
+INIT_BOOT_B      : ${INIT_BOOT_SIZE} MiB
 VENDOR_BOOT_A    : ${VENDOR_BOOT_SIZE} MiB
 VENDOR_BOOT_B    : ${VENDOR_BOOT_SIZE} MiB
 MISC             : ${MISC_SIZE} MiB
@@ -270,6 +274,11 @@ function check_images
 
 	if [[ ! -f ${imagesdir}/${bootloader_file} ]] ; then
 		red_bold_echo "ERROR: ${bootloader_file} image does not exist"
+		exit 1
+	fi
+
+	if [[ ! -f ${imagesdir}/${initboot_image_file} ]] ; then
+		red_bold_echo "ERROR: ${initboot_image_file} image does not exist"
 		exit 1
 	fi
 
@@ -356,12 +365,14 @@ function create_parts
 	blue_underlined_bold_echo "Creating Android partitions"
 
 	MCU_OFFSET=`expr ${BOOTLOAD_RESERVE} + ${MCU_OS_BOOT_SIZE}`
-	sgdisk -n 1:${MCU_OFFSET}M:+${DTBO_ROM_SIZE}M		-c 1:"dtbo_a"      -t 1:8300  $node
+	sgdisk -n 1:16384:+${DTBO_ROM_SIZE}M		-c 1:"dtbo_a"      -t 1:8300  $node
 	sgdisk -n 2:0:+${DTBO_ROM_SIZE}M                    -c 2:"dtbo_b"      -t 2:8300  $node
 	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 3:8300  $node
 	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 4:8300  $node
-	sgdisk -n 5:0:+${VENDOR_BOOT_SIZE}M                 -c 5:"vendor_boot_a"      -t 5:8300  $node
-	sgdisk -n 6:0:+${VENDOR_BOOT_SIZE}M                 -c 6:"vendor_boot_b"      -t 6:8300  $node
+	sgdisk -n 5:0:+${BOOT_ROM_SIZE}M                    -c 5:"init_boot_a"      -t 5:8300  $node
+	sgdisk -n 6:0:+${BOOT_ROM_SIZE}M                    -c 6:"init_boot_b"      -t 6:8300  $node
+	sgdisk -n 7:0:+${VENDOR_BOOT_SIZE}M                 -c 7:"vendor_boot_a"      -t 7:8300  $node
+	sgdisk -n 8:0:+${VENDOR_BOOT_SIZE}M                 -c 8:"vendor_boot_b"      -t 8:8300  $node
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 5:0:+${SYSTEM_ROM_SIZE}M                  -c 5:"system_a"    -t 3:8300  $node
 		sgdisk -n 6:0:+${SYSTEM_ROM_SIZE}M                  -c 6:"system_b"    -t 4:8300  $node
@@ -369,9 +380,9 @@ function create_parts
 		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 6:8300  $node
 		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 7:8300  $node
 	else
-		sgdisk -n 7:0:+${MISC_SIZE}M                        -c 7:"misc"        -t 7:8300  $node
-		sgdisk -n 8:0:+${METADATA_SIZE}M                    -c 8:"metadata"    -t 8:8300  $node
-		sgdisk -n 9:0:+${PRESISTDATA_SIZE}M                 -c 9:"presistdata" -t 9:8300  $node
+		sgdisk -n 9:0:+${MISC_SIZE}M                        -c 9:"misc"        -t 9:8300  $node
+		sgdisk -n 10:0:+${METADATA_SIZE}M                    -c 10:"metadata"    -t 10:8300  $node
+		sgdisk -n 11:0:+${PRESISTDATA_SIZE}M                 -c 11:"presistdata" -t 11:8300  $node
 	fi
 	if [[ "${dynamic_img}" = false ]]; then
 		sgdisk -n 10:0:+${VENDOR_ROM_SIZE}M                 -c 10:"vendor_a"   -t 8:8300  $node
@@ -383,13 +394,13 @@ function create_parts
 		sgdisk -n 16:0:+${VBMETA_SIZE}M                     -c 16:"vbmeta_a"   -t 14:8300 $node
 		sgdisk -n 17:0:+${VBMETA_SIZE}M                     -c 17:"vbmeta_b"   -t 15:8300 $node
 	else
-		sgdisk -n 10:0:+${SUPER_ROM_SIZE}M                  -c 10:"super"        -t 10:8300  $node
-		sgdisk -n 11:0:+${data_size}M                       -c 11:"userdata"     -t 11:8300 $node
-		sgdisk -n 12:0:+${FBMISC_SIZE}M                     -c 12:"fbmisc"       -t 12:8300 $node
-		sgdisk -n 13:0:+${VBMETA_SIZE}M                     -c 13:"vbmeta_a"     -t 13:8300 $node
-		sgdisk -n 14:0:+${VBMETA_SIZE}M                     -c 14:"vbmeta_b"     -t 14:8300 $node
+		sgdisk -n 12:0:+${SUPER_ROM_SIZE}M                  -c 12:"super"        -t 12:8300  $node
+		sgdisk -n 13:0:+${data_size}M                       -c 13:"userdata"     -t 13:8300 $node
+		sgdisk -n 14:0:+${FBMISC_SIZE}M                     -c 14:"fbmisc"       -t 14:8300 $node
+		sgdisk -n 15:0:+${VBMETA_SIZE}M                     -c 15:"vbmeta_a"     -t 15:8300 $node
+		sgdisk -n 16:0:+${VBMETA_SIZE}M                     -c 16:"vbmeta_b"     -t 16:8300 $node
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			sgdisk -n 13:0:+${FIRMWARE_SIZE}M	    -c 13:"firmware"   -t 11:8300 $node
+			sgdisk -n 17:0:+${FIRMWARE_SIZE}M	    -c 17:"firmware"   -t 17:8300 $node
 		fi
 	fi
 
@@ -410,7 +421,7 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing booloader"
 
-	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset}; sync
+	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset} conv=fsync; sync
 
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
@@ -435,20 +446,23 @@ function format_android
 		mkfs.ext4 -F ${node}${part}14 -Ldata
 	else
 		blue_underlined_bold_echo "Erasing presistdata partition"
-		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
-		mkfs.ext4 -F ${node}${part}9 -Lmetadata
+		dd if=/dev/zero of=${node}${part}11 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
+
 		blue_underlined_bold_echo "Erasing fbmisc partition"
-		dd if=/dev/zero of=${node}${part}12 bs=1M count=${FBMISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}15 bs=1M count=${FBMISC_SIZE} conv=fsync
+
 		blue_underlined_bold_echo "Erasing misc partition"
-		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}9 bs=1M count=${MISC_SIZE} conv=fsync
+
 		blue_underlined_bold_echo "Erasing metadata partition"
-		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}10 bs=1M count=${METADATA_SIZE} conv=fsync
+		mkfs.f2fs -f ${node}${part}10 -l metadata
+
 		blue_underlined_bold_echo "Formating userdata partition"
-		mkfs.ext4 -F ${node}${part}11 -Ldata
 
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"
-			mkfs.ext4 -F ${node}${part}13 -Lfirmware
+			mkfs.ext4 -F ${node}${part}17 -Lfirmware
 		fi
 	fi
 	sync; sleep 1
@@ -469,9 +483,15 @@ function install_android
 	sync
 
 	echo
+	blue_underlined_bold_echo "Installing Android init_boot image: $initboot_image_file"
+	dd if=${imagesdir}/${initboot_image_file} of=${node}${part}5 bs=1M
+	dd if=${imagesdir}/${initboot_image_file} of=${node}${part}6 bs=1M
+	sync
+
+	echo
 	blue_underlined_bold_echo "Installing Android vendor boot image: $vendor_bootimage_file"
-	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}5 bs=1M
-	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}6 bs=1M
+	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}7 bs=1M
+	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}8 bs=1M
 	sync
 
 	if [[ "${dynamic_img}" = false ]]; then
@@ -501,20 +521,20 @@ function install_android
 	else
 		echo
 		blue_underlined_bold_echo "Installing Android super image: $superimage_file"
-		simg2img ${imagesdir}/${superimage_file} ${node}${part}10
+		simg2img ${imagesdir}/${superimage_file} ${node}${part}12
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}13 bs=1M
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}14 bs=1M
+		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}15 bs=1M
+		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}16 bs=1M
 		sync;
 
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
 			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}13 /tmp/firmware_mnt
+			mount ${node}${part}17 /tmp/firmware_mnt
 			mkdir -p /tmp/firmware_mnt/firmware
 			cp -ar ${imagesdir}/vendor/firmware/hdp /tmp/firmware_mnt/firmware
 			sync;

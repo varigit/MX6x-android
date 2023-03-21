@@ -1,4 +1,4 @@
-From ff4fb11e2751f032ce4cce7841fc0b93cd3623e5 Mon Sep 17 00:00:00 2001
+From 319ca72460d6a45305b0152d93af78bdea33373c Mon Sep 17 00:00:00 2001
 From: Nate Drude <nate.d@variscite.com>
 Date: Mon, 28 Feb 2022 10:42:42 -0600
 Subject: [PATCH 4/4] iMX8M: soc: change padding of DDR4 and LPDDR4 DMEM
@@ -12,10 +12,10 @@ Signed-off-by: Nate Drude <nate.d@variscite.com>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/iMX8M/soc.mak b/iMX8M/soc.mak
-index fc9ca55..01e07bf 100644
+index 8661904..f24825f 100644
 --- a/iMX8M/soc.mak
 +++ b/iMX8M/soc.mak
-@@ -94,7 +94,7 @@ lpddr4_dmem_2d = lpddr4_pmu_train_2d_dmem$(LPDDR_FW_VERSION).bin
+@@ -98,7 +98,7 @@ lpddr4_dmem_2d = lpddr4_pmu_train_2d_dmem$(LPDDR_FW_VERSION).bin
  
  u-boot-spl-ddr.bin: u-boot-spl.bin $(lpddr4_imem_1d) $(lpddr4_dmem_1d) $(lpddr4_imem_2d) $(lpddr4_dmem_2d)
  	@objcopy -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 $(lpddr4_imem_1d) lpddr4_pmu_train_1d_imem_pad.bin
@@ -24,7 +24,7 @@ index fc9ca55..01e07bf 100644
  	@objcopy -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 $(lpddr4_imem_2d) lpddr4_pmu_train_2d_imem_pad.bin
  	@cat lpddr4_pmu_train_1d_imem_pad.bin lpddr4_pmu_train_1d_dmem_pad.bin > lpddr4_pmu_train_1d_fw.bin
  	@cat lpddr4_pmu_train_2d_imem_pad.bin $(lpddr4_dmem_2d) > lpddr4_pmu_train_2d_fw.bin
-@@ -109,7 +109,7 @@ ddr4_dmem_2d = ddr4_dmem_2d$(DDR_FW_VERSION).bin
+@@ -113,7 +113,7 @@ ddr4_dmem_2d = ddr4_dmem_2d$(DDR_FW_VERSION).bin
  
  u-boot-spl-ddr4.bin: u-boot-spl.bin $(ddr4_imem_1d) $(ddr4_dmem_1d) $(ddr4_imem_2d) $(ddr4_dmem_2d)
  	@objcopy -I binary -O binary --pad-to 0x8000 --gap-fill=0x0 $(ddr4_imem_1d) ddr4_imem_1d_pad.bin

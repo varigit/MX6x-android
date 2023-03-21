@@ -1,6 +1,6 @@
-From 47c14eaf28963c0a792098a109c9f83689d2d176 Mon Sep 17 00:00:00 2001
-From: Stefan Assmann <sassmann@kpanic.de>
-Date: Thu, 9 Feb 2023 12:23:16 -0800
+From ea90e02e9d307f35a5a23f96733f7b3cb185e67b Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Wed, 8 Mar 2023 17:53:50 -0800
 Subject: [PATCH] resurrect mWifiLinkLayerStatsSupported counter
 
 On devices with broken/not implemented LinkLayerStats
@@ -15,17 +15,17 @@ This partially reverts commit 1ba5b5858ffc04acbd317dc1f6789f1777d375e6.
 Origin: https://github.com/PixelExperience/frameworks_opt_net_wifi/commit/1ec98a731a8fc91a29af781ae284a73b6d43ebd2.patch
 Change-Id: I840f9d1304bf0a31e7a6b65db00a37dc3651e4b8
 
-Change-Id: I175124cc554299e628302b05e66b568609db393c
+Change-Id: I3db9d89c8de543f7749e7846c83af229e2d61335
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
- .../android/server/wifi/ClientModeImpl.java   | 28 +++++++++++--------
- 1 file changed, 17 insertions(+), 11 deletions(-)
+ .../android/server/wifi/ClientModeImpl.java   | 29 +++++++++----------
+ 1 file changed, 14 insertions(+), 15 deletions(-)
 
 diff --git a/service/java/com/android/server/wifi/ClientModeImpl.java b/service/java/com/android/server/wifi/ClientModeImpl.java
-index 5248716ac5..575013153f 100644
+index 92cc9ffce6..54e58ca89b 100644
 --- a/service/java/com/android/server/wifi/ClientModeImpl.java
 +++ b/service/java/com/android/server/wifi/ClientModeImpl.java
-@@ -324,6 +324,8 @@ public class ClientModeImpl extends StateMachine implements ClientMode {
+@@ -345,6 +345,8 @@ public class ClientModeImpl extends StateMachine implements ClientMode {
      private DetailedState mNetworkAgentState;
      private final SupplicantStateTracker mSupplicantStateTracker;
  
@@ -34,13 +34,17 @@ index 5248716ac5..575013153f 100644
      // Indicates that framework is attempting to roam, set true on CMD_START_ROAM, set false when
      // wifi connects or fails to connect
      private boolean mIsAutoRoaming = false;
-@@ -1206,18 +1208,22 @@ public class ClientModeImpl extends StateMachine implements ClientMode {
-             loge("getWifiLinkLayerStats called without an interface");
-             return null;
+@@ -1411,23 +1413,20 @@ public class ClientModeImpl extends StateMachine implements ClientMode {
          }
-+        WifiLinkLayerStats stats = null;
          mLastLinkLayerStatsUpdate = mClock.getWallClockMillis();
--        WifiLinkLayerStats stats = mWifiNative.getWifiLinkLayerStats(mInterfaceName);
+         WifiLinkLayerStats stats = null;
+-        if (isPrimary()) {
+-            stats = mWifiNative.getWifiLinkLayerStats(mInterfaceName);
+-        } else {
+-            if (mVerboseLoggingEnabled) {
+-                Log.w(getTag(), "Can't getWifiLinkLayerStats on secondary iface");
+-            }
+-        }
 -        if (stats != null) {
 -            mOnTime = stats.on_time;
 -            mTxTime = stats.tx_time;
@@ -48,23 +52,21 @@ index 5248716ac5..575013153f 100644
 -            mRunningBeaconCount = stats.beacon_rx;
 -            mWifiInfo.updatePacketRates(stats, mLastLinkLayerStatsUpdate);
 -        } else {
--            long mTxPkts = mFacade.getTxPackets(mInterfaceName);
--            long mRxPkts = mFacade.getRxPackets(mInterfaceName);
--            mWifiInfo.updatePacketRates(mTxPkts, mRxPkts, mLastLinkLayerStatsUpdate);
-+        if (mWifiLinkLayerStatsSupported > 0) {
-+            stats = mWifiNative.getWifiLinkLayerStats(mInterfaceName);
-+            if (stats == null) {
-+                mWifiLinkLayerStatsSupported -= 1;
-+            } else {
++	if (mWifiLinkLayerStatsSupported > 0) {
++	    stats = mWifiNative.getWifiLinkLayerStats(mInterfaceName);
++	    if (stats == null) {
++		    mWifiLinkLayerStatsSupported -= 1;
++	    } else {
 +                mOnTime = stats.on_time;
 +                mTxTime = stats.tx_time;
 +                mRxTime = stats.rx_time;
 +                mRunningBeaconCount = stats.beacon_rx;
 +                mWifiInfo.updatePacketRates(stats, mLastLinkLayerStatsUpdate);
 +            }
-+        } else { // LinkLayerStats are broken or unsupported
-+                long mTxPkts = mFacade.getTxPackets(mInterfaceName);
-+                long mRxPkts = mFacade.getRxPackets(mInterfaceName);
++	} else {
+             long mTxPkts = mFacade.getTxPackets(mInterfaceName);
+             long mRxPkts = mFacade.getRxPackets(mInterfaceName);
+-            mWifiInfo.updatePacketRates(mTxPkts, mRxPkts, mLastLinkLayerStatsUpdate);
          }
          mWifiMetrics.incrementWifiLinkLayerUsageStats(mInterfaceName, stats);
          return stats;
