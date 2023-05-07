@@ -1,2 +1,0 @@
-#============= mediaprovider ==============
-allow mediaprovider gpuservice:binder call;

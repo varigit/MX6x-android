@@ -6,6 +6,9 @@ on early-boot
     # Set GPU 3D minimum clock to 3/64
     write /sys/bus/platform/drivers/galcore/gpu3DMinClock 3
 
+    # Set RenderEngine Backend
+    setprop debug.renderengine.backend gles
+
     # change for FSL specific service
     chown root system /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
     chmod 0664 /sys/devices/system/cpu/cpu0/cpufreq/scaling_max_freq
@@ -48,12 +51,12 @@ on property:sys.boot_completed=1
 
 on property:sys.force.suspend=true
     write /sys/class/rfkill/rfkill0/state 0
-    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "${ro.boot.wifisdio}"
 	
 on property:sys.force.suspend=false
-    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "30b40000.mmc"
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "${ro.boot.wifisdio}"
     chmod 665 /sys/class/rfkill/rfkill0/state
     chown system system /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 1
-    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "30b40000.mmc"
+    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "${ro.boot.wifisdio}"
 

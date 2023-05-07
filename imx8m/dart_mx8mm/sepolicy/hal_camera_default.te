@@ -1,5 +1,0 @@
-#============= hal_camera_default ==============
-#allow hal_camera_default hal_thermal_hwservice:hwservice_manager find;
-allow hal_camera_default system_data_file:dir search;
-allow hal_camera_default system_data_file:dir search;
-

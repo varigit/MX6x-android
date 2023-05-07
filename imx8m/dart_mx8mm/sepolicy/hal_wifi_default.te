@@ -1,2 +1,1 @@
-
 allow sysfs_wifi_hal_writable sysfs:file { write };

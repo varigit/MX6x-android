@@ -21,4 +21,6 @@
     <bool name="def_user_setup_complete">true</bool>
     <bool name="def_bluetooth_on">false</bool>
     <bool name="def_stay_on_while_plugged_in">true</bool>
+    <string name="enabled_input_methods" translatable="false">com.android.inputmethod.latin/.LatinIME</string>
+    <string name="default_input_method" translatable="false">com.android.inputmethod.latin/.LatinIME</string>
 </resources>
