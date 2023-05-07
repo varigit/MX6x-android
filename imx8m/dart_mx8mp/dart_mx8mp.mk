@@ -8,7 +8,7 @@ IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 BCM_FIRMWARE_PATH := device/variscite/imx8m/laird-lwb-firmware
 #IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mp
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
-PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=nxp
+PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=Variscite
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=IMX8MP
 
 # configs shared between uboot, kernel and Android rootfs
