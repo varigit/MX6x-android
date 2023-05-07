@@ -139,7 +139,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 fi
 
 dtboimage_file="dtbo-${soc_name}.img"
-bootimage_file="boot.img"
+bootimage_file="boot-imx.img"
 initboot_image_file="init_boot.img"
 vendor_bootimage_file="vendor_boot.img"
 vbmeta_file="vbmeta-${soc_name}.img"
@@ -369,8 +369,8 @@ function create_parts
 	sgdisk -n 2:0:+${DTBO_ROM_SIZE}M                    -c 2:"dtbo_b"      -t 2:8300  $node
 	sgdisk -n 3:0:+${BOOT_ROM_SIZE}M                    -c 3:"boot_a"      -t 3:8300  $node
 	sgdisk -n 4:0:+${BOOT_ROM_SIZE}M                    -c 4:"boot_b"      -t 4:8300  $node
-	sgdisk -n 5:0:+${BOOT_ROM_SIZE}M                    -c 5:"init_boot_a"      -t 5:8300  $node
-	sgdisk -n 6:0:+${BOOT_ROM_SIZE}M                    -c 6:"init_boot_b"      -t 6:8300  $node
+	sgdisk -n 5:0:+${INIT_BOOT_SIZE}M                    -c 5:"init_boot_a"      -t 5:8300  $node
+	sgdisk -n 6:0:+${INIT_BOOT_SIZE}M                    -c 6:"init_boot_b"      -t 6:8300  $node
 	sgdisk -n 7:0:+${VENDOR_BOOT_SIZE}M                 -c 7:"vendor_boot_a"      -t 7:8300  $node
 	sgdisk -n 8:0:+${VENDOR_BOOT_SIZE}M                 -c 8:"vendor_boot_b"      -t 8:8300  $node
 	if [[ "${dynamic_img}" = false ]]; then
@@ -443,7 +443,7 @@ function format_android
 		blue_underlined_bold_echo "Erasing metadata partition"
 		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
 		blue_underlined_bold_echo "Formating userdata partition"
-		mkfs.ext4 -F ${node}${part}14 -Ldata
+		mkfs.f2fs -F ${node}${part}14 -Ldata
 	else
 		blue_underlined_bold_echo "Erasing presistdata partition"
 		dd if=/dev/zero of=${node}${part}11 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
@@ -459,6 +459,7 @@ function format_android
 		mkfs.f2fs -f ${node}${part}10 -l metadata
 
 		blue_underlined_bold_echo "Formating userdata partition"
+		mkfs.f2fs -f ${node}${part}13 -l data
 
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"
