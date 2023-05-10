@@ -72,10 +72,8 @@ function add_imx8mm_menu() {
 	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-legacy.img    (DART-MX8M-MINI on DT8MCustomBoard 1.x)")
 	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-m4.img        (DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with M4 support)")
 	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard.img           (DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mm-var-som-symphony-legacy-m4.img         (VAR-SOM-MX8M-MINI on Symphony-Board V1.4 and below, with M4 support)")
-	img_list+=("dtbo-imx8mm-var-som-symphony-legacy.img            (VAR-SOM-MX8M-MINI on Symphony-Board V1.4 and below)")
-	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img                (VAR-SOM-MX8M-MINI on Symphony-Board V1.4A and above, with M4 support)")
-	img_list+=("dtbo-imx8mm-var-som-symphony.img                   (VAR-SOM-MX8M-MINI on Symphony-Board V1.4A and above)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img                (VAR-SOM-MX8M-MINI on Symphony-Board with M4 support)")
+	img_list+=("dtbo-imx8mm-var-som-symphony.img                   (VAR-SOM-MX8M-MINI on Symphony-Board)")
 }
 
 function add_imx8mq_menu() {
