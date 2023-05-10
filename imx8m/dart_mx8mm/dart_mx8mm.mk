@@ -498,3 +498,6 @@ PRODUCT_COPY_FILES += \
 $(call inherit-product-if-exists, vendor/partner_gms/products/gms.mk)
 PRODUCT_SOONG_NAMESPACES += vendor/partner_gms
 
+# Include imx_rpmsg_pingpong.ko to image
+PRODUCT_COPY_FILES += \
+   $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:/vendor/imx_rpmsg_pingpong.ko
