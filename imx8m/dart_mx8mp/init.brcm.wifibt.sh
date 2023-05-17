@@ -6,6 +6,8 @@
 
 #BT_EN_GPIO=68
 BT_EN_RFKILL=0
+BT_EN_GPIO=38
+BT_EN_GPIO_SOM=41
 
 WIFI_PWR_GPIO=40
 WIFI_PWR_GPIO_SOM=51
@@ -61,10 +63,10 @@ wifi_pre_up()
 		echo out > /sys/class/gpio/gpio${BT_BUF_GPIO}/direction
 	fi
 
-	#if [ ! -d /sys/class/gpio/gpio${BT_EN_GPIO} ]; then
-	#	echo ${BT_EN_GPIO} > /sys/class/gpio/export
-	#	echo out > /sys/class/gpio/gpio${BT_EN_GPIO}/direction
-	#fi
+	if [ ! -d /sys/class/gpio/gpio${BT_EN_GPIO} ]; then
+		echo ${BT_EN_GPIO} > /sys/class/gpio/export
+		echo out > /sys/class/gpio/gpio${BT_EN_GPIO}/direction
+	fi
 }
 
 # Power up WIFI chip
@@ -86,7 +88,7 @@ wifi_up()
 
 	# BT_EN up via rfkill
 	#echo 1 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 1 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	echo 1 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
 
 	# BT_BUF up
 	echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
@@ -99,7 +101,7 @@ wifi_up()
 
 	# BT_EN down
 	#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
 
 	# Bind WIFI device to MMC controller
 	echo ${WIFI_MMC_HOST} > /sys/bus/platform/drivers/sdhci-esdhc-imx/bind
@@ -130,7 +132,7 @@ wifi_down()
 
 	# BT_EN down
 	#echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
-	echo 0 > /sys/class/rfkill/rfkill${BT_EN_RFKILL}/state
+	echo 0 > /sys/class/gpio/gpio${BT_EN_GPIO}/value
 
 	usleep 10000
 

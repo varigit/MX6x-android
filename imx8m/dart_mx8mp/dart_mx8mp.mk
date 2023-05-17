@@ -264,7 +264,7 @@ PRODUCT_PACKAGES += \
 
 # Broadcome WiFi Firmware
 PRODUCT_COPY_FILES += \
-       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:system/etc/bluetooth/bt_vendor.conf
+       $(IMX_DEVICE_PATH)/bluetooth/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -314,7 +314,9 @@ endif
 # ro.product.first_api_level indicates the first api level the device has commercially launched on.
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.product.first_api_level=28 \
-    vendor.typec.legacy=true
+    vendor.typec.legacy=true \
+    ro.rfkilldisabled=1
+
 
 PRODUCT_PACKAGES += \
     libg1 \
