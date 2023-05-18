@@ -172,7 +172,8 @@ PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
 PRODUCT_COPY_FILES += \
-       $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh
+       $(IMX_DEVICE_PATH)/init.brcm.wifibt.sh:vendor/bin/init.brcm.wifibt.sh \
+       $(IMX_DEVICE_PATH)/init.brcm.bt.sh:vendor/bin/init.brcm.bt.sh
 
 # GPU openCL g2d
 PRODUCT_COPY_FILES += \

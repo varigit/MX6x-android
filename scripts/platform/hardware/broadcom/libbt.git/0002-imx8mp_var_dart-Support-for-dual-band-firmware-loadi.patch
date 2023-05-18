@@ -1,0 +1,62 @@
+From 0fbb8d6d71c0be53f36bce1453fad2b4aea57384 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Wed, 17 May 2023 21:16:06 -0700
+Subject: [PATCH 2/2] imx8mp_var_dart: Support for dual band firmware loading
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ src/bt_vendor_brcm.c | 31 +++++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
+
+diff --git a/src/bt_vendor_brcm.c b/src/bt_vendor_brcm.c
+index 3fcdbd4..f321a1f 100644
+--- a/src/bt_vendor_brcm.c
++++ b/src/bt_vendor_brcm.c
+@@ -108,6 +108,7 @@ static int init(const bt_vendor_callbacks_t* p_cb, unsigned char *local_bdaddr)
+     char fw_file_value[PROPERTY_VALUE_MAX];
+     int  fd, sz;
+     char buf[CONF_MAX_LINE_LEN];
++    char product_value[PROPERTY_VALUE_MAX];
+ 
+     ALOGI("init");
+ 
+@@ -165,6 +166,36 @@ static int init(const bt_vendor_callbacks_t* p_cb, unsigned char *local_bdaddr)
+            }
+        }
+     }
++
++    property_get("ro.build.product", product_value, "");
++
++    if (strncmp(product_value,"dart_mx8mp", 10) == 0)
++    {
++        property_get("ro.boot.bt_uart", uart_value, "0");
++        property_get("ro.boot.bt_firmware", fw_file_value, "0");
++        ALOGE("dart_imx8mp/var-som-imx8mp: UART=%s Firmware=%s", uart_value, fw_file_value);
++        if (strcmp(uart_value, "0") != 0)
++        {
++            userial_set_port(NULL, uart_value, 0);
++            memset(buf,'\0', CONF_MAX_LINE_LEN);
++            fd = open(fw_path_value, O_RDONLY);
++            if (fd < 0)
++            {
++                ALOGE("failed to read from %s:(%d)\n", \
++                        fw_path_value, errno);
++            }
++            else
++            {
++                sz = read(fd, &buf, sizeof(buf));
++                close(fd);
++            }
++            if (strcmp(fw_file_value, "0") != 0)
++            {
++                hw_set_patch_file_name(NULL, fw_file_value, 0);
++            }
++        }
++    }
++
+     /* store reference to user callbacks */
+     bt_vendor_cbacks = (bt_vendor_callbacks_t *) p_cb;
+ 
+-- 
+2.25.1
+

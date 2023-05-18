@@ -36,6 +36,7 @@ config_pins()
 		WIFI_EN_GPIO=${WIFI_EN_GPIO_SOM}
 		BT_BUF_GPIO=${BT_BUF_GPIO_SOM}
 		BT_EN_GPIO=${BT_EN_GPIO_SOM}
+		setprop ro.boot.bt_uart "/dev/ttymxc2"
 	fi
 }
 

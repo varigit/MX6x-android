@@ -36,6 +36,13 @@ service init_brcm_wifibt_sh /vendor/bin/init.brcm.wifibt.sh
     disabled
     oneshot
 
+service init_brcm_bt_sh /vendor/bin/init.brcm.bt.sh
+    class main
+    user root
+    group root system
+    disabled
+    oneshot
+
 on init
     start watchdogd
 
@@ -131,7 +138,7 @@ on early-boot
 
     # Prepare for bluetooth
     chmod 665 /sys/class/rfkill/rfkill0/state
-    chown bluetooth bluetooth /sys/class/rfkill/rfkill0/state
+    chown system system /sys/class/rfkill/rfkill0/state
     write /sys/class/rfkill/rfkill0/state 0
 
     # prepare for ril
@@ -340,3 +347,6 @@ on property:ro.boot.vendor.sysrq=1
 # setenv append_bootargs androidboot.usb.debugging=1
 on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
+
+on property:sys.boot_completed=1
+    start init_brcm_bt_sh
