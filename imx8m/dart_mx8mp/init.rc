@@ -136,11 +136,6 @@ on early-boot
 
     setprop persist.service.bdroid.bdaddr 22:22:67:C6:69:73
 
-    # Prepare for bluetooth
-    chmod 665 /sys/class/rfkill/rfkill0/state
-    chown system system /sys/class/rfkill/rfkill0/state
-    write /sys/class/rfkill/rfkill0/state 0
-
     # prepare for ril
     setprop ro.ril.wake_lock_timeout 300
 
