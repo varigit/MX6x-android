@@ -1,19 +1,6 @@
 import /vendor/etc/init/hw/init.${ro.hardware}.usb.rc
 import /vendor/etc/init/hw/init.${ro.hardware}.${ro.boot.soc_type}.rc
 
-service vendor.charger /system/bin/charger
-    class charger
-    user system
-    group system wakelock input
-    capabilities SYS_BOOT
-    file /dev/kmsg w
-    file /sys/fs/pstore/console-ramoops-0 r
-    file /sys/fs/pstore/console-ramoops r
-    file /proc/last_kmsg r
-
-on charger
-    start vendor.charger
-
 on early-init
     # mount the debugfs
     mount debugfs none /sys/kernel/debug/ mode=0755
@@ -31,51 +18,6 @@ on early-init
 
     # Set the density to 160 dpi to match LCD.
     setprop ro.sf.lcd_density 160
-
-on init
-    # cpuctl hierarchy for devices using utilclamp
-    mkdir /dev/cpuctl/foreground
-    mkdir /dev/cpuctl/background
-    mkdir /dev/cpuctl/top-app
-    mkdir /dev/cpuctl/rt
-    mkdir /dev/cpuctl/system
-    mkdir /dev/cpuctl/system-background
-    chown system system /dev/cpuctl
-    chown system system /dev/cpuctl/foreground
-    chown system system /dev/cpuctl/background
-    chown system system /dev/cpuctl/top-app
-    chown system system /dev/cpuctl/rt
-    chown system system /dev/cpuctl/system
-    chown system system /dev/cpuctl/system-background
-    chown system system /dev/cpuctl/tasks
-    chown system system /dev/cpuctl/foreground/tasks
-    chown system system /dev/cpuctl/background/tasks
-    chown system system /dev/cpuctl/top-app/tasks
-    chown system system /dev/cpuctl/rt/tasks
-    chown system system /dev/cpuctl/system/tasks
-    chown system system /dev/cpuctl/system-background/tasks
-    chmod 0664 /dev/cpuctl/tasks
-    chmod 0664 /dev/cpuctl/foreground/tasks
-    chmod 0664 /dev/cpuctl/background/tasks
-    chmod 0664 /dev/cpuctl/top-app/tasks
-    chmod 0664 /dev/cpuctl/rt/tasks
-    chmod 0664 /dev/cpuctl/system/tasks
-    chmod 0664 /dev/cpuctl/system-background/tasks
-
-    # Create a cpu group for NNAPI HAL processes
-    mkdir /dev/cpuctl/nnapi-hal
-    chown system system /dev/cpuctl/nnapi-hal
-    chown system system /dev/cpuctl/nnapi-hal/tasks
-    chmod 0664 /dev/cpuctl/nnapi-hal/tasks
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.min 1
-    write /dev/cpuctl/nnapi-hal/cpu.uclamp.latency_sensitive 1
-
-    # Create a cpu group for camera daemon processes
-    mkdir /dev/cpuctl/camera-daemon
-    chown system system /dev/cpuctl/camera-daemon
-    chown system system /dev/cpuctl/camera-daemon/tasks
-    chmod 0664 /dev/cpuctl/camera-daemon/tasks
-
 
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
@@ -114,6 +56,10 @@ on init && property:vendor.skip.charger_not_need=0
     write /dev/cpuctl/rt/cpu.uclamp.latency_sensitive 1
     write /dev/cpuctl/background/cpu.uclamp.max 50
 
+on late-fs && property:vendor.storageproxyd=trusty && property:vendor.skip.charger_not_need=0
+    start storageproxyd
+    start vendor.oemlock-1-0
+    start confirmationui-1-0
 on late-fs && property:vendor.skip.charger_not_need=0
     # Start keymaster/gatekeeper service
     start vendor.gatekeeper-1-0-${ro.boot.keystore}
@@ -134,6 +80,7 @@ on early-boot && property:vendor.skip.charger_not_need=0
     setprop vendor.sys.hwc.disable     1
     setprop vendor.2d.composition 0
     setprop vendor.hwc.stretch.filter  1
+    setprop vendor.hwc.enable.overlay  1
 
     #viv sdk dir
     setprop vendor.VIVANTE_SDK_DIR /vendor/etc/viv_sdk
@@ -222,10 +169,7 @@ on boot && property:vendor.skip.charger_not_need=0
 service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     -O/data/vendor/wifi/wpa/sockets -puse_p2p_group_interface=1 \
     -g@android:wpa_wlan0
-    interface android.hardware.wifi.supplicant@1.0::ISupplicant default
-    interface android.hardware.wifi.supplicant@1.1::ISupplicant default
-    interface android.hardware.wifi.supplicant@1.2::ISupplicant default
-    interface android.hardware.wifi.supplicant@1.3::ISupplicant default
+    interface aidl android.hardware.wifi.supplicant.ISupplicant/default
     class main
     socket wpa_wlan0 dgram 660 wifi wifi
     disabled

@@ -1,3 +1,1 @@
-allow system_server nfc:file write;
-allow system_server sysfs:file read;
-allow system_server sysfs:file open;
+dontaudit system_server bluetooth:file write;

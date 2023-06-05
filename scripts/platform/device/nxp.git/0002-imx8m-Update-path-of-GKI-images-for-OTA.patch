@@ -1,0 +1,25 @@
+From b3d81cc0e8e7d129e39f83c9f0c4bf481983bdac Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 13 Jun 2023 22:51:41 -0700
+Subject: [PATCH 2/2] imx8m: Update path of GKI images for OTA
+
+---
+ imx8m/BoardConfigCommon.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/imx8m/BoardConfigCommon.mk b/imx8m/BoardConfigCommon.mk
+index 5e610780..40bdabd7 100644
+--- a/imx8m/BoardConfigCommon.mk
++++ b/imx8m/BoardConfigCommon.mk
+@@ -86,7 +86,7 @@ TARGET_BOARD_KERNEL_HEADERS := $(CONFIG_REPO_PATH)/common/kernel-headers
+ 
+ TARGET_IMX_KERNEL ?= false
+ ifeq ($(TARGET_IMX_KERNEL),false)
+-BOARD_PREBUILT_BOOTIMAGE := vendor/nxp/fsl-proprietary/gki/boot.img
++BOARD_PREBUILT_BOOTIMAGE := device/variscite/imx8m/$(TARGET_PRODUCT)/gki/boot.img
+ TARGET_NO_KERNEL := true
+ endif
+ 
+-- 
+2.25.1
+

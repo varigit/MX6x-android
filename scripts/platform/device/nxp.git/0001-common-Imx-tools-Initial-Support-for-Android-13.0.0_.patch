@@ -1,13 +1,15 @@
-From d61a9a12ab4eab1f6a1c12449ad9b9d68eebfe9c Mon Sep 17 00:00:00 2001
+From 32d2bd33916f474dec41e2d7d8d5439ce67899a9 Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Sun, 5 Mar 2023 18:57:26 -0800
-Subject: [PATCH] common: Imx-tools : Initial Support for Android 13.0.0_1.0.0
+Subject: [PATCH 1/2] common: Imx-tools : Initial Support for Android
+ 13.0.0_1.0.0
 
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---
  common/build/Makefile    |  7 ++++---
+ common/build/uboot.mk    |  1 -
  common/tools/imx-make.sh | 22 +++++++++++++++-------
- 2 files changed, 19 insertions(+), 10 deletions(-)
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
 diff --git a/common/build/Makefile b/common/build/Makefile
 index ae046dbc..bde5eaf5 100644
@@ -31,8 +33,20 @@ index ae046dbc..bde5eaf5 100644
  -include ${product_path}/AndroidTee.mk
  -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
  -include ${VVCAM_PATH}/vvcam/vvcam.mk
+diff --git a/common/build/uboot.mk b/common/build/uboot.mk
+index b725d9dc..470d7f02 100644
+--- a/common/build/uboot.mk
++++ b/common/build/uboot.mk
+@@ -151,7 +151,6 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ .PHONY: bootloader $(UBOOT_BIN) $(UBOOTENVSH)
+ 
+ bootloader: $(UBOOT_BIN)
+-	cp -fp $(UBOOT_COLLECTION)/$(BOARD_OTA_BOOTLOADERIMAGE) $(PRODUCT_OUT)/bootloader.img
+ 
+ ifneq ($(TARGET_UBOOT_ENV),)
+ $(UBOOT_ENV_OUT): $(TARGET_UBOOT_ENV) | $(UBOOT_BIN)
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index 535c5b8f..4227ecd0 100755
+index 535c5b8f..9b37f760 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
 @@ -140,11 +140,18 @@ if [ -n "${build_kernel_modules}" ]; then
@@ -96,7 +110,7 @@ index 535c5b8f..4227ecd0 100755
          || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
 -        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ]; then
 +        || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
-+	|| [ ${TARGET_PRODUCT} = "dart_mx8mp"] ; then
++	|| [ ${TARGET_PRODUCT} = "dart_mx8mp" ] || [ ${TARGET_PRODUCT} = "dart_mx8mq" ]; then
              mv ${OUT}/boot.img ${OUT}/boot-imx.img
              make bootimage
          fi

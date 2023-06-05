@@ -18,7 +18,9 @@ HAVE_FSL_IMX_GPU3D := true
 HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
-
+ENABLE_SEC_DMABUF_HEAP := false
+CFG_SECURE_IOCTRL_REGS := false
+BOARD_BOOTLOADER_IN_UPDATE_PACKAGE := false
 SOONG_CONFIG_IMXPLUGIN += \
                           BOARD_VPU_TYPE
 
@@ -29,6 +31,7 @@ SOONG_CONFIG_IMXPLUGIN_BOARD_VPU_ONLY = false
 SOONG_CONFIG_IMXPLUGIN_PREBUILT_FSL_IMX_CODEC = true
 SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 
+IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mq
 # -------@block_memory-------
 USE_ION_ALLOCATOR := true
 USE_GPU_ALLOCATOR := false
@@ -65,6 +68,7 @@ BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
 
+
 # -------@block_security-------
 ENABLE_CFI=false
 
@@ -73,9 +77,21 @@ BOARD_AVB_ALGORITHM := SHA256_RSA4096
 # The testkey_rsa4096.pem is copied from external/avb/test/data/testkey_rsa4096.pem
 BOARD_AVB_KEY_PATH := $(CONFIG_REPO_PATH)/common/security/testkey_rsa4096.pem
 
-BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa2048.pem
-BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA2048
+BOARD_AVB_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_BOOT_ALGORITHM := SHA256_RSA4096
 BOARD_AVB_BOOT_ROLLBACK_INDEX_LOCATION := 2
+
+# Enable chained vbmeta for init_boot images
+BOARD_AVB_INIT_BOOT_KEY_PATH := external/avb/test/data/testkey_rsa4096.pem
+BOARD_AVB_INIT_BOOT_ALGORITHM := SHA256_RSA4096
+BOARD_AVB_INIT_BOOT_ROLLBACK_INDEX_LOCATION := 3
+
+# Use sha256 hashtree
+BOARD_AVB_SYSTEM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_SYSTEM_EXT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_PRODUCT_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
+BOARD_AVB_VENDOR_DLKM_ADD_HASHTREE_FOOTER_ARGS += --hash_algorithm sha256
 
 # -------@block_treble-------
 # Vendor Interface manifest and compatibility
@@ -90,9 +106,14 @@ BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
 BOARD_HOSTAPD_DRIVER         := NL80211
 BOARD_HOSTAPD_PRIVATE_LIB           := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 BOARD_WPA_SUPPLICANT_PRIVATE_LIB    := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
+WIFI_HIDL_FEATURE_DUAL_INTERFACE := false
+
+BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
+BOARD_CUSTOM_BT_CONFIG := $(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)/vnd_config.txt
+BOARD_HAVE_BLUETOOTH_BCM := true
 
 # -------@block_sensor-------
-BOARD_USE_SENSOR_FUSION := true
+BOARD_USE_SENSOR_FUSION := false
 
 # -------@block_kernel_bootimg-------
 BOARD_KERNEL_BASE := 0x40400000
@@ -152,6 +173,7 @@ BOARD_PLAT_PRIVATE_SEPOLICY_DIR += \
 
 BOARD_SEPOLICY_DIRS := \
        $(CONFIG_REPO_PATH)/imx8m/sepolicy \
+       $(CONFIG_REPO_PATH)/imx8m/evk_8mq/sepolicy \
        $(IMX_DEVICE_PATH)/sepolicy
 
 ifeq ($(PRODUCT_IMX_DRM),true)

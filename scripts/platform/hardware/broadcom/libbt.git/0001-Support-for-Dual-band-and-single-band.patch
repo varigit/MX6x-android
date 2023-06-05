@@ -1,4 +1,4 @@
-From 7a6fbcd86ed75f26aae1ef211ba9d13ef41bf527 Mon Sep 17 00:00:00 2001
+From 07cf57bc1b5f45dd397da4e4ebf79b7e452d1e5e Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Sat, 7 Jan 2023 20:00:03 -0800
 Subject: [PATCH 1/2] Support for Dual band and single band

@@ -1,0 +1,57 @@
+From 4e3177fc23b8c7637d9dc41ea852cdde07e78720 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 13 Jun 2023 15:07:14 -0700
+Subject: [PATCH 3/3] camera: Update focus fd for camera focus ioctls
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ camera/CameraDeviceHWLImpl.cpp | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/camera/CameraDeviceHWLImpl.cpp b/camera/CameraDeviceHWLImpl.cpp
+index e7d31ae..250bae7 100644
+--- a/camera/CameraDeviceHWLImpl.cpp
++++ b/camera/CameraDeviceHWLImpl.cpp
+@@ -56,10 +56,6 @@ std::unique_ptr<CameraDeviceHwl> CameraDeviceHwlImpl::Create(
+         return nullptr;
+     }
+ 
+-    ctrl_fd = open(*mDevPath[0], O_RDWR);
+-    if (ctrl_fd < 0) {
+-	ALOGE("%s invalid fd handle", __func__);
+-    }
+     ALOGI("%s: Created CameraDeviceHwlImpl for camera %u", __func__, device->camera_id_);
+ 
+     return std::unique_ptr<CameraDeviceHwl>(device);
+@@ -76,8 +72,6 @@ CameraDeviceHwlImpl::CameraDeviceHwlImpl(
+         mUseCpuEncoder(use_cpu_encoder),
+         physical_device_map_(std::move(physical_devices))
+ {
+-    if (ctrl_fd > 0)
+-       close(ctrl_fd);
+     mDevPath = devPaths;
+     for (int i = 0; i < (int)mDevPath.size(); ++i) {
+         ALOGI("%s, mDevPath[%d] %s", __func__, i, *mDevPath[i]);
+@@ -95,6 +89,10 @@ CameraDeviceHwlImpl::CameraDeviceHwlImpl(
+ 
+     memset(mSensorFormats, 0, sizeof(mSensorFormats));
+     memset(mAvailableFormats, 0, sizeof(mAvailableFormats));
++    ctrl_fd = open(*mDevPath[0], O_RDWR);
++    if (ctrl_fd < 0) {
++        ALOGE("%s invalid fd handle", __func__);
++    }
+ 
+     memset(mPreviewResolutions, 0, sizeof(mPreviewResolutions));
+     memset(mPictureResolutions, 0, sizeof(mPictureResolutions));
+@@ -105,6 +103,8 @@ CameraDeviceHwlImpl::CameraDeviceHwlImpl(
+ 
+ CameraDeviceHwlImpl::~CameraDeviceHwlImpl()
+ {
++    if (ctrl_fd > 0)
++       close(ctrl_fd);
+     if(m_meta) {
+         delete m_meta;
+         m_meta = NULL;
+-- 
+2.25.1
+
