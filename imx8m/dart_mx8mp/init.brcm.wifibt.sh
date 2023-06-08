@@ -245,5 +245,18 @@ echo 0 > /sys/class/gpio/gpio${BT_BUF_GPIO}/value
 # always set property even if wifi failed
 # as property value "1" is expected in early-boot trigger
 setprop sys.brcm.wifibt.completed 1
+# Return true if SOM has 5G WIFI chip
+som_has_5g_wifi()
+{
+	if [ "`cat ${WIFI_SDIO_ID_FILE}`" = "${WIFI_5G_SDIO_ID}" ]; then
+		return 0
+	fi
 
+	return 1
+}
+if som_has_5g_wifi; then
+	setprop ro.boot.bt_firmware "BCM4335C0.hcd"
+else
+	setprop ro.boot.bt_firmware "BCM43430A1.hcd"
+fi
 exit 0

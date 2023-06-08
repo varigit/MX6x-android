@@ -1,0 +1,29 @@
+From d5d0418040f38cf12af5b72a1da00eb2a000d174 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 8 Jun 2023 13:14:35 -0700
+Subject: [PATCH] system/bt: Revert bt initialization timeout from new 2.9
+ seconds back to 8 second
+
+As per Leird Documentation
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ hci/src/hci_layer.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hci/src/hci_layer.cc b/hci/src/hci_layer.cc
+index 80f63de..f2a99ad 100644
+--- a/hci/src/hci_layer.cc
++++ b/hci/src/hci_layer.cc
+@@ -80,7 +80,7 @@ typedef struct {
+ // Using a define here, because it can be stringified for the property lookup
+ // Default timeout should be less than BLE_START_TIMEOUT and
+ // having less than 3 sec would hold the wakelock for init
+-#define DEFAULT_STARTUP_TIMEOUT_MS 2900
++#define DEFAULT_STARTUP_TIMEOUT_MS 8000
+ #define STRING_VALUE_OF(x) #x
+ 
+ // Abort if there is no response to an HCI command.
+-- 
+2.25.1
+

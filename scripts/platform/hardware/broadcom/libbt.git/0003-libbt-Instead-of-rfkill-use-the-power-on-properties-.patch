@@ -1,0 +1,49 @@
+From b8b75d0f8ecf3e717baffd9f0ea9ec70ca6bd33f Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 8 Jun 2023 13:17:24 -0700
+Subject: [PATCH 3/3] libbt: Instead of rfkill use the power on properties to
+ trigger BT init scripts
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ src/upio.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
+
+diff --git a/src/upio.c b/src/upio.c
+index 6d32a33..ddb65ef 100644
+--- a/src/upio.c
++++ b/src/upio.c
+@@ -290,6 +290,22 @@ void upio_cleanup(void)
+ #endif
+ }
+ 
++int setprop_brcm(int on)
++{
++    switch(on)
++    {
++	case UPIO_BT_POWER_ON:
++		property_set("vendor.bluetooth.init", "true");
++		break;
++	case UPIO_BT_POWER_OFF:
++		property_set("vendor.bluetooth.init", "false");
++		break;
++	default:
++		property_set("vendor.bluetooth.init", "true");
++    }
++    sleep(1);
++    return 0;
++}
+ /*******************************************************************************
+ **
+ ** Function        upio_set_bluetooth_power
+@@ -318,6 +334,7 @@ int upio_set_bluetooth_power(int on)
+             buffer = '1';
+             break;
+     }
++    setprop_brcm(on);
+ 
+     if (is_emulator_context())
+     {
+-- 
+2.25.1
+

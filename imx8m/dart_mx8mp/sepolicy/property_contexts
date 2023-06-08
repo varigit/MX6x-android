@@ -8,3 +8,4 @@ ro.boot.bt_firmware u:object_r:exported_default_prop:s0 exact string
 ro.boot.bt_uart u:object_r:exported_default_prop:s0 exact string
 ro.boot.bt_sdio_id u:object_r:exported_default_prop:s0 exact string
 ro.rfkilldisabled u:object_r:exported_default_prop:s0 exact string
+vendor.bluetooth.init u:object_r:public_vendor_default_prop:s0

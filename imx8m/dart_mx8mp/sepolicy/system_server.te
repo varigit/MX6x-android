@@ -1,1 +1,2 @@
 allow system_server nfc:file write;
+dontaudit system_server bluetooth:file write;
