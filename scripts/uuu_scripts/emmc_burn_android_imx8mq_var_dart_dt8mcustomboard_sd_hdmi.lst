@@ -35,6 +35,8 @@ FB: flash dtbo_a dtbo-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img
 FB: flash dtbo_b dtbo-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img
 FB: flash boot_a boot.img
 FB: flash boot_b boot.img
+FB: flash init_boot_a init_boot.img
+FB: flash init_boot_b init_boot.img
 FB: flash vbmeta_a vbmeta-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img --disable-verity
 FB: flash vbmeta_b vbmeta-imx8mq-var-dart-dt8mcustomboard-sd-hdmi.img --disable-verity
 FB[-t 600000]: flash super super.img
