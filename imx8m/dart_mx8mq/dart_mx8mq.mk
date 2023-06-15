@@ -514,3 +514,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # trusty loadable apps
 PRODUCT_COPY_FILES += \
     vendor/nxp/fsl-proprietary/uboot-firmware/imx8m/confirmationui-imx8mq.app:/vendor/firmware/tee/confirmationui.app
+
+# Include imx_rpmsg_pingpong.ko to image
+PRODUCT_COPY_FILES += \
+   $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:/vendor/imx_rpmsg_pingpong.ko
