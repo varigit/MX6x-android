@@ -51,6 +51,9 @@ function rename_remoteproc_images {
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8mq-var-dart"* ]]; then
+		cp -ar device/variscite/imx8m/dart_mx8mq/*.bin.debug ${imagesdir}
+		cp ${imagesdir}/${mcu_os_demo_file_8mq_dart}	${imagesdir}/${mcu_os_demo_file}
 	fi
 }
 
@@ -148,6 +151,7 @@ superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
 mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
+mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 
 block=`basename $node`
 part=""
@@ -415,7 +419,7 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 	
-	dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+	dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync,nocreat
 	sync
 }
 
@@ -424,27 +428,27 @@ function format_android
 	echo
 	if [[ "${dynamic_img}" = false ]]; then
 		blue_underlined_bold_echo "Erasing presistdata partition"
-		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Erasing fbmisc partition"
-		dd if=/dev/zero of=${node}${part}15 bs=1M count=${FBMISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}15 bs=1M count=${FBMISC_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Erasing misc partition"
-		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Erasing metadata partition"
-		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Formating userdata partition"
-		mkfs.ext4 -F ${node}${part}14 -Ldata
+		mkfs.ext4 -F ${node}${part}14 -Luserdata
 	else
 		blue_underlined_bold_echo "Erasing presistdata partition"
-		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}9 bs=1M count=${PRESISTDATA_SIZE} conv=fsync,nocreat
 		mkfs.ext4 -F ${node}${part}9 -Lmetadata
 		blue_underlined_bold_echo "Erasing fbmisc partition"
-		dd if=/dev/zero of=${node}${part}12 bs=1M count=${FBMISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}12 bs=1M count=${FBMISC_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Erasing misc partition"
-		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}7 bs=1M count=${MISC_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Erasing metadata partition"
-		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync
+		dd if=/dev/zero of=${node}${part}8 bs=1M count=${METADATA_SIZE} conv=fsync,nocreat
 		blue_underlined_bold_echo "Formating userdata partition"
-		mkfs.ext4 -F ${node}${part}11 -Ldata
+		mkfs.ext4 -F ${node}${part}11 -Luserdata
 
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"

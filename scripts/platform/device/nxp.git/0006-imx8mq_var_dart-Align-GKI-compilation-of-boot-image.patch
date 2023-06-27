@@ -1,0 +1,26 @@
+From 0af3f89cb0ce369dc35bc93bc252d017a119949a Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 27 Jun 2023 00:00:24 -0700
+Subject: [PATCH] imx8mq_var_dart: Align GKI compilation of boot image
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 11006ae2..bc0bdbab 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -202,7 +202,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] || [ ${TARGET_PRODUCT} = "dart_mx8mm" ] \
+-	|| [ ${TARGET_PRODUCT} = "dart_mx8mp"] ; then
++	|| [ ${TARGET_PRODUCT} = "dart_mx8mp" ] || [ ${TARGET_PRODUCT} = "dart_mx8mq" ] ; then
+             mv ${OUT}/boot.img ${OUT}/boot-imx.img
+             # sign prebuilt gki boot.img
+             make bootimage
+-- 
+2.34.1
+
