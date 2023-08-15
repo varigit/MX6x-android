@@ -344,10 +344,13 @@ on property:ro.boot.usb.debugging=1
     setprop persist.sys.usb.config adb
 
 on property:sys.boot_completed=1
+    start init_brcm_wifibt_sh
     start init_brcm_bt_sh
 
 on property:vendor.bluetooth.init=true
+    start init_brcm_wifibt_sh
     start init_brcm_bt_sh
 
 on property:vendor.bluetooth.init=false
+    start init_brcm_wifibt_sh
     start init_brcm_bt_sh
