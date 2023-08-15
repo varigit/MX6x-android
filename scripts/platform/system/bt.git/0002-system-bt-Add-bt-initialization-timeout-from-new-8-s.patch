@@ -1,0 +1,27 @@
+From 7172226e01b72010417b7a062d76bbc51b82d087 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Mon, 14 Aug 2023 23:41:43 -0700
+Subject: [PATCH] system/bt: Add bt initialization timeout from new 8 seconds
+ to 10 second
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ hci/src/hci_layer.cc | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hci/src/hci_layer.cc b/hci/src/hci_layer.cc
+index f2a99ad..55652aa 100644
+--- a/hci/src/hci_layer.cc
++++ b/hci/src/hci_layer.cc
+@@ -80,7 +80,7 @@ typedef struct {
+ // Using a define here, because it can be stringified for the property lookup
+ // Default timeout should be less than BLE_START_TIMEOUT and
+ // having less than 3 sec would hold the wakelock for init
+-#define DEFAULT_STARTUP_TIMEOUT_MS 8000
++#define DEFAULT_STARTUP_TIMEOUT_MS 10000
+ #define STRING_VALUE_OF(x) #x
+ 
+ // Abort if there is no response to an HCI command.
+-- 
+2.25.1
+
