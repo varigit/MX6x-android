@@ -246,5 +246,3 @@ LOW_MEMORY := false
 # -------@block_security-------
 #Enable this to include trusty support
 PRODUCT_IMX_TRUSTY := true
-
-BOARD_OTA_BOOTLOADERIMAGE := u-boot-imx8mp-var-dart.imx

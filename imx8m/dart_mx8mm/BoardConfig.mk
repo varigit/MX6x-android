@@ -37,6 +37,8 @@ SOONG_CONFIG_IMXPLUGIN_POWERSAVE = false
 SOONG_CONFIG_IMXPLUGIN_CFG_SECURE_IOCTRL_REGS = false
 SOONG_CONFIG_IMXPLUGIN_ENABLE_SEC_DMABUF_HEAP = false
 
+BOARD_BOOTLOADER_IN_UPDATE_PACKAGE := false
+
 IMX_DEVICE_PATH := device/variscite/imx8m/dart_mx8mm
 # -------@block_memory-------
 USE_ION_ALLOCATOR := true
@@ -74,7 +76,6 @@ BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
 
-AB_OTA_PARTITIONS += bootloader
 # -------@block_security-------
 ENABLE_CFI=false
 
