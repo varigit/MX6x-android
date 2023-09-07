@@ -1,7 +1,7 @@
-From a45556ccad7f055e4c4d3cb39c0174993af63384 Mon Sep 17 00:00:00 2001
+From 87c98ef332148d7879a9fcd40224ad4105dadace Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Thu, 16 Mar 2023 21:40:17 -0700
-Subject: [PATCH 2/2]  support for overwriting the /dev/ttymxcX based on .conf
+Subject: [PATCH 2/3] support for overwriting the /dev/ttymxcX based on .conf
  file
 
 Change-Id: Ibd4977319fd7e21beb759f4dcc4f7cdd72d13454
