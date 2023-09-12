@@ -1,0 +1,24 @@
+From 0d7996cd820d96c8d66f9496e928a0e9151ab472 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 12 Sep 2023 15:45:58 -0700
+Subject: [PATCH 2/2] imx8: Don't copy the bootloader.img for Variscite builds
+
+---
+ common/build/uboot.mk | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/common/build/uboot.mk b/common/build/uboot.mk
+index 4e15dab1..2ad6026f 100644
+--- a/common/build/uboot.mk
++++ b/common/build/uboot.mk
+@@ -150,7 +150,6 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ .PHONY: bootloader $(UBOOT_BIN) $(UBOOTENVSH)
+ 
+ bootloader: $(UBOOT_BIN)
+-	cp -fp $(UBOOT_COLLECTION)/$(BOARD_OTA_BOOTLOADERIMAGE) $(PRODUCT_OUT)/bootloader.img
+ 
+ ifneq ($(TARGET_UBOOT_ENV),)
+ $(UBOOT_ENV_OUT): $(TARGET_UBOOT_ENV) | $(UBOOT_BIN)
+-- 
+2.25.1
+
