@@ -1,0 +1,29 @@
+From de784b3bea388f786bf1ebe344a04d9548227c9d Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Thu, 7 Sep 2023 07:19:57 -0700
+Subject: [PATCH 3/3] bluetooth: Update generic hw_settlement delay to 200 msec
+
+This is required for LWB modules
+
+Change-Id: Ib21da6736f721a9ebbce9d107e1b8d8ca1cde10b
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ src/hardware.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/hardware.c b/src/hardware.c
+index 8f96d60..0ea77b0 100644
+--- a/src/hardware.c
++++ b/src/hardware.c
+@@ -234,7 +234,7 @@ static uint8_t bt_sco_i2spcm_param[SCO_I2SPCM_PARAM_SIZE] =
+ static const fw_settlement_entry_t fw_settlement_table[] = {
+     {"BCM43241", 200},
+     {"BCM43341", 100},
+-    {(const char *) NULL, 100}  // Giving the generic fw settlement delay setting.
++    {(const char *) NULL, 200}  // Giving the generic fw settlement delay setting.
+ };
+ 
+ 
+-- 
+2.25.1
+
