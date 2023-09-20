@@ -1,4 +1,13 @@
-allow hal_bluetooth_default system_file:file read;
-allow hal_bluetooth_default system_file:file open;
-allow hal_bluetooth_default system_file:file getattr;
 allow hal_bluetooth_default sysfs_rfkill:file write;
+allow hal_bluetooth_default sysfs:file { write };
+allow hal_bluetooth_default hal_bluetooth_default:unix_stream_socket { ioctl };
+allow hal_bluetooth_default sysfs_rfkill:file { write };
+# connect to the UART
+# vendor.wc_transport.start_hci and friends
+set_prop(hal_bluetooth_default, vendor_bluetooth_prop)
+# talk to system_server to set priority
+allow hal_bluetooth_default fwk_scheduler_hwservice:hwservice_manager {find};
+allow hal_bluetooth_default system_server:binder {call};
+# Use bluetooth device
+allow hal_bluetooth_default hci_attach_dev:chr_file rw_file_perms;
+allow hal_bluetooth_default hci_attach_dev:chr_file {open read write ioctl};

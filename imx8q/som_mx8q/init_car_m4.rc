@@ -1,0 +1,17 @@
+on property:vendor.vehicle.register=1
+    start boot_completed_core_sh
+
+on property:vendor.all.system_server.ready=1
+    # register the vehicle_rpmsg_m4 on raw android.
+    write /sys/devices/platform/vehicle_rpmsg_m4/register 1
+    # register the vehicle_rpmsg_m4 on android running in xen.
+    write /sys/devices/platform/passthrough/passthrough\:vehicle_rpmsg_m4/register  1
+
+on early-init
+   setprop vendor.all.system_server.ready 0
+
+on property:sys.boot_completed=1 && property:vendor.all.system_server.ready=0
+    # register the vehicle_rpmsg_m4 on raw android.
+    write /sys/devices/platform/vehicle_rpmsg_m4/register 1
+    # register the vehicle_rpmsg_m4 on android running in xen.
+    write /sys/devices/platform/passthrough/passthrough\:vehicle_rpmsg_m4/register  1

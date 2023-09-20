@@ -32,6 +32,9 @@ PRODUCT_IMX_TRUSTY := true
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
     $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
+    $(KERNEL_OUT)/drivers/rtc/rtc-ds1307.ko \
+    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko
 
 ifeq ($(PRODUCT_IMX_CAR),true)
 BOARD_VENDOR_KERNEL_MODULES += \

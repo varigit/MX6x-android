@@ -19,7 +19,7 @@ FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=4096
 VENDOR_BOOT_SIZE=64
-FIRMWARE_SIZE=1
+FIRMWARE_SIZE=8
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
 som=""
@@ -556,7 +556,9 @@ function format_android
 		blue_underlined_bold_echo "Erasing metadata partition"
 		mkfs.f2fs -f ${node}${part}10 -l metadata
 
+		# For Android 13.0.0_1.2.0 encryption otpion is must
 		blue_underlined_bold_echo "Formating userdata partition"
+		mkfs.f2fs -f ${node}${part}13  -O encrypt -l userdata
 
 		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			blue_underlined_bold_echo "Formating firmware partition"
@@ -632,13 +634,7 @@ function install_android
 		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
-			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}17 /tmp/firmware_mnt
-			mkdir -p /tmp/firmware_mnt/firmware/hdp
-			cp ${imagesdir}/*.bin /tmp/firmware_mnt/firmware/hdp
-			sync;
-			umount /tmp/firmware_mnt
-			rm -rf /tmp/firmware_mnt
+			dd if=${imagesdir}/firmware.img of=${node}${part}17 bs=1M
 		fi
 	fi
 

@@ -1,4 +1,9 @@
 {
+    "HotplugCPUs":[
+            "cpu3",
+            "cpu4",
+            "cpu5"
+    ],
     "Sensors":[
         {
             "Name":"cpu-thermal0",
@@ -6,11 +11,11 @@
             "HotThreshold":[
                 "NAN",
                 "NAN",
-                "NAN",
+                102,
                 107,
-                127,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -31,11 +36,11 @@
             "HotThreshold":[
                 "NAN",
                 "NAN",
-                "NAN",
+                102,
                 107,
-                127,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -58,9 +63,9 @@
                 "NAN",
                 "NAN",
                 107,
-                127,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -83,9 +88,9 @@
                 "NAN",
                 "NAN",
                 107,
-                127,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -108,9 +113,9 @@
                 "NAN",
                 "NAN",
                 107,
-                127,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -132,10 +137,10 @@
                 "NAN",
                 "NAN",
                 "NAN",
-                110,
-                125,
+                107,
+                112,
                 "NAN",
-                "NAN"
+                122
             ],
             "HotHysteresis":[
                 2.0,
@@ -160,7 +165,7 @@
                 "NAN",
                 "NAN",
                 "NAN",
-                "NAN"
+                122
             ],
             "VrThreshold":"NAN",
             "Multiplier":0.001,
@@ -169,36 +174,16 @@
     ],
     "CoolingDevices":[
         {
-            "Name":"thermal-cpufreq-0",
+            "Name":"cpufreq-cpu0",
             "Type": "CPU"
         },
         {
-            "Name":"thermal-cpufreq-1",
+            "Name":"cpufreq-cpu4",
             "Type":"CPU"
         },
         {
-            "Name":"thermal-devfreq-0",
-            "Type":"CPU"
-        },
-        {
-            "Name":"thermal-devfreq-1",
-            "Type":"CPU"
-        },
-        {
-            "Name":"thermal-devfreq-2",
+            "Name":"thermal-gpufreq-0",
             "Type":"GPU"
-        },
-        {
-            "Name":"thermal-devfreq-3",
-            "Type":"GPU"
-        },
-        {
-            "Name":"thermal-devfreq-4",
-            "Type":"UNKNOWN"
-        },
-        {
-            "Name":"thermal-devfreq-5",
-            "Type":"CPU"
         }
     ]
 }

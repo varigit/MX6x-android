@@ -1,0 +1,31 @@
+From 44c0f1cffb7afbb1051e9873d0e5a18dbe2f9968 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 19 Sep 2023 21:50:13 -0700
+Subject: [PATCH 6/6] firmware: Create firmware.img to generate image
+
+- This is required to load firmware at bootup time via u-boot for imx8qm
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 32babd0..9a237b5 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -208,6 +208,11 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+             make bootimage
+         fi
+     fi
++
++    if [ ${TARGET_PRODUCT} = "som_mx8qm" ]; then
++	echo "Generating firmware.img for HDMI and DP"
++	make_ext4fs -l 8M -L firmware out/target/product/som_mx8q/firmware.img out/target/product/som_mx8q/vendor/firmware/
++    fi
+ fi
+ 
+ # copy the uboot output to ${OUT_DIR}
+-- 
+2.25.1
+

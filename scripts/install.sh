@@ -40,9 +40,9 @@ LIBBT=$(readlink -f "${ANDROID_DIR}/hardware/broadcom/libbt")
 SEPOLICY=$(readlink -f "${ANDROID_DIR}/system/sepolicy")
 
 SC_MX8_FAMILY=$1
-readonly SCFW_BRANCH="1.6.0"
+readonly SCFW_BRANCH="1.15.0"
 readonly SRCREV_8X="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
-readonly SRCREV_8M="9626cacced29ffa24b06847f1e54fc4eb137a282"
+readonly SRCREV_8M="af1d8f69335e079e249dc5933453a933d0a79dcd"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
 readonly PRE_BUILTS_GCC_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
@@ -126,7 +126,7 @@ function scfw_tools_setup()
 
 	cd ${PRE_BUILTS_GCC_PATH}
 	if [[ ! -d "imx-sc-firmware" ]] ; then
-		git clone git://github.com/varigit/imx-sc-firmware.git
+		git clone https://github.com/varigit/imx-sc-firmware.git
 	fi
 
 	if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then

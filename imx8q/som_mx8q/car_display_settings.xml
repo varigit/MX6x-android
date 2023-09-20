@@ -1,0 +1,23 @@
+<display-settings>
+	<!-- Type of identifier to use: 1 = physical port number, 0 = uniqueId. -->
+	<config identifier="1" />
+	<!-- Primary screen has system decorations and IME enabled by default. -->
+	<!-- Cluster screen -->
+	<display name="port:1"
+		forcedDensity="320" />
+	<!-- Rear seats - enable system decor and IME-->
+	<display name="port:2"
+		shouldShowSystemDecors="true"
+		shouldShowIme="true"
+		forcedDensity="240" />
+	<!-- Repeat for second rear seat at port 3 -->
+	<display name="port:3"
+		shouldShowSystemDecors="true"
+		shouldShowIme="true"
+		forcedDensity="240" />
+	<!-- Repeat for second rear seat at port 3 -->
+	<display name="port:4"
+		shouldShowSystemDecors="true"
+		shouldShowIme="true"
+		forcedDensity="240" />
+</display-settings>

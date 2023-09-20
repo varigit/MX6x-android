@@ -11,8 +11,9 @@
   "camera_metadata": [
     {
       "camera_type": "back",
-      "camera_name": "mxc-isi-cap",
+      "camera_name": "mxc_isi.0.capture",
       "orientation": "0",
+      "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "2592",
       "ActiveArrayHeight": "1944",
@@ -22,8 +23,9 @@
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
       "MaxJpegSize": "6291456",
-      "MinFrameDuration": "33331760",
+      "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
+      "MinFrameDurationBlob5M": "600000000",
       "OmitFrame": [
           {
               "width": "2592",
@@ -34,8 +36,9 @@
     },
     {
       "camera_type": "front",
-      "camera_name": "mxc-isi-cap",
+      "camera_name": "mxc_isi.4.capture",
       "orientation": "0",
+      "mplane": "1",
       "buffer_type": "dma",
       "ActiveArrayWidth": "2592",
       "ActiveArrayHeight": "1944",
@@ -45,8 +48,9 @@
       "PhysicalHeight": "2.7216",
       "FocalLength": "3.37",
       "MaxJpegSize": "6291456",
-      "MinFrameDuration": "33331760",
+      "MinFrameDuration": "33333333",
       "MaxFrameDuration": "300000000",
+      "MinFrameDurationBlob5M": "600000000",
       "OmitFrame": [
           {
               "width": "2592",

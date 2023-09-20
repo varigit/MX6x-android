@@ -1,0 +1,28 @@
+From f081503ac25fb2b3a10cd7b4b980950f41e289a1 Mon Sep 17 00:00:00 2001
+From: mohit <mohit.p@variscite.com>
+Date: Tue, 1 Aug 2023 14:44:00 -0700
+Subject: [PATCH 3/6] Android: Changes required to compile SCFW
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 9b37f76..a090b44 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -117,6 +117,10 @@ for arg in ${args[*]} ; do
+     esac
+ done
+ 
++if [ ${TARGET_PRODUCT} = "som_mx8qx" ]; then
++	source $ANDROID_BUILD_TOP/device/variscite/imx8q/som_mx8q/uboot-firmware/scfw_build.sh ${TARGET_PRODUCT}
++fi
++
+ # if bootloader and kernel not in arguments, all need to be made
+ if [ "${build_bootloader}" = "" ] && [ "${build_kernel}" = "" ] && \
+         [ "${build_kernel_modules}" = "" ] && [ "${build_kernel_dts}" = "" ] && \
+-- 
+2.25.1
+

@@ -1,0 +1,85 @@
+From dbad046e0c87f5de9436aad8d72f85d56191fc30 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 19 Sep 2023 21:46:31 -0700
+Subject: [PATCH 5/6] common: Add firmware partition for DP and HDMI
+
+---
+ common/partition/device-partitions-13GB-ab.bpt       | 6 ++++++
+ common/partition/device-partitions-13GB-ab_super.bpt | 6 ++++++
+ common/partition/device-partitions-28GB-ab.bpt       | 8 +++++++-
+ common/partition/device-partitions-28GB-ab_super.bpt | 8 +++++++-
+ 4 files changed, 26 insertions(+), 2 deletions(-)
+
+diff --git a/common/partition/device-partitions-13GB-ab.bpt b/common/partition/device-partitions-13GB-ab.bpt
+index b1cd7cd..f2c8e0d 100644
+--- a/common/partition/device-partitions-13GB-ab.bpt
++++ b/common/partition/device-partitions-13GB-ab.bpt
+@@ -83,6 +83,12 @@
+             "size": "1 MiB",
+             "guid": "auto",
+             "type_guid": "7d6ea677-fe98-4ffe-9771-f5c3ef6d282c"
++        },
++        {
++            "label": "firmware",
++            "size": "8 MiB",
++            "guid": "auto",
++	    "type_guid": "linux_fs"
+          }
+     ]
+ }
+diff --git a/common/partition/device-partitions-13GB-ab_super.bpt b/common/partition/device-partitions-13GB-ab_super.bpt
+index 1f23a41..f5298fc 100644
+--- a/common/partition/device-partitions-13GB-ab_super.bpt
++++ b/common/partition/device-partitions-13GB-ab_super.bpt
+@@ -75,6 +75,12 @@
+             "size": "1 MiB",
+             "guid": "auto",
+             "type_guid": "7d6ea677-fe98-4ffe-9771-f5c3ef6d282c"
++        },
++        {
++            "label": "firmware",
++            "size": "8 MiB",
++            "guid": "auto",
++	    "type_guid": "linux_fs"
+          }
+     ]
+ }
+diff --git a/common/partition/device-partitions-28GB-ab.bpt b/common/partition/device-partitions-28GB-ab.bpt
+index e965903..03f143b 100644
+--- a/common/partition/device-partitions-28GB-ab.bpt
++++ b/common/partition/device-partitions-28GB-ab.bpt
+@@ -83,6 +83,12 @@
+             "size": "1 MiB",
+             "guid": "auto",
+             "type_guid": "7d6ea677-fe98-4ffe-9771-f5c3ef6d282c"
+-        }
++        },
++        {
++            "label": "firmware",
++            "size": "1 MiB",
++            "guid": "auto",
++	    "type_guid": "linux_fs"
++         }
+     ]
+ }
+diff --git a/common/partition/device-partitions-28GB-ab_super.bpt b/common/partition/device-partitions-28GB-ab_super.bpt
+index 741500a..254d119 100644
+--- a/common/partition/device-partitions-28GB-ab_super.bpt
++++ b/common/partition/device-partitions-28GB-ab_super.bpt
+@@ -75,6 +75,12 @@
+             "size": "1 MiB",
+             "guid": "auto",
+             "type_guid": "7d6ea677-fe98-4ffe-9771-f5c3ef6d282c"
+-        }
++        },
++        {
++            "label": "firmware",
++            "size": "8 MiB",
++            "guid": "auto",
++	    "type_guid": "linux_fs"
++         }
+     ]
+ }
+-- 
+2.25.1
+

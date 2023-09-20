@@ -32,7 +32,7 @@ FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=4096
 VENDOR_BOOT_SIZE=64
-FIRMWARE_SIZE=1
+FIRMWARE_SIZE=8
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
 
@@ -540,13 +540,7 @@ function install_android
 		if [[ "${soc_name}" = *"mx8qm"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
-			mkdir -p /tmp/firmware_mnt
-			mount ${node}${part}17 /tmp/firmware_mnt
-			mkdir -p /tmp/firmware_mnt/firmware
-			cp -ar ${imagesdir}/vendor/firmware/hdp /tmp/firmware_mnt/firmware
-			sync;
-			umount /tmp/firmware_mnt
-			rm -rf /tmp/firmware_mnt
+			dd if=${imagesdir}/firmware.img of=${node}${part}17 bs=1M
 		fi
 	fi
 

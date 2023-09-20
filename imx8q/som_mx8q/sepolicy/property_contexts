@@ -1,8 +1,6 @@
 # public_vendor_system_prop
 # They are public_vendor_system_props for vendor-specific extension.
-sys.brcm.wifibt.completed    u:object_r:public_vendor_system_prop:s0
-ro.boot.board u:object_r:exported_default_prop:s0 exact string
-ro.boot.bt_sdio u:object_r:exported_default_prop:s0 exact string
-ro.boot.bt_firmware u:object_r:exported_default_prop:s0 exact string
-ro.boot.bt_uart u:object_r:exported_default_prop:s0 exact string
-ro.boot.bt_sdio_id u:object_r:exported_default_prop:s0 exact string
+ro.boot.vendor.board    u:object_r:vendor_public_default_prop:s0 exact string
+vendor.force.suspend 	u:object_r:vendor_public_default_prop:s0
+ro.rfkilldisabled 	u:object_r:vendor_public_default_prop:s0 exact string
+vendor.bluetooth.init   u:object_r:vendor_public_default_prop:s0
