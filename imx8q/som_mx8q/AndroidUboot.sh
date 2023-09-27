@@ -99,10 +99,10 @@ build_imx_uboot()
                MKIMAGE_PLATFORM=iMX8QX
                SCFW_PLATFORM=8qx
                ATF_PLATFORM=imx8qx
-               if [ `echo $2 | cut -d '-' -f2` = "c0" ] || [ "`echo $2 | cut -d '-' -f3`" = "c0" ]; then
-                       REV=C0
-               else
+               if [ `echo $2 | cut -d '-' -f2` = "b0" ] || [ "`echo $2 | cut -d '-' -f3`" = "b0" ]; then
                        REV=B0
+               else
+                       REV=C0
                fi
                if [ `echo $2 | rev | cut -d '-' -f1` = "uuu" ]; then
                        FLASH_TARGET=flash_spl

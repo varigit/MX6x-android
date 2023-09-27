@@ -11,11 +11,12 @@ PRODUCT_COPY_FILES += \
        $(IMX_DEVICE_PATH)/bluetooth/qm/bt_vendor.conf:vendor/etc/bluetooth/bt_vendor.conf
 
 PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/init.imx8qm.init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.rc \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/dpfw.bin:vendor/firmware/hdp/dpfw.bin \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:vendor/firmware/hdp/hdmitxfw.bin \
     $(FSL_PROPRIETARY_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin:vendor/firmware/hdp/hdmirxfw.bin \
     $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qm.rc \
-    $(IMX_DEVICE_PATH)/ueventd.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/ueventd.rc
+    $(IMX_DEVICE_PATH)/ueventd.imx8qm.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
 
 BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-symphony-lvds.img
 

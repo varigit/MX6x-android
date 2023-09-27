@@ -35,8 +35,6 @@ endif
 PRODUCT_VENDOR_PROPERTIES += ro.soc.manufacturer=nxp
 PRODUCT_VENDOR_PROPERTIES += ro.soc.model=IMX8Q
 PRODUCT_VENDOR_PROPERTIES += ro.crypto.metadata_init_delete_all_keys.enabled=true
-PRODUCT_VENDOR_PROPERTIES += vendor.typec.legacy=true \
-			     ro.rfkilldisabled=1
 # -------@block_treble-------
 PRODUCT_FULL_TREBLE_OVERRIDE := true
 
@@ -127,7 +125,6 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/ueventd.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc \
     $(CONFIG_REPO_PATH)/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh
 
 # -------@block_storage-------
@@ -584,7 +581,6 @@ PRODUCT_COPY_FILES += \
 endif #PRODUCT_IMX_CAR_M4
 else
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.rc \
     $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
   PRODUCT_COPY_FILES += \
