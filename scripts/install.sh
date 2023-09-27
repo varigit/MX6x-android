@@ -41,7 +41,7 @@ SEPOLICY=$(readlink -f "${ANDROID_DIR}/system/sepolicy")
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.15.0"
-readonly SRCREV_8X="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
+readonly SRCREV_8X="5693a7343c1cfda046e5a29b381558d147bf82af"
 readonly SRCREV_8M="af1d8f69335e079e249dc5933453a933d0a79dcd"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
