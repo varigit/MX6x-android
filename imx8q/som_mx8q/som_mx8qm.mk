@@ -18,7 +18,7 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qm.rc \
     $(IMX_DEVICE_PATH)/ueventd.imx8qm.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
 
-BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-symphony-lvds.img
+BOARD_PREBUILT_DTBOIMAGE := out/target/product/som_mx8q/dtbo-imx8qm-var-som-lvds.img
 
 
 ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
