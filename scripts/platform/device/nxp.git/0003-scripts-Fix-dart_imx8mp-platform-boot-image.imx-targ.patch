@@ -1,0 +1,26 @@
+From 4bb8fd33bc92d9446fc268e24ed1e803e5840992 Mon Sep 17 00:00:00 2001
+From: Harshesh Valera <harshesh.v@variscite.com>
+Date: Tue, 7 Nov 2023 01:41:40 -0800
+Subject: [PATCH 3/3] scripts: Fix dart_imx8mp platform boot-image.imx target
+
+Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
+---
+ common/tools/imx-make.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 4227ecd0..26b8b8da 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -199,7 +199,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+-	|| [ ${TARGET_PRODUCT} = "dart_mx8mp"] ; then
++	|| [ ${TARGET_PRODUCT} = "dart_mx8mp" ] ; then
+             mv ${OUT}/boot.img ${OUT}/boot-imx.img
+             make bootimage
+         fi
+-- 
+2.25.1
+

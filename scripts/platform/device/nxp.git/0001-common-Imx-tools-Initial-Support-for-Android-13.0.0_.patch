@@ -1,7 +1,8 @@
-From d61a9a12ab4eab1f6a1c12449ad9b9d68eebfe9c Mon Sep 17 00:00:00 2001
+From 79db700a65b0850d91b2419d4666c8d4354c637c Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Sun, 5 Mar 2023 18:57:26 -0800
-Subject: [PATCH] common: Imx-tools : Initial Support for Android 13.0.0_1.0.0
+Subject: [PATCH 1/3] common: Imx-tools : Initial Support for Android
+ 13.0.0_1.0.0
 
 Signed-off-by: Harshesh Valera <harshesh.v@variscite.com>
 ---

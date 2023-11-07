@@ -1,7 +1,7 @@
-From 0d7996cd820d96c8d66f9496e928a0e9151ab472 Mon Sep 17 00:00:00 2001
+From 690941988a643cb6cc0d30d9813749791f005b1b Mon Sep 17 00:00:00 2001
 From: Harshesh Valera <harshesh.v@variscite.com>
 Date: Tue, 12 Sep 2023 15:45:58 -0700
-Subject: [PATCH 2/2] imx8: Don't copy the bootloader.img for Variscite builds
+Subject: [PATCH 2/3] imx8: Don't copy the bootloader.img for Variscite builds
 
 ---
  common/build/uboot.mk | 1 -
