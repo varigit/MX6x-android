@@ -1,0 +1,29 @@
+/dev/block/by-name/presistdata 0600   system     system
+/dev/rfkill               0660   bluetooth  bluetooth
+/dev/snd/*                0660   system     audio
+/dev/video*               0660   system     camera
+/dev/dma_heap/dsp         0660   mediacodec      mediacodec
+/dev/rpmsg0               0660   mediacodec      mediacodec
+/dev/rpmsg1               0660   mediacodec      mediacodec
+/dev/mxc_hifi4            0660   media      drmrpc
+/dev/mxc_hantro           0666   media      drmrpc
+/dev/mxc_hantro_vc8000e   0666   media      drmrpc
+/dev/vsi_daemon_ctrl      0666   media      drmrpc
+/dev/ion                  0666   media      drmrpc
+/dev/galcore	          0666 	 system     graphics
+/dev/graphics/fb0         0660   system     graphics
+/dev/watchdog             0660   system     root
+/dev/mmcblk2rpmb    0600   system     system
+/dev/trusty-ipc-dev0      0660   system     drmrpc
+/dev/block/pmem0          0660   system     system
+/dev/dma_heap/reserved    0666   system     system
+/dev/dma_heap/reserved-uncached    0666   system     system
+/dev/dma_heap/secure      0666   system     system
+
+/sys/devices/virtual/thermal/thermal_zone* trip_point_0_temp 0660 system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_1_temp 0660 system system
+
+/sys/devices/virtual/thermal/thermal_zone* trip_point_0_hyst 0660 system system
+/sys/devices/virtual/thermal/thermal_zone* trip_point_1_hyst 0660 system system
+
+/dev/dmabuf_imx           0664   system     system

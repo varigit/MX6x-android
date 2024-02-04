@@ -1,0 +1,29 @@
+From 6f38fb541c93787d28b33624b6a7b75817dfe095 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Sat, 3 Feb 2024 20:24:18 +0100
+Subject: [PATCH 3/3] android-imx_device_fsl: disable ACS support for Wifi
+ hotspot
+
+Sterling LWB / LWB5 don't support Auto Channel Selection (ACS)
+
+Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+---
+ common/wifi/WifiOverlay/res/values/config.xml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/wifi/WifiOverlay/res/values/config.xml b/common/wifi/WifiOverlay/res/values/config.xml
+index 42d59ebd..ffce3d1e 100644
+--- a/common/wifi/WifiOverlay/res/values/config.xml
++++ b/common/wifi/WifiOverlay/res/values/config.xml
+@@ -27,7 +27,7 @@
+     <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
+ 
+     <!-- Enable ACS (auto channel selection) for Wifi hotspot (SAP) -->
+-    <bool translatable="false" name="config_wifi_softap_acs_supported">true</bool>
++    <bool translatable="false" name="config_wifi_softap_acs_supported">false</bool>
+ 
+     <!-- Enable 802.11ac for Wifi hotspot (SAP) -->
+     <bool translatable="false" name="config_wifi_softap_ieee80211ac_supported">true</bool>
+-- 
+2.34.1
+

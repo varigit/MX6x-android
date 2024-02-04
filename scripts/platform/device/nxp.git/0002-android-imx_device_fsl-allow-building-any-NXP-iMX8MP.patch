@@ -1,0 +1,40 @@
+From 0792c1e61b7ec09c8e36257ca05e269456fbcb15 Mon Sep 17 00:00:00 2001
+From: Pierluigi Passaro <pierluigi.p@variscite.com>
+Date: Sat, 3 Feb 2024 19:47:38 +0100
+Subject: [PATCH 2/3] android-imx_device_fsl: allow building any NXP iMX8MP
+ derivatives
+
+These changes assume that the product name of the NXP iMX8MP derivatives
+include the string "8mp" and  this is used to simplify the checks in the
+build script.
+
+Signed-off-by: Pierluigi Passaro <pierluigi.p@variscite.com>
+---
+ common/tools/imx-make.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index c91ae0e8..e9701639 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -129,7 +129,7 @@ if [ "${build_bootloader}" = "" ] && [ "${build_kernel}" = "" ] && \
+ fi
+ 
+ # vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
+-if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
++if [ -n "${build_kernel_modules}" ] && [[ ${TARGET_PRODUCT} =~ "8mp" ]]; then
+     build_vvcam="vvcam";
+     build_kernel_oot_module_flag=1;
+ fi
+@@ -190,7 +190,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+     fi
+     TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendorimage} || exit
+     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+-        if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
++        if [[ ${TARGET_PRODUCT} =~ "8mp" ]] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ]; then
+             mv ${OUT}/boot.img ${OUT}/boot-imx.img
+-- 
+2.34.1
+

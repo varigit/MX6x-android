@@ -1,0 +1,33 @@
+# This file must be generated following the instructions in
+#    https://source.android.com/docs/security/features/selinux/validate#using_audit2allow
+# adb pull /sys/fs/selinux/policy
+# adb logcat -b events -d | audit2allow -p policy
+# Be aware that some of these lines may cause sepolicy violations during the build: just comment the relevant lines
+
+#============= hal_camera_default ==============
+#allow hal_camera_default hal_thermal_hwservice:hwservice_manager find;
+
+#============= hal_graphics_composer_default ==============
+#allow hal_graphics_composer_default vendor_default_prop:property_service set;
+
+#============= hal_wifi_default ==============
+allow hal_wifi_default self:capability sys_module;
+
+#============= isolated_app ==============
+#allow isolated_app content_capture_service:service_manager find;
+
+#============= shell ==============
+allow shell self:udp_socket ioctl;
+#allow shell sysfs:file { getattr read };
+#allow shell vendor_toolbox_exec:file { execute getattr };
+
+#============= system_server ==============
+allow system_server self:capability sys_module;
+#allow system_server sysfs:file read;
+#allow system_server vendor_default_prop:file read;
+
+#============= system_suspend ==============
+#allow system_suspend sysfs:dir read;
+
+#============= toolbox ==============
+allow toolbox ram_device:blk_file ioctl;
