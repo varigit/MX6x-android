@@ -62,6 +62,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_dsp_rproc.ko \
     $(KERNEL_OUT)/drivers/i2c/busses/i2c-rpmsg-imx.ko \
+    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-pcm-rpmsg.ko \
     $(KERNEL_OUT)/sound/soc/fsl/snd-soc-fsl-rpmsg.ko \
     $(KERNEL_OUT)/sound/soc/fsl/imx-audio-rpmsg.ko \
@@ -230,7 +231,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-video.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-dwe.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-isp.ko \
-    $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko
