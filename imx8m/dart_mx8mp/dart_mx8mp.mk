@@ -389,8 +389,7 @@ PRODUCT_COPY_FILES += \
 
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth@1.0-impl \
-    android.hardware.bluetooth@1.0-service
+    android.hardware.bluetooth@1.1-service.btlinux
 
 PRODUCT_COPY_FILES += \
 	device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.ddr_debug_dart:cm_hello_world.bin.ddr_debug_dart \

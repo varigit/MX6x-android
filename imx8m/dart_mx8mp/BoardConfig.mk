@@ -105,10 +105,8 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 # -------@block_bluetooth-------
-# Sterling LWB / LWB5 BT via Broadcom libbt
-BOARD_HAVE_BLUETOOTH_BCM := true
+# Sterling LWB / LWB5 BT via HCI UART driver
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
-BOARD_CUSTOM_BT_CONFIG := $(BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR)/vnd_config.txt
 
 # -------@block_sensor-------
 #BOARD_USE_SENSOR_FUSION := true
