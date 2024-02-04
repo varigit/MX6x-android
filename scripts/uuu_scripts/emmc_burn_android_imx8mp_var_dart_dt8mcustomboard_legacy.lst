@@ -33,8 +33,8 @@ FB: flash bootloader0 u-boot-imx8mp-var-dart.imx
 FB: flash gpt partition-table.img
 FB: flash dtbo_a dtbo-imx8mp-var-dart-dt8mcustomboard-legacy.img
 FB: flash dtbo_b dtbo-imx8mp-var-dart-dt8mcustomboard-legacy.img
-FB: flash boot_a boot.img
-FB: flash boot_b boot.img
+FB: flash boot_a boot-imx.img
+FB: flash boot_b boot-imx.img
 FB: flash vendor_boot_a vendor_boot.img
 FB: flash vendor_boot_b vendor_boot.img
 FB: flash vbmeta_a vbmeta-imx8mp-var-dart-dt8mcustomboard-legacy.img --disable-verity

@@ -230,7 +230,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 fi
 
 dtboimage_file="dtbo-${soc_name}.img"
-bootimage_file="boot.img"
+bootimage_file="boot-imx.img"
 vendor_bootimage_file="vendor_boot.img"
 vbmeta_file="vbmeta-${soc_name}.img"
 systemimage_file="system.img"
