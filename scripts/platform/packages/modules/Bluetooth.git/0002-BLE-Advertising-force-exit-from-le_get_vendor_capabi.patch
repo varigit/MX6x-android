@@ -1,0 +1,74 @@
+From 216e382223664552204cc2edd333cd64820c994a Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Tue, 27 Feb 2024 12:28:47 +0100
+Subject: [PATCH 2/2] BLE Advertising: force exit from
+ le_get_vendor_capabilities to make it work
+
+The issue was encountered with Sterling LWB/LWB5. Without this change, enabling
+advertising on the target fails with the following error:
+
+imx8mn-var-som:/ $ logcat
+[ 3071.436949][  T193] logd: logdr: UID=2000 GID=2000 PID=2199 b tail=0 logMask=99 pid=0 start=0ns deadline=0ns
+--------- beginning of main
+02-11 23:42:24.595  2146  2146 D AutofillManager: Fill dialog is enabled:false, hints=[]
+02-11 23:42:24.705  2146  2146 D BluetoothAdapter: isLeEnabled(): ON
+02-11 23:42:24.712  2146  2146 D BluetoothAdapter: isLeEnabled(): ON
+02-11 23:42:24.714   342  1873 I audio_hw_primary: out_write: first frame write, out stream 0xee5472d0
+02-11 23:42:24.725  1858  1874 D BtGatt.AdvertiseManager: startAdvertisingSet() - reg_id=-2, callback: android.os.BinderProxy@d960101
+02-11 23:42:24.729  1858  1874 E BtGatt.ContextMap: Context not found for ID 10092
+02-11 23:42:24.730  1858  1874 I bt_stack: [INFO:le_advertising_manager.cc(172)] StartAdvertisingSet in shim layer
+02-11 23:42:24.741  1858  1874 I bt_stack: [INFO:le_advertising_manager.cc(230)] create advertising set, reg_id:-2, id:1
+02-11 23:42:24.765  1858  1911 I bluetooth: packages/modules/Bluetooth/system/gd/hci/le_address_manager.cc:172 register_client: Scheduled address rotation for first client registered
+02-11 23:42:24.765  1858  1911 I bluetooth: packages/modules/Bluetooth/system/gd/hci/le_address_manager.cc:175 register_client: Client registered
+02-11 23:42:24.800  1858  1911 F bluetooth: assertion 'status_view.IsValid()' failed
+--------- beginning of crash
+02-11 23:42:24.801  1858  1911 F libc    : Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 1911 (bt_stack_manage), pid 1858 (droid.bluetooth)
+02-11 23:42:25.010  2205  2205 I crash_dump64: obtaining output fd from tombstoned, type: kDebuggerdTombstoneProto
+02-11 23:42:25.018   257   257 I tombstoned: received crash request for pid 1911
+02-11 23:42:25.022  2205  2205 I crash_dump64: performing dump of process 1858 (target tid = 1911)
+02-11 23:42:25.052  2205  2205 E DEBUG   : failed to read process info: failed to open /proc/1858
+[ 3075.826480][  T193] logd: logdr: UID=1002 GID=1002 PID=2205 n tail=0 logMask=8 pid=1858 start=0ns deadline=0ns
+[ 3075.838551][  T193] logd: logdr: UID=1002 GID=1002 PID=2205 n tail=0 logMask=1 pid=1858 start=0ns deadline=0ns
+02-11 23:42:27.333  2205  2205 F DEBUG   : *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+02-11 23:42:27.333  2205  2205 F DEBUG   : Build fingerprint: 'Android/som_mx8mn/som_mx8mn:13/TQ3A.230805.001.A2/eng.ff.20240204.085733:userdebug/dev-keys'
+02-11 23:42:27.333  2205  2205 F DEBUG   : Revision: '0'
+02-11 23:42:27.333  2205  2205 F DEBUG   : ABI: 'arm64'
+02-11 23:42:27.333  2205  2205 F DEBUG   : Timestamp: 2024-02-11 23:42:25.050333750+0000
+02-11 23:42:27.333  2205  2205 F DEBUG   : Process uptime: 0s
+02-11 23:42:27.333  2205  2205 F DEBUG   : Cmdline: com.android.bluetooth
+02-11 23:42:27.334  2205  2205 F DEBUG   : pid: 1858, tid: 1911, name: bt_stack_manage  >>> com.android.bluetooth <<<
+02-11 23:42:27.334  2205  2205 F DEBUG   : uid: 1002
+02-11 23:42:27.334  2205  2205 F DEBUG   : tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+02-11 23:42:27.334  2205  2205 F DEBUG   : signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+02-11 23:42:27.334  2205  2205 F DEBUG   : Abort message: 'assertion 'status_view.IsValid()' failed'
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x0  0000000000000000  x1  0000000000000777  x2  0000000000000006  x3  0000007391ca0e30
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x4  282763686b605572  x5  282763686b605572  x6  282763686b605572  x7  7f7f7f7f7f7f7f7f
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x8  00000000000000f0  x9  00000076c3857a00  x10 0000000000000001  x11 00000076c38996a0
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x12 0000007391c9fd00  x13 0000000000000029  x14 0000007391ca1090  x15 0000000000000000
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x16 00000076c3907d58  x17 00000076c38e2770  x18 0000007391662038  x19 00000000000000ac
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x20 00000000000000b2  x21 0000000000000742  x22 0000000000000777  x23 00000000ffffffff
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x24 0000007391ca2000  x25 0000007391ca1570  x26 00000073a6d165f8  x27 000000741fa16000
+02-11 23:42:27.334  2205  2205 F DEBUG   :     x28 b400007474aafeac  x29 0000007391ca0eb0
+02-11 23:42:27.[ 3076.048650][    T1] init: Untracked pid 2205 exited with status 0
+
+Change-Id: Ibdc17e3e04629b4ac073667614063f6a1e17e7fa
+Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
+---
+ system/gd/hci/controller.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/system/gd/hci/controller.cc b/system/gd/hci/controller.cc
+index 6ff46b381d..08f6713699 100644
+--- a/system/gd/hci/controller.cc
++++ b/system/gd/hci/controller.cc
+@@ -537,6 +537,7 @@ struct Controller::impl {
+     vendor_capabilities_.bluetooth_quality_report_support_ = 0x00;
+ 
+     if (complete_view.IsValid()) {
++      return;
+       vendor_capabilities_.is_supported_ = 0x01;
+ 
+       // v0.55 without activity_energy_info_support
+-- 
+2.43.0
+

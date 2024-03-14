@@ -1,0 +1,29 @@
+From d77ca5dcc5235e2097a914b04780ea9dda27a01e Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Wed, 28 Feb 2024 09:57:58 +0100
+Subject: [PATCH 3/3] android-imx_device_fsl: export toolchains for building
+ Android images
+
+Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
+---
+ common/tools/imx-make.sh | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index bb9039be..dba6b759 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -146,6 +146,10 @@ product_path=${product_makefile%/*}
+ soc_path=${product_path%/*}
+ nxp_git_path=${soc_path%/*}
+ 
++export AARCH64_GCC_CROSS_COMPILE=$ANDROID_BUILD_TOP/prebuilts/gcc/linux-x86/aarch64/gcc-arm-9.2-2019.12-x86_64-aarch64-none-linux-gnu/bin/aarch64-none-linux-gnu-
++export CLANG_PATH=/opt/prebuilt-android-clang-var-d20e409261d6a
++export PATH=/opt/prebuilt-android-kernel-build-tools-var-e3f6a8c059b94/linux-x86/bin:$PATH
++
+ if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "mek_8q" ]; then
+     make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
+ fi
+-- 
+2.43.2
+

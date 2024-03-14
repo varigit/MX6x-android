@@ -1,0 +1,34 @@
+From e3d17e9c7c1bb095f29b6eb549e5be91d62de717 Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Wed, 28 Feb 2024 09:53:04 +0100
+Subject: [PATCH 2/3] android-imx_device_fsl: allow building any NXP iMX8MN 
+ derivatives
+
+These changes assume that the product name of the NXP iMX8MN derivatives
+include the string "8mn" and  this is used to simplify the checks in the
+build script.
+
+Derived from
+  https://github.com/varigit/MX6x-android/blob/android-12.0.0_1.0.0-var02/scripts/platform/device/nxp.git/0002-android-imx_device_fsl-allow-building-any-NXP-iMX8MP.patch
+
+Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
+---
+ common/tools/imx-make.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index dd795bcd..bb9039be 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -195,7 +195,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+     fi
+     TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
+     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+-        if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
++        if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [[ ${TARGET_PRODUCT} =~ "8mn" ]] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ]; then
+             if [ ${enable_gki} -eq 1 ]; then
+-- 
+2.43.2
+

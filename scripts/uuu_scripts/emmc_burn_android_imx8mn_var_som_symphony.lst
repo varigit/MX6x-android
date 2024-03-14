@@ -1,0 +1,36 @@
+uuu_version 1.4.182
+SDPS: boot -f u-boot-imx8mn-var-som-uuu.imx
+SDPU: delay 1000
+SDPU: write -f u-boot-imx8mn-var-som-uuu.imx -offset 0x57c00
+SDPU: jump
+SDPV: delay 1000
+SDPV: write -f u-boot-imx8mn-var-som-uuu.imx -skipspl
+SDPV: jump
+FB: ucmd setenv fastboot_dev mmc
+FB: ucmd setenv mmcdev 2
+FB: ucmd mmc dev 2
+FB: ucmd mmc dev 2 0
+FB: ucmd mmc erase 0x3800 0x20
+FB: ucmd mmc partconf 2 0 0 0
+FB[-t 600000]: flash bootloader0 spl-imx8mn-var-som-dual.bin
+FB[-t 600000]: flash gpt partition-table-dual.img
+FB[-t 600000]: flash bootloader_a bootloader-imx8mn-var-som-dual.img
+FB[-t 600000]: flash dtbo_a dtbo-imx8mn-var-som-symphony.img
+FB[-t 600000]: flash boot_a boot.img
+FB[-t 600000]: flash vendor_boot_a vendor_boot.img
+FB[-t 600000]: flash init_boot_a init_boot.img
+FB[-t 600000]: flash vbmeta_a vbmeta-imx8mn-var-som-symphony.img
+FB[-t 600000]: flash bootloader_b bootloader-imx8mn-var-som-dual.img
+FB[-t 600000]: flash dtbo_b dtbo-imx8mn-var-som-symphony.img
+FB[-t 600000]: flash boot_b boot.img
+FB[-t 600000]: flash vendor_boot_b vendor_boot.img
+FB[-t 600000]: flash init_boot_b init_boot.img
+FB[-t 600000]: flash vbmeta_b vbmeta-imx8mn-var-som-symphony.img
+FB[-t 600000]: flash super super.img
+FB[-t 600000]: erase misc
+FB[-t 600000]: erase presistdata
+FB[-t 600000]: erase fbmisc
+FB[-t 600000]: erase metadata
+FB[-t 600000]: erase userdata
+FB: set_active _a
+FB: done

@@ -1,0 +1,20 @@
+# Android fstab file.
+#<src>                                                  <mnt_point>         <type>    <mnt_flags and options>                       <fs_mgr_flags>
+# The filesystem that contains the filesystem checker binary (typically /system) cannot
+# specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
+
+/devices/platform/soc@0/32c00000.bus/32e40000.usb/ci_hdrc.0/* auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc@0/30800000.bus/30b50000.mmc/mmc_host* auto auto defaults voldmanaged=extsd:auto
+/dev/block/by-name/userdata    /data        f2fs    nodev,noatime,nosuid,inlinecrypt,reserve_root=32768 latemount,wait,check,quota,formattable,fileencryption=aes-256-xts:aes-256-cts:v2+inlinecrypt_optimized,fscompress,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
+/dev/block/by-name/metadata    /metadata    f2fs    noatime,nosuid,nodev,discard,sync,fsync_mode=nobarrier                           wait,formattable,first_stage_mount,check
+/dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults
+/dev/block/zram0 none swap defaults zramsize=629145600
+/tmp /sdcard none defaults,bind recoveryonly
+
+system                         /system       erofs ro                                                              wait,slotselect,avb,avb_keys=/avb,logical,first_stage_mount
+system                         /system       ext4  noatime,errors=panic,ro,barrier=1,inode_readahead_blks=8        wait,slotselect,avb,avb_keys=/avb,logical,first_stage_mount
+system_dlkm                    /system_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+system_ext                     /system_ext   erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+vendor                         /vendor       erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+vendor_dlkm                    /vendor_dlkm  erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
+product                        /product      erofs ro                                                              wait,slotselect,avb,logical,first_stage_mount
