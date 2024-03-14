@@ -3,6 +3,8 @@
 # Product-specific compile-time definitions.
 #
 
+TARGET_IMX_KERNEL = true
+
 include $(CONFIG_REPO_PATH)/imx8m/BoardConfigCommon.mk
 
 #
