@@ -49,10 +49,10 @@ help() {
 
 function rename_remoteproc_images {
 	if [[ "$1" == *"imx8mp-var-som"* ]]; then
-		cp -ar device/variscite/imx8m/dart_mx8mp/*.bin.debug ${imagesdir}
+		cp -ar device/variscite/imx8m/dart_mx8mp/*.bin.debug_som ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
-		cp -ar device/variscite/imx8m/dart_mx8mp/*.bin.debug ${imagesdir}
+		cp -ar device/variscite/imx8m/dart_mx8mp/*.bin.debug_dart ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8mq-var-dart"* ]]; then
 		cp -ar device/variscite/imx8m/dart_mx8mq/*.bin.debug ${imagesdir}
