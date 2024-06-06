@@ -127,33 +127,43 @@ function copy_android
 	fi
 	if [ -e "${ANDROID_IMGS_PATH}/vendor_boot.img" ]; then
                 echo "Copying vendor_boot image to /opt/images/"
-                pv ${ANDROID_IMGS_PATH}/vendor_boot.img >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor_boot.img
+                pv ${ANDROID_IMGS_PATH}/vendor_boot.img >       ${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor_boot.img
                 sync | pv -t
 	fi
 
 	if [[ "${MACHINE}" = "imx8mm-var-dart" ]]; then
-                echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/rpmsg_lite_pingpong_rtos_linux_remote.bin > \
-                            ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.bin
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/rpmsg_lite_pingpong_rtos_linux_remote.elf > \
-                           ${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf
-                sync | pv -t
-	elif [[ "${MACHINE}" = "imx8mn-var-som" ]]; then
-                echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
+		echo "Copying M4 demo images to /opt/images/"
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_hello_world.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
 				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/rpmsg_lite_pingpong_rtos_linux_remote.elf
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_hello_world.elf.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.elf.debug
-                sync | pv -t
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin
+		sync | pv -t
+	elif [[ "${MACHINE}" = "imx8mn-var-som" ]]; then
+		echo "Copying M7 demo images to /opt/images/"
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos.bin.debug > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin
+		sync | pv -t
 	elif [[ "${MACHINE}" = "imx8mp-var-dart" ]]; then
-                echo "Copying M4 demo images to /opt/images/"
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart >         ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_dart
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som >             ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_som
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart >          ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
-                pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som >              ${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
-                sync | pv -t
+		echo "Copying M7 demo images to /opt/images/"
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_dart > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin.debug_dart
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_som > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin.debug_som
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_som > \
+				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin.debug_som
+		sync | pv -t
 	fi
 
 }
