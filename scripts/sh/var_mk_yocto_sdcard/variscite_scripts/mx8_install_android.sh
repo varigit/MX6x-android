@@ -86,14 +86,14 @@ function add_imx8mp_menu() {
 }
 
 function add_imx8mm_menu() {
-	img_list+=("dtbo-imx8mm-var-dart-1.x-dt8mcustomboard.img 	(DART-MX8M-MINI on DT8MCustomBoard 1.x with M4 support)")
-	img_list+=("dtbo-imx8mm-var-dart-1.x-dt8mcustomboard-m4.img	(DART-MX8M-MINI on DT8MCustomBoard 1.x)")
-	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-m4.img		(DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with WBE and M4 support)")
-	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard.img		(DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard-m4.img	(DART-MX8M-MINI on DT8MCustomBoard 2.x and above, with WBE and M4 support)")
-	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard.img	(DART-MX8M-MINI on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img			(VAR-SOM-MX8M-MINI on Symphony-Board with M4 support)")
-	img_list+=("dtbo-imx8mm-var-som-symphony.img			(VAR-SOM-MX8M-MINI on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-dt8mcustomboard.img 	(DART-MX8M-MINI V1.x on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-dt8mcustomboard-m4.img	(DART-MX8M-MINI V1.x with M4 support on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard.img		(DART-MX8M-MINI V2.x on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-m4.img		(DART-MX8M-MINI V2.x with M4 support on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard.img	(DART-MX8M-MINI V2.x with WBE support on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard-m4.img	(DART-MX8M-MINI V2.x with WBE and M4 support on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-som-symphony.img			(VAR-SOM-MX8M-MINI V1.x on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img			(VAR-SOM-MX8M-MINI V1.x with M4 support on Symphony-Board)")
 }
 
 function add_imx8mq_menu() {
