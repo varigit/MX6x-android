@@ -1,0 +1,7 @@
+# android.system.suspend@1.0-service
+#rtc used for dart is connected to i2c so we need corresponding file_contexts
+/sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/wakeup                                                                   u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/wakeup/wakeup[0-9]*(/.*)?                                                u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup                                    u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup/wakeup[0-9]*(/.*)?                 u:object_r:sysfs_wakeup:s0
+
