@@ -27,7 +27,7 @@ else
 	exit 1
 fi
 
-TARGET_DTBS="imx8mp-var-dart-dt8mcustomboard.dtb imx8mp-var-som-symphony.dtb"
+TARGET_DTBS="imx8mp-var-dart-dt8mcustomboard.dtb imx8mp-var-dart-1.x-dt8mcustomboard.dtb imx8mp-var-som-symphony.dtb"
 
 build_m4_image()
 {
@@ -41,6 +41,7 @@ build_imx_uboot()
 	cp ${UBOOT_OUT}/spl/u-boot-spl.bin  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 	cp ${UBOOT_OUT}/tools/mkimage  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/mkimage_uboot
 	cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-dt8mcustomboard.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+	cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-1.x-dt8mcustomboard.dtb  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 	cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-som-symphony.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4_pmu_train* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 
@@ -68,6 +69,7 @@ build_imx_uboot()
 	if [ `echo $2 | rev | cut -d '-' -f1 | rev` = "dual" ]; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=iMX8MP dtbs="${TARGET_DTBS}" flash_evk_no_hdmi_dual_bootloader || exit 1
 		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-dt8mcustomboard.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-1.x-dt8mcustomboard.dtb  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-som-symphony.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=iMX8MP dtbs="${TARGET_DTBS}" PRINT_FIT_HAB_OFFSET=0x0 print_fit_hab || exit 1
 		cp ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/flash.bin ${UBOOT_COLLECTION}/spl-$2.bin
@@ -75,6 +77,7 @@ build_imx_uboot()
 	else
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=iMX8MP dtbs="${TARGET_DTBS}" flash_evk || exit 1
 		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-dt8mcustomboard.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
+		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-dart-1.x-dt8mcustomboard.dtb  ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 		cp ${UBOOT_OUT}/arch/arm/dts/imx8mp-var-som-symphony.dtb ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=iMX8MP dtbs="${TARGET_DTBS}" print_fit_hab || exit 1
 		cp ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
