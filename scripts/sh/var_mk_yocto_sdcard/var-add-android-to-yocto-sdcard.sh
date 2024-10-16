@@ -63,7 +63,7 @@ function compress_image
 function create_loop
 {
 	losetup -Pf ${YOCTO_IMAGE_FILE}
-	node=`losetup -a |grep ${YOCTO_IMAGE_FILE} |cut -d : -f 1`
+	node=`losetup -a |grep -v "deleted" |grep ${YOCTO_IMAGE_FILE} |cut -d : -f 1`
 	part="p"
 }
 
