@@ -1,0 +1,36 @@
+From 724617cd2bc2830070c387c32cec90f31a53c0a5 Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Tue, 26 Nov 2024 14:13:09 +0100
+Subject: [PATCH] mlan: mlan_cmdevt: Reduce verbosity of
+ wlan_fill_link_statistic error message
+
+In the wlan_fill_link_statistic function, checking the maximum number
+of supported channels, if exceeded, results in this warning message
+continuing to print:
+'wlan_fill_link_statistic: radio_stat->num_channels=1'.
+This issue appeared starting with SDIW612 firmware version 18.99.2.p19.6
+and also persists in latest versions.
+The WiFi/BT chipset functionality is not affected in this case,
+while waiting for the firmware to be improved, move this message
+from error log level to warning to reduce verbosity.
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c b/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
+index 7bc55f3..2b9595a 100644
+--- a/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
++++ b/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
+@@ -8920,7 +8920,7 @@ static void wlan_fill_link_statistic(mlan_private *priv,
+ 			if (radio_stat->num_channels > MAX_NUM_CHAN) {
+ 				radio_stat->num_channels =
+ 					wlan_le32_to_cpu(MAX_NUM_CHAN);
+-				PRINTM(MERROR,
++				PRINTM(MWARN,
+ 				       "%s : radio_stat->num_channels=%d\n",
+ 				       __func__, radio_stat->num_channels);
+ 				break;
+--
+2.34.1
