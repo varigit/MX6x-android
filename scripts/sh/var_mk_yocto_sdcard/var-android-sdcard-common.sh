@@ -40,82 +40,93 @@ function unmount_parts
 	rm -rf ${TEMP_DIR}
 }
 
-function copy_android
+function do_copy_android
 {
-	echo
-	echo "Copying Android images to /opt/images/"
-	mkdir -p ${ROOTFS_MOUNT_DIR}/opt/images/Android
-	rm -rf ${ROOTFS_MOUNT_DIR}/opt/images/Android/*
-
-	cp ${ANDROID_IMGS_PATH}/spl-${MACHINE}-dual.bin	        ${ROOTFS_MOUNT_DIR}/opt/images/Android/
-	cp ${ANDROID_IMGS_PATH}/bootloader-${MACHINE}-dual.img  ${ROOTFS_MOUNT_DIR}/opt/images/Android/
-	cp ${ANDROID_IMGS_PATH}/boot.img			${ROOTFS_MOUNT_DIR}/opt/images/Android/
-	cp ${ANDROID_IMGS_PATH}/init_boot.img                   ${ROOTFS_MOUNT_DIR}/opt/images/Android/
-	cp ${ANDROID_IMGS_PATH}/dtbo-*.img			${ROOTFS_MOUNT_DIR}/opt/images/Android/
-	cp ${ANDROID_IMGS_PATH}/vbmeta-*.img			${ROOTFS_MOUNT_DIR}/opt/images/Android/
+	cp ${ANDROID_IMGS_PATH}/spl-${MACHINE}-dual.bin	        ${ROOTFS_ANDROID_PATH}/
+	cp ${ANDROID_IMGS_PATH}/bootloader-${MACHINE}-dual.img  ${ROOTFS_ANDROID_PATH}/
+	cp ${ANDROID_IMGS_PATH}/boot.img			${ROOTFS_ANDROID_PATH}/
+	cp ${ANDROID_IMGS_PATH}/init_boot.img                   ${ROOTFS_ANDROID_PATH}/
+	cp ${ANDROID_IMGS_PATH}/dtbo-*.img			${ROOTFS_ANDROID_PATH}/
+	cp ${ANDROID_IMGS_PATH}/vbmeta-*.img			${ROOTFS_ANDROID_PATH}/
 
 	if [[ "${MACHINE}" = "imx8qm-var-som" ]]; then
 		echo "Copying firmware images to /opt/images/"
-		cp ${ANDROID_IMGS_PATH}/vendor/firmware/hdmitxfw.bin	${ROOTFS_MOUNT_DIR}/opt/images/Android/
-		cp ${ANDROID_IMGS_PATH}/vendor/firmware/dpfw.bin	${ROOTFS_MOUNT_DIR}/opt/images/Android/
+		cp ${ANDROID_IMGS_PATH}/vendor/firmware/hdmitxfw.bin	${ROOTFS_ANDROID_PATH}/
+		cp ${ANDROID_IMGS_PATH}/vendor/firmware/dpfw.bin	${ROOTFS_ANDROID_PATH}/
 	fi
 
 	if [ -e "${ANDROID_IMGS_PATH}/super.img" ]; then
 		echo "Copying super image to /opt/images/"
-		pv ${ANDROID_IMGS_PATH}/super.img >		${ROOTFS_MOUNT_DIR}/opt/images/Android/super.img
+		pv ${ANDROID_IMGS_PATH}/super.img >		${ROOTFS_ANDROID_PATH}/super.img
 		sync | pv -t
 	else
 		echo "Copying system image to /opt/images/"
-		pv ${ANDROID_IMGS_PATH}/system.img >		${ROOTFS_MOUNT_DIR}/opt/images/Android/system.img
+		pv ${ANDROID_IMGS_PATH}/system.img >		${ROOTFS_ANDROID_PATH}/system.img
 		sync | pv -t
 		echo "Copying vendor image to /opt/images/"
-		pv ${ANDROID_IMGS_PATH}/vendor.img >		${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor.img
+		pv ${ANDROID_IMGS_PATH}/vendor.img >		${ROOTFS_ANDROID_PATH}/vendor.img
 		sync | pv -t
 		echo "Copying product image to /opt/images/"
-		pv ${ANDROID_IMGS_PATH}/product.img >		${ROOTFS_MOUNT_DIR}/opt/images/Android/product.img
+		pv ${ANDROID_IMGS_PATH}/product.img >		${ROOTFS_ANDROID_PATH}/product.img
 		sync | pv -t
 	fi
 	if [ -e "${ANDROID_IMGS_PATH}/vendor_boot.img" ]; then
                 echo "Copying vendor_boot image to /opt/images/"
-                pv ${ANDROID_IMGS_PATH}/vendor_boot.img >       ${ROOTFS_MOUNT_DIR}/opt/images/Android/vendor_boot.img
+                pv ${ANDROID_IMGS_PATH}/vendor_boot.img >       ${ROOTFS_ANDROID_PATH}/vendor_boot.img
                 sync | pv -t
 	fi
 
 	if [[ "${MACHINE}" = "imx8mm-var-dart" ]]; then
 		echo "Copying M4 demo images to /opt/images/"
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_hello_world.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin
+				${ROOTFS_ANDROID_PATH}/cm_hello_world.bin
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin
 		sync | pv -t
 	elif [[ "${MACHINE}" = "imx8mn-var-som" ]]; then
 		echo "Copying M7 demo images to /opt/images/"
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin
+				${ROOTFS_ANDROID_PATH}/cm_hello_world.bin
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos.bin.debug > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_str_echo_rtos.bin
 		sync | pv -t
 	elif [[ "${MACHINE}" = "imx8mp-var-dart" ]]; then
 		echo "Copying M7 demo images to /opt/images/"
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_dart > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin.debug_dart
+				${ROOTFS_ANDROID_PATH}/cm_hello_world.bin.debug_dart
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_som > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_hello_world.bin.debug_som
+				${ROOTFS_ANDROID_PATH}/cm_hello_world.bin.debug_som
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_som > \
-				${ROOTFS_MOUNT_DIR}/opt/images/Android/cm_rpmsg_lite_str_echo_rtos.bin.debug_som
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_str_echo_rtos.bin.debug_som
 		sync | pv -t
 	fi
 
+}
+
+function copy_android
+{
+	echo
+	echo "Copying Android images to /opt/images/"
+	ROOTFS_ANDROID_PATH=${ROOTFS_MOUNT_DIR}/opt/images/Android
+	mkdir -p ${ROOTFS_ANDROID_PATH}
+	rm -rf ${ROOTFS_ANDROID_PATH}/*
+	do_copy_android
+	if [ -n ${ANDROID_BUILD_SUBDIR} ] ; then
+		ANDROID_IMGS_PATH=${ANDROID_IMGS_PATH}/${ANDROID_BUILD_SUBDIR}
+		ROOTFS_ANDROID_PATH=${ROOTFS_ANDROID_PATH}/${ANDROID_BUILD_SUBDIR}
+		mkdir -p ${ROOTFS_ANDROID_PATH}
+		do_copy_android
+	fi
 }
 
 function copy_android_scripts
