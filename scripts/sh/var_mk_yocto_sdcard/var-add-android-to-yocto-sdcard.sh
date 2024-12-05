@@ -3,11 +3,12 @@ set -e
 
 help() {
 	bn=`basename $0`
-	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
+	echo "Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
+	echo "Launch from Android build root directory or set variable ANDROID_BUILD_ROOT to path"
 	echo
 }
 
-if [ -z "$1" ] ; then
+if [ -z $1 ] ; then
 	help
 fi
 
@@ -17,7 +18,9 @@ readonly ABSOLUTE_FILENAME=`readlink -e "$0"`
 readonly ABSOLUTE_DIRECTORY=`dirname ${ABSOLUTE_FILENAME}`
 
 ANDROID_SCRIPTS_PATH=${ABSOLUTE_DIRECTORY}/variscite_scripts
-ANDROID_BUILD_ROOT=`pwd`
+if [ -z "${ANDROID_BUILD_ROOT}" ] ; then
+	ANDROID_BUILD_ROOT=`pwd`
+fi
 YOCTO_IMAGE_FILE_COMP=`readlink -e "$1"`
 YOCTO_IMAGE_FILE=${YOCTO_IMAGE_FILE_COMP%.*}
 YOCTO_IMAGE_DIRECTORY=`dirname ${YOCTO_IMAGE_FILE}`
