@@ -1,6 +1,16 @@
 #!/bin/bash
 set -e
 
+help() {
+	bn=`basename $0`
+	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
+	echo
+}
+
+if [ -z "$1" ] ; then
+	help
+fi
+
 #### Exports Variables ####
 #### global variables ####
 readonly ABSOLUTE_FILENAME=`readlink -e "$0"`
@@ -15,12 +25,6 @@ NEW_YOCTO_IMAGE_FILE=${YOCTO_IMAGE_DIRECTORY}/$2.wic
 
 TEMP_DIR=./var_tmp
 ROOTFS_MOUNT_DIR=${TEMP_DIR}/rootfs
-
-help() {
-	bn=`basename $0`
-	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
-	echo
-}
 
 source ${ABSOLUTE_DIRECTORY}/var-android-sdcard-common.sh
 
