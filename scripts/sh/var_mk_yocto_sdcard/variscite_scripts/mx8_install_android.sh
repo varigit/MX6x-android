@@ -102,10 +102,14 @@ function add_imx8mm_menu() {
 	img_list+=("dtbo-imx8mm-var-dart-1.x-dt8mcustomboard-m4.img	(DART-MX8M-MINI V1.x with M4 support on DT8MCustomBoard V2.x and above)")
 	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard.img		(DART-MX8M-MINI V2.x on DT8MCustomBoard V2.x and above)")
 	img_list+=("dtbo-imx8mm-var-dart-dt8mcustomboard-m4.img		(DART-MX8M-MINI V2.x with M4 support on DT8MCustomBoard V2.x and above)")
-	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard.img		(DART-MX8M-MINI V2.x with WBE support on DT8MCustomBoard V2.x and above)")
+	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard.img	(DART-MX8M-MINI V2.x with WBE support on DT8MCustomBoard V2.x and above)")
 	img_list+=("dtbo-imx8mm-var-dart-wbe-dt8mcustomboard-m4.img	(DART-MX8M-MINI V2.x with WBE and M4 support on DT8MCustomBoard V2.x and above)")
-	img_list+=("dtbo-imx8mm-var-som-symphony.img			(VAR-SOM-MX8M-MINI V1.x on Symphony-Board)")
-	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img			(VAR-SOM-MX8M-MINI V1.x with M4 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-1.x-symphony.img		(VAR-SOM-MX8M-MINI V1.x on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-1.x-symphony-m4.img		(VAR-SOM-MX8M-MINI V1.x with M4 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-symphony.img			(VAR-SOM-MX8M-MINI V2.x on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img			(VAR-SOM-MX8M-MINI V2.x with M4 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-wbe-symphony.img		(VAR-SOM-MX8M-MINI V2.x with WBE support on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-som-wbe-symphony-m4.img		(VAR-SOM-MX8M-MINI V2.x with WBE and M4 support on Symphony-Board)")
 }
 
 function add_imx8mq_menu() {
@@ -259,7 +263,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			else
 				soc_name=$opt
 			fi
-			if [[ "${soc_name}" == *"imx8mm-var-som"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
+			if [[ "${soc_name}" == *"imx8mm-var-som-1.x"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
 					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]]; then
 				imagesdir="/opt/images/Android/lwb"
 				blue_underlined_bold_echo "Image directory for SOM V1.x version: $imagesdir"

@@ -139,12 +139,16 @@ BOARD_KERNEL_BASE := 0x40400000
 TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-som-symphony:imx8mm-var-som-symphony.dtb \
 	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
-  imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
-  imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb \
-  imx8mm-var-dart-1.x-dt8mcustomboard:imx8mm-var-dart-1.x-dt8mcustomboard.dtb \
-  imx8mm-var-dart-1.x-dt8mcustomboard-m4:imx8mm-var-dart-1.x-dt8mcustomboard-m4.dtb \
-  imx8mm-var-dart-wbe-dt8mcustomboard:imx8mm-var-dart-wbe-dt8mcustomboard.dtb \
-  imx8mm-var-dart-wbe-dt8mcustomboard-m4:imx8mm-var-dart-wbe-dt8mcustomboard-m4.dtb
+	imx8mm-var-som-1.x-symphony:imx8mm-var-som-1.x-symphony.dtb \
+	imx8mm-var-som-1.x-symphony-m4:imx8mm-var-som-1.x-symphony-m4.dtb \
+	imx8mm-var-som-wbe-symphony:imx8mm-var-som-wbe-symphony.dtb \
+	imx8mm-var-som-wbe-symphony-m4:imx8mm-var-som-wbe-symphony-m4.dtb \
+	imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
+	imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-1.x-dt8mcustomboard:imx8mm-var-dart-1.x-dt8mcustomboard.dtb \
+	imx8mm-var-dart-1.x-dt8mcustomboard-m4:imx8mm-var-dart-1.x-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-wbe-dt8mcustomboard:imx8mm-var-dart-wbe-dt8mcustomboard.dtb \
+	imx8mm-var-dart-wbe-dt8mcustomboard-m4:imx8mm-var-dart-wbe-dt8mcustomboard-m4.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
