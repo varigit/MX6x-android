@@ -392,8 +392,12 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # WiFi HAL
+ifneq ($(TARGET_USES_BCM_WIFI),true)
 PRODUCT_PACKAGES += \
-    android.hardware.wifi-service \
+    android.hardware.wifi-service
+endif
+
+PRODUCT_PACKAGES += \
     wificond
 
 # WiFi RRO
