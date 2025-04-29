@@ -517,7 +517,8 @@ PRODUCT_COPY_FILES += \
 	device/variscite/imx8m/dart_mx8mm/cm_hello_world.bin.debug:vendor/firmware/cm_hello_world.bin.debug \
 	device/variscite/imx8m/dart_mx8mm/cm_hello_world.elf.ddr_debug:vendor/firmware/cm_hello_world.elf.ddr_debug \
 	device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.debug \
-	device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.ddr_debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.ddr_debug
+	device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.ddr_debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm4.elf.ddr_debug \
+	device/variscite/imx8m/dart_mx8mm/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin.debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm4.bin.debug
 
 PRODUCT_COPY_FILES += \
     $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:/vendor/imx_rpmsg_pingpong.ko \
