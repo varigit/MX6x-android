@@ -26,6 +26,11 @@ LOADABLE_KERNEL_MODULE ?= true
 # CONFIG_AT803X_PHY: ethernet phy driver at803x.ko
 # CONFIG_ADIN_PHY: ethernet phy driver adin.ko
 
+# NXP IW612 wifi driver module
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
+    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
+
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
@@ -66,7 +71,8 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/can/can-gw.ko \
     $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko
+    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko
 
 #Cortex-M7
 BOARD_VENDOR_KERNEL_MODULES += \

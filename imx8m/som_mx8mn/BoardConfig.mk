@@ -18,6 +18,7 @@ HAVE_FSL_IMX_GPU3D := true
 HAVE_FSL_IMX_PXP := false
 TARGET_USES_HWC2 := true
 TARGET_HAVE_VULKAN := true
+TARGET_USES_BCM_WIFI ?= false
 
 SOONG_CONFIG_IMXPLUGIN_BOARD_SOC_TYPE = IMX8MN
 SOONG_CONFIG_IMXPLUGIN_BOARD_HAVE_VPU = false
@@ -99,7 +100,13 @@ DEVICE_MATRIX_FILE := $(NXP_DEVICE_PATH)/compatibility_matrix.xml
 DEVICE_FRAMEWORK_COMPATIBILITY_MATRIX_FILE := $(NXP_DEVICE_PATH)/device_framework_matrix.xml
 
 # -------@block_wifi-------
+ifeq ($(TARGET_USES_BCM_WIFI),true)
+# Sterling LWB / LWB5 WiFi
 BOARD_WLAN_DEVICE            := bcmdhd
+else
+# NXP IW612 WIFI
+BOARD_WLAN_DEVICE            := nxp
+endif
 WPA_SUPPLICANT_VERSION       := VER_0_8_X
 BOARD_WPA_SUPPLICANT_DRIVER  := NL80211
 BOARD_HOSTAPD_DRIVER         := NL80211
@@ -109,8 +116,12 @@ BOARD_WPA_SUPPLICANT_PRIVATE_LIB        := lib_driver_cmd_$(BOARD_WLAN_DEVICE)
 WIFI_HIDL_FEATURE_DUAL_INTERFACE := true
 
 # -------@block_bluetooth-------
-# Linux BT via HCI UART driver
+# Sterling LWB / LWB5 or NXP IW612 BT via HCI UART driver
 BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
+
+ifeq ($(TARGET_USES_BCM_WIFI),false)
+BOARD_HAVE_BLUETOOTH_NXP := true
+endif
 
 # -------@block_sensor-------
 BOARD_USE_SENSOR_FUSION := false
