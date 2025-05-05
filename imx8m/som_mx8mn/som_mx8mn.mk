@@ -460,6 +460,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
                     tflitecamerademo
 
+# -------@block_var_mii-------------
+ PRODUCT_PACKAGES += \
+    var-mii
+
 # -------@block_miscellaneous-------
 
 # Copy device related config and binary to board
