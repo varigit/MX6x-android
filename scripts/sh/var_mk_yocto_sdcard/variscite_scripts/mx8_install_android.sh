@@ -164,8 +164,12 @@ function add_imx8qm_menu() {
 }
 
 function add_imx8mn_menu() {
-	img_list+=("dtbo-imx8mn-var-som-symphony-m7.img        (VAR-SOM-MX8M-NANO on Symphony-Board with M7 support)")
 	img_list+=("dtbo-imx8mn-var-som-symphony.img           (VAR-SOM-MX8M-NANO on Symphony-Board)")
+	img_list+=("dtbo-imx8mn-var-som-symphony-m7.img        (VAR-SOM-MX8M-NANO with M7 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mn-var-som-1.x-symphony.img       (VAR-SOM-MX8M-NANO V1.x on Symphony-Board)")
+	img_list+=("dtbo-imx8mn-var-som-1.x-symphony-m7.img    (VAR-SOM-MX8M-NANO V1.x with M7 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mn-var-som-wbe-symphony.img       (VAR-SOM-MX8M-NANO V2.x with WBE support on Symphony-Board)")
+	img_list+=("dtbo-imx8mn-var-som-wbe-symphony-m7.img    (VAR-SOM-MX8M-NANO V2.x with WBE and M7 support on Symphony-Board)")
 }
 
 imagesdir="/opt/images/Android"
@@ -264,7 +268,8 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 				soc_name=$opt
 			fi
 			if [[ "${soc_name}" == *"imx8mm-var-som-1.x"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
-					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]]; then
+					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]] ||
+					[[ "${soc_name}" == *"imx8mn-var-som-1.x"* ]]; then
 				imagesdir="/opt/images/Android/lwb"
 				blue_underlined_bold_echo "Image directory for SOM V1.x version: $imagesdir"
 			fi

@@ -131,7 +131,11 @@ BOARD_KERNEL_BASE := 0x40400000
 
 TARGET_BOARD_DTS_CONFIG := \
 	imx8mn-var-som-symphony:imx8mn-var-som-symphony.dtb \
-	imx8mn-var-som-symphony-m7:imx8mn-var-som-symphony-m7.dtb
+	imx8mn-var-som-symphony-m7:imx8mn-var-som-symphony-m7.dtb \
+	imx8mn-var-som-1.x-symphony:imx8mn-var-som-1.x-symphony.dtb \
+	imx8mn-var-som-1.x-symphony-m7:imx8mn-var-som-1.x-symphony-m7.dtb \
+	imx8mn-var-som-wbe-symphony:imx8mn-var-som-wbe-symphony.dtb \
+	imx8mn-var-som-wbe-symphony-m7:imx8mn-var-som-wbe-symphony-m7.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
