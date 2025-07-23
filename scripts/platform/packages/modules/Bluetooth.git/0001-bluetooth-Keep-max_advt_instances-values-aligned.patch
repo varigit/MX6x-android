@@ -1,0 +1,83 @@
+From b8862bcf39c0e347c4c3cd3d0fa024ebee3f0060 Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Mon, 14 Jul 2025 19:46:28 +0200
+Subject: [PATCH] bluetooth: BLE advertisement : keep max_advt_instances values
+ aligned
+
+Bluetooth stack should have the same way to check for BLE multi advertising
+capability. Currently the Bluetooth native stack has this way to check
+this capability:
+
+from system/gd/hci/controller.cc:
+
+bool is_supported(OpCode op_code) {
+    switch (op_code) {
+<many lines redacted>
+    case OpCode::LE_MULTI_ADVT:
+        return vendor_capabilities_.max_advt_instances_ != 0;
+}
+
+and the Bluethooth system service has this one instead:
+
+from android/app/src/com/android/bluetooth/btservice/AdapterService.java
+
+private static final int MIN_ADVT_INSTANCES_FOR_MA = 5;
+
+private boolean isMultiAdvertisementSupported() {
+    AdapterService service = getService();
+    if (service == null) {
+        return false;
+    }
+
+    int val = service.mAdapterProperties.getNumOfAdvertisementInstancesSupported();
+    return val >= MIN_ADVT_INSTANCES_FOR_MA;
+}
+
+That's why android apk which checks this capability (like nRF connect) report:
+"Multiple Advertisement supported NO"
+but in native stack the code execution jumps into Multiple Advertisement support
+implementation when the controller_->GetVendorCapabilities().max_advt_instances_
+returns 1.
+
+This misalignment causes a crash when we try to enable BLE Advertiser.
+
+Keeping criteria unified when checking for BLE multi advertising capability
+will solve the issue.
+
+Cherry-Picked from
+
+https://github.com/varigit/MX6x-android/blob/android-14.0.0_1.0.0-var01/scripts/platform/packages/modules/Bluetooth.git/0001-bluetooth-Keep-max_advt_instances-values-aligned.patch
+
+Change-Id: I087a80c77e4a37f3ba066614f2c4c9240c6804e7
+Signed-off-by: Pitchaiah P <pitchaiah.p@variscite.com>
+---
+ system/gd/hci/controller.cc | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/system/gd/hci/controller.cc b/system/gd/hci/controller.cc
+index 3a4ab17dfb..068f0222ac 100644
+--- a/system/gd/hci/controller.cc
++++ b/system/gd/hci/controller.cc
+@@ -45,6 +45,10 @@ constexpr bool kDefaultVendorCapabilitiesEnabled = true;
+ static const std::string kPropertyVendorCapabilitiesEnabled =
+         "bluetooth.core.le.vendor_capabilities.enabled";
+ 
++/* Keep this constant aligned with MIN_ADVT_INSTANCES_FOR_MA from
++ * android/app/src/com/android/bluetooth/btservice/AdapterService.java */
++static constexpr uint8_t min_advt_instances_for_ma = 5;
++
+ using os::Handler;
+ 
+ struct Controller::impl {
+@@ -1177,7 +1181,7 @@ struct Controller::impl {
+       case OpCode::LE_GET_VENDOR_CAPABILITIES:
+         return vendor_capabilities_.is_supported_ == 0x01;
+       case OpCode::LE_MULTI_ADVT:
+-        return vendor_capabilities_.max_advt_instances_ != 0x00;
++        return vendor_capabilities_.max_advt_instances_ >= min_advt_instances_for_ma;
+       case OpCode::LE_BATCH_SCAN:
+         return vendor_capabilities_.total_scan_results_storage_ != 0x00;
+       case OpCode::LE_ADV_FILTER:
+-- 
+2.43.0
+

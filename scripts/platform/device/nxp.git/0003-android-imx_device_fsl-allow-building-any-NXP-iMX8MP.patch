@@ -1,0 +1,44 @@
+From 9d26b08e4de04ec32f2f25310ffb62bb64bfcb09 Mon Sep 17 00:00:00 2001
+From: Pitchaiah P <pitchaiah.p@variscite.com>
+Date: Sun, 13 Jul 2025 23:06:56 +0200
+Subject: [PATCH] android-imx_device_fsl: allow building any NXP iMX8MP
+ derivatives
+
+These changes assume that the product name of the NXP iMX8MP derivatives
+include the string "8mp" and  this is used to simplify the checks in the
+build script.
+
+Derived from
+
+https://github.com/varigit-dev/MX6x-android/blob/android-14.0.0_1.0.0-var01/scripts/platform/device/nxp.git/0004-android-imx_device_fsl-allow-building-any-NXP-iMX8MP.patch
+
+Signed-off-by: Pitchaiah P <pitchaiah.p@variscite.com>
+---
+ common/tools/imx-make.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index cd4ec758..f0c65796 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -130,7 +130,7 @@ if [ "${build_bootloader}" = "" ] && [ "${build_kernel}" = "" ] && \
+ fi
+ 
+ # vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
+-if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
++if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} =~ "8mp" ]; then
+     build_vvcam="vvcam";
+     build_kernel_oot_module_flag=1;
+ fi
+@@ -205,7 +205,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+     fi
+     TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
+     if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+-        if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} =~ "8mn"  ] \
++        if [ ${TARGET_PRODUCT} =~ "8mp" ] || [ ${TARGET_PRODUCT} =~ "8mn"  ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+         || [ ${TARGET_PRODUCT} = "evk_95" ]; then
+-- 
+2.43.0
+
