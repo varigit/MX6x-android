@@ -1,0 +1,9 @@
+<display-settings>
+    <!-- Type of identifier to use: 1 = physical port number, 0 = uniqueId. -->
+    <config identifier="1" />
+
+    <display name="port:1"
+        shouldShowSystemDecors="true"
+        shouldShowIme="true"
+        forcedDensity="160" />
+</display-settings>

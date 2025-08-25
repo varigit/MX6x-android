@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
     exit 1
 fi
 
-./var-docker/run.sh -u 20.04 -a 15 -l -w "$WORKSPACE_DIR" -p
+./var-docker/run.sh -u 20.04 -a 15.0.0_1.2.0 -l -w "$WORKSPACE_DIR" -p 
 
 if [ $? -ne 0 ]; then
     echo "#################################################"

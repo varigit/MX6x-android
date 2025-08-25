@@ -26,7 +26,7 @@ index cd4ec758..f0c65796 100755
  
  # vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
 -if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
-+if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} =~ "8mp" ]; then
++if [ -n "${build_kernel_modules}" ] && [[ ${TARGET_PRODUCT} =~ 8mp ]]; then
      build_vvcam="vvcam";
      build_kernel_oot_module_flag=1;
  fi
@@ -35,7 +35,7 @@ index cd4ec758..f0c65796 100755
      TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
      if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
 -        if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} =~ "8mn"  ] \
-+        if [ ${TARGET_PRODUCT} =~ "8mp" ] || [ ${TARGET_PRODUCT} =~ "8mn"  ] \
++        if [[ ${TARGET_PRODUCT} =~ 8mp ]] || [[ ${TARGET_PRODUCT} =~ 8mn  ]] \
          || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
          || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
          || [ ${TARGET_PRODUCT} = "evk_95" ]; then
