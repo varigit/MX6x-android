@@ -205,4 +205,8 @@ PRODUCT_IMX_TRUSTY := false
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8mn-var-som-trusty-dual.img
+else
 BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8mn-var-som-dual.img
+endif
