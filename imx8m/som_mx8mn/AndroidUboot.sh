@@ -47,7 +47,7 @@ build_imx_uboot()
 	# build ATF based on whether tee is involved
 	make -C ${VARISCITE_PATH}/arm-trusted-firmware/ PLAT=`echo $2 | cut -d '-' -f1` clean
 	if [ `echo $2 | cut -d '-' -f4` = "trusty" ]; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx8m/tee-imx8mn.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/tee.bin
+		cp -v ${product_path}/tee-imx8mn.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/tee.bin
 		make -C ${VARISCITE_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty IMX_ANDROID_BUILD=true 1>/dev/null || exit 1
 	else
 		if [ -f ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX8M/tee.bin ] ; then
