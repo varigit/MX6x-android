@@ -197,11 +197,11 @@ endif
 
 # -------@block_memory-------
 #Enable this to config 1GB ddr on evk_imx8mn
-LOW_MEMORY := false
+LOW_MEMORY ?= false
 
 # -------@block_security-------
 #Enable this to include trusty support
-PRODUCT_IMX_TRUSTY := false
+PRODUCT_IMX_TRUSTY ?= false
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
