@@ -391,10 +391,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1-service.btlinux
 
-# Boot Animation
-PRODUCT_COPY_FILES += \
-    device/variscite/common/bootanimation/bootanimation-var1280.zip:system/media/bootanimation.zip
-
 # -------@block_usb-------
 # Usb HAL
 PRODUCT_PACKAGES += \
