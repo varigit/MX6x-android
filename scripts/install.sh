@@ -20,21 +20,14 @@ readonly SCRIPT_POINT=${ABSOLUTE_DIRECTORY}
 readonly SCRIPT_START_DATE=$(date +%Y%m%d)
 readonly ANDROID_DIR="${SCRIPT_POINT}/../../.."
 
-readonly BASE_BRANCH_NAME="android-15.0.0_1.2.0"
 
 ## git variables get from base script!
 readonly _EXTPARAM_BRANCH="android-15.0.0_1.2.0-var01"
 
-# Android TAG from release notes
-readonly ANDROID_TAG="android-15.0.0_r17"
 
 ## dirs ##
 readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
 readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
-VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
-LIBBT=$(readlink -f "${ANDROID_DIR}/hardware/broadcom/libbt")
-SEPOLICY=$(readlink -f "${ANDROID_DIR}/system/sepolicy")
-BLUETOOTH=$(readlink -f "${ANDROID_DIR}/packages/modules/Bluetooth")
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.6.0"
@@ -165,11 +158,6 @@ do
 	cd ${ANDROID_DIR}/${_git_p}/ > /dev/null
 
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
-		if [[ ${PWD} == ${LIBBT} ]] || [[ ${PWD} == ${BLUETOOTH} ]]; then
-			git checkout tags/${ANDROID_TAG}
-		else
-			git checkout tags/${BASE_BRANCH_NAME}
-		fi
 		git branch -D ${_EXTPARAM_BRANCH}
 		git checkout -b ${_EXTPARAM_BRANCH} || {
 			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
