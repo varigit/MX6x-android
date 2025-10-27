@@ -455,7 +455,7 @@ PRODUCT_PACKAGES += \
 
 # Tensorflow lite camera demo
 PRODUCT_PACKAGES += \
-                    tflitecamerademo
+    tflitecamerademo
 
 # -------@block_var_mii-------------
  PRODUCT_PACKAGES += \

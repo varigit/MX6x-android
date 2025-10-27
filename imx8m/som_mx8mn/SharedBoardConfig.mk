@@ -79,7 +79,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
-    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko 
+    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko
 endif
 
 # CONFIG_CLK_IMX8MM: clk-imx8mm.ko
