@@ -122,6 +122,14 @@ function add_imx8mm_menu() {
 	img_list+=("dtbo-imx8mm-var-som-symphony-m4.img			(VAR-SOM-MX8M-MINI V2.x with M4 support on Symphony-Board)")
 	img_list+=("dtbo-imx8mm-var-som-wbe-symphony.img		(VAR-SOM-MX8M-MINI V2.x with WBE support on Symphony-Board)")
 	img_list+=("dtbo-imx8mm-var-som-wbe-symphony-m4.img		(VAR-SOM-MX8M-MINI V2.x with WBE and M4 support on Symphony-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-sonata.img			(DART-MX8M-MINI V2.x on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-wbe-sonata.img 		(DART-MX8M-MINI V2.x with WBE support on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-sonata-m4.img			(DART-MX8M-MINI V2.x with M4 support on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-wbe-sonata-m4.img 		(DART-MX8M-MINI V2.x with WBE and M4 support on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-sonata.img 		(DART-MX8M-MINI V1.x on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-sonata-m4.img 		(DART-MX8M-MINI V1.x with M4 support on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-wbe-sonata.img 		(DART-MX8M-MINI V1.x with WBE support on Sonata-Board)")
+	img_list+=("dtbo-imx8mm-var-dart-1.x-wbe-sonata-m4.img 		(DART-MX8M-MINI V1.x with WBE and M4 support on Sonata-Board)")
 }
 
 function add_imx8mq_menu() {
