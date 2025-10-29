@@ -1,0 +1,1 @@
+genfscon sysfs /devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc/rtc0/hctosys     u:object_r:sysfs_rtc:s0
