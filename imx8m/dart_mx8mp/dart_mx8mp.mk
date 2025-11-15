@@ -751,3 +751,7 @@ $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk
 
 # Add imx private apps
 $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)
+
+# Input Device Configuration files
+PRODUCT_COPY_FILES += \
+    $(IMX_DEVICE_PATH)/idc/generic_ft5x06__79_.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06__79_.idc
