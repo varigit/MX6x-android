@@ -1,0 +1,35 @@
+From 39710a62bc59f86b4ac7d4e8012850fafc412cc7 Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Fri, 15 Mar 2024 14:22:06 +0100
+Subject: [PATCH] android-imx_device_fsl: Check if the file exists before
+ trying to install it
+
+When building u-boot with dual-bootloader support the file u-boot-*.img
+is not created and build exits with error:
+install: cannot stat '../UBOOT_COLLECTION/u-boot-imx8mp-var-dart-trusty-dual.imx': No such file or directory
+make: *** [../nxp/common/build/uboot.mk:137: ../out/target/product/dart_mx8mp/u-boot.imx] Error 1
+
+Check before if this file exists.
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ common/build/uboot.mk | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/common/build/uboot.mk b/common/build/uboot.mk
+index 130f2dc0..179fc9d9 100644
+--- a/common/build/uboot.mk
++++ b/common/build/uboot.mk
+@@ -150,7 +150,9 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ 		else \
+ 			install -D $(UBOOT_OUT)/u-boot$(TARGET_DTB_POSTFIX).$(TARGET_BOOTLOADER_POSTFIX) $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx; \
+ 		fi; \
+-		install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN); \
++		if [ -e "$(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx" ]; then \
++			install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN); \
++		fi; \
+ 	done
+ 
+ .PHONY: bootloader $(UBOOT_BIN) $(UBOOTENVSH)
+-- 
+2.34.1

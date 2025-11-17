@@ -1,0 +1,46 @@
+From 6003a24441ccc1b1217deba3408786595e3e017c Mon Sep 17 00:00:00 2001
+From: FrancescoFerraro <francesco.f@variscite.com>
+Date: Thu, 23 Oct 2025 09:51:10 +0200
+Subject: [PATCH] android-imx_device_fsl: allow building any NXP iMX95
+ derivatives
+
+These changes assume that the product name of the NXP iMX95 derivatives
+include the string "95" and  this is used to simplify the checks in the
+build script.
+
+Signed-off-by: FrancescoFerraro <francesco.f@variscite.com>
+---
+ common/tools/imx-make.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index 910b4eda..3dd46b82 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -147,11 +147,11 @@ soc_path=${product_path%/*}
+ nxp_git_path=${soc_path%/*}
+ 
+ if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "mek_8q" ]; then
+-    make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
++    make -f ${nxp_git_path}/../nxp/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
+ fi
+ 
+-if [ -n "${build_kernel}" ] && [ ${TARGET_PRODUCT} = "evk_95" ]; then
+-    make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
++if [ -n "${build_kernel}" ] && [[ ${TARGET_PRODUCT} =~ "95" ]]; then
++    make -f ${nxp_git_path}/../nxp/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
+ fi
+ 
+ # if uboot is to be compiled, remove the UBOOT_COLLECTION directory
+@@ -201,7 +201,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+         if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
+         || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+-        || [ ${TARGET_PRODUCT} = "evk_95" ]; then
++        || [[ ${TARGET_PRODUCT} =~ "95" ]]; then
+             if [ ${enable_gki} -eq 1 ]; then
+                 mv ${OUT}/boot.img ${OUT}/boot-imx.img
+                 make bootimage
+-- 
+2.47.0
+

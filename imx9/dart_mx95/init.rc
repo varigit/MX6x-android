@@ -19,7 +19,7 @@ on property:sys.boot_completed=1
 on early-init
     start early_init_sh
     # Set the host name which used in console
-    export HOSTNAME evk_95
+    export HOSTNAME imx95-var-dart
 
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
@@ -27,8 +27,8 @@ on early-init
     setprop ro.hardware.gatekeeper ${ro.boot.keystore}
     setprop vendor.storageproxyd ${ro.boot.keystore}
 
-    # Use ro.boot.lcd_density to override ro.sf.lcd_density
-    setprop ro.sf.lcd_density ${ro.boot.lcd_density}
+    # Set the density to 160 dpi to match LCD.
+    setprop ro.sf.lcd_density 160
 
 # Skip charger_not_need trigger for charger mode
 on early-init && property:ro.boot.mode=charger
@@ -145,6 +145,12 @@ on early-boot && property:vendor.skip.charger_not_need=0
     chown root graphics /sys/kernel/debug/sync/sw_sync
     chmod 0664 /sys/kernel/debug/sync/sw_sync
 
+    # Default backlight device
+    setprop vendor.hw.backlight.dev "backlight"
+    # Chmod/chown FSL specific sys entry
+    chown system system /sys/class/backlight/backlight/brightness
+    chmod 0660 /sys/class/backlight/backlight/brightness
+
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
     setprop vendor.ro.lightsensor.threshold  20
@@ -186,7 +192,7 @@ on boot && property:vendor.skip.charger_not_need=0
     start drm
 
 on fs && property:vendor.skip.charger_not_need=0
-# mount ext4 partitions
+# mount partitions
     mount_all /vendor/etc/fstab.nxp --early
 
     # Update dm-verity state and set partition.*.verified properties
@@ -291,8 +297,8 @@ service imx_dek_extractor /vendor/bin/hw/imx_dek_extractor
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start imx_dek_extractor
 
-on property:ro.boot.camera.layout=ap1302
-    setprop ro.media.xml_variant.profiles _95-ap1302
+on property:ro.boot.camera.layout=ov5640
+    setprop ro.media.xml_variant.profiles _95-ov5640
 
 on property:sys.boot_completed=1 && property:vendor.storageproxyd=trusty
     start vendor.secure-enclave
@@ -303,3 +309,4 @@ on property:sys.boot_completed=1
 on property:sys.boot_completed=1
     # Turn on swap
     swapon_all /vendor/etc/fstab.nxp
+    chmod 0777 /data/ota_package

@@ -3,6 +3,11 @@ KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
 LOADABLE_KERNEL_MODULE ?= true
 
+#NXP 8997 wifi driver module
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
+    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
+
 #ARM GPU driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/arm/midgard/mali_kbase.ko
@@ -35,12 +40,10 @@ IMX_ANDROID_FIRST_STAGE_MODULES += \
     $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-ipc.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-virtio.ko \
-    $(KERNEL_OUT)/drivers/i2c/busses/i2c-imx-lpi2c.ko \
     $(KERNEL_OUT)/drivers/i2c/i2c-dev.ko \
     $(KERNEL_OUT)/drivers/i2c/busses/i2c-rpmsg-imx.ko \
     $(KERNEL_OUT)/drivers/i2c/i2c-mux.ko \
     $(KERNEL_OUT)/drivers/irqchip/irq-imx-irqsteer.ko \
-    $(KERNEL_OUT)/drivers/rtc/rtc-imx-sm-bbm.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/sm-misc.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx7ulp_wdt.ko \
@@ -50,12 +53,30 @@ IMX_ANDROID_FIRST_STAGE_MODULES += \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp-fsb-s400.ko \
+    $(KERNEL_OUT)/drivers/power/sequencing/pwrseq-core.ko \
     $(KERNEL_OUT)/drivers/mmc/core/pwrseq_simple.ko \
     $(KERNEL_OUT)/drivers/pwm/pwm-imx-tpm.ko \
     $(KERNEL_OUT)/drivers/soc/imx/soc-imx9.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-adp5585.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-vf610.ko
+
+#Variscite addons
+IMX_ANDROID_FIRST_STAGE_MODULES += \
+    $(KERNEL_OUT)/drivers/dma/imx-sdma.ko\
+    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
+    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
+    $(KERNEL_OUT)/drivers/spi/spidev.ko \
+    $(KERNEL_OUT)/drivers/spi/spi-imx.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/ads7846.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/edt-ft5x06.ko \
+    $(KERNEL_OUT)/drivers/rtc/rtc-ds1307.ko \
+    $(KERNEL_OUT)/drivers/leds/leds-gpio.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko \
+    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko
 
 IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/video/backlight/led_bl.ko \
@@ -112,7 +133,6 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-simple.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-raydium-rm692c9.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-rocktech-hx8394f.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko \
@@ -128,7 +148,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
     $(KERNEL_OUT)/lib/crypto/libarc4.ko \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko \
@@ -137,13 +156,11 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/reset/gpio-reset.ko \
     $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
     $(KERNEL_OUT)/drivers/pci/controller/dwc/pci-imx6.ko \
-    $(KERNEL_OUT)/drivers/spi/spidev.ko \
     $(KERNEL_OUT)/drivers/spi/spi-bitbang.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
     $(KERNEL_OUT)/drivers/spi/spi-fsl-lpspi.ko \
     $(KERNEL_OUT)/drivers/mtd/mtd.ko \
     $(KERNEL_OUT)/drivers/mtd/spi-nor/spi-nor.ko \
-    $(KERNEL_OUT)/drivers/leds/leds-gpio.ko \
     $(KERNEL_OUT)/drivers/leds/leds-pca995x.ko \
     $(KERNEL_OUT)/drivers/leds/leds-pca963x.ko \
     $(KERNEL_OUT)/drivers/mxc/vpu/wave6/wave6-vpu-ctrl.ko \
@@ -192,16 +209,32 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/enetc/fsl-enetc4.ko \
     $(KERNEL_OUT)/drivers/net/phy/realtek.ko
 
+#Variscite addons
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/net/phy/adin.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/qcom-phy-lib.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/at803x.ko \
+    $(KERNEL_OUT)/drivers/net/phy/mxl-8611x.ko \
+    $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac.ko \
+    $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac-platform.ko \
+    $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.ko \
+    $(KERNEL_OUT)/net/can/can.ko \
+    $(KERNEL_OUT)/net/can/can-gw.ko \
+    $(KERNEL_OUT)/net/can/can-bcm.ko \
+    $(KERNEL_OUT)/net/can/can-raw.ko \
+    $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
+    $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
+    $(KERNEL_OUT)/drivers/net/can/flexcan/flexcan.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko
+
 ifeq ($(ENABLE_CONTEXTHUB), true)
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/rpmsg/imx_rpmsg_chre.ko
 endif
 endif
-
-#NXP 8997 wifi driver module
-BOARD_VENDOR_KERNEL_MODULES += \
-    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
-    $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
 
 #neutron driver module
 BOARD_VENDOR_KERNEL_MODULES += \
@@ -232,8 +265,12 @@ LOW_MEMORY := false
 
 # -------@block_security-------
 #Enable this to include trusty support
-PRODUCT_IMX_TRUSTY := true
+PRODUCT_IMX_TRUSTY := false
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
-BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-var-dart-trusty-dual.img
+else
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-var-dart-dual.img
+endif

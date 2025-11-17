@@ -6,6 +6,6 @@
 <!-- Display settings for 2nd Home -->
 <display name="port:2"
     shouldShowSystemDecors="true"
-    shouldShowIme="true" />
-
+    shouldShowIme="true"
+    forcedDensity="160" />
 </display-settings>

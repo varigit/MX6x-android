@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2012 The Android Open Source Project
+ * Copyright (C) 2024 Variscite Ltd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,13 +15,10 @@
  * limitations under the License.
  */
 
-/* Copyright (C) 2015-2016 Freescale Semiconductor, Inc. */
-/* Copyright 2017-2018 NXP */
-
 #ifndef _BDROID_BUILDCFG_H
 #define _BDROID_BUILDCFG_H
 
-#define BTM_DEF_LOCAL_NAME "iMX9"
+#define BTM_DEF_LOCAL_NAME "DART-MX95"
 
 // Disables Interleave scan
 #define BTA_HOST_INTERLEAVE_SEARCH  FALSE

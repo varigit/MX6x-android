@@ -23,9 +23,9 @@ VVCAM_PATH := vendor/nxp-opensource/verisilicon_sw_isp_vvcam
 MXMWIFI_PATH := vendor/nxp-opensource/nxp-mwifiex
 RESTRICTED_APP_PATH := vendor/nxp-private
 IMX_SECURITY_PATH := vendor/nxp-private/security
-
-KERNEL_IMX_PATH := vendor/nxp-opensource
-UBOOT_IMX_PATH := vendor/nxp-opensource
+VARISCITE_PATH := vendor/variscite
+KERNEL_IMX_PATH := vendor/variscite
+UBOOT_IMX_PATH := vendor/variscite
 IMX_LIB_PATH := vendor/nxp-opensource
 IMX_MKIMAGE_PATH := vendor/nxp-opensource
 IMX_PATH := vendor/nxp-opensource

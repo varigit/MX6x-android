@@ -2,6 +2,9 @@
 CONFIG_REPO_PATH := device/nxp
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
+# IMX_DEVICE_PATH refers to the Variscite SoM folder
+# NXP_DEVICE_PATH refers to the NXP EVK folder
+NXP_DEVICE_PATH := $(CONFIG_REPO_PATH)/imx9/evk_95
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
@@ -18,9 +21,9 @@ include $(CONFIG_REPO_PATH)/imx9/ProductConfigCommon.mk
 
 # -------@block_common_config-------
 # Overrides
-PRODUCT_NAME := evk_95
-PRODUCT_DEVICE := evk_95
-PRODUCT_MODEL := EVK_95
+PRODUCT_NAME := dart_mx95
+PRODUCT_DEVICE := dart_mx95
+PRODUCT_MODEL := DART_MX95
 
 TARGET_BOOTLOADER_BOARD_NAME := EVK_95
 
@@ -44,7 +47,7 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/power
 PRODUCT_SOONG_NAMESPACES += hardware/google/pixel
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/powerhint_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx95.json
+    $(NXP_DEVICE_PATH)/powerhint_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx95.json
 
 # Do not skip charger_not_need trigger by default
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -54,13 +57,13 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 PRODUCT_PACKAGES += \
     android.hardware.power-service.imx
 
-TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
+TARGET_VENDOR_PROP := $(NXP_DEVICE_PATH)/product.prop
 
 # Thermal HAL
 PRODUCT_PACKAGES += \
     android.hardware.thermal-service.imx
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/thermal_info_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx95.json
+    $(NXP_DEVICE_PATH)/thermal_info_config_imx95.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx95.json
 
 # Media c2_component_register
 PRODUCT_COPY_FILES += \
@@ -73,7 +76,7 @@ PRODUCT_COPY_FILES += \
 	  $(CONFIG_REPO_PATH)/imx9/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
+    $(NXP_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
 
 # -------@block_kernel_bootimg-------
 
@@ -97,7 +100,7 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
+    $(NXP_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/sdma/sdma-imx7d.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/sdma/sdma-imx7d.bin \
     $(CONFIG_REPO_PATH)/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
     $(IMX_DEVICE_PATH)/ueventd.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
@@ -149,7 +152,7 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
   ifeq ($(BUILD_ENCRYPTED_BOOT),true)
     PRODUCT_COPY_FILES += \
-      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-var-dart-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
   endif
 endif
 
@@ -204,9 +207,11 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx \
-    android.hardware.oemlock-service-software.imx
+    android.hardware.oemlock-service.imx
 endif
+
+PRODUCT_PACKAGES += \
+    android.hardware.oemlock-service-software.imx
 
 # Add Trusty OS backed gatekeeper and secure storage proxy
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -281,39 +286,25 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # Audio card json
 PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/audio-json/cs42448_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42448_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
+    $(IMX_DEVICE_PATH)/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/micfil_s32_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_s32_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/mqs_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/mqs_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 
-# LPA demo
 PRODUCT_COPY_FILES += \
-    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
+    $(NXP_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+    $(NXP_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
-
-PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
-    $(IMX_DEVICE_PATH)/audio_policy_configuration_multichannel.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_multichannel.xml
+    $(NXP_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml \
+    $(NXP_DEVICE_PATH)/audio_policy_configuration_multichannel.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration_multichannel.xml
 
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
-    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
-
-PRODUCT_PACKAGES += \
-    media_profiles_95-ap1302.xml
-
-PRODUCT_PACKAGES += \
-    ap1302_ar0144_single_fw.bin
+    $(IMX_DEVICE_PATH)/camera_config_imx95-dual-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
+    $(NXP_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
@@ -356,7 +347,7 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 ifeq ($(MULTIDISPLAY_WITH_INDEPENDENT_CONTROL),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml \
-    $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
+    $(NXP_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 endif
 
 # Display Device Config
@@ -412,13 +403,17 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     WifiOverlay
 
-# nxp 8997 wifi and bluetooth combo Firmware
+# NXP 8987 Wifi and Bluetooth Combo Firmware
+# The firmware name is defined in wifi_mod_para_sd8987.conf
+# If using WiFi and BT firmware separately, change the firmware name in wifi_mod_para_sd8987.conf to sd_w61x_v1.bin.se
+# and the BT firmware will be loaded by the btnxpuart driver.
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/nxp/FwImage_IW416_SD/sduartiw416_combo.bin:vendor/firmware/sduartiw416_combo.bin \
-    vendor/nxp/imx-firmware/nxp/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
+    vendor/nxp/imx-firmware/nxp/FwImage_8987/sduart8987_combo.bin:vendor/firmware/sduart8987_combo.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/FwImage_AW693_PCIE/pcieuartaw693_combo_v1.bin.se:vendor/firmware/pcieuartaw693_combo_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
+    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/uartspi_n61x_v1.bin.se:vendor/firmware/nxp/uartspi_n61x_v1.bin.se \
+    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sd_w61x_v1.bin.se:vendor/firmware/sd_w61x_v1.bin.se \
+    vendor/nxp/imx-firmware/nxp/mfguart/helper_uart_3000000.bin:vendor/firmware/helper_uart_3000000.bin \
+    device/variscite/imx9/dart_mx95/wifi_mod_para_sd8987.conf:vendor/firmware/wifi_mod_para_sd8987.conf \
     hardware/nxp/libbt/conf/nxp/evk_95/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
 
 # Wifi regulatory
@@ -428,10 +423,18 @@ PRODUCT_COPY_FILES += \
 
 # -------@block_bluetooth-------
 
+# -------@block_bluetooth-------
 # Bluetooth HAL
+TARGET_USES_VND_LIBBT := false
+
+ifeq ($(TARGET_USES_VND_LIBBT),true)
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth \
     android.hardware.bluetooth-service.default.nxp
+else
+PRODUCT_PACKAGES += \
+    android.hardware.bluetooth-service.default
+endif
 
 #nxp 8997 Bluetooth vendor config
 PRODUCT_PACKAGES += \
@@ -451,7 +454,7 @@ PRODUCT_PACKAGES += \
     android.hardware.usb.gadget-service.imx
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
+    $(NXP_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     sys.usb.mtp.batchcancel=1
@@ -460,8 +463,8 @@ PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
 
 # Vendor seccomp policy files for media components:
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
-    $(IMX_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
+    $(NXP_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
+    $(NXP_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
 
 
 # imx c2 codec binary
@@ -510,25 +513,43 @@ PRODUCT_PACKAGES += \
 
 # Tensorflow lite camera demo
 PRODUCT_PACKAGES += \
-                    tflitecamerademo
+    tflitecamerademo
+
+# -------@block_canbus_tools-------
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
+
+# -------@block_var_mii-------------
+PRODUCT_PACKAGES += \
+    var-mii
 
 # -------@block_miscellaneous-------
 
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.imx95.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx95.rc \
+    $(NXP_DEVICE_PATH)/init.imx95.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx95.rc \
     $(IMX_DEVICE_PATH)/init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.rc
 
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
   PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
+    $(NXP_DEVICE_PATH)/init.recovery.nxp.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
 else
   PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
+    $(NXP_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
 endif
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
+    $(NXP_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
 
 # ONLY devices that meet the CDD's requirements may declare these features
 
@@ -545,6 +566,7 @@ endif
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
     frameworks/native/data/etc/android.hardware.screen.portrait.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.portrait.xml \
@@ -618,5 +640,5 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml \
-    $(IMX_DEVICE_PATH)/chre/preloaded_nanoapps.json:$(TARGET_COPY_OUT_VENDOR)/etc/chre/preloaded_nanoapps.json
+    $(NXP_DEVICE_PATH)/chre/preloaded_nanoapps.json:$(TARGET_COPY_OUT_VENDOR)/etc/chre/preloaded_nanoapps.json
 endif

@@ -4,6 +4,10 @@
 # specify MF_CHECK, and must come before any filesystems that do specify MF_CHECK
 
 /devices/platform/soc/4c200000.usb/*        auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc/4c010010.usb/4c100000.usb*        auto auto defaults voldmanaged=usb:auto
+/devices/platform/soc/42800000.bus/42860000.mmc/mmc_host/* auto auto defaults voldmanaged=extsd:auto
+/devices/platform/soc/4c380000.pcie/pci0001:00/0001:00:00.0/0001:01:00.0/nvme/nvme*      auto       auto    defaults    voldmanaged=nvmedisk:auto
+/devices/platform/soc/4c300000.pcie/pci0000:00/0000:00:00.0/0000:01:00.0/nvme/nvme*      auto       auto    defaults    voldmanaged=nvmedisk:auto
 /dev/block/by-name/userdata    /data        f2fs    nodev,noatime,nosuid,inlinecrypt,reserve_root=32768 latemount,wait,check,quota,formattable,fileencryption=aes-256-xts,fscompress,keydirectory=/metadata/vold/metadata_encryption,checkpoint=fs
 /dev/block/by-name/metadata    /metadata    f2fs    noatime,nosuid,nodev,discard,sync,fsync_mode=nobarrier                           wait,formattable,first_stage_mount,check
 /dev/block/by-name/misc        /misc        emmc    defaults                                                                         defaults

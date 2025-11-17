@@ -27,14 +27,8 @@
 # Copied from build/target/product/AndroidProducts.mk
 
 PRODUCT_MAKEFILES := \
-  $(LOCAL_DIR)/evk_943/evk_943.mk \
-  $(LOCAL_DIR)/evk_93/evk_93.mk \
-  $(LOCAL_DIR)/evk_95/evk_95.mk
+  $(LOCAL_DIR)/dart_mx95/dart_mx95.mk
 
 COMMON_LUNCH_CHOICES := \
-  evk_93-nxp_stable-user \
-  evk_93-nxp_stable-userdebug \
-  evk_943-nxp_stable-user \
-  evk_943-nxp_stable-userdebug \
-  evk_95-nxp_stable-user \
-  evk_95-nxp_stable-userdebug
+  dart_mx95-var_stable-user \
+  dart_mx95-var_stable-userdebug
