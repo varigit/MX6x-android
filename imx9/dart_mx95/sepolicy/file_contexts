@@ -1,0 +1,6 @@
+# Label all wakeup source directories as sysfs_wakeup
+/sys/devices/platform/soc/42000000.bus/42530000.i2c/i2c-2/2-0038/wakeup(/.*)?                               u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc/42000000.bus/42710000.spi/spi_master/spi0/spi0.0/wakeup(/.*)?                     u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc/42000000.bus/42530000.i2c/i2c-2/2-0068/rtc/rtc0/alarmtimer.1.auto/wakeup(/.*)?    u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc/42000000.bus/42530000.i2c/i2c-2/2-0068/wakeup(/.*)?                               u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/gpio-keys/wakeup(/.*)?                                                                u:object_r:sysfs_wakeup:s0
