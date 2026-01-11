@@ -183,6 +183,30 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 	 imx8mp-var-som-wbe-symphony-basler-isp0-m7:imx8mp-var-som-wbe-symphony-basler-isp0-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-basler-isi0:imx8mp-var-som-wbe-symphony-basler-isi0.dtb \
 	 imx8mp-var-som-wbe-symphony-basler-isi0-m7:imx8mp-var-som-wbe-symphony-basler-isi0-m7.dtb \
+	 imx8mp-var-som-symphony-1.x:imx8mp-var-som-symphony-1.x.dtb \
+	 imx8mp-var-som-symphony-1.x-m7:imx8mp-var-som-symphony-1.x-m7.dtb \
+	 imx8mp-var-som-symphony-1.x-2nd-ov5640:imx8mp-var-som-symphony-1.x-2nd-ov5640.dtb \
+	 imx8mp-var-som-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-symphony-1.x-2nd-ov5640-m7.dtb \
+	 imx8mp-var-som-symphony-1.x-basler-isp0:imx8mp-var-som-symphony-1.x-basler-isp0.dtb \
+	 imx8mp-var-som-symphony-1.x-basler-isp0-m7:imx8mp-var-som-symphony-1.x-basler-isp0-m7.dtb \
+	 imx8mp-var-som-symphony-1.x-basler-isi0:imx8mp-var-som-symphony-1.x-basler-isi0.dtb \
+	 imx8mp-var-som-symphony-1.x-basler-isi0-m7:imx8mp-var-som-symphony-1.x-basler-isi0-m7.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x:imx8mp-var-som-1.x-symphony-1.x.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-m7:imx8mp-var-som-1.x-symphony-1.x-m7.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640:imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640-m7.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-basler-isp0:imx8mp-var-som-1.x-symphony-1.x-basler-isp0.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-basler-isp0-m7:imx8mp-var-som-1.x-symphony-1.x-basler-isp0-m7.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-basler-isi0:imx8mp-var-som-1.x-symphony-1.x-basler-isi0.dtb \
+	 imx8mp-var-som-1.x-symphony-1.x-basler-isi0-m7:imx8mp-var-som-1.x-symphony-1.x-basler-isi0-m7.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x:imx8mp-var-som-wbe-symphony-1.x.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-m7:imx8mp-var-som-wbe-symphony-1.x-m7.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640:imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640-m7.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-basler-isp0:imx8mp-var-som-wbe-symphony-1.x-basler-isp0.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-basler-isp0-m7:imx8mp-var-som-wbe-symphony-1.x-basler-isp0-m7.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-basler-isi0:imx8mp-var-som-wbe-symphony-1.x-basler-isi0.dtb \
+	 imx8mp-var-som-wbe-symphony-1.x-basler-isi0-m7:imx8mp-var-som-wbe-symphony-1.x-basler-isi0-m7.dtb \
 	 imx8mp-var-dart-wbe-sonata:imx8mp-var-dart-wbe-sonata.dtb \
 	 imx8mp-var-dart-wbe-sonata-m7:imx8mp-var-dart-wbe-sonata-m7.dtb \
 	 imx8mp-var-dart-wbe-sonata-basler-isi0-m7:imx8mp-var-dart-wbe-sonata-basler-isi0-m7.dtb \
