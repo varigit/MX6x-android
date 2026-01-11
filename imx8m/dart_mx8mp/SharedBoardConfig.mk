@@ -42,6 +42,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
     $(KERNEL_OUT)/lib/crypto/libarc4.ko \
+    $(KERNEL_OUT)/lib/crc-ccitt.ko \
     $(KERNEL_OUT)/net/mac80211/mac80211.ko \
     $(KERNEL_OUT)/drivers/mxc/gpu-viv/galcore.ko \
     $(KERNEL_OUT)/drivers/thermal/imx8mm_thermal.ko \
@@ -109,7 +110,10 @@ BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
     $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
 endif
 
 # CONFIG_TOUCHSCREEN_GOODIX: goodix_ts.ko, rm67199 mipi-panel touch driver module
