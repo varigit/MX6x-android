@@ -139,8 +139,14 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
 	imx8mm-var-som-1.x-symphony:imx8mm-var-som-1.x-symphony.dtb \
 	imx8mm-var-som-1.x-symphony-m4:imx8mm-var-som-1.x-symphony-m4.dtb \
+	imx8mm-var-som-symphony-1.x:imx8mm-var-som-symphony-1.x.dtb \
+	imx8mm-var-som-symphony-1.x-m4:imx8mm-var-som-symphony-1.x-m4.dtb \
+	imx8mm-var-som-1.x-symphony-1.x:imx8mm-var-som-1.x-symphony-1.x.dtb \
+	imx8mm-var-som-1.x-symphony-1.x-m4:imx8mm-var-som-1.x-symphony-1.x-m4.dtb \
 	imx8mm-var-som-wbe-symphony:imx8mm-var-som-wbe-symphony.dtb \
 	imx8mm-var-som-wbe-symphony-m4:imx8mm-var-som-wbe-symphony-m4.dtb \
+	imx8mm-var-som-wbe-symphony-1.x:imx8mm-var-som-wbe-symphony-1.x.dtb \
+	imx8mm-var-som-wbe-symphony-1.x-m4:imx8mm-var-som-wbe-symphony-1.x-m4.dtb \
 	imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
 	imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb \
 	imx8mm-var-dart-1.x-dt8mcustomboard:imx8mm-var-dart-1.x-dt8mcustomboard.dtb \
