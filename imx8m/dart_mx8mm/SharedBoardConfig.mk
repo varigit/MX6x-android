@@ -84,11 +84,17 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
     $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko
 
- BOARD_VENDOR_KERNEL_MODULES += \
-     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
-     $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
-     $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
+    $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko
 
+# TPM support
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/lib/crc-ccitt.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
 endif
 
 # CONFIG_TOUCHSCREEN_GOODIX: goodix_ts.ko, rm67199 mipi-panel touch driver module
