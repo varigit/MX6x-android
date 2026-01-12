@@ -411,10 +411,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
     persist.bluetooth.leaudio_offload.disabled=false \
     ro.bluetooth.leaudio_switcher.supported=true
 
-# Boot Animation
-PRODUCT_COPY_FILES += \
-    device/variscite/common/bootanimation/bootanimation-var1280.zip:system/media/bootanimation.zip
-
 # -------@block_cm_rpmsg-------
 # Include imx_rpmsg_pingpong.ko to image
 PRODUCT_COPY_FILES += \
