@@ -4,4 +4,7 @@
 /sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/wakeup/wakeup[0-9]*(/.*)?                                                u:object_r:sysfs_wakeup:s0
 /sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup                                    u:object_r:sysfs_wakeup:s0
 /sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup/wakeup[0-9]*(/.*)?                 u:object_r:sysfs_wakeup:s0
-
+#pca9534 GPIO expander, snvs_pwrkeys, ft5x06_ts touch controller
+/sys/devices/platform/soc@0/30800000.bus/30a30000.i2c/i2c-1/1-0020/wakeup*(/.*)?                                                            u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/gpio-keys/wakeup*(/.*)?                                                                                               u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/soc@0/30800000.bus/30a40000.i2c/i2c-2/2-0038/wakeup*(/.*)?                                                            u:object_r:sysfs_wakeup:s0
