@@ -210,6 +210,9 @@ PRODUCT_PACKAGES += \
     android.hardware.oemlock-service.imx
 endif
 
+PRODUCT_PACKAGES += \
+    android.hardware.oemlock-service-software.imx
+
 # Specify rollback index for boot and vbmeta partition
 ifneq ($(AVB_RBINDEX),)
 BOARD_AVB_ROLLBACK_INDEX := $(AVB_RBINDEX)
