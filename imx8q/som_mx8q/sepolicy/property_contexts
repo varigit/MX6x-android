@@ -1,0 +1,5 @@
+# public_vendor_system_prop
+# They are public_vendor_system_props for vendor-specific extension.
+ro.boot.vendor.board    u:object_r:vendor_public_default_prop:s0 exact string
+vendor.force.suspend 	u:object_r:vendor_public_default_prop:s0
+vendor.bluetooth.init   u:object_r:vendor_public_default_prop:s0

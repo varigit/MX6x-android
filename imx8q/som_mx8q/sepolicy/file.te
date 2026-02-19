@@ -1,0 +1,2 @@
+type sysfs_wifi_hal_writable, fs_type, sysfs_type, mlstrustedobject;
+type vendor_firmware_file, vendor_file_type, file_type;

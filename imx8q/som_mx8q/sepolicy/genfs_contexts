@@ -1,0 +1,10 @@
+genfscon sysfs /devices/platform/bus@5a000000/5a810000.i2c/i2c-1/1-003d/extcon u:object_r:sysfs_extcon:s0
+
+genfscon sysfs /devices/platform/backlight/backlight/backlight u:object_r:sysfs_leds:s0
+# RTC on SPEAR-MX8
+genfscon sysfs /devices/platform/bus@5a000000/5a800000.i2c/i2c-0/0-0068/rtc u:object_r:sysfs_rtc:s0
+
+# RTC on VAR-SOM-MX8
+genfscon sysfs /devices/platform/bus@5a000000/5a840000.i2c/i2c-4/4-0068/rtc u:object_r:sysfs_rtc:s0
+
+genfscon sysfs /devices/platform/bus@5a000000/5a820000.i2c/i2c-2/2-0068/rtc/rtc0  u:object_r:sysfs_rtc:s0

@@ -1,0 +1,14 @@
+# Variscite VAR-SOM-MX8X specific file contexts
+
+/vendor/etc/bluetooth/bt_vendor.conf	    u:object_r:vendor_configs_file:s0
+/vendor/firmware/brcm(/.*)?                 u:object_r:vendor_firmware_file:s0
+/dev/rfkill                                 u:object_r:rfkill_device:s0
+
+# android.system.suspend@1.0-service
+# rtc-ds1307 on Symphony board I2C bus
+/sys/devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-15/i2c-15/15-0068/wakeup                                                              u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-15/i2c-15/15-0068/wakeup/wakeup[0-9]*(/.*)?                                           u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-15/i2c-15/15-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup                               u:object_r:sysfs_wakeup:s0
+/sys/devices/platform/bus@5a000000/bus@5a000000:i2c-rpbus-15/i2c-15/15-0068/rtc/rtc0/alarmtimer.[0-9].auto/wakeup/wakeup[0-9]*(/.*)?            u:object_r:sysfs_wakeup:s0
+# gpio-keys, ft5x06 touch controller
+/sys/devices/platform/gpio-keys/wakeup*(/.*)?                                                                                                   u:object_r:sysfs_wakeup:s0

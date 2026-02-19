@@ -1,0 +1,7 @@
+allow hal_bluetooth_default sysfs:file { write };
+allow hal_bluetooth_default hal_bluetooth_default:unix_stream_socket { ioctl };
+# talk to system_server to set priority
+allow hal_bluetooth_default fwk_scheduler_hwservice:hwservice_manager {find};
+allow hal_bluetooth_default system_server:binder {call};
+# Access BT data files
+allow hal_bluetooth_default bluetooth_data_file:file { write read append getattr };
