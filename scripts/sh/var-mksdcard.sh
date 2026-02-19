@@ -64,6 +64,9 @@ function rename_remoteproc_images {
 	elif [[ "$1" == *"imx8mm-var-dart"* ]]; then
 		cp -ar device/variscite/imx8m/dart_mx8mm/*.bin.debug ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8mm_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8qxp-var-som"* ]]; then
+		cp -ar device/variscite/imx8q/som_mx8q/*.bin.debug ${imagesdir}
+		cp ${imagesdir}/${mcu_os_demo_file_8qx_som}	${imagesdir}/${mcu_os_demo_file}
 	fi
 }
 
@@ -96,10 +99,10 @@ elif [[ "${soc_name}" = *"mx8mp"* ]]; then
 elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 	imagesdir="out/target/product/dart_mx8mq"
 	sdshared=true
-elif [[ "${soc_name}" = *"mx8qxpb0"* ]]; then
+elif [[ "${soc_name}" = *"mx8qxp-b0"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 	sdshared=true
-	bootloader_file="u-boot-imx8qxpb0-var-som.imx"
+	bootloader_file="u-boot-imx8qxp-b0-var-som.imx"
 	socname_dtbo_mismatch=true
 elif [[ "${soc_name}" = *"mx8qx"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
@@ -165,6 +168,7 @@ mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
 mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mn_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mm_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
+mcu_os_demo_file_8qx_som="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
 
 
 block=`basename $node`
@@ -207,6 +211,7 @@ fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
+	uboot_proper_file=bootloader-imx8qxp-var-som-dual.img
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then

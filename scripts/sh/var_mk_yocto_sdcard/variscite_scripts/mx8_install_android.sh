@@ -182,8 +182,14 @@ function add_imx8mq_menu() {
 }
 
 function add_imx8x_menu() {
-	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi-m4.img (VAR-SOM-MX8QXP on Symphony-Board, with LVDS, WiFi and M4 support)")
-	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi.img    (VAR-SOM-MX8QXP on Symphony-Board, with LVDS and WiFi support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi-m4.img       (VAR-SOM-MX8QXP on Symphony-Board 2.x, with LVDS, WiFi and M4 support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-wifi.img          (VAR-SOM-MX8QXP on Symphony-Board 2.x, with LVDS and WiFi support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-sd-m4.img         (VAR-SOM-MX8QXP on Symphony-Board 2.x, with LVDS, SD and M4 support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-sd.img            (VAR-SOM-MX8QXP on Symphony-Board 2.x, with LVDS and SD support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-1.x-wifi-m4.img  (VAR-SOM-MX8QXP on Symphony-Board 1.x, with LVDS, WiFi and M4 support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-1.x-wifi.img     (VAR-SOM-MX8QXP on Symphony-Board 1.x, with LVDS and WiFi support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-1.x-sd-m4.img    (VAR-SOM-MX8QXP on Symphony-Board 1.x, with LVDS, SD and M4 support)")
+	img_list+=("dtbo-imx8qxp-var-som-symphony-1.x-sd.img       (VAR-SOM-MX8QXP on Symphony-Board 1.x, with LVDS and SD support)")
 }
 
 function add_imx8qm_menu() {
@@ -369,8 +375,8 @@ fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
-	if [[ -f "${imagesdir}/u-boot-imx8qxpb0-var-som.imx" ]]; then
-		bootloader_file="u-boot-imx8qxpb0-var-som.imx"
+	if [[ -f "${imagesdir}/u-boot-imx8qxp-b0-var-som.imx" ]]; then
+		bootloader_file="u-boot-imx8qxp-b0-var-som.imx"
 	elif [[ -f "${imagesdir}/u-boot-imx8qxp-var-som.imx" ]]; then
 		bootloader_file="u-boot-imx8qxp-var-som.imx"
 	else

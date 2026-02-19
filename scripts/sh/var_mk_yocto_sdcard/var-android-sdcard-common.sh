@@ -13,7 +13,7 @@ case $MACHINE in
 	"imx8mm-var-dart")
 		ANDROID_IMGS_PATH=${ANDROID_BUILD_ROOT}/out/target/product/dart_mx8mm
 		;;
-	"imx8qxp-var-som" | "imx8qxpb0-var-som")
+	"imx8qxp-var-som" | "imx8qxp-b0-var-som")
 		ANDROID_IMGS_PATH=${ANDROID_BUILD_ROOT}/out/target/product/som_mx8q
 		;;
 	"imx8qm-var-som")

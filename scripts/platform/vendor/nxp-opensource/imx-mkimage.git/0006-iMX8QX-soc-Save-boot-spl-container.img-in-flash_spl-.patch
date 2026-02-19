@@ -1,0 +1,31 @@
+From 0401ac9b967bbe67f459f56cf080b5fa86b107a7 Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Thu, 26 Mar 2026 17:40:21 +0100
+Subject: [PATCH] iMX8QX: soc: Save boot-spl-container.img in flash_spl target
+
+Copy flash.bin to boot-spl-container.img before appending u-boot-atf,
+matching what flash_linux_m4 and the iMX8QM flash_spl target already do.
+
+Without this fix, the dual bootloader SPL image is invalid and the
+SECO ROM cannot boot.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ iMX8QX/soc.mak | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/iMX8QX/soc.mak b/iMX8QX/soc.mak
+index 4817f32..e5657f2 100755
+--- a/iMX8QX/soc.mak
++++ b/iMX8QX/soc.mak
+@@ -87,6 +87,7 @@ flash_nand: $(MKIMG) $(AHAB_IMG) scfw_tcm.bin u-boot-atf.bin
+ 
+ flash_spl: $(MKIMG) $(AHAB_IMG) scfw_tcm.bin u-boot-spl.bin u-boot-atf-container.img
+ 	./$(MKIMG) -soc QX -rev B0 -dcd skip -append $(AHAB_IMG) -c -scfw scfw_tcm.bin -ap u-boot-spl.bin a35 0x00100000 -out flash.bin
++	cp flash.bin boot-spl-container.img
+ 	@flashbin_size=`wc -c flash.bin | awk '{print $$1}'`; \
+                    pad_cnt=$$(((flashbin_size + 0x400 - 1) / 0x400)); \
+                    echo "append u-boot-atf-container.img at $$pad_cnt KB"; \
+-- 
+2.43.0
+

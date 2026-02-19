@@ -116,7 +116,7 @@ function scfw_tools_setup()
 
 	cd ${PRE_BUILTS_GCC_PATH}
 	if [[ ! -d "imx-sc-firmware" ]] ; then
-		git clone git://github.com/varigit/imx-sc-firmware.git
+		git clone git@github.com:varigit/imx-sc-firmware.git
 	fi
 
 	if [[ ! -f ${PRE_BUILTS_GCC_PATH}/${GCC_ARM_NONE_TOOL} ]] ; then
@@ -158,11 +158,9 @@ do
 	cd ${ANDROID_DIR}/${_git_p}/ > /dev/null
 
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
-		git branch -D ${_EXTPARAM_BRANCH}
-		git checkout -b ${_EXTPARAM_BRANCH} || {
-			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
+		git checkout ${_EXTPARAM_BRANCH} || {
+			pr_warning "Branch ${_EXTPARAM_BRANCH} checkout failed!"
 		};
-
 	else
 		git checkout -b ${_EXTPARAM_BRANCH} || {
 			pr_warning "Branch ${_EXTPARAM_BRANCH} is present!"
@@ -170,7 +168,13 @@ do
 	fi
 
 	pr_info "Apply patches for this git: \"${_git_p}/\""
-	git am ${VARISCITE_PATCHS_DIR}/${_ddd}/*
+	for _patch in ${VARISCITE_PATCHS_DIR}/${_ddd}/*; do
+		if git apply --check "${_patch}" 2>/dev/null; then
+			git am "${_patch}"
+		else
+			pr_info "Skipping already applied: $(basename ${_patch})"
+		fi
+	done
 
 	cd - > /dev/null
 done

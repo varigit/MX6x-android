@@ -23,7 +23,11 @@ PRODUCT_COPY_FILES += \
     device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_c0.lst:emmc_burn_android_var_som_mx8x_c0.lst \
     device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0.lst:emmc_burn_android_var_som_mx8x_b0.lst \
     device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_c0_symphony_1.x.lst:emmc_burn_android_var_som_mx8x_c0_symphony_1.x.lst \
-    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0_symphony_1.x.lst:emmc_burn_android_var_som_mx8x_b0_symphony_1.x.lst
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0_symphony_1.x.lst:emmc_burn_android_var_som_mx8x_b0_symphony_1.x.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_c0_m4.lst:emmc_burn_android_var_som_mx8x_c0_m4.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0_m4.lst:emmc_burn_android_var_som_mx8x_b0_m4.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_c0_symphony_1.x_m4.lst:emmc_burn_android_var_som_mx8x_c0_symphony_1.x_m4.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0_symphony_1.x_m4.lst:emmc_burn_android_var_som_mx8x_b0_symphony_1.x_m4.lst
 
 BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/som_mx8q/dtbo-imx8qxp-var-som-symphony-wifi.img
 

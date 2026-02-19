@@ -20,7 +20,7 @@ ROOTFS_MOUNT_DIR=${TEMP_DIR}/rootfs
 
 help() {
 	bn=`basename $0`
-	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn device_node"
+	echo " Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxp-b0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn device_node"
 	echo
 }
 

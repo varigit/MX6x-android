@@ -3,7 +3,7 @@ set -e
 
 help() {
 	bn=`basename $0`
-	echo "Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
+	echo "Usage: MACHINE=<imx8mq-var-dart|imx8mm-var-dart|imx8qxp-var-som|imx8qxp-b0-var-som|imx8qm-var-som|imx8mn-var-som|imx8mp-var-dart> $bn yocto_image.wic.zst [new_image_name]"
 	echo "Launch from Android build root directory or set variable ANDROID_BUILD_ROOT to path"
 	echo
 }
