@@ -30,8 +30,8 @@ readonly VARISCITE_PATCHS_DIR="${SCRIPT_POINT}/platform"
 readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
 
 SC_MX8_FAMILY=$1
-readonly SCFW_BRANCH="1.6.0"
-readonly SRCREV_8X="0dbb2964afbb50f9b48d0955e7d5ef7d9cbabe23"
+readonly SCFW_BRANCH="1.18.0"
+readonly SRCREV_8X="0a0556554078e15bc35421c63edcfb9f4e3e318a"
 readonly SRCREV_8M="9626cacced29ffa24b06847f1e54fc4eb137a282"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
