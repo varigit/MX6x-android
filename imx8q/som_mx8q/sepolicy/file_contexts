@@ -1,4 +1,4 @@
-# Variscite VAR-SOM-MX8X specific file contexts
+# Variscite VAR-SOM-MX8 specific file contexts
 
 /vendor/etc/bluetooth/bt_vendor.conf	    u:object_r:vendor_configs_file:s0
 /vendor/firmware/brcm(/.*)?                 u:object_r:vendor_firmware_file:s0

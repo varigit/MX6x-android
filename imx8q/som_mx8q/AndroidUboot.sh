@@ -37,9 +37,20 @@ build_pre_image()
 
 build_imx_uboot()
 {
-	echo Building i.MX U-Boot with firmware for imx8qxp
+	echo Building i.MX U-Boot with firmware for $2
 
-	if [ `echo $2 | cut -d '-' -f1` = "imx8qxp" ]; then
+	if [ `echo $2 | cut -d '-' -f1` = "imx8qm" ]; then
+		MKIMAGE_PLATFORM=iMX8QM
+		SCFW_PLATFORM=8qm
+		ATF_PLATFORM=imx8qm
+		REV=B0
+		FLASH_TARGET=flash_spl
+		cp ${FSL_PROPRIETARY_PATH}/imx-seco/firmware/seco/mx8qm*ahab-container.img ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_0_default.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_image.bin
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_1_default.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_1_image.bin
+		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmitxfw.bin
+		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmirxfw.bin
+	elif [ `echo $2 | cut -d '-' -f1` = "imx8qxp" ]; then
 		MKIMAGE_PLATFORM=iMX8QX
 		SCFW_PLATFORM=8qx
 		ATF_PLATFORM=imx8qx

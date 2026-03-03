@@ -15,7 +15,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mailbox/imx-mailbox.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/imx-scu-firmware.ko \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
-    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/seco_mu.ko \
     $(KERNEL_OUT)/drivers/pmdomain/imx/scu-pd.ko \
     $(KERNEL_OUT)/drivers/clk/imx/mxc-clk.ko \
@@ -26,6 +25,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-scu.ko \
     $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qxp.ko \
+    $(KERNEL_OUT)/drivers/pinctrl/freescale/pinctrl-imx8qm.ko \
     $(KERNEL_OUT)/drivers/power/reset/imx-sm-reset.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-core.ko \
     $(KERNEL_OUT)/drivers/trusty/trusty-log.ko \
@@ -71,6 +71,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/mmc/host/sdhci-esdhc-imx.ko \
     $(KERNEL_OUT)/lib/stmp_device.ko \
     $(KERNEL_OUT)/drivers/remoteproc/imx_rproc.ko \
+    $(KERNEL_OUT)/drivers/rpmsg/virtio_rpmsg_bus.ko \
     $(KERNEL_OUT)/drivers/usb/typec/mux/gpio-switch.ko \
     $(KERNEL_OUT)/drivers/usb/phy/phy-mxs-usb.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/usbmisc_imx.ko \
@@ -101,6 +102,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/phy/phy-mixel-lvds-combo.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/fsl-imx-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/imx8qxp-ldb.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/imx/imx8qm-ldb.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/bridge/cadence/cdns_mhdp_drmcore.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/mhdp/cdns_mhdp_imx.ko \
@@ -127,7 +129,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko
+    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
+    $(KERNEL_OUT)/drivers/watchdog/imx_sc_wdt.ko
 
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/firmware/imx/imx-dsp.ko \
@@ -186,7 +189,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/perf/fsl_imx8_ddr_perf.ko \
     $(KERNEL_OUT)/drivers/iio/adc/imx8qxp-adc.ko \
     $(KERNEL_OUT)/drivers/net/can/flexcan/flexcan.ko \
-    $(KERNEL_OUT)/drivers/watchdog/imx_sc_wdt.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-imx-sc.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp-scu.ko \
     $(KERNEL_OUT)/drivers/soc/imx/secvio/soc-imx-secvio-sc.ko
@@ -212,4 +214,8 @@ PRODUCT_IMX_TRUSTY := false
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
+ifeq ($(TARGET_PRODUCT),som_mx8qm)
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8qm-var-som-dual.img
+else
 BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8qxp-var-som-dual.img
+endif

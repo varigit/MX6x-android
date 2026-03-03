@@ -1,0 +1,1 @@
+allow init-insmod-sh init-insmod-sh_exec:file ioctl;

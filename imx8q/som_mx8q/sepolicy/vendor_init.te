@@ -1,3 +1,8 @@
 allow vendor_init self:capability sys_module;
 #allow vendor_init wifi_data_file:dir { search setattr };
 #allow vendor_init dhcp_data_file:dir setattr;
+
+set_prop(vendor_init, vendor_wc_prop)
+set_prop(vendor_init, vendor_bluetooth_prop)
+set_prop(vendor_init, vendor_public_default_prop)
+set_prop(vendor_init, future_pm_prop)

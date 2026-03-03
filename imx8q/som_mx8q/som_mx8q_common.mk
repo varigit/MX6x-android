@@ -39,7 +39,8 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/power
 PRODUCT_SOONG_NAMESPACES += hardware/google/pixel
 
 PRODUCT_COPY_FILES += \
-     $(IMX_DEVICE_PATH)/powerhint_imx8qxp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8qxp.json
+     $(IMX_DEVICE_PATH)/powerhint_imx8qxp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8qxp.json \
+     $(IMX_DEVICE_PATH)/powerhint_imx8qm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8qm.json
 
 # Do not skip charger_not_need trigger by default
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
@@ -58,7 +59,8 @@ PRODUCT_PACKAGES += \
     android.hardware.thermal-service.imx
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/thermal_info_config_imx8qxp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8qxp.json
+    $(IMX_DEVICE_PATH)/thermal_info_config_imx8qxp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8qxp.json \
+    $(IMX_DEVICE_PATH)/thermal_info_config_imx8qm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8qm.json
 
 # -------@block_app-------
 # Set permission for GMS packages
@@ -135,11 +137,6 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/tools/imx-sdcard-partition.sh:imx-sdcard-partition.sh \
     $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
     $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
-
-# Variscite UUU eMMC burning scripts
-PRODUCT_COPY_FILES += \
-    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_c0.lst:emmc_burn_android_var_som_mx8x_c0.lst \
-    device/variscite/scripts/uuu_scripts/emmc_burn_android_var_som_mx8x_b0.lst:emmc_burn_android_var_som_mx8x_b0.lst
 
 # -------@block_security-------
 # Include keystore attestation keys and certificates.
@@ -280,6 +277,8 @@ PRODUCT_CHARACTERISTICS := tablet
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx8qxp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8qxp.json \
     $(IMX_DEVICE_PATH)/camera_config_imx8qxp_logic.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8qxp_logic.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx8qm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8qm.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx8qm_logic.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8qm_logic.json \
     $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
@@ -467,7 +466,8 @@ PRODUCT_COPY_FILES += \
 
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qxp.rc
+    $(IMX_DEVICE_PATH)/init.imx8qxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qxp.rc \
+    $(IMX_DEVICE_PATH)/init.imx8qm.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8qm.rc
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml

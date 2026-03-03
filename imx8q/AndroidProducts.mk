@@ -32,4 +32,6 @@ PRODUCT_MAKEFILES := \
 
 COMMON_LUNCH_CHOICES := \
   som_mx8qx-var_stable-user \
-  som_mx8qx-var_stable-userdebug
+  som_mx8qx-var_stable-userdebug \
+  som_mx8qm-var_stable-user \
+  som_mx8qm-var_stable-userdebug

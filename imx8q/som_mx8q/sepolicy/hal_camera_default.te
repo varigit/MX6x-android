@@ -1,0 +1,2 @@
+allow hal_camera_default self:capability sys_admin;
+dontaudit hal_camera_default system_data_file:dir search;

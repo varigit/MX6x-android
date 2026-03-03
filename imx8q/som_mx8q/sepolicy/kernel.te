@@ -1,3 +1,6 @@
 # Allow kernel firmware loader to access BRCM firmware files
 allow kernel vendor_firmware_file:dir { search open read getattr };
 allow kernel vendor_firmware_file:file { open read getattr };
+
+# Allow krfcommd (Bluetooth RFCOMM) to bind service
+allow kernel self:capability net_bind_service;

@@ -1,7 +1,21 @@
 TARGET_BOOTLOADER_POSTFIX := bin
 UBOOT_POST_PROCESS := true
 
-# u-boot target for imx8qxp VAR-SOM-MX8X
+ifeq ($(TARGET_PRODUCT),som_mx8qm)
+# u-boot targets for imx8qm VAR-SOM-MX8
+TARGET_BOOTLOADER_CONFIG := \
+	imx8qm-var-som:imx8qm_var_som_android_defconfig \
+	imx8qm-var-som-dual:imx8qm_var_som_android_dual_defconfig \
+	imx8qm-var-som-uuu:imx8qm_var_som_android_uuu_defconfig
+
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+TARGET_BOOTLOADER_CONFIG += \
+	imx8qm-var-som-trusty:imx8qm_var_som_android_trusty_defconfig \
+	imx8qm-var-som-trusty-dual:imx8qm_var_som_android_trusty_dual_defconfig
+endif
+
+else
+# u-boot targets for imx8qxp VAR-SOM-MX8X
 TARGET_BOOTLOADER_CONFIG := \
 	imx8qxp-var-som:imx8qxp_var_som_android_defconfig \
 	imx8qxp-b0-var-som:imx8qxp_var_som_android_defconfig \
@@ -15,7 +29,10 @@ TARGET_BOOTLOADER_CONFIG += \
 	imx8qxp-var-som-trusty:imx8qxp_var_som_android_trusty_defconfig \
 	imx8qxp-var-som-trusty-dual:imx8qxp_var_som_android_trusty_dual_defconfig
 endif
-# imx8qxp kernel defconfig
+
+endif
+
+# imx8qxp/imx8qm kernel defconfig
 ifeq ($(LOADABLE_KERNEL_MODULE),true)
 TARGET_KERNEL_DEFCONFIG := gki_defconfig
 TARGET_KERNEL_GKI_DEFCONF:= imx8q_gki.fragment

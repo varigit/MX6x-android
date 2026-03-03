@@ -59,8 +59,6 @@ else
   endif
 endif
 
-BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/$(PRODUCT_DEVICE)/dtbo-imx8qxp-var-som-symphony-wifi.img
-
 BOARD_USES_METADATA_PARTITION := true
 BOARD_ROOT_EXTRA_FOLDERS += metadata
 
@@ -118,18 +116,27 @@ BOARD_BLUETOOTH_BDROID_BUILDCFG_INCLUDE_DIR := $(IMX_DEVICE_PATH)/bluetooth
 # -------@block_kernel_bootimg-------
 
 # NXP default config
-BOARD_KERNEL_CMDLINE := console=ttyLP3,115200 earlycon init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
+BOARD_KERNEL_CMDLINE := init=/init firmware_class.path=/vendor/firmware loop.max_part=7 bootconfig
 BOARD_KERNEL_CMDLINE += swiotlb=768
+BOARD_KERNEL_CMDLINE += cma=928M@0x960M-0xfc0M transparent_hugepage=never
 BOARD_BOOTCONFIG += androidboot.hardware=nxp
 
 # framebuffer config
 BOARD_BOOTCONFIG += androidboot.fbTileSupport=enable
 
 # console
+ifeq ($(TARGET_PRODUCT),som_mx8qm)
+BOARD_BOOTCONFIG += androidboot.console=ttyLP0
+else
 BOARD_BOOTCONFIG += androidboot.console=ttyLP3
+endif
 
 # WiFi SDIO controller address for unbind/rebind sequence
+ifeq ($(TARGET_PRODUCT),som_mx8qm)
+BOARD_BOOTCONFIG += androidboot.wifisdio=5b030000.mmc
+else
 BOARD_BOOTCONFIG += androidboot.wifisdio=5b020000.mmc
+endif
 
 # BT UART controller address for unbind/rebind sequence
 ifeq ($(TARGET_PRODUCT),som_mx8qm)
