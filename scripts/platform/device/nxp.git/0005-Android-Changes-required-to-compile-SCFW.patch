@@ -1,4 +1,4 @@
-From 897da4c270f262afc72109642c2fb7c630424e37 Mon Sep 17 00:00:00 2001
+From eefea5e4b1d3baafb0075e50b6d21d4ef9a27900 Mon Sep 17 00:00:00 2001
 From: Marius Bagassien <marius.b@variscite.com>
 Date: Wed, 18 Feb 2026 16:19:54 +0100
 Subject: [PATCH] Android: Changes required to compile SCFW
@@ -14,7 +14,7 @@ Signed-off-by: Marius Bagassien <marius.b@variscite.com>
  1 file changed, 4 insertions(+)
 
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index c95f2631..f78e03c5 100755
+index c95f2631..c3f73452 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
 @@ -118,6 +118,10 @@ for arg in ${args[*]} ; do
