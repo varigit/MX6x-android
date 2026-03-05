@@ -1,0 +1,24 @@
+{
+  "driver_name": "wm8904-audio",
+  "supported_out_devices": ["speaker", "wired_headphone", "wired_headset"],
+  "supported_in_devices": ["wired_headset", "builtin_mic"],
+
+  "init_ctl": [
+    {"name": "Capture Volume", "type": "int", "val": 24},
+    {"name": "Capture Switch", "type": "int", "val": 1},
+    {"name": "Capture Input", "type": "int", "val": 1},
+    {"name": "Left Capture Inverting Mux", "type": "int", "val": 1},
+    {"name": "Right Capture Inverting Mux", "type": "int", "val": 1}
+  ],
+
+  "headset_mic_ctl": [
+    {"name": "ALC Function", "type": "int", "val": 3},
+    {"name": "Left Input Mixer Boost Switch", "type": "int", "val": 1},
+    {"name": "ADC PCM Capture Volume", "type": "int", "val": 230},
+    {"name": "Capture Volume", "type": "int", "val": 60}
+  ],
+
+  "out_volume_ctl": [
+    "Playback Volume"
+  ]
+}
