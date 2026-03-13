@@ -14,6 +14,7 @@ IMX8_BUILD_32BIT_ROOTFS ?= false
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
 -include device/variscite/common/imx_path/ImxPathConfig.mk
+-include device/variscite/common/bootanimation/variscite_bootanimation_logo.mk
 include $(CONFIG_REPO_PATH)/imx8m/ProductConfigCommon.mk
 
 
