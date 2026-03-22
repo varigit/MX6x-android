@@ -109,6 +109,24 @@ function do_copy_android
 		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_som > \
 				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_str_echo_rtos.bin.debug_som
 		sync | pv -t
+	elif [[ "${MACHINE}" = "imx8qxp-var-som" ]] || [[ "${MACHINE}" = "imx8qxp-b0-var-som" ]]; then
+		echo "Copying M4 demo images to /opt/images/"
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug
+		sync | pv -t
+	elif [[ "${MACHINE}" = "imx8qm-var-som" ]]; then
+		echo "Copying M4 demo images to /opt/images/"
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug
+		pv ${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug > \
+				${ROOTFS_ANDROID_PATH}/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug
+		sync | pv -t
 	fi
 
 }

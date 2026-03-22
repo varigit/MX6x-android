@@ -65,8 +65,13 @@ function rename_remoteproc_images {
 		cp -ar device/variscite/imx8m/dart_mx8mm/*.bin.debug ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8mm_som}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8qxp-var-som"* ]]; then
+		cp -ar device/variscite/imx8q/som_mx8q/*_m40.bin.debug ${imagesdir}
+		cp -ar device/variscite/imx8q/som_mx8q/*_m40.elf.debug ${imagesdir}
+		cp ${imagesdir}/${mcu_os_demo_file_8q_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8qm-var"* ]]; then
 		cp -ar device/variscite/imx8q/som_mx8q/*.bin.debug ${imagesdir}
-		cp ${imagesdir}/${mcu_os_demo_file_8qx_som}	${imagesdir}/${mcu_os_demo_file}
+		cp -ar device/variscite/imx8q/som_mx8q/*.elf.debug ${imagesdir}
+		cp ${imagesdir}/${mcu_os_demo_file_8q_som}	${imagesdir}/${mcu_os_demo_file}
 	fi
 }
 
@@ -168,7 +173,7 @@ mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
 mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mn_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mm_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
-mcu_os_demo_file_8qx_som="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
+mcu_os_demo_file_8q_som="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
 
 
 block=`basename $node`
