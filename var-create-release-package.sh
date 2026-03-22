@@ -72,17 +72,19 @@ fi
 INSTALL_SCRIPT_DIR="${SCRIPT_DIR}/var_mk_yocto_sdcard/variscite_scripts/"
 
 PRODUCT=""
+LUNCH_PRODUCT=""
 case "$MACHINE" in
-  imx8mq-var-dart) PRODUCT="dart_mx8mq" ;;
-  imx8mp-var-dart) PRODUCT="dart_mx8mp" ;;
-  imx8mm-var-dart) PRODUCT="dart_mx8mm" ;;
-  imx8qxp-var-som|imx8qxpb0-var-som|imx8qm-var-som) PRODUCT="som_mx8q" ;;
-  imx8mn-var-som) PRODUCT="som_mx8mn" ;;
+  imx8mq-var-dart) PRODUCT="dart_mx8mq";  LUNCH_PRODUCT="dart_mx8mq" ;;
+  imx8mp-var-dart) PRODUCT="dart_mx8mp";  LUNCH_PRODUCT="dart_mx8mp" ;;
+  imx8mm-var-dart) PRODUCT="dart_mx8mm";  LUNCH_PRODUCT="dart_mx8mm" ;;
+  imx8qxp-var-som|imx8qxpb0-var-som) PRODUCT="som_mx8q"; LUNCH_PRODUCT="som_mx8qx" ;;
+  imx8qm-var-som) PRODUCT="som_mx8q";    LUNCH_PRODUCT="som_mx8qm" ;;
+  imx8mn-var-som) PRODUCT="som_mx8mn";   LUNCH_PRODUCT="som_mx8mn" ;;
   *) echo "ERROR: unsupported MACHINE: $MACHINE"; usage; exit 1 ;;
 esac
 
 OUTDIR="${ANDROID_BUILD_ROOT}/out/target/product/${PRODUCT}"
-LUNCH_TARGET="${PRODUCT}-var_stable-${VARIANT}"
+LUNCH_TARGET="${LUNCH_PRODUCT}-var_stable-${VARIANT}"
 MAKE="${ANDROID_BUILD_ROOT}/imx-make.sh"
 
 copy_glob() {
@@ -190,6 +192,14 @@ copy_artifacts_for_machine() {
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_dart" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_dart" "${dest}"
+  elif [ "${MACHINE}" = "imx8qxp-var-som" ] || [ "${MACHINE}" = "imx8qxpb0-var-som" ]; then
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug" "${dest}"
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug" "${dest}"
+  elif [ "${MACHINE}" = "imx8qm-var-som" ]; then
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug" "${dest}"
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug" "${dest}"
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug" "${dest}"
+      copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug" "${dest}"
   fi
   copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/*.lst" "${dest}"
 }
