@@ -193,30 +193,48 @@ function add_imx8x_menu() {
 }
 
 function add_imx8qm_menu() {
-	img_list+=("dtbo-imx8qp-var-som-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with LVDS and M4 support)")
-	img_list+=("dtbo-imx8qp-var-som-lvds.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with LVDS support)")
-	img_list+=("dtbo-imx8qp-var-som-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with HDMI and M4 support)")
-	img_list+=("dtbo-imx8qp-var-som-hdmi.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with HDMI support)")
-	img_list+=("dtbo-imx8qp-var-som-dp-m4.img     (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with Display Port and M4 support)")
-	img_list+=("dtbo-imx8qp-var-som-dp.img        (VAR-SOM-MX8 with i.MX8QP on Symphony-Board, with Display Port support)")
-	img_list+=("dtbo-imx8qm-var-som-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with LVDS and M4 support)")
-	img_list+=("dtbo-imx8qm-var-som-lvds.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with LVDS support)")
-	img_list+=("dtbo-imx8qm-var-som-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with HDMI and M4 support)")
-	img_list+=("dtbo-imx8qm-var-som-hdmi.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with HDMI support)")
-	img_list+=("dtbo-imx8qm-var-som-dp-m4.img     (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with Display port and M4 support)")
-	img_list+=("dtbo-imx8qm-var-som-dp.img        (VAR-SOM-MX8 with i.MX8QM on Symphony-Board, with Display port support)")
-	img_list+=("dtbo-imx8qp-var-spear-dp-m4.img   (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port and M4 support)")
-	img_list+=("dtbo-imx8qp-var-spear.img         (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port)")
-	img_list+=("dtbo-imx8qp-var-spear-lvds-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS and M4 support)")
-	img_list+=("dtbo-imx8qp-var-spear-lvds.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS support)")
-	img_list+=("dtbo-imx8qp-var-spear-hdmi-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI and M4 support)")
-	img_list+=("dtbo-imx8qp-var-spear-hdmi.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI support)")
-	img_list+=("dtbo-imx8qm-var-spear-lvds.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS support)")
-	img_list+=("dtbo-imx8qm-var-spear-lvds-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS and M4 support)")
-	img_list+=("dtbo-imx8qm-var-spear-hdmi-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI and M4 support)")
-	img_list+=("dtbo-imx8qm-var-spear-hdmi.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI support)")
-	img_list+=("dtbo-imx8qm-var-spear-dp-m4.img   (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port and M4 support)")
-	img_list+=("dtbo-imx8qm-var-spear-dp.img      (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port)")
+	# imx8qp Symphony 2.x
+	img_list+=("dtbo-imx8qp-var-som-symphony-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-hdmi.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with HDMI support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-lvds.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with LVDS support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-dp-m4.img     (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-dp.img        (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 2.x, with Display Port support)")
+	# imx8qp Symphony 1.x
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-hdmi-m4.img (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-hdmi.img    (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with HDMI support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-lvds-m4.img (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-lvds.img    (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with LVDS support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-dp-m4.img   (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qp-var-som-symphony-1.x-dp.img      (VAR-SOM-MX8 with i.MX8QP on Symphony-Board 1.x, with Display Port support)")
+	# imx8qm Symphony 2.x
+	img_list+=("dtbo-imx8qm-var-som-symphony-hdmi-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-hdmi.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-lvds-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-lvds.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with LVDS support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-dp-m4.img     (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-dp.img        (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 2.x, with Display Port support)")
+	# imx8qm Symphony 1.x
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-hdmi-m4.img (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-hdmi.img    (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-lvds-m4.img (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-lvds.img    (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with LVDS support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-dp-m4.img   (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qm-var-som-symphony-1.x-dp.img      (VAR-SOM-MX8 with i.MX8QM on Symphony-Board 1.x, with Display Port support)")
+	# imx8qp Spear SP8CustomBoard
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-hdmi-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-hdmi.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with HDMI support)")
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-lvds-m4.img (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-lvds.img    (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with LVDS support)")
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-dp-m4.img   (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qp-var-spear-sp8customboard-dp.img      (SPEAR-MX8 with i.MX8QP on SP8CustomBoard, with Display Port)")
+	# imx8qm Spear SP8CustomBoard
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-hdmi-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-hdmi.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with HDMI support)")
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-lvds-m4.img (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-lvds.img    (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with LVDS support)")
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-dp-m4.img   (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port and M4 support)")
+	img_list+=("dtbo-imx8qm-var-spear-sp8customboard-dp.img      (SPEAR-MX8 with i.MX8QM on SP8CustomBoard, with Display Port)")
 }
 
 function add_imx8mn_menu() {
@@ -375,21 +393,23 @@ fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
-	if [[ -f "${imagesdir}/u-boot-imx8qxp-b0-var-som.imx" ]]; then
-		bootloader_file="u-boot-imx8qxp-b0-var-som.imx"
-	elif [[ -f "${imagesdir}/u-boot-imx8qxp-var-som.imx" ]]; then
-		bootloader_file="u-boot-imx8qxp-var-som.imx"
+	if [[ -f "${imagesdir}/spl-imx8qxpb0-var-som-dual.bin" ]]; then
+		bootloader_file="spl-imx8qxpb0-var-som-dual.bin"
+		uboot_proper_file="bootloader-imx8qxpb0-var-som-dual.img"
+	elif [[ -f "${imagesdir}/spl-imx8qxp-var-som-dual.bin" ]]; then
+		bootloader_file="spl-imx8qxp-var-som-dual.bin"
+		uboot_proper_file="bootloader-imx8qxp-var-som-dual.img"
 	else
 		echo; red_bold_echo "ERROR: no bootloader image present"
 	fi
-	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qm-var-som.imx"
-
-	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin"
+	bootloader_file="spl-imx8qm-var-som-dual.bin"
+	uboot_proper_file="bootloader-imx8qm-var-som-dual.img"
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
 fi
 
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
@@ -625,7 +645,7 @@ function create_parts
 function install_bootloader
 {
 	echo
-	blue_underlined_bold_echo "Installing booloader"
+	blue_underlined_bold_echo "Installing bootloader: ${bootloader_file}"
 
 	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset} conv=fsync; sync
 
