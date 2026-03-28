@@ -574,6 +574,13 @@ function finish
 		fi
 	done
 
+	#Start Udev back before exit
+	if [ -x /etc/init.d/udev ]; then
+		/etc/init.d/udev restart
+	elif command -v udevadm > /dev/null 2>&1; then
+		udevadm control --start-exec-queue
+	fi
+
 	if [[ ${errors} = 0 ]] ; then
 		blue_bold_echo "Android installed successfully"
 	else
@@ -587,7 +594,11 @@ check_images
 umount ${node}${part}*  2> /dev/null || true
 
 #Stop Udev for block devices while partitioning in progress
-/etc/init.d/udev stop
+if [ -x /etc/init.d/udev ]; then
+	/etc/init.d/udev stop
+elif command -v udevadm > /dev/null 2>&1; then
+	udevadm control --stop-exec-queue
+fi
 
 delete_device
 create_parts
@@ -595,6 +606,3 @@ install_bootloader
 format_android
 install_android
 finish
-
-#Start Udev back before exit
-/etc/init.d/udev restart
