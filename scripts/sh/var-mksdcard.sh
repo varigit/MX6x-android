@@ -116,9 +116,6 @@ fi
 
 img_prefix="dtbo-"
 img_search_str="ls ${imagesdir}/${img_prefix}*"
-if [ "$sdshared" = true ] ; then
-	img_search_str+=" | grep sd"
-fi
 img_list=()
 
 # generate options list
