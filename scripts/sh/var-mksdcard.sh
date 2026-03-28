@@ -34,7 +34,6 @@ FBMISC_SIZE=1
 VBMETA_SIZE=1
 SUPER_ROM_SIZE=4096
 VENDOR_BOOT_SIZE=64
-FIRMWARE_SIZE=8
 MCU_OS_BOOT_SIZE=6
 mcu_image_offset=5120
 
@@ -107,12 +106,10 @@ elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 elif [[ "${soc_name}" = *"mx8qxp-b0"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 	sdshared=true
-	bootloader_file="u-boot-imx8qxp-b0-var-som.imx"
 	socname_dtbo_mismatch=true
 elif [[ "${soc_name}" = *"mx8qx"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 	sdshared=true
-	bootloader_file="u-boot-imx8qxp-var-som.imx"
 elif [[ "${soc_name}" = *"mx8qm"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 fi
@@ -216,12 +213,19 @@ fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
 	bootloader_offset=32
-	uboot_proper_file=bootloader-imx8qxp-var-som-dual.img
+	if [[ -f "${imagesdir}/spl-imx8qxpb0-var-som-dual.bin" ]]; then
+		bootloader_file="spl-imx8qxpb0-var-som-dual.bin"
+		uboot_proper_file="bootloader-imx8qxpb0-var-som-dual.img"
+	else
+		bootloader_file="spl-imx8qxp-var-som-dual.bin"
+		uboot_proper_file="bootloader-imx8qxp-var-som-dual.img"
+	fi
 fi
 
 if [[ "${soc_name}" = *"mx8qm"* ]]; then
 	bootloader_offset=32
-	bootloader_file="u-boot-imx8qm.imx"
+	bootloader_file="spl-imx8qm-var-som-dual.bin"
+	uboot_proper_file="bootloader-imx8qm-var-som-dual.img"
 fi
 
 echo "${soc_name} image dir is: ${imagesdir}"
@@ -241,11 +245,6 @@ if [[ -f ${imagesdir}/${superimage_file} ]] ; then
 	dynamic_part="SUPER           : ${SUPER_ROM_SIZE} MiB"
 fi
 
-firmware=""
-if [[ "${soc_name}" = *"mx8qm"* ]]; then
-firmware="FIRMWARE	 : ${FIRMWARE_SIZE} MiB"
-fi
-
 # Get total device size
 seprate=100
 total_size=`sfdisk -s ${node}`
@@ -254,11 +253,7 @@ MCU_OFFSET=`expr ${mcu_image_offset} / 1024`
 boot_rom_sizeb=`expr ${MCU_OFFSET} + ${MCU_OS_BOOT_SIZE} + ${BOOTLOADER_SIZE} \* 2 + ${DTBO_ROM_SIZE} \* 2 + ${BOOT_ROM_SIZE} \* 2 + ${INIT_BOOT_SIZE} \* 2 + ${VENDOR_BOOT_SIZE} \* 2`
 
 if [[ "${dynamic_img}" = true ]]; then
-	if [[ "${soc_name}" = *"mx8qm"* ]]; then
-		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate} + ${FIRMWARE_SIZE}`
-	else
-		extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
-	fi
+	extend_size=`expr ${SUPER_ROM_SIZE} + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 else
 	extend_size=`expr ${SYSTEM_ROM_SIZE} \* 2 + ${MISC_SIZE} + ${METADATA_SIZE} + ${PRESISTDATA_SIZE} + ${VENDOR_ROM_SIZE} \* 2 + ${PRODUCT_ROM_SIZE} \* 2 + ${FBMISC_SIZE} + ${VBMETA_SIZE} \* 2 + ${seprate}`
 fi
@@ -287,7 +282,6 @@ USERDATA         : ${data_size} MiB
 FBMISC           : ${FBMISC_SIZE} MiB
 VBMETA_A         : ${VBMETA_SIZE} MiB
 VBMETA_B         : ${VBMETA_SIZE} MiB
-$firmware
 MCU_OS           : ${MCU_OS_BOOT_SIZE} MiB
 EOF
 
@@ -435,9 +429,6 @@ function create_parts
 		sgdisk -n 16:0:+${FBMISC_SIZE}M               -c 16:"fbmisc"        -t 16:8300  $node
 		sgdisk -n 17:0:+${VBMETA_SIZE}M               -c 17:"vbmeta_a"      -t 17:8300  $node
 		sgdisk -n 18:0:+${VBMETA_SIZE}M               -c 18:"vbmeta_b"      -t 18:8300  $node
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			sgdisk -n 19:0:+${FIRMWARE_SIZE}M     -c 19:"firmware"      -t 19:8300  $node
-		fi
 	fi
 
 	sync; sleep 2
@@ -496,10 +487,6 @@ function format_android
 		blue_underlined_bold_echo "Formatting userdata partition"
 		out/host/linux-x86/bin/make_f2fs -l userdata -f -g android ${node}${part}15
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			blue_underlined_bold_echo "Formating firmware partition"
-			mkfs.ext4 -F ${node}${part}19 -Lfirmware
-		fi
 	fi
 
 	sync; sleep 1
@@ -573,11 +560,6 @@ function install_android
 		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}18 bs=1M
 		sync;
 
-		if [[ "${soc_name}" = *"mx8qm"* ]]; then
-			echo
-			blue_underlined_bold_echo "Installing firmware image"
-			dd if=${imagesdir}/firmware.img of=${node}${part}19 bs=1M
-		fi
 	fi
 
 	sleep 1
