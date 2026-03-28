@@ -69,7 +69,7 @@ else
   LWB_DEST="${ART_ANDROID_LWB}"
 fi
 
-INSTALL_SCRIPT_DIR="${SCRIPT_DIR}/var_mk_yocto_sdcard/variscite_scripts/"
+INSTALL_SCRIPT_DIR="${ANDROID_BUILD_ROOT}/device/variscite/scripts/sh/var_mk_yocto_sdcard/variscite_scripts/"
 
 PRODUCT=""
 LUNCH_PRODUCT=""
