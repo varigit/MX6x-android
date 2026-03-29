@@ -145,77 +145,59 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 	 imx8mp-var-dart-dt8mcustomboard-m7:imx8mp-var-dart-dt8mcustomboard-m7.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-basler-isp0:imx8mp-var-dart-dt8mcustomboard-basler-isp0.dtb \
 	 imx8mp-var-dart-dt8mcustomboard-basler-isp0-m7:imx8mp-var-dart-dt8mcustomboard-basler-isp0-m7.dtb \
-	 imx8mp-var-dart-dt8mcustomboard-basler-isi0:imx8mp-var-dart-dt8mcustomboard-basler-isi0.dtb \
-	 imx8mp-var-dart-dt8mcustomboard-basler-isi0-m7:imx8mp-var-dart-dt8mcustomboard-basler-isi0-m7.dtb \
 	 imx8mp-var-dart-1.x-dt8mcustomboard:imx8mp-var-dart-1.x-dt8mcustomboard.dtb \
-	 imx8mp-var-dart-1.x-dt8mcustomboard-basler-isi0-m7:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isi0-m7.dtb \
-         imx8mp-var-dart-1.x-dt8mcustomboard-basler-isi0:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isi0.dtb \
-         imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0-m7:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0-m7.dtb \
-         imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0.dtb \
-         imx8mp-var-dart-1.x-dt8mcustomboard-m7:imx8mp-var-dart-1.x-dt8mcustomboard-m7.dtb \
+	 imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0-m7:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0-m7.dtb \
+	 imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0:imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0.dtb \
+	 imx8mp-var-dart-1.x-dt8mcustomboard-m7:imx8mp-var-dart-1.x-dt8mcustomboard-m7.dtb \
 	 imx8mp-var-dart-wbe-dt8mcustomboard:imx8mp-var-dart-wbe-dt8mcustomboard.dtb \
-         imx8mp-var-dart-wbe-dt8mcustomboard-basler-isi0-m7:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isi0-m7.dtb \
-         imx8mp-var-dart-wbe-dt8mcustomboard-basler-isi0:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isi0.dtb \
-         imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0-m7:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0-m7.dtb \
-         imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0.dtb \
-         imx8mp-var-dart-wbe-dt8mcustomboard-m7:imx8mp-var-dart-wbe-dt8mcustomboard-m7.dtb \
+	 imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0-m7:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0-m7.dtb \
+	 imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0:imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0.dtb \
+	 imx8mp-var-dart-wbe-dt8mcustomboard-m7:imx8mp-var-dart-wbe-dt8mcustomboard-m7.dtb \
 	 imx8mp-var-som-symphony:imx8mp-var-som-symphony.dtb \
 	 imx8mp-var-som-symphony-m7:imx8mp-var-som-symphony-m7.dtb \
 	 imx8mp-var-som-symphony-2nd-ov5640:imx8mp-var-som-symphony-2nd-ov5640.dtb \
 	 imx8mp-var-som-symphony-2nd-ov5640-m7:imx8mp-var-som-symphony-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-symphony-basler-isp0:imx8mp-var-som-symphony-basler-isp0.dtb \
 	 imx8mp-var-som-symphony-basler-isp0-m7:imx8mp-var-som-symphony-basler-isp0-m7.dtb \
-	 imx8mp-var-som-symphony-basler-isi0:imx8mp-var-som-symphony-basler-isi0.dtb \
-	 imx8mp-var-som-symphony-basler-isi0-m7:imx8mp-var-som-symphony-basler-isi0-m7.dtb \
 	 imx8mp-var-som-1.x-symphony:imx8mp-var-som-1.x-symphony.dtb \
 	 imx8mp-var-som-1.x-symphony-m7:imx8mp-var-som-1.x-symphony-m7.dtb \
 	 imx8mp-var-som-1.x-symphony-2nd-ov5640:imx8mp-var-som-1.x-symphony-2nd-ov5640.dtb \
 	 imx8mp-var-som-1.x-symphony-2nd-ov5640-m7:imx8mp-var-som-1.x-symphony-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-1.x-symphony-basler-isp0:imx8mp-var-som-1.x-symphony-basler-isp0.dtb \
 	 imx8mp-var-som-1.x-symphony-basler-isp0-m7:imx8mp-var-som-1.x-symphony-basler-isp0-m7.dtb \
-	 imx8mp-var-som-1.x-symphony-basler-isi0:imx8mp-var-som-1.x-symphony-basler-isi0.dtb \
-	 imx8mp-var-som-1.x-symphony-basler-isi0-m7:imx8mp-var-som-1.x-symphony-basler-isi0-m7.dtb \
 	 imx8mp-var-som-wbe-symphony:imx8mp-var-som-wbe-symphony.dtb \
 	 imx8mp-var-som-wbe-symphony-m7:imx8mp-var-som-wbe-symphony-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-2nd-ov5640:imx8mp-var-som-wbe-symphony-2nd-ov5640.dtb \
 	 imx8mp-var-som-wbe-symphony-2nd-ov5640-m7:imx8mp-var-som-wbe-symphony-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-basler-isp0:imx8mp-var-som-wbe-symphony-basler-isp0.dtb \
 	 imx8mp-var-som-wbe-symphony-basler-isp0-m7:imx8mp-var-som-wbe-symphony-basler-isp0-m7.dtb \
-	 imx8mp-var-som-wbe-symphony-basler-isi0:imx8mp-var-som-wbe-symphony-basler-isi0.dtb \
-	 imx8mp-var-som-wbe-symphony-basler-isi0-m7:imx8mp-var-som-wbe-symphony-basler-isi0-m7.dtb \
 	 imx8mp-var-som-symphony-1.x:imx8mp-var-som-symphony-1.x.dtb \
 	 imx8mp-var-som-symphony-1.x-m7:imx8mp-var-som-symphony-1.x-m7.dtb \
 	 imx8mp-var-som-symphony-1.x-2nd-ov5640:imx8mp-var-som-symphony-1.x-2nd-ov5640.dtb \
 	 imx8mp-var-som-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-symphony-1.x-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-symphony-1.x-basler-isp0:imx8mp-var-som-symphony-1.x-basler-isp0.dtb \
 	 imx8mp-var-som-symphony-1.x-basler-isp0-m7:imx8mp-var-som-symphony-1.x-basler-isp0-m7.dtb \
-	 imx8mp-var-som-symphony-1.x-basler-isi0:imx8mp-var-som-symphony-1.x-basler-isi0.dtb \
-	 imx8mp-var-som-symphony-1.x-basler-isi0-m7:imx8mp-var-som-symphony-1.x-basler-isi0-m7.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x:imx8mp-var-som-1.x-symphony-1.x.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x-m7:imx8mp-var-som-1.x-symphony-1.x-m7.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640:imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-1.x-symphony-1.x-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x-basler-isp0:imx8mp-var-som-1.x-symphony-1.x-basler-isp0.dtb \
 	 imx8mp-var-som-1.x-symphony-1.x-basler-isp0-m7:imx8mp-var-som-1.x-symphony-1.x-basler-isp0-m7.dtb \
-	 imx8mp-var-som-1.x-symphony-1.x-basler-isi0:imx8mp-var-som-1.x-symphony-1.x-basler-isi0.dtb \
-	 imx8mp-var-som-1.x-symphony-1.x-basler-isi0-m7:imx8mp-var-som-1.x-symphony-1.x-basler-isi0-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x:imx8mp-var-som-wbe-symphony-1.x.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x-m7:imx8mp-var-som-wbe-symphony-1.x-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640:imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640-m7:imx8mp-var-som-wbe-symphony-1.x-2nd-ov5640-m7.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x-basler-isp0:imx8mp-var-som-wbe-symphony-1.x-basler-isp0.dtb \
 	 imx8mp-var-som-wbe-symphony-1.x-basler-isp0-m7:imx8mp-var-som-wbe-symphony-1.x-basler-isp0-m7.dtb \
-	 imx8mp-var-som-wbe-symphony-1.x-basler-isi0:imx8mp-var-som-wbe-symphony-1.x-basler-isi0.dtb \
-	 imx8mp-var-som-wbe-symphony-1.x-basler-isi0-m7:imx8mp-var-som-wbe-symphony-1.x-basler-isi0-m7.dtb \
+	 imx8mp-var-dart-sonata:imx8mp-var-dart-sonata.dtb \
+	 imx8mp-var-dart-sonata-m7:imx8mp-var-dart-sonata-m7.dtb \
+	 imx8mp-var-dart-sonata-basler-isp0-m7:imx8mp-var-dart-sonata-basler-isp0-m7.dtb \
+	 imx8mp-var-dart-sonata-basler-isp0:imx8mp-var-dart-sonata-basler-isp0.dtb \
 	 imx8mp-var-dart-wbe-sonata:imx8mp-var-dart-wbe-sonata.dtb \
 	 imx8mp-var-dart-wbe-sonata-m7:imx8mp-var-dart-wbe-sonata-m7.dtb \
-	 imx8mp-var-dart-wbe-sonata-basler-isi0-m7:imx8mp-var-dart-wbe-sonata-basler-isi0-m7.dtb \
-	 imx8mp-var-dart-wbe-sonata-basler-isi0:imx8mp-var-dart-wbe-sonata-basler-isi0.dtb \
 	 imx8mp-var-dart-wbe-sonata-basler-isp0-m7:imx8mp-var-dart-wbe-sonata-basler-isp0-m7.dtb \
 	 imx8mp-var-dart-wbe-sonata-basler-isp0:imx8mp-var-dart-wbe-sonata-basler-isp0.dtb \
 	 imx8mp-var-dart-1.x-sonata:imx8mp-var-dart-1.x-sonata.dtb \
-	 imx8mp-var-dart-1.x-sonata-basler-isi0-m7:imx8mp-var-dart-1.x-sonata-basler-isi0-m7.dtb \
-	 imx8mp-var-dart-1.x-sonata-basler-isi0:imx8mp-var-dart-1.x-sonata-basler-isi0.dtb \
 	 imx8mp-var-dart-1.x-sonata-basler-isp0-m7:imx8mp-var-dart-1.x-sonata-basler-isp0-m7.dtb \
 	 imx8mp-var-dart-1.x-sonata-basler-isp0:imx8mp-var-dart-1.x-sonata-basler-isp0.dtb \
 	 imx8mp-var-dart-1.x-sonata-m7:imx8mp-var-dart-1.x-sonata-m7.dtb
@@ -231,4 +213,3 @@ BOARD_VENDOR_SEPOLICY_DIRS := \
        $(IMX_DEVICE_PATH)/sepolicy
 
 HAS_SYSTEM_EXT_SEPOLICY := true
-
