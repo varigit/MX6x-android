@@ -16,6 +16,7 @@ include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
 -include $(CONFIG_REPO_PATH)/common/imx_path/ImxPathConfig.mk
 -include device/variscite/common/imx_path/ImxPathConfig.mk
+-include device/variscite/common/bootanimation/variscite_bootanimation_logo.mk
 include $(CONFIG_REPO_PATH)/imx8m/ProductConfigCommon.mk
 
 # -------@block_common_config-------
