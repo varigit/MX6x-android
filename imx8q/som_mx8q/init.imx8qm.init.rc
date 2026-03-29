@@ -238,11 +238,3 @@ on property:sys.boot_completed=1
 on property:sys.boot_completed=1
     start vendor.secretkeeper.${ro.boot.keystore}
 
-on property:sys.boot_completed=1
-    write /sys/bus/platform/drivers/sdhci-esdhc-imx/unbind "${ro.boot.wifisdio}"
-    write /sys/bus/platform/drivers/sdhci-esdhc-imx/bind "${ro.boot.wifisdio}"
-
-on property:sys.boot_completed=1
-    # Rebind BT UART to reload BRCM firmware after /vendor is mounted
-    write /sys/bus/platform/drivers/fsl-lpuart/unbind "${ro.boot.btuart}"
-    write /sys/bus/platform/drivers/fsl-lpuart/bind "${ro.boot.btuart}"
