@@ -418,9 +418,11 @@ PRODUCT_PRODUCT_PROPERTIES += \
     persist.bluetooth.leaudio_offload.disabled=false \
     ro.bluetooth.leaudio_switcher.supported=true
 
+# HDMI and Display Port firmware in vendor_boot ramdisk for early loading before /vendor mount
 PRODUCT_COPY_FILES += \
-    vendor/nxp/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/hdmitxfw.bin \
-    vendor/nxp/linux-firmware-imx/firmware/hdmi/cadence/dpfw.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/dpfw.bin
+    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/hdmi/cadence/dpfw.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/dpfw.bin \
+    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/hdmitxfw.bin \
+    $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/hdmirxfw.bin
 
 # -------@block_usb-------
 # Usb HAL

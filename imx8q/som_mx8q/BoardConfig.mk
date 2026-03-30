@@ -1,6 +1,9 @@
 # -------@block_infrastructure-------
 #
 # Product-specific compile-time definitions.
+
+# Allow ELF-like firmware binaries (hdmitxfw.bin) in PRODUCT_COPY_FILES
+BUILD_BROKEN_ELF_PREBUILT_PRODUCT_COPY_FILES := true
 #if TARGET_IMX_KERNEL is false, the full ota package
 #takes the gki boot image from vendor/nxp/. so that
 #causes to unknown symbol failure in boot.
