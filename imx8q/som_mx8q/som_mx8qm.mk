@@ -36,7 +36,7 @@ PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug:cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug \
     $(IMX_DEVICE_PATH)/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug:$(TARGET_COPY_OUT_VENDOR)/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug
 
-BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/som_mx8q/dtbo-imx8qm-var-som-symphony-hdmi.img
+BOARD_PREBUILT_DTBOIMAGE := $(OUT_DIR)/target/product/som_mx8q/dtbo-imx8qm-var-som-symphony-lvds.img
 
 # imx8qm Symphony
 TARGET_BOARD_DTS_CONFIG := \
