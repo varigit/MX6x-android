@@ -5,3 +5,5 @@ allow hal_bluetooth_default fwk_scheduler_hwservice:hwservice_manager {find};
 allow hal_bluetooth_default system_server:binder {call};
 # Access BT data files
 allow hal_bluetooth_default bluetooth_data_file:file { write read append getattr };
+# Access rfkill to control BT power state
+allow hal_bluetooth_default rfkill_device:chr_file { open read write };

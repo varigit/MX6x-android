@@ -125,11 +125,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-isi-mem2mem.ko \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-media-dev.ko \
     $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
-    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx_sc_wdt.ko
 
 BOARD_VENDOR_KERNEL_MODULES += \
@@ -142,7 +137,6 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/sound/soc/sof/imx/snd-sof-imx8.ko \
     $(KERNEL_OUT)/mm/zsmalloc.ko \
     $(KERNEL_OUT)/drivers/block/zram/zram.ko \
-    $(KERNEL_OUT)/net/rfkill/rfkill.ko \
     $(KERNEL_OUT)/net/wireless/cfg80211.ko \
     $(KERNEL_OUT)/lib/crypto/libarc4.ko \
     $(KERNEL_OUT)/lib/crc-ccitt.ko \
