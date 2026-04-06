@@ -2,7 +2,15 @@
 # Meant to be called by install_android.sh
 set -e
 
-. /usr/bin/echos.sh
+script_dir=$(cd "$(dirname "$0")" && pwd)
+bundled_android_dir="$script_dir/../android"
+echos_path="/usr/bin/echos.sh"
+
+if [ -f "$script_dir/echos.sh" ]; then
+	echos_path="$script_dir/echos.sh"
+fi
+
+. "$echos_path"
 
 # Partition sizes in MiB
 BOOTLOAD_RESERVE=8
@@ -177,6 +185,11 @@ function add_imx95_menu() {
 }
 
 imagesdir="/opt/images/Android"
+bundled_mode=false
+if [ -d "$bundled_android_dir" ]; then
+	imagesdir="$bundled_android_dir"
+	bundled_mode=true
+fi
 soc_name="showoptions"
 
 function help() {
@@ -276,6 +289,14 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			if [[ "${soc_name}" == *"imx8mm-var-som-1.x"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
 					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]]; then
 				imagesdir="/opt/images/Android/lwb"
+				if $bundled_mode; then
+					imagesdir="$bundled_android_dir/lwb"
+					if [ ! -d "$imagesdir" ]; then
+						red_bold_echo "ERROR: bundled installer is missing required subdirectory: $imagesdir"
+						red_bold_echo "This bundle does not support SOM V1.x ($soc_name)."
+						exit 1
+					fi
+				fi
 				blue_underlined_bold_echo "Image directory for SOM V1.x version: $imagesdir"
 			fi
 			break
