@@ -31,8 +31,8 @@ readonly VARISCITE_SH_DIR="${SCRIPT_POINT}/sh"
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.18.0"
-readonly SRCREV_8X="0a0556554078e15bc35421c63edcfb9f4e3e318a"
-readonly SRCREV_8M="9626cacced29ffa24b06847f1e54fc4eb137a282"
+readonly SRCREV_8X="0ac239e197e45ccf6c5ebc7da6085aeb5ebab255"
+readonly SRCREV_8M="0ac239e197e45ccf6c5ebc7da6085aeb5ebab255"
 readonly GCC_ARM_NONE_EABI_MD5SUM="f55f90d483ddb3bcf4dae5882c2094cd"
 readonly GCC_ARM_NONE_TOOL="gcc-arm-none-eabi-8-2018-q4-major-linux.tar.bz2"
 readonly PRE_BUILTS_GCC_PATH=${ANDROID_DIR}/prebuilts/gcc/linux-x86/aarch64/
