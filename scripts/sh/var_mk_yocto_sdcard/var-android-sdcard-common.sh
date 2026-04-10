@@ -51,8 +51,8 @@ function do_copy_android
 
 	if [[ "${MACHINE}" = "imx8qm-var-som" ]]; then
 		echo "Copying firmware images to /opt/images/"
-		cp ${ANDROID_IMGS_PATH}/vendor/firmware/hdmitxfw.bin	${ROOTFS_ANDROID_PATH}/
-		cp ${ANDROID_IMGS_PATH}/vendor/firmware/dpfw.bin	${ROOTFS_ANDROID_PATH}/
+		cp ${ANDROID_IMGS_PATH}/vendor_ramdisk/lib/firmware/hdmitxfw.bin	${ROOTFS_ANDROID_PATH}/
+		cp ${ANDROID_IMGS_PATH}/vendor_ramdisk/lib/firmware/dpfw.bin		${ROOTFS_ANDROID_PATH}/
 	fi
 
 	if [ -e "${ANDROID_IMGS_PATH}/super.img" ]; then
