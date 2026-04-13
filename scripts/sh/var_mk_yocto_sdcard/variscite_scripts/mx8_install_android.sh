@@ -204,9 +204,9 @@ function help() {
 
 function rename_remoteproc_images {
 	if [[ "$1" == *"imx8mp-var-som"* ]]; then
-		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
+		cp "${imagesdir}/${mcu_os_demo_file_8mp_som}" "${imagesdir}/${mcu_os_demo_file}"
 	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
-		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
+		cp "${imagesdir}/${mcu_os_demo_file_8mp_dart}" "${imagesdir}/${mcu_os_demo_file}"
 	fi
 }
 
@@ -289,7 +289,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			if [[ "${soc_name}" == *"imx8mm-var-som-1.x"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
 					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]]; then
 				imagesdir="/opt/images/Android/lwb"
-				if $bundled_mode; then
+				if [[ "$bundled_mode" == true ]]; then
 					imagesdir="$bundled_android_dir/lwb"
 					if [ ! -d "$imagesdir" ]; then
 						red_bold_echo "ERROR: bundled installer is missing required subdirectory: $imagesdir"
@@ -396,7 +396,7 @@ VENDOR_B         : ${VENDOR_ROM_SIZE} MiB
 PRODUCT_A        : ${PRODUCT_ROM_SIZE} MiB
 PRODUCT_B        : ${PRODUCT_ROM_SIZE} MiB"
 
-if [[ -f ${imagesdir}/${superimage_file} ]] ; then
+if [[ -f "${imagesdir}/${superimage_file}" ]] ; then
 	dynamic_img=true
 	dynamic_part="SUPER            : ${SUPER_ROM_SIZE} MiB"
 fi
@@ -460,66 +460,66 @@ function check_images
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${bootloader_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${bootloader_file}" ]] ; then
 		red_bold_echo "ERROR: ${bootloader_file} image does not exist"
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${uboot_proper_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${uboot_proper_file}" ]] ; then
 		red_bold_echo "ERROR: ${uboot_proper_file} image does not exist"
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${initboot_image_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${initboot_image_file}" ]] ; then
 		red_bold_echo "ERROR: ${initboot_image_file} image does not exist"
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${dtboimage_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${dtboimage_file}" ]] ; then
 		red_bold_echo "ERROR: ${dtboimage_file} image does not exist"
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${bootimage_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${bootimage_file}" ]] ; then
 		red_bold_echo "ERROR: ${bootimage_file} image does not exist"
 		exit 1
 	fi
 
-	if [[ ! -f ${imagesdir}/${vendor_bootimage_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${vendor_bootimage_file}" ]] ; then
 		red_bold_echo "ERROR: ${vendor_bootimage_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ "${dynamic_img}" = true ]]; then
-		if [[ ! -f ${imagesdir}/${superimage_file} ]] ; then
+		if [[ ! -f "${imagesdir}/${superimage_file}" ]] ; then
 			red_bold_echo "ERROR: ${superimage_file} image does not exist"
 			exit 1
 		fi
 	else
-		if [[ ! -f ${imagesdir}/${systemimage_file} ]] ; then
+		if [[ ! -f "${imagesdir}/${systemimage_file}" ]] ; then
 			red_bold_echo "ERROR: ${systemimage_file} image does not exist"
 			exit 1
 		fi
 
-		if [[ ! -f ${imagesdir}/${productimage_file} ]] ; then
+		if [[ ! -f "${imagesdir}/${productimage_file}" ]] ; then
 			red_bold_echo "ERROR: ${productimage_file} image does not exist"
 			exit 1
 		fi
 
-		if [[ ! -f ${imagesdir}/${vendorimage_file} ]] ; then
+		if [[ ! -f "${imagesdir}/${vendorimage_file}" ]] ; then
 			red_bold_echo "ERROR: ${vendorimage_file} image does not exist"
 			exit 1
 		fi
 	fi
 
-	if [[ ! -f ${imagesdir}/${vbmeta_file} ]] ; then
+	if [[ ! -f "${imagesdir}/${vbmeta_file}" ]] ; then
 		red_bold_echo "ERROR: ${vbmeta_file} image does not exist"
 		exit 1
 	fi
 
 	if [[ "${soc_name}" != *"mx95"* ]]; then
 		rename_remoteproc_images ${soc_name}
-		if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
+		if [[ ! -f "${imagesdir}/${mcu_os_demo_file}" ]] ; then
 			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
 			exit 1
 		fi
@@ -615,13 +615,13 @@ function install_bootloader
 	echo
 	blue_underlined_bold_echo "Installing booloader"
 
-	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset} conv=fsync; sync
+	dd if="${imagesdir}/${bootloader_file}" of="$node" bs=1k seek="${bootloader_offset}" conv=fsync; sync
 
 	if [[ "${soc_name}" != *"mx95"* ]]; then
 		echo
 		blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 
-		dd if=${imagesdir}/${mcu_os_demo_file} of=${node} bs=1k seek=${mcu_image_offset} conv=fsync
+		dd if="${imagesdir}/${mcu_os_demo_file}" of="${node}" bs=1k seek="${mcu_image_offset}" conv=fsync
 		sync
 	fi
 }
@@ -669,74 +669,74 @@ function install_android
 {
 	echo
 	blue_underlined_bold_echo "Installing Android bootloader image: $uboot_proper_file"
-	dd if=${imagesdir}/${uboot_proper_file} of=${node}${part}1 bs=1M
-	dd if=${imagesdir}/${uboot_proper_file} of=${node}${part}2 bs=1M
+	dd if="${imagesdir}/${uboot_proper_file}" of="${node}${part}1" bs=1M
+	dd if="${imagesdir}/${uboot_proper_file}" of="${node}${part}2" bs=1M
 	sync
 
 	echo
 	blue_underlined_bold_echo "Installing Android dtbo image: $dtboimage_file"
-	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}3 bs=1M
-	dd if=${imagesdir}/${dtboimage_file} of=${node}${part}4 bs=1M
+	dd if="${imagesdir}/${dtboimage_file}" of="${node}${part}3" bs=1M
+	dd if="${imagesdir}/${dtboimage_file}" of="${node}${part}4" bs=1M
 	sync
 
 	echo
 	blue_underlined_bold_echo "Installing Android boot image: $bootimage_file"
-	dd if=${imagesdir}/${bootimage_file} of=${node}${part}5 bs=1M
-	dd if=${imagesdir}/${bootimage_file} of=${node}${part}6 bs=1M
+	dd if="${imagesdir}/${bootimage_file}" of="${node}${part}5" bs=1M
+	dd if="${imagesdir}/${bootimage_file}" of="${node}${part}6" bs=1M
 	sync
 
 	echo
 	blue_underlined_bold_echo "Installing Android init_boot image: $initboot_image_file"
-	dd if=${imagesdir}/${initboot_image_file} of=${node}${part}7 bs=1M
-	dd if=${imagesdir}/${initboot_image_file} of=${node}${part}8 bs=1M
+	dd if="${imagesdir}/${initboot_image_file}" of="${node}${part}7" bs=1M
+	dd if="${imagesdir}/${initboot_image_file}" of="${node}${part}8" bs=1M
 	sync
 
 	echo
 	blue_underlined_bold_echo "Installing Android vendor boot image: $vendor_bootimage_file"
-	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}9 bs=1M
-	dd if=${imagesdir}/${vendor_bootimage_file} of=${node}${part}10 bs=1M
+	dd if="${imagesdir}/${vendor_bootimage_file}" of="${node}${part}9" bs=1M
+	dd if="${imagesdir}/${vendor_bootimage_file}" of="${node}${part}10" bs=1M
 	sync
 
 	if [[ "${dynamic_img}" = false ]]; then
 		echo
 		blue_underlined_bold_echo "Installing Android system image: $systemimage_file"
-		simg2img ${imagesdir}/${systemimage_file} ${node}${part}11
-		simg2img ${imagesdir}/${systemimage_file} ${node}${part}12
+		simg2img "${imagesdir}/${systemimage_file}" "${node}${part}11"
+		simg2img "${imagesdir}/${systemimage_file}" "${node}${part}12"
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android vendor image: $vendorimage_file"
-		simg2img ${imagesdir}/${vendorimage_file} ${node}${part}16
-		simg2img ${imagesdir}/${vendorimage_file} ${node}${part}17
+		simg2img "${imagesdir}/${vendorimage_file}" "${node}${part}16"
+		simg2img "${imagesdir}/${vendorimage_file}" "${node}${part}17"
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android product image: $productimage_file"
-		simg2img ${imagesdir}/${productimage_file} ${node}${part}18
-		simg2img ${imagesdir}/${productimage_file} ${node}${part}19
+		simg2img "${imagesdir}/${productimage_file}" "${node}${part}18"
+		simg2img "${imagesdir}/${productimage_file}" "${node}${part}19"
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}22 bs=1M
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}23 bs=1M
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}22" bs=1M
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}23" bs=1M
 		sync;
 	else
 		echo
 		blue_underlined_bold_echo "Installing Android super image: $superimage_file"
-		simg2img ${imagesdir}/${superimage_file} ${node}${part}14
+		simg2img "${imagesdir}/${superimage_file}" "${node}${part}14"
 		sync;
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}17 bs=1M
-		dd if=${imagesdir}/${vbmeta_file} of=${node}${part}18 bs=1M
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}17" bs=1M
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}18" bs=1M
 		sync;
 
 		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 			echo
 			blue_underlined_bold_echo "Installing firmware image"
-			dd if=${imagesdir}/firmware.img of=${node}${part}19 bs=1M
+			dd if="${imagesdir}/firmware.img" of="${node}${part}19" bs=1M
 		fi
 	fi
 
