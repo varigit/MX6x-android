@@ -267,10 +267,16 @@ LOW_MEMORY := false
 #Enable this to include trusty support
 PRODUCT_IMX_TRUSTY := false
 
+# -------@block_rpmsg----------
+# Enable this to include rpmsg support
+PRODUCT_IMX_RPMSG ?= false
+
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-var-dart-trusty-dual.img
+else ifeq ($(PRODUCT_IMX_RPMSG),true)
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-var-dart-rpmsg-dual.img
 else
 BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-var-dart-dual.img
 endif
