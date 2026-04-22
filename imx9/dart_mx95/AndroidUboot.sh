@@ -45,8 +45,8 @@ build_pre_image()
 	make -C ${BOARD_SM_PATH} really-clean
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk 1>/dev/null || exit 1
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evkrpmsg 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evkrpmsg 1>/dev/null || exit 1
+	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=dart-mx95-m7 1>/dev/null || exit 1
+	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=dart-mx95-m7 1>/dev/null || exit 1
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk-android 1>/dev/null || exit 1
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk-android 1>/dev/null || exit 1
 	echo Building imx-oei ...
@@ -63,8 +63,8 @@ build_imx_uboot()
 
 	if [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
 		cp ${BOARD_SM_PATH}/build/mx95evk-android/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
-		cp ${BOARD_SM_PATH}/build/mx95evkrpmsg/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
+	elif [ `echo $2 | cut -d '-' -f4` = "rpmsg" ]; then
+		cp ${BOARD_SM_PATH}/build/dart-mx95-m7/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
 	else
 		cp ${BOARD_SM_PATH}/build/mx95evk/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
 	fi
@@ -113,7 +113,7 @@ build_imx_uboot()
 
 	if echo "$2" | grep -q "15x15" ; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr4x OEI=YES || exit 1
-	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
+	elif [ `echo $2 | cut -d '-' -f4` = "rpmsg" ]; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	else
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
