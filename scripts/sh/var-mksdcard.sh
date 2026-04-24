@@ -218,8 +218,14 @@ fi
 
 if [[ "${soc_name}" = *"mx95"* ]]; then
 	bootloader_offset=32
-	bootloader_file=spl-imx95-var-dart-dual.bin
-	uboot_proper_file=bootloader-imx95-var-dart-dual.img
+	# When SM was compiled with config=dart-mx95-m7"
+	if [[ "${soc_name}" == *"-m7" ]]; then
+		bootloader_file=spl-imx95-var-dart-rpmsg-dual.bin
+		uboot_proper_file="bootloader-imx95-var-dart-rpmsg-dual.img"
+	else
+		bootloader_file=spl-imx95-var-dart-dual.bin
+		uboot_proper_file="bootloader-imx95-var-dart-dual.img"
+	fi
 fi
 
 echo "${soc_name} image dir is: ${imagesdir}"
