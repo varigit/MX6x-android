@@ -163,7 +163,9 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/tools/fastboot_imx_flashall.sh:fastboot_imx_flashall.sh \
     $(CONFIG_REPO_PATH)/common/tools/imx-sdcard-partition.sh:imx-sdcard-partition.sh \
     $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
-    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
+    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7.lst:emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_sonata_m7.lst:emmc_burn_android_imx95_var_dart_sonata_m7.lst
 
 # -------@block_security-------
 
