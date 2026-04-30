@@ -64,6 +64,8 @@ function rename_remoteproc_images {
 	elif [[ "$1" == *"imx8mm-var-dart"* ]]; then
 		cp -ar device/variscite/imx8m/dart_mx8mm/*.bin.debug ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8mm_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx95-var-dart"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_mx95_dart}	${imagesdir}/${mcu_os_demo_file}
 	fi
 }
 
@@ -167,7 +169,7 @@ mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som
 mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mn_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mm_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
-
+mcu_os_demo_file_mx95_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.bin.debug"
 
 block=`basename $node`
 part=""
@@ -365,7 +367,7 @@ function check_images
 		exit 1
 	fi
 
-	if [[ "${soc_name}" != *"mx95"* ]]; then
+	if [[ "${soc_name}" == *"-m7" || "${soc_name}" != *"mx95"* ]]; then
 		rename_remoteproc_images ${soc_name}
 		if [[ ! -f ${imagesdir}/${mcu_os_demo_file} ]] ; then
 			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
@@ -465,7 +467,7 @@ function install_bootloader
 
 	dd if=${imagesdir}/${bootloader_file} of=$node bs=1k seek=${bootloader_offset} conv=fsync; sync
 
-	if [[ "${soc_name}" != *"mx95"* ]]; then
+	if [[ "${soc_name}" == *"-m7" || "${soc_name}" != *"mx95"* ]]; then
 		echo
 		blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
 
