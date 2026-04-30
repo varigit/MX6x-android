@@ -634,6 +634,23 @@ $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/idc/generic_ft5x06__7b_.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06__7b_.idc
 
+# --------@block_rpmsg----------
+
+# Install the imx_rpmsg_pingpong.ko and imx_rpmsg_tty.ko
+# modules to load when needed using insmod
+PRODUCT_COPY_FILES += \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:/vendor/imx_rpmsg_pingpong.ko \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_tty.ko:/vendor/imx_rpmsg_tty.ko
+
+# Copy the CM7 demo .bin files to the images directory for writing, and install the CM7 demo .elf files for running from user space
+PRODUCT_COPY_FILES += \
+	$(IMX_DEVICE_PATH)/cm_hello_world_cm7.bin.debug:cm_hello_world_cm7.bin.debug \
+	$(IMX_DEVICE_PATH)/cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.bin.debug:cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.bin.debug \
+	$(IMX_DEVICE_PATH)/cm_rpmsg_lite_str_echo_rtos_remote_cm7.bin.debug:cm_rpmsg_lite_str_echo_rtos_remote_cm7.bin.debug \
+	$(IMX_DEVICE_PATH)/cm_hello_world_cm7.elf.debug:vendor/firmware/cm_hello_world_cm7.elf.debug \
+	$(IMX_DEVICE_PATH)/cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.elf.debug:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.elf.debug \
+	$(IMX_DEVICE_PATH)/cm_rpmsg_lite_str_echo_rtos_remote_cm7.elf.debug:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_remote_cm7.elf.debug
+
 # -------@block_mcu_contexthub-------
 
 # context hub
