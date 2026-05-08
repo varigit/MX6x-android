@@ -41,6 +41,8 @@ BOARD_OEI_PATH=${VARISCITE_PATH}/imx-oei
 
 build_pre_image()
 {
+	local dram_size="${1:-8}"
+
 	echo Building imx-sm ...
 	make -C ${BOARD_SM_PATH} really-clean
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk 1>/dev/null || exit 1
@@ -51,7 +53,7 @@ build_pre_image()
 	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk-android 1>/dev/null || exit 1
 	echo Building imx-oei ...
 	make -C ${BOARD_OEI_PATH} really-clean
-	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95-var-dart r=b0 oei=ddr d=1 all 1>/dev/null || exit 1
+	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95-var-dart r=b0 oei=ddr DDR_CONFIG=lpddr5_${dram_size}gb_6400mbps_train_timing d=1 all 1>/dev/null || exit 1
 	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95-var-dart r=b0 oei=tcm d=1 all 1>/dev/null || exit 1
 }
 

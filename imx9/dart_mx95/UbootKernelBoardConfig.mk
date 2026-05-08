@@ -5,6 +5,9 @@ UBOOT_POST_PROCESS := true
 TARGET_BOOTLOADER_CONFIG := imx95-var-dart:imx95_var_dart_android_defconfig
 TARGET_BOOTLOADER_CONFIG += imx95-var-dart-dual:imx95_var_dart_android_dual_defconfig
 
+# Supported DRAM_SIZE 2GB|4GB|8GB|16GB
+TARGET_DRAM_SIZE_GB ?= 8
+
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 	TARGET_BOOTLOADER_CONFIG += imx95-var-dart-trusty-dual:imx95_var_dart_android_trusty_dual_defconfig
 	TARGET_BOOTLOADER_CONFIG += imx95-var-dart-trusty-secure-unlock-dual:imx95_var_dart_android_trusty_secure_unlock_dual_defconfig
