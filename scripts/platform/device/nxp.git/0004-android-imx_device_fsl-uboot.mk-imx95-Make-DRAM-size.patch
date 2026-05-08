@@ -1,0 +1,67 @@
+From 211d2a04f37d3c2b798f0e942490054e91bc8532 Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Fri, 8 May 2026 10:40:38 +0200
+Subject: [PATCH] android-imx_device_fsl: uboot.mk: imx95: Make DRAM size
+ configurable
+
+When building the bootloader for the dart_mx95 target, the DRAM size
+value in CONFIG_IMX95_VAR_DART_(X)GB in U-Boot and the DDR_CONFIG file
+in the imx-oei configuration is set based on TARGET_DRAM_SIZE_GB.
+
+TARGET_DRAM_SIZE_GB can be set in UbootKernelBoardConfig.mk or
+overridden on the command line, e.g.:
+
+TARGET_DRAM_SIZE_GB=16 ./imx-make.sh -j4 2>&1 | tee build1-1.log
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ common/build/uboot.mk | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/common/build/uboot.mk b/common/build/uboot.mk
+index 0af376d0..019e1d65 100644
+--- a/common/build/uboot.mk
++++ b/common/build/uboot.mk
+@@ -36,6 +36,16 @@ ifeq ($(TARGET_BOOTLOADER_CONFIG),)
+ $(error TARGET_BOOTLOADER_CONFIG not defined)
+ endif
+ 
++ifeq ($(TARGET_PRODUCT),dart_mx95)
++TARGET_DRAM_SIZE_GB := $(strip $(TARGET_DRAM_SIZE_GB))
++VALID_DRAM_SIZES := 2 4 8 16
++ifeq ($(TARGET_DRAM_SIZE_GB),)
++    $(error TARGET_DRAM_SIZE_GB is not defined. Please set it in UbootKernelBoardConfig.mk or via command line)
++else ifeq ($(filter $(TARGET_DRAM_SIZE_GB),$(VALID_DRAM_SIZES)),)
++    $(error Invalid TARGET_DRAM_SIZE_GB: "$(TARGET_DRAM_SIZE_GB)". Supported values are: $(VALID_DRAM_SIZES))
++endif
++endif
++
+ ifeq ($(TARGET_UBOOT_ARCH),)
+ $(error TARGET_UBOOT_ARCH not defined)
+ endif
+@@ -134,12 +144,21 @@ $(UBOOTENVSH): | $(UBOOT_OUT)
+ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ 	$(hide) echo "Building $(UBOOT_ARCH) $(UBOOT_VERSION) U-Boot ..."
+ 		. ${product_path}/AndroidUboot.sh; \
+-		build_pre_image
++		if [ "${TARGET_PRODUCT}" = "dart_mx95" ]; then \
++			build_pre_image $(TARGET_DRAM_SIZE_GB); \
++		else \
++			build_pre_image; \
++		fi
+ 	$(hide) for ubootplat in $(TARGET_BOOTLOADER_CONFIG); do \
+ 		UBOOT_PLATFORM=`echo $$ubootplat | cut -d':' -f1`; \
+ 		UBOOT_CONFIG=`echo $$ubootplat | cut -d':' -f2`; \
+ 		$(MAKE) -C $(UBOOT_IMX_PATH)/uboot-imx/ CROSS_COMPILE="$(UBOOT_CROSS_COMPILE_WRAPPER)" O=$(realpath $(UBOOT_OUT)) mrproper; \
+ 		$(MAKE) -C $(UBOOT_IMX_PATH)/uboot-imx/ CROSS_COMPILE="$(UBOOT_CROSS_COMPILE_WRAPPER)" O=$(realpath $(UBOOT_OUT)) $$UBOOT_CONFIG; \
++		if [ "${TARGET_PRODUCT}" = "dart_mx95" ]; then \
++			echo "Update to $(TARGET_DRAM_SIZE_GB)GB DRAM configuration..." ; \
++			echo "CONFIG_IMX95_VAR_DART_$(TARGET_DRAM_SIZE_GB)GB=y" >> $(UBOOT_OUT)/.config; \
++			$(MAKE) -C $(UBOOT_IMX_PATH)/uboot-imx/ CROSS_COMPILE="$(UBOOT_CROSS_COMPILE_WRAPPER)" O=$(realpath $(UBOOT_OUT)) olddefconfig; \
++		fi; \
+ 		$(MAKE) -s -C $(UBOOT_IMX_PATH)/uboot-imx/ CROSS_COMPILE="$(UBOOT_CROSS_COMPILE_WRAPPER)" O=$(realpath $(UBOOT_OUT)) 1>/dev/null || exit 1; \
+ 		if [ "$(UBOOT_POST_PROCESS)" = "true" ]; then \
+ 			echo "build post process" ; \
+-- 
+2.34.1
+
