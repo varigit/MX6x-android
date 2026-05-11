@@ -65,7 +65,7 @@ build_imx_uboot()
 
 	if [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
 		cp ${BOARD_SM_PATH}/build/mx95evk-android/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif [ `echo $2 | cut -d '-' -f4` = "rpmsg" ]; then
+	elif [ "`echo $2 | cut -d '-' -f4`" = "rpmsg" ]; then
 		cp ${BOARD_SM_PATH}/build/dart-mx95-m7/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
 	else
 		cp ${BOARD_SM_PATH}/build/mx95evk/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
@@ -94,7 +94,7 @@ build_imx_uboot()
 
 	# build ATF based on whether tee is involved
 	make -C ${VARISCITE_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` clean
-	if [ `echo $2 | cut -d '-' -f4` = "trusty" ] && [ `echo $2 | rev | cut -d '-' -f3` != "uuu" ]; then
+	if [ "`echo $2 | cut -d '-' -f4`" = "trusty" ] && [ "`echo $2 | rev | cut -d '-' -f3`" != "uuu" ]; then
 		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
 		make -C ${VARISCITE_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty 1>/dev/null || exit 1
 	else
@@ -115,7 +115,7 @@ build_imx_uboot()
 
 	if echo "$2" | grep -q "15x15" ; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr4x OEI=YES || exit 1
-	elif [ `echo $2 | cut -d '-' -f4` = "rpmsg" ]; then
+	elif [ "`echo $2 | cut -d '-' -f4`" = "rpmsg" ]; then
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
 	else
 		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
