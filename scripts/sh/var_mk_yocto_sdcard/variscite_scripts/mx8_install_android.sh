@@ -718,8 +718,8 @@ function install_android
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}22" bs=1M
-		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}23" bs=1M
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}22" bs=4k oflag=direct,dsync
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}23" bs=4k oflag=direct,dsync
 		sync;
 	else
 		echo
@@ -729,8 +729,10 @@ function install_android
 
 		echo
 		blue_underlined_bold_echo "Installing Android vbmeta image: $vbmeta_file"
-		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}17" bs=1M
-		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}18" bs=1M
+		# Critical image for Android Verified Boot (AVB)
+		# Bypass kernel page cache and ensure per-4K synchronous write completion
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}17" bs=4k oflag=direct,dsync
+		dd if="${imagesdir}/${vbmeta_file}" of="${node}${part}18" bs=4k oflag=direct,dsync
 		sync;
 
 		if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
@@ -757,6 +759,7 @@ function finish
 
 	if [[ ${errors} = 0 ]] ; then
 		blue_bold_echo "Android installed successfully"
+		red_bold_echo "IMPORTANT: To ensure data integrity, shut down via the 'poweroff' command"
 	else
 		red_bold_echo "Android installation failed"
 	fi
