@@ -9,7 +9,7 @@ TARGET_BOOTLOADER_CONFIG := \
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 TARGET_BOOTLOADER_CONFIG += \
 	imx8mp-var-dart-trusty-secure-unlock-dual:imx8mp_var_dart_android_trusty_secure_unlock_dual_defconfig \
-	imx8mp-var-dart-trusty-dual:imx8mp_var_dart_android_trusty_dual_defconfig
+	imx8mp-var-dart-trusty-dual:imx8mp_var_dart_android_trusty_dual_defconfig \
         imx8mp-var-dart-trusty-rbidx-blob-dual:imx8mp_var_dart_android_trusty_rbidx_blob_dual_defconfig
 endif
 
