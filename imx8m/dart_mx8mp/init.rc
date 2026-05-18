@@ -258,6 +258,9 @@ on property:ro.boot.camera.layout=basler-ov5640
 on property:ro.boot.camera.layout=dual-basler
     mount overlay overlay /vendor/etc/configs/isp ro lowerdir=/vendor/vendor_overlay_sensor/basler/vendor/etc/configs/isp:/vendor/etc/configs/isp,override_creds=off
 
+on property:ro.boot.camera.layout=var-basler
+    mount overlay overlay /vendor/etc/configs/isp ro lowerdir=/vendor/vendor_overlay_sensor/basler/vendor/etc/configs/isp:/vendor/etc/configs/isp,override_creds=off
+
 service confirmationui_ta_load /vendor/bin/trusty_apploader /vendor/firmware/tee/confirmationui.app
     user root
     group root system
