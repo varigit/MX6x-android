@@ -76,6 +76,8 @@ build_imx_uboot()
 	elif echo "$2" | grep -q "verdin" ; then
 		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_verdin_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
 	else
+		# CM7 image is flashed into the bootloader container, when the build target is flash_all
+		# Note: We are currently using flash_a55 target and a MCU demo image flashed separately
 		if [ "${ENABLE_CONTEXTHUB}" = "true" ]; then
 			cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_chre.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
 		else

@@ -665,3 +665,9 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml \
     $(NXP_DEVICE_PATH)/chre/preloaded_nanoapps.json:$(TARGET_COPY_OUT_VENDOR)/etc/chre/preloaded_nanoapps.json
 endif
+
+# This is the CHRE MCU image with two NanoApps:
+# 1. message_world (statically built into the MCU firmware)
+# 2. hello_world (preloaded NanoApp, built as a separate binary)
+PRODUCT_COPY_FILES += \
+    vendor/nxp/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_chre.img:rpmsg_chre_rtos_cm7.bin

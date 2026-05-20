@@ -271,6 +271,10 @@ PRODUCT_IMX_TRUSTY := false
 # Enable this to include rpmsg support
 PRODUCT_IMX_RPMSG ?= false
 
+ifeq ($(ENABLE_CONTEXTHUB), true)
+    PRODUCT_IMX_RPMSG := true
+endif
+
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
