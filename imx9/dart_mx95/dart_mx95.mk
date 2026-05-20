@@ -165,7 +165,9 @@ PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
     $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh \
     device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7.lst:emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7.lst \
-    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_sonata_m7.lst:emmc_burn_android_imx95_var_dart_sonata_m7.lst
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_sonata_m7.lst:emmc_burn_android_imx95_var_dart_sonata_m7.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7_chre.lst:emmc_burn_android_imx95_var_dart_dt8mcustomboard_m7_chre.lst \
+    device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_sonata_m7_chre.lst:emmc_burn_android_imx95_var_dart_sonata_m7_chre.lst
 
 # -------@block_security-------
 
