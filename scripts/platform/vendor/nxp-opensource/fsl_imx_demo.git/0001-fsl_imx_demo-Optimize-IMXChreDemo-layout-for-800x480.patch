@@ -1,0 +1,67 @@
+From bf5f6e97bdc2e8032cae46514730344adc6f278b Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Wed, 20 May 2026 14:23:49 +0200
+Subject: [PATCH] fsl_imx_demo: Optimize IMXChreDemo layout for 800x480
+ displays
+
+Remove the oversized title and unused spacer from the main activity
+layout to better adapt to our 800x480 display resolution.
+
+Adjust button container margins and add horizontal padding to the
+log messages view.
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ ContextHubDemo/res/layout/activity_main.xml | 22 +++++----------------
+ 1 file changed, 5 insertions(+), 17 deletions(-)
+
+diff --git a/ContextHubDemo/res/layout/activity_main.xml b/ContextHubDemo/res/layout/activity_main.xml
+index f51cabe..4f648b7 100755
+--- a/ContextHubDemo/res/layout/activity_main.xml
++++ b/ContextHubDemo/res/layout/activity_main.xml
+@@ -15,26 +15,12 @@
+         app:layout_constraintVertical_bias="0.485"
+         tools:layout_editor_absoluteX="1dp">
+ 
+-        <TextView
+-            android:id="@+id/top"
+-            android:layout_width="wrap_content"
+-            android:layout_height="wrap_content"
+-            android:layout_gravity="center"
+-            android:layout_marginTop="50dp"
+-            android:fontFamily="sans-serif-medium"
+-            android:text="@string/app_name"
+-            android:textFontWeight="@integer/material_motion_duration_long_1"
+-            android:textSize="60sp" />
+-
+-        <Space
+-            android:layout_width="match_parent"
+-            android:layout_height="95dp" />
+-
+         <LinearLayout
+             android:layout_width="197dp"
+             android:layout_height="wrap_content"
+             android:layout_gravity="center"
+-            android:layout_marginBottom="50dp"
++            android:layout_marginTop="30dp"
++            android:layout_marginBottom="15dp"
+             android:orientation="vertical">
+ 
+             <Button
+@@ -83,9 +69,11 @@
+             xmlns:android="http://schemas.android.com/apk/res/android">
+             <TextView
+                 android:id="@+id/output"
++                android:layout_marginStart="30dp"
++                android:layout_marginEnd="30dp"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content" />
+         </ScrollView>
+ 
+     </LinearLayout>
+-</androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
++</androidx.constraintlayout.widget.ConstraintLayout>
+-- 
+2.34.1
+
