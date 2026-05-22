@@ -1,0 +1,247 @@
+From f323d65081d263448208d8af76ba02ea761e92ba Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Thu, 21 May 2026 18:36:04 +0200
+Subject: [PATCH] fsl-imx-demo: Improve IMXChreDemo functionality
+
+This fixes a null object reference that causes the app to crash
+if a user clicks the UNLOAD NANOAPP, QUERY NANOAPP, or SEND MESSAGE
+buttons first.
+
+The original design required a strict sequence of button clicks:
+1. CONTEXT HUB INFO
+2. QUERY NANOAPP
+Otherwise, the app would crash, for example, when clicking the SEND MESSAGE
+button first.
+
+Move this functionality to onCreate():
+
+Extract the ContextHubClient creation code from the button handler
+and wrap it in the registerContextHubClient() function to call it
+in onCreate().
+
+Extract the code for getting the nanoappStateList from the button handler
+and wrap it in the updateNanoAppState() function to call it in onCreate()
+and whenever the nanoapp list is updated.
+
+Important note: This IMXChreDemo UI demo is a proof of concept and
+requires further development.
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ .../com/example/imxchre/MainActivity.java     | 131 ++++++++++++++----
+ 1 file changed, 107 insertions(+), 24 deletions(-)
+
+diff --git a/ContextHubDemo/java/com/example/imxchre/MainActivity.java b/ContextHubDemo/java/com/example/imxchre/MainActivity.java
+index 09742c1..d57772e 100755
+--- a/ContextHubDemo/java/com/example/imxchre/MainActivity.java
++++ b/ContextHubDemo/java/com/example/imxchre/MainActivity.java
+@@ -120,6 +120,8 @@ public class MainActivity extends AppCompatActivity {
+                 });
+ 
+         connectContextHubServer();
++        updateNanoAppState();
++        registerContextHubClient();
+     }
+ 
+     private void checkPermissions(String[] permissions) {
+@@ -189,6 +191,77 @@ public class MainActivity extends AppCompatActivity {
+         }
+     }
+ 
++    private void updateNanoAppState() {
++        if (mContextHubManager == null) {
++            return;
++        }
++
++        List<ContextHubInfo> info = mContextHubManager.getContextHubs();
++
++        if (info != null && !info.isEmpty()) {
++            mContextHubInfo = info.get(0);
++
++            if (mContextHubInfo == null) {
++                printToScreen("Context Hub Info is null", true);
++                return;
++            }
++
++            ContextHubTransaction<List<NanoAppState>> transaction = mContextHubManager.queryNanoApps(mContextHubInfo);
++
++            try {
++                ContextHubTransaction.Response<List<NanoAppState>> response =
++                    transaction.waitForResponse(QUERY_NANOAPPS_TIMEOUT_SECONDS, TimeUnit.SECONDS);
++
++                if (response != null && response.getResult() == ContextHubTransaction.RESULT_SUCCESS) {
++                    mNanoappStateList = response.getContents();
++
++                    if (mNanoappStateList == null || mNanoappStateList.isEmpty()) {
++                        printToScreen("No loadable nanoapps running in CHRE", false);
++                    }
++                } else {
++                    int err = (response != null) ? response.getResult() : -1;
++                    printToScreen("Nanoapps query failed with error: " + err, true);
++                }
++             } catch (InterruptedException | TimeoutException e) {
++                    printToScreen("Exception while retrieving query response: " + e.getMessage(), true);
++             }
++        } else {
++            printToScreen("Hardware CHRE link down or unavailable", true);
++        }
++    }
++
++    /* Creates a client to send messages to nanoapps
++     * and receive notifications through its callback */
++
++    private void registerContextHubClient() {
++        if (mContextHubManager == null || mContextHubInfo == null) {
++            printToScreen("Cannot create client: Context Hub Manager or Hub Info is null", true);
++            return;
++        }
++
++        mContextHubClientCallback = new ContextHubClientCallback() {
++            @Override
++            public void onMessageFromNanoApp(ContextHubClient client, NanoAppMessage message) {
++                printToScreen("Received message from nanoapp: " + message.toString(), false);
++
++                byte[] messageBody = message.getMessageBody();
++                if (messageBody != null) {
++                    printToScreen("Message body: " + new String(messageBody), false);
++                } else {
++                    printToScreen("Message body is empty/null", true);
++                }
++            }
++        };
++
++        mContextHubClient = mContextHubManager.createClient(mContextHubInfo, mContextHubClientCallback);
++
++        if (mContextHubClient == null) {
++            printToScreen("Context Hub client registration failed", true);
++        } else {
++            printToScreen("Context Hub client registration successed", false);
++        }
++    }
++
+     /* load Nanoapp callback */
+     public void ClickLoadButton(View view) {
+         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+@@ -218,14 +291,19 @@ public class MainActivity extends AppCompatActivity {
+ 
+     public void ClickunLoadButton(View view) {
+         boolean result = false;
+-        for (NanoAppState state : mNanoappStateList) {
+-            result = unloadNanoApp(state.getNanoAppId());
+-            if (result == false) {
+-                printToScreen("unload Nanoapp failed, id: " + Long.toHexString(state.getNanoAppId()), true);
++        if (mNanoappStateList != null) {
++            for (NanoAppState state : mNanoappStateList) {
++                result = unloadNanoApp(state.getNanoAppId());
++                if (result == true) {
++                    printToScreen("unload Nanoapp success, id: " + Long.toHexString(state.getNanoAppId()), false);
++                } else {
++                    printToScreen("unload Nanoapp failed, id: " + Long.toHexString(state.getNanoAppId()), true);
++                }
+             }
++            updateNanoAppState();
++        } else {
++            printToScreen("NanoApps List is null", true);
+         }
+-        if (result == true)
+-            printToScreen("Unload successully", false);
+     }
+ 
+     /* GetContextHubInfo callback */
+@@ -239,26 +317,16 @@ public class MainActivity extends AppCompatActivity {
+         if (mContextHubInfo != null) {
+             printToScreen(String.format("contextHub vendor: %s , name: %s , Id: %s , chreApiMajor: %d , ChreApiMinor: %d",
+                       mContextHubInfo.getVendor(), mContextHubInfo.getName(), mContextHubInfo.getId(), mContextHubInfo.getChreApiMajorVersion(), mContextHubInfo.getChreApiMinorVersion()), false);
++
++           /*If client creation failed during onCreate(), fix it now*/
++            if (mContextHubClient == null) {
++                printToScreen("Re-registering Context Hub Client...", false);
++                registerContextHubClient();
++            }
+         } else {
+             printToScreen("contextHubInfo is null", true);
+             return;
+         }
+-        /* create context hub client for connect context hub service */
+-        mContextHubClientCallback = new ContextHubClientCallback() {
+-            @Override
+-            public void onMessageFromNanoApp(ContextHubClient client, NanoAppMessage message) {
+-                printToScreen("Received message from nanoapp: " + message.toString(), false);
+-                byte[] messageBody = message.getMessageBody();
+-                printToScreen("Message body: " + new String(messageBody), false);
+-            }
+-        };
+-
+-        mContextHubClient = mContextHubManager.createClient(mContextHubInfo, mContextHubClientCallback);
+-        if (mContextHubClient == null) {
+-            printToScreen("create contexthub client failed", true);
+-        } else {
+-            printToScreen("create contexthub client successed", false);
+-        }
+     }
+ 
+     /* Query Nanoapp List info callback */
+@@ -281,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
+             return;
+         }
+         if (response.getResult() == ContextHubTransaction.RESULT_SUCCESS) {
+-            printToScreen("query transcation succssed", false);
++            printToScreen("query transaction successful", false);
+         } else {
+             printToScreen(type + " transaction failed with error code " + response.getResult(), false);
+             return;
+@@ -289,6 +357,10 @@ public class MainActivity extends AppCompatActivity {
+     }
+ 
+     public void ClickqueryButton(View view) {
++        if (mContextHubInfo == null) {
++            printToScreen("Context Hub Info is null", true);
++            return;
++        }
+         ContextHubTransaction<List<NanoAppState>> transaction =
+             mContextHubManager.queryNanoApps(mContextHubInfo);
+         assertTransactionSuccessSync(transaction, QUERY_NANOAPPS_TIMEOUT_SECONDS);
+@@ -306,7 +378,7 @@ public class MainActivity extends AppCompatActivity {
+             return;
+         }
+         mNanoappStateList = response.getContents();
+-        if (mNanoappStateList.size() >= 0) {
++        if (mNanoappStateList != null && !mNanoappStateList.isEmpty()) {
+             printToScreen("NanoApp Info List:", false);
+             for (NanoAppState state : mNanoappStateList) {
+                 printToScreen(Long.toHexString(state.getNanoAppId()), false);
+@@ -322,6 +394,12 @@ public class MainActivity extends AppCompatActivity {
+         NanoAppMessage message =
+             NanoAppMessage.createMessageToNanoApp(
+                 0x0123456789000003L , /* messageType= */ 0, /* messageBody= */ test_data);
++
++        if (mContextHubClient == null) {
++            printToScreen("Context Hub client is null", true);
++            return;
++        }
++
+         int returnValue = mContextHubClient.sendMessageToNanoApp(message);
+         if (returnValue == ContextHubTransaction.RESULT_SUCCESS) {
+             printToScreen("send successed", false);
+@@ -351,6 +429,10 @@ public class MainActivity extends AppCompatActivity {
+                 printToScreen("create nanoapp binary failed", true);
+             } else {
+                 printToScreen("create nanoapp binary successed", false);
++                if (mContextHubManager == null || mContextHubInfo == null) {
++                    printToScreen("Failed to execute the transaction: Context Hub Manager or Hub Info is null", true);
++                    return;
++                }
+                 ContextHubTransaction<Void> transaction = mContextHubManager.loadNanoApp(mContextHubInfo, appBinary);
+                 ContextHubTransaction.Response<Void> resp = null;
+                 try {
+@@ -361,6 +443,7 @@ public class MainActivity extends AppCompatActivity {
+                 }
+                 if (resp.getResult() == ContextHubTransaction.RESULT_SUCCESS) {
+                     printToScreen("Load Nanoapp success", false);
++                    updateNanoAppState();
+                 } else {
+                     printToScreen("Load Nanoapp failed", true);
+                 }
+-- 
+2.34.1
+
