@@ -269,7 +269,6 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 # -------@block_audio-------
 # Audio card json
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/micfil_s32_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_s32_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/hdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/hdmi_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
@@ -741,6 +740,12 @@ PRODUCT_PACKAGES += \
 
 # make sure /vendor/etc/configs/isp/ is created
     PRODUCT_PACKAGES += hollow
+
+# config for audio selection
+PRODUCT_PACKAGES += \
+    var-audio-config \
+    var-wm8904-config-carrier.json \
+    var-wm8904-config.json
 
 # Install the imx_rpmsg_pingpong.ko and imx_rpmsg_tty.ko
 # modules to load when needed using insmod

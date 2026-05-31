@@ -261,6 +261,14 @@ on property:ro.boot.camera.layout=dual-basler
 on property:ro.boot.camera.layout=var-basler
     mount overlay overlay /vendor/etc/configs/isp ro lowerdir=/vendor/vendor_overlay_sensor/basler/vendor/etc/configs/isp:/vendor/etc/configs/isp,override_creds=off
 
+# default is VAR-SMARC SoM audio codec
+on property:ro.boot.varaudio.selection=""
+    mount overlay overlay /vendor/etc/configs/audio ro lowerdir=/vendor/vendor_overlay_audio/som/vendor/etc/configs/audio:/vendor/etc/configs/audio,override_creds=off
+
+# setenv append_bootargs androidboot.varaudio.selection=carrier
+on property:ro.boot.varaudio.selection=carrier
+    mount overlay overlay /vendor/etc/configs/audio ro lowerdir=/vendor/vendor_overlay_audio/carrier/vendor/etc/configs/audio:/vendor/etc/configs/audio,override_creds=off
+
 service confirmationui_ta_load /vendor/bin/trusty_apploader /vendor/firmware/tee/confirmationui.app
     user root
     group root system

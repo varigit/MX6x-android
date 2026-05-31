@@ -5,3 +5,4 @@
 /sys/devices/platform/soc@0/30800000.bus/30800000.spba-bus/30820000.spi/spi_master/spi1/spi1.0/wakeup(/.*)? u:object_r:sysfs_wakeup:s0
 /sys/devices/platform/gpio-keys/wakeup(/.*)? u:object_r:sysfs_wakeup:s0
 /sys/devices/platform/soc@0/30800000.bus/30b40000.mmc/mmc_host/mmc0/mmc0:0001/mmc0:0001:1/wakeup(/.*)? u:object_r:sysfs_wakeup:s0
+/vendor/vendor_overlay_audio/(som|carrier)/vendor/etc/configs/audio(/.*)?         u:object_r:vendor_configs_file:s0
