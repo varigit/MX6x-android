@@ -200,7 +200,9 @@ ifeq ($(TARGET_USE_DYNAMIC_PARTITIONS),true)
 	 imx8mp-var-dart-1.x-sonata:imx8mp-var-dart-1.x-sonata.dtb \
 	 imx8mp-var-dart-1.x-sonata-basler-isp0-m7:imx8mp-var-dart-1.x-sonata-basler-isp0-m7.dtb \
 	 imx8mp-var-dart-1.x-sonata-basler-isp0:imx8mp-var-dart-1.x-sonata-basler-isp0.dtb \
-	 imx8mp-var-dart-1.x-sonata-m7:imx8mp-var-dart-1.x-sonata-m7.dtb
+	 imx8mp-var-dart-1.x-sonata-m7:imx8mp-var-dart-1.x-sonata-m7.dtb \
+	 imx8mp-var-smarc-echo:imx8mp-var-smarc-echo.dtb \
+	 imx8mp-var-smarc-echo-basler-isp0:imx8mp-var-smarc-echo-basler-isp0.dtb
 endif
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)

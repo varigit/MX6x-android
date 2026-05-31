@@ -106,6 +106,7 @@ BOARD_VENDOR_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/stmmac-platform.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/stmicro/stmmac/dwmac-imx.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
+    $(KERNEL_OUT)/drivers/net/phy/dp83867.ko \
     $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
