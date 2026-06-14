@@ -339,7 +339,8 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 				soc_name=$opt
 			fi
 			if [[ "${soc_name}" == *"imx8mm-var-som-1.x"* ]] || [[ "${soc_name}" == *"imx8mm-var-dart-1.x"* ]] ||
-					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]]; then
+					[[ "${soc_name}" == *"imx8mp-var-dart-1.x"* ]] || [[ "${soc_name}" == *"imx8mp-var-som-1.x"* ]] ||
+					[[ "${soc_name}" == *"imx8mn-var-som-1.x"* ]]; then
 				imagesdir="/opt/images/Android/lwb"
 				if [[ "$bundled_mode" == true ]]; then
 					imagesdir="$bundled_android_dir/lwb"
