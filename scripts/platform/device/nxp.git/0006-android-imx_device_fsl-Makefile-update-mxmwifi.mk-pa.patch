@@ -1,0 +1,26 @@
+From 1b2774978483208c9dababa535f83b43c46c3afd Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Thu, 18 Jun 2026 22:47:57 +0200
+Subject: [PATCH] android-imx_device_fsl: Makefile: update mxmwifi.mk path
+
+mxmwifi.mk was moved to the repository root as part of mxmwifi
+driver updates.
+
+Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
+---
+ common/build/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/common/build/Makefile b/common/build/Makefile
+index 5d58adf4..f7aa1648 100644
+--- a/common/build/Makefile
++++ b/common/build/Makefile
+@@ -20,4 +20,4 @@ include ${nxp_git_path}/../nxp/common/build/uboot.mk
+ -include ${product_path}/AndroidTee.mk
+ -include ${GPU_VIV6_PATH}/gpu-viv6/driver/hal/kernel/galcore.mk
+ -include ${VVCAM_PATH}/vvcam/vvcam.mk
+--include ${MXMWIFI_PATH}/mxm_wifiex/mxmwifi.mk
++-include ${MXMWIFI_PATH}/mxmwifi.mk
+-- 
+2.34.1
+
