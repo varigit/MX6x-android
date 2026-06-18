@@ -1,4 +1,4 @@
-From 724617cd2bc2830070c387c32cec90f31a53c0a5 Mon Sep 17 00:00:00 2001
+From ab21ec0179cb3c1db2c1ffe791e2a31fe5f59632 Mon Sep 17 00:00:00 2001
 From: Natalia Kovalenko <natasha.k@variscite.com>
 Date: Tue, 26 Nov 2024 14:13:09 +0100
 Subject: [PATCH] mlan: mlan_cmdevt: Reduce verbosity of
@@ -16,14 +16,14 @@ from error log level to warning to reduce verbosity.
 
 Signed-off-by: Natalia Kovalenko <natasha.k@variscite.com>
 ---
- mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c | 2 +-
+ mlan/mlan_cmdevt.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c b/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
-index 7bc55f3..2b9595a 100644
---- a/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
-+++ b/mxm_wifiex/wlan_src/mlan/mlan_cmdevt.c
-@@ -8920,7 +8920,7 @@ static void wlan_fill_link_statistic(mlan_private *priv,
+diff --git a/mlan/mlan_cmdevt.c b/mlan/mlan_cmdevt.c
+index 948633c..1b828d6 100644
+--- a/mlan/mlan_cmdevt.c
++++ b/mlan/mlan_cmdevt.c
+@@ -9839,7 +9839,7 @@ static void wlan_fill_link_statistic(mlan_private *priv,
  			if (radio_stat->num_channels > MAX_NUM_CHAN) {
  				radio_stat->num_channels =
  					wlan_le32_to_cpu(MAX_NUM_CHAN);
@@ -32,5 +32,6 @@ index 7bc55f3..2b9595a 100644
  				       "%s : radio_stat->num_channels=%d\n",
  				       __func__, radio_stat->num_channels);
  				break;
---
+-- 
 2.34.1
+
