@@ -32,6 +32,11 @@ readonly BASE_BRANCH_NAME="android-14.0.0_1.0.0"
 ## git variables get from base script!
 readonly _EXTPARAM_BRANCH="android-14.0.0_1.0.0-var01"
 
+# WiFi driver MM6X18537.p9
+readonly MWIFIEX_SRCREV="9630752ea1d9e28d9956adf27c652f40399e85ad"
+# WiFi/BT firmware IW612-18.99.3.p25.7
+readonly IMX_FW_SRCREV="34faa4b3008bf9c6f814b5767cacbc3857cdc49b"
+
 # Android TAG from release notes
 readonly ANDROID_TAG="android-14.0.0_r17"
 
@@ -42,6 +47,8 @@ VENDOR_BASE_DIR=${ANDROID_DIR}/vendor/variscite
 LIBBT=$(readlink -f "${ANDROID_DIR}/hardware/broadcom/libbt")
 SEPOLICY=$(readlink -f "${ANDROID_DIR}/system/sepolicy")
 BLUETOOTH=$(readlink -f "${ANDROID_DIR}/packages/modules/Bluetooth")
+MWIFIEX=$(readlink -f "${ANDROID_DIR}/vendor/nxp-opensource/nxp-mwifiex")
+IMX_FW=$(readlink -f "${ANDROID_DIR}/vendor/nxp/imx-firmware")
 
 SC_MX8_FAMILY=$1
 readonly SCFW_BRANCH="1.6.0"
@@ -174,6 +181,10 @@ do
 	if [[ `git branch --list $_EXTPARAM_BRANCH` ]] ; then
 		if [[ ${PWD} == ${LIBBT} ]] || [[ ${PWD} == ${BLUETOOTH} ]]; then
 			git checkout tags/${ANDROID_TAG}
+		elif [[ ${PWD} == ${MWIFIEX} ]]; then
+			git checkout ${MWIFIEX_SRCREV}
+		elif [[ ${PWD} == ${IMX_FW} ]]; then
+			git checkout ${IMX_FW_SRCREV}
 		else
 			git checkout tags/${BASE_BRANCH_NAME}
 		fi
