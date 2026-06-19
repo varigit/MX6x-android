@@ -372,12 +372,17 @@ PRODUCT_COPY_FILES += \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.txt:vendor/firmware/brcm/brcmfmac43430-sdio.txt \
     $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.clm_blob:vendor/firmware/brcm/brcmfmac43430-sdio.clm_blob
 
-#IW612 muratta Wifi & Bluetooth firmware
+# NXP IW612 Wi-Fi and Bluetooth firmware
+# The firmware name is defined in wifi_mod_para_iw612.conf.
+# By default, the combo firmware sduart_nw61x_v1.bin.se will be loaded by Wi-Fi driver.
+# If using separate Wi-Fi and Bluetooth firmware, update the firmware name in
+# wifi_mod_para_iw612.conf to sd_w61x_v1.bin.se.
+# In that case, the Bluetooth firmware will be loaded by the btnxpuart driver.
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/nxp/FwImage_8987/sdiouart8987_combo_v0.bin:vendor/firmware/sdiouart8987_combo_v0.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
+    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/uartspi_n61x_v1.bin.se:vendor/firmware/nxp/uartspi_n61x_v1.bin.se \
+    vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sd_w61x_v1.bin.se:vendor/firmware/sd_w61x_v1.bin.se \
     device/variscite/imx8m/dart_mx8mm/wifi_mod_para_iw612.conf:vendor/firmware/wifi_mod_para_iw612.conf
-
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
