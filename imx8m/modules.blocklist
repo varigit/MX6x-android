@@ -1,0 +1,4 @@
+# this system_dlkm module should not be loaded automatically 
+# because it is prebuilt module, we need to update its code
+# this module will be loaded from vendor_dlkm
+blocklist bluetooth.ko

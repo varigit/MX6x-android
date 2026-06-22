@@ -389,6 +389,9 @@ PRODUCT_COPY_FILES += \
     external/wireless-regdb/regulatory.db:$(TARGET_COPY_OUT_VENDOR)/firmware/regulatory.db \
     external/wireless-regdb/regulatory.db.p7s:$(TARGET_COPY_OUT_VENDOR)/firmware/regulatory.db.p7s
 
+PRODUCT_COPY_FILES += \
+    device/variscite/imx8m/modules.blocklist:$(TARGET_COPY_OUT_SYSTEM_DLKM)/lib/modules/modules.blocklist
+
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1-service.btlinux

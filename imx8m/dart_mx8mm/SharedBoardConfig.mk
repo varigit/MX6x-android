@@ -76,10 +76,11 @@ BOARD_VENDOR_KERNEL_MODULES += \
 
 
 BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko
+    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko
 
  BOARD_VENDOR_KERNEL_MODULES += \
      $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
