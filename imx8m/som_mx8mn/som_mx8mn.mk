@@ -387,6 +387,9 @@ PRODUCT_COPY_FILES += \
 
 # -------@block_bluetooth-------
 
+PRODUCT_COPY_FILES += \
+    device/variscite/imx8m/modules.blocklist:$(TARGET_COPY_OUT_SYSTEM_DLKM)/lib/modules/modules.blocklist
+
 # Bluetooth HAL
 PRODUCT_PACKAGES += \
     android.hardware.bluetooth@1.1-service.btlinux

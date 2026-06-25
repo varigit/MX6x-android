@@ -72,6 +72,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/net/can/can-gw.ko \
     $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
+    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
     $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
     $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko
 
