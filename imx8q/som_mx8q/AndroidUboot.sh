@@ -45,11 +45,11 @@ build_imx_uboot()
 		ATF_PLATFORM=imx8qm
 		REV=B0
 		FLASH_TARGET=flash_spl
-		cp ${FSL_PROPRIETARY_PATH}/imx-seco/firmware/seco/mx8qm*ahab-container.img ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_0_default.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_image.bin
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_1_default.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_1_image.bin
-		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmitxfw.bin
-		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmirxfw.bin
+		cp ${FSL_PROPRIETARY_PATH}/imx-seco/firmware/seco/mx8qm*ahab-container.img ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_0_default.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_image.bin
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qm_m4_1_default.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_1_image.bin
+		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmitxfw.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmitxfw.bin
+		cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/hdmi/cadence/hdmirxfw.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/hdmirxfw.bin
 	elif [ `echo $2 | cut -d '-' -f1` = "imx8qxp" ]; then
 		MKIMAGE_PLATFORM=iMX8QX
 		SCFW_PLATFORM=8qx
@@ -64,17 +64,17 @@ build_imx_uboot()
 		else
 			FLASH_TARGET=flash_spl
 		fi
-		cp ${FSL_PROPRIETARY_PATH}/imx-seco/firmware/seco/mx8qx*ahab-container.img ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qx_m4_default.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_image.bin
+		cp ${FSL_PROPRIETARY_PATH}/imx-seco/firmware/seco/mx8qx*ahab-container.img ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/
+		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx8q/imx8qx_m4_default.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/m4_image.bin
 	else
 		echo ERROR: unsupported SoC: $2
 		exit 1
 	fi
 
-	cp  device/variscite/imx8q/som_mx8q/uboot-firmware/mx$SCFW_PLATFORM-var-som-scfw-tcm.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/scfw_tcm.bin
+	cp  device/variscite/imx8q/som_mx8q/uboot-firmware/mx$SCFW_PLATFORM-var-som-scfw-tcm.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/scfw_tcm.bin
 
-	if [ -f ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/tee.bin ]; then
-		rm -f ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/tee.bin
+	if [ -f ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/tee.bin ]; then
+		rm -f ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/tee.bin
 	fi
 
 	make -C ${VARISCITE_PATH}/arm-trusted-firmware/ PLAT=$ATF_PLATFORM clean
@@ -83,27 +83,27 @@ build_imx_uboot()
 	else
 		make -C ${VARISCITE_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=$ATF_PLATFORM bl31 -B IMX_ANDROID_BUILD=true 1>/dev/null || exit 1
 	fi
-	cp ${VARISCITE_PATH}/arm-trusted-firmware/build/$ATF_PLATFORM/release/bl31.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/bl31.bin
+	cp ${VARISCITE_PATH}/arm-trusted-firmware/build/$ATF_PLATFORM/release/bl31.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/bl31.bin
 
-	cp  ${UBOOT_OUT}/u-boot.$1 ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot.bin
+	cp  ${UBOOT_OUT}/u-boot.$1 ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot.bin
 	if [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
-		cp  ${UBOOT_OUT}/spl/u-boot-spl.bin ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot-spl.bin
+		cp  ${UBOOT_OUT}/spl/u-boot-spl.bin ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot-spl.bin
 	fi
-	cp  ${UBOOT_OUT}/tools/mkimage  ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/mkimage_uboot
+	cp  ${UBOOT_OUT}/tools/mkimage  ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/mkimage_uboot
 
-	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ clean
+	make -C ${VARISCITE_PATH}/imx-mkimage/ clean
 	# in imx-mkimage/Makefile, MKIMG is assigned with a value of "$(PWD)/mkimage_imx8", the value of PWD is set by shell to current
-	# directory. Directly execute "make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ ..." command in this script, PWD is the top dir of Android
+	# directory. Directly execute "make -C ${VARISCITE_PATH}/imx-mkimage/ ..." command in this script, PWD is the top dir of Android
 	# codebase, so mkimage_imx8 will be generated under Android codebase top dir.
 	pwd_backup=${PWD}
-	PWD=${PWD}/${IMX_MKIMAGE_PATH}/imx-mkimage/
-	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=$MKIMAGE_PLATFORM REV=$REV $FLASH_TARGET || exit 1
+	PWD=${PWD}/${VARISCITE_PATH}/imx-mkimage/
+	make -C ${VARISCITE_PATH}/imx-mkimage/ SOC=$MKIMAGE_PLATFORM REV=$REV $FLASH_TARGET || exit 1
 	PWD=${pwd_backup}
 
 	if [ "${PRODUCT_IMX_DUAL_BOOTLOADER}" = "true" ] && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ] || [ `echo $2 | rev | cut -d '-' -f1 | rev` = "dual" ]; then
-		cp ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/boot-spl-container.img ${UBOOT_COLLECTION}/spl-$2.bin
-		cp ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot-atf-container.img ${UBOOT_COLLECTION}/bootloader-$2.img
+		cp ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/boot-spl-container.img ${UBOOT_COLLECTION}/spl-$2.bin
+		cp ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/u-boot-atf-container.img ${UBOOT_COLLECTION}/bootloader-$2.img
 	else
-		cp ${IMX_MKIMAGE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
+		cp ${VARISCITE_PATH}/imx-mkimage/$MKIMAGE_PLATFORM/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
 	fi
 }
