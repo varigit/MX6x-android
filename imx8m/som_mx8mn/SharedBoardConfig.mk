@@ -74,7 +74,9 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
     $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
     $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
-    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko
 
 #Cortex-M7
 BOARD_VENDOR_KERNEL_MODULES += \
