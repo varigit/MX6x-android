@@ -274,6 +274,10 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 # -------@block_display-------
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
+# Touchscreen IDC for wakeup support.
+PRODUCT_COPY_FILES += \
+    device/variscite/imx8m/generic_ft5x06.idc:vendor/usr/idc/generic_ft5x06.idc
+
 # HWC2 HAL
 PRODUCT_PACKAGES += \
     android.hardware.graphics.composer3-service.imx
