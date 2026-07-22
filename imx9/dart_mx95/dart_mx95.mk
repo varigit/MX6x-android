@@ -330,6 +330,10 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
 
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
+# Touchscreen IDC for wakeup support.
+PRODUCT_COPY_FILES += \
+    device/variscite/common/generic_ft5x06.idc:vendor/usr/idc/generic_ft5x06.idc
+
 # -----some limiataion of overlay/g2d in hwcomposer3 --------
 SOONG_CONFIG_NAMESPACES += nxp_hwc
 SOONG_CONFIG_nxp_hwc += overlay_ip g2d_ip
