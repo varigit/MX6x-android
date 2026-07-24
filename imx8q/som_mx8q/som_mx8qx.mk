@@ -16,7 +16,7 @@ PRODUCT_COPY_FILES += \
 
 # Touchscreen IDC
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/idc/generic_ft5x06__79_.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06__79_.idc
+    device/variscite/common/generic_ft5x06.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06.idc
 
 # Variscite UUU eMMC burning scripts
 PRODUCT_COPY_FILES += \
