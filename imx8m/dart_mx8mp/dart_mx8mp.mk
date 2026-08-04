@@ -409,12 +409,10 @@ PRODUCT_PACKAGES += \
 # If using WiFi and BT firmware separately, change the firmware name in wifi_mod_para_sd8987.conf to sd_w61x_v1.bin.se
 # and the BT firmware will be loaded by the btnxpuart driver.
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/nxp/FwImage_8987/sdiouart8987_combo_v0.bin:vendor/firmware/sdiouart8987_combo_v0.bin \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/uartspi_n61x_v1.bin.se:vendor/firmware/nxp/uartspi_n61x_v1.bin.se \
     vendor/nxp/imx-firmware/nxp/FwImage_IW612_SD/sd_w61x_v1.bin.se:vendor/firmware/sd_w61x_v1.bin.se \
-    vendor/nxp/imx-firmware/nxp/mfguart/helper_uart_3000000.bin:vendor/firmware/helper_uart_3000000.bin \
-    device/variscite/imx8m/dart_mx8mp/wifi_mod_para_sd8987.conf:vendor/firmware/wifi_mod_para_sd8987.conf
+    vendor/nxp/imx-firmware/nxp/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para_sd8987.conf
 
 # Sterling LWB / LWB5 wifi and bluetooth combo Firmware
 PRODUCT_COPY_FILES += \
