@@ -275,6 +275,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/camera_config_imx8mp-dual-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp.json \
     $(IMX_DEVICE_PATH)/camera_config_imx8mp-dual-basler.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-dual-basler.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx8mp-var-basler.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-var-basler.json \
     $(NXP_DEVICE_PATH)/camera_config_imx8mp-4k-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-4k-basler-ov5640.json \
     $(NXP_DEVICE_PATH)/camera_config_imx8mp-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-basler-ov5640.json \
     $(NXP_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
