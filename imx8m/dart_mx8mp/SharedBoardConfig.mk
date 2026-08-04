@@ -245,6 +245,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
     $(KERNEL_OUT)/drivers/staging/media/imx/imx8-mipi-csi2-sam.ko \
     $(KERNEL_OUT)/drivers/dma/imx-sdma.ko \
     $(KERNEL_OUT)/net/rfkill/rfkill.ko \
+    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
+    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/basler-camera-driver-vvcam.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/os08a20.ko \
     $(TARGET_OUT_INTERMEDIATES)/VVCAM_OBJ/vvcam-dwe.ko \
@@ -253,8 +255,6 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
 
 # Variscite RAMDISK addons
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES +=     \
-    $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
-    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
     $(KERNEL_OUT)/drivers/spi/spidev.ko \
     $(KERNEL_OUT)/drivers/spi/spi-imx.ko \
