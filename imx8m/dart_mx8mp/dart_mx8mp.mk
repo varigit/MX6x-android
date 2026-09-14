@@ -482,7 +482,19 @@ PRODUCT_COPY_FILES += \
 	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_dart:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_dart \
 	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_som:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_som \
 	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_dart:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_dart \
-	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_som:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_som
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_som:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_som \
+	device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_smarc:cm_hello_world.bin.debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.ddr_debug_smarc:cm_hello_world.bin.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_smarc:cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug_smarc:cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_smarc:cm_rpmsg_lite_str_echo_rtos.bin.debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.ddr_debug_smarc:cm_rpmsg_lite_str_echo_rtos.bin.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_hello_world.elf.ddr_debug_smarc:vendor/firmware/cm_hello_world.elf.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_hello_world.elf.debug_smarc:vendor/firmware/cm_hello_world.elf.debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug_smarc:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_smarc:vendor/firmware/cm_rpmsg_lite_pingpong_rtos_linux_remote.elf.debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_smarc:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.ddr_debug_smarc \
+	device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_smarc:vendor/firmware/cm_rpmsg_lite_str_echo_rtos_imxcm7.elf.debug_smarc
 
 # -------@block_usb-------
 # Usb HAL
