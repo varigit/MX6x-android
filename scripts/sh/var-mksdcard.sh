@@ -49,7 +49,9 @@ help() {
 }
 
 function rename_remoteproc_images {
-	if [[ "$1" == *"imx8mp-var-som"* ]]; then
+	if [[ "$1" == *"imx8mp-var-smarc"* ]]; then
+		cp ${imagesdir}/${mcu_os_demo_file_8mp_smarc} ${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx8mp-var-som"* ]]; then
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_som}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
 		cp ${imagesdir}/${mcu_os_demo_file_8mp_dart}	${imagesdir}/${mcu_os_demo_file}
@@ -164,6 +166,7 @@ superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
 mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
+mcu_os_demo_file_8mp_smarc="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_smarc"
 mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mn_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mm_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
