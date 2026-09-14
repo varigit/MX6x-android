@@ -121,6 +121,7 @@ function add_imx8mp_menu() {
 	img_list+=("dtbo-imx8mp-var-som-wbe-symphony-1.x.img                    (VAR-SOM-MX8M-PLUS V2.x with WBE and LVDS support on Symphony-Board V1.x)")
 	img_list+=("dtbo-imx8mp-var-som-wbe-symphony-1.x-m7.img                 (VAR-SOM-MX8M-PLUS V2.x with WBE, LVDS and M7 support on Symphony-Board V1.x)")
 	img_list+=("dtbo-imx8mp-var-smarc-echo.img                              (VAR-SMARC-MX8M-PLUS with LVDS on Echo-Board)")
+	img_list+=("dtbo-imx8mp-var-smarc-echo-m7.img                           (VAR-SMARC-MX8M-PLUS with LVDS and M7 support on Echo-Board)")
 	img_list+=("dtbo-imx8mp-var-smarc-echo-basler-isp0.img                  (VAR-SMARC-MX8M-PLUS with LVDS, Basler VCAM-AR0821B camera support on Echo-Board)")
 }
 
@@ -262,7 +263,9 @@ function help() {
 }
 
 function rename_remoteproc_images {
-	if [[ "$1" == *"imx8mp-var-som"* ]]; then
+	if [[ "$1" == *"imx8mp-var-smarc"* ]]; then
+		cp "${imagesdir}/${mcu_os_demo_file_8mp_smarc}" "${imagesdir}/${mcu_os_demo_file}"
+	elif [[ "$1" == *"imx8mp-var-som"* ]]; then
 		cp "${imagesdir}/${mcu_os_demo_file_8mp_som}" "${imagesdir}/${mcu_os_demo_file}"
 	elif [[ "$1" == *"imx8mp-var-dart"* ]]; then
 		cp "${imagesdir}/${mcu_os_demo_file_8mp_dart}" "${imagesdir}/${mcu_os_demo_file}"
@@ -369,6 +372,7 @@ superimage_file="super.img"
 mcu_os_demo_file="rpmsg_lite_pingpong_rtos_linux_remote.bin"
 mcu_os_demo_file_8mp_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_dart"
 mcu_os_demo_file_8mp_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som"
+mcu_os_demo_file_8mp_smarc="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_smarc"
 
 block=`basename $node`
 part=""
