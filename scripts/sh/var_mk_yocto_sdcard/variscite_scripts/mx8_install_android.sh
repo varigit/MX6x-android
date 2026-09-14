@@ -557,12 +557,9 @@ function check_images
 	fi
 
 	rename_remoteproc_images ${soc_name}
-	# mcu demo image is not yet available for VAR-SMARC-MX8M-PLUS SoM
-	if [[ "$soc_name" != *"imx8mp-var-smarc"* ]]; then
-		if [[ ! -f "${imagesdir}/${mcu_os_demo_file}" ]] ; then
-			red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
-			exit 1
-		fi
+	if [[ ! -f "${imagesdir}/${mcu_os_demo_file}" ]] ; then
+		red_bold_echo "ERROR: ${mcu_os_demo_file} image does not exist"
+		exit 1
 	fi
 }
 
@@ -655,12 +652,10 @@ function install_bootloader
 	dd if="${imagesdir}/${bootloader_file}" of="$node" bs=1k seek="${bootloader_offset}" conv=fsync; sync
 
 	echo
-	# mcu demo image is not yet available for VAR-SMARC-MX8M-PLUS SoM
-	if [[ "$soc_name" != *"imx8mp-var-smarc"* ]]; then
-		blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
-		dd if="${imagesdir}/${mcu_os_demo_file}" of="${node}" bs=1k seek="${mcu_image_offset}" conv=fsync
-		sync
-	fi
+	blue_underlined_bold_echo "Installing mcu demo image: $mcu_os_demo_file"
+
+	dd if="${imagesdir}/${mcu_os_demo_file}" of="${node}" bs=1k seek="${mcu_image_offset}" conv=fsync
+	sync
 }
 
 function format_android
