@@ -70,6 +70,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/phy/adin.ko \
     $(KERNEL_OUT)/drivers/net/phy/mxl-8611x.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
+    $(KERNEL_OUT)/drivers/net/phy/dp83867.ko \
     $(KERNEL_OUT)/net/can/can.ko \
     $(KERNEL_OUT)/net/can/can-raw.ko \
     $(KERNEL_OUT)/net/can/can-bcm.ko \
