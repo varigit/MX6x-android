@@ -152,10 +152,11 @@ TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-dart-wbe-dt8mcustomboard:imx8mm-var-dart-wbe-dt8mcustomboard.dtb \
 	imx8mm-var-dart-wbe-dt8mcustomboard-m4:imx8mm-var-dart-wbe-dt8mcustomboard-m4.dtb \
 	imx8mm-var-dart-sonata-m4:imx8mm-var-dart-sonata-m4.dtb \
-	imx8mm-var-dart-1.x-sonata:imx8mm-var-dart-sonata.dtb \
-	imx8mm-var-dart-1.x-sonata-m4:imx8mm-var-dart-sonata-m4.dtb \
-	imx8mm-var-dart-wbe-sonata:imx8mm-var-dart-sonata.dtb \
-	imx8mm-var-dart-wbe-sonata-m4:imx8mm-var-dart-sonata-m4.dtb
+	imx8mm-var-dart-1.x-sonata:imx8mm-var-dart-1.x-sonata.dtb \
+	imx8mm-var-dart-1.x-sonata-m4:imx8mm-var-dart-1.x-sonata-m4.dtb \
+	imx8mm-var-dart-sonata:imx8mm-var-dart-sonata.dtb \
+	imx8mm-var-dart-wbe-sonata:imx8mm-var-dart-wbe-sonata.dtb \
+	imx8mm-var-dart-wbe-sonata-m4:imx8mm-var-dart-wbe-sonata-m4.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
