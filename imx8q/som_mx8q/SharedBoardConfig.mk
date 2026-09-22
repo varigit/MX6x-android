@@ -177,6 +177,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/phy/at803x.ko \
     $(KERNEL_OUT)/drivers/net/phy/mxl-8611x.ko \
     $(KERNEL_OUT)/drivers/net/phy/adin.ko \
+    $(KERNEL_OUT)/drivers/net/phy/dp83867.ko \
     $(KERNEL_OUT)/drivers/pps/pps_core.ko \
     $(KERNEL_OUT)/drivers/ptp/ptp.ko \
     $(KERNEL_OUT)/drivers/net/ethernet/freescale/fec.ko \
