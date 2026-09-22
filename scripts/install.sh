@@ -4,7 +4,7 @@
 #
 # This script must be run from the Android main directory.
 #
-# Variscite patches for Android 14.0.0 1.0.0
+# Variscite patches for Android 15.0.0_1.2.0
 
 set -e
 #set -x
@@ -113,6 +113,10 @@ function scfw_tools_setup()
 	   ;;
 	*)
 	esac
+
+	if [[ ! -d ${PRE_BUILTS_GCC_PATH} ]]; then
+		mkdir -p ${PRE_BUILTS_GCC_PATH}
+	fi
 
 	cd ${PRE_BUILTS_GCC_PATH}
 	if [[ ! -d "imx-sc-firmware" ]] ; then
