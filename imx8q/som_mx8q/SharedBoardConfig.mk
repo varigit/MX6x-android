@@ -47,6 +47,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/spi/spidev.ko \
     $(KERNEL_OUT)/drivers/spi/spi-fsl-lpspi.ko \
     $(KERNEL_OUT)/drivers/spi/spi-nxp-fspi.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/ads7846.ko \
     $(KERNEL_OUT)/drivers/iio/buffer/kfifo_buf.ko \
     $(KERNEL_OUT)/drivers/iio/buffer/industrialio-triggered-buffer.ko \
     $(KERNEL_OUT)/drivers/iio/light/isl29018.ko \
@@ -187,7 +188,10 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/flexcan/flexcan.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-imx-sc.ko \
     $(KERNEL_OUT)/drivers/nvmem/nvmem-imx-ocotp-scu.ko \
-    $(KERNEL_OUT)/drivers/soc/imx/secvio/soc-imx-secvio-sc.ko
+    $(KERNEL_OUT)/drivers/soc/imx/secvio/soc-imx-secvio-sc.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
 
 BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/rpmsg/rpmsg_ns.ko \
