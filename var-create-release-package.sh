@@ -201,7 +201,13 @@ copy_artifacts_for_machine() {
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.bin.debug" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m41.elf.debug" "${dest}"
   fi
-  copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/*.lst" "${dest}"
+  local uuu_prefix
+  case "${MACHINE}" in
+    imx8qxp-var-som) uuu_prefix="var_som_mx8x_c0" ;;
+    imx8qxpb0-var-som) uuu_prefix="var_som_mx8x_b0" ;;
+    *) uuu_prefix="${MACHINE%%-*}_" ;;
+  esac
+  copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_${uuu_prefix}*.lst" "${dest}"
 }
 
 copy_scripts() {
