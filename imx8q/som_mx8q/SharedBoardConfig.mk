@@ -80,6 +80,8 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/usb/common/ulpi.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/ci_hdrc.ko \
     $(KERNEL_OUT)/drivers/usb/chipidea/ci_hdrc_imx.ko \
+    $(KERNEL_OUT)/drivers/usb/phy/phy-generic.ko \
+    $(KERNEL_OUT)/drivers/usb/misc/usb3503.ko \
     $(KERNEL_OUT)/drivers/phy/cadence/phy-cadence-salvo.ko \
     $(KERNEL_OUT)/drivers/usb/cdns3/cdns-usb-common.ko \
     $(KERNEL_OUT)/drivers/usb/cdns3/cdns3-imx.ko \
