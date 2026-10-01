@@ -163,8 +163,8 @@ copy_artifacts_for_machine() {
   copy_glob "${OUTDIR}/vbmeta-*.img"                          "${dest}"
 
   if [ "${MACHINE}" = "imx8qm-var-som" ]; then
-    copy_file "${OUTDIR}/vendor/firmware/hdmitxfw.bin"        "${dest}"
-    copy_file "${OUTDIR}/vendor/firmware/dpfw.bin"            "${dest}"
+    copy_file "${OUTDIR}/vendor_ramdisk/lib/firmware/hdmitxfw.bin"        "${dest}"
+    copy_file "${OUTDIR}/vendor_ramdisk/lib/firmware/dpfw.bin"            "${dest}"
   fi
 
   if [ -e "${OUTDIR}/super.img" ]; then
