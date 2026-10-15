@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8' standalone='yes' ?>
+<display-settings>
+<!-- Use physical port number instead of local id -->
+<config identifier="1" />
+
+<!-- Display settings for 2nd Home -->
+<display name="port:2"
+    ignoreOrientationRequest="true"
+    shouldShowSystemDecors="true"
+    shouldShowIme="true"
+    forcedDensity="240"  />
+
+<!-- Display settings for 3rd Home -->
+<display name="port:3"
+    ignoreOrientationRequest="true"
+    shouldShowSystemDecors="true"
+    shouldShowIme="true"
+    forcedDensity="240"  />
+
+</display-settings>
