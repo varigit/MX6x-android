@@ -1,0 +1,84 @@
+From 22800efa84ade356a11cdc9b37d506eeae2dbbf2 Mon Sep 17 00:00:00 2001
+From: Natalia Kovalenko <natasha.k@variscite.com>
+Date: Wed, 16 Jul 2025 21:49:50 +0200
+Subject: [PATCH] bluetooth: Allow LE vendor capability response of 8 bytes
+
+The Bluetooth LE vendor capability response can have one less parameter,
+instead of having filtering_support and max_filters, just max_filters.
+The response length of 8 bytes is a valid length
+The filtering_support value will be retrieved using the value of max_filters.
+
+Change-Id: I8fb97ba25852d51155608acf9dc5fa3909c3922e
+Signed-off-by: Pitchaiah P <pitchaiah.p@variscite.com>
+---
+[Android 16: rebased onto system/gd/hci/controller_impl.cc]
+
+ system/gd/hci/controller_impl.cc | 18 ++++++++++++++++++
+ system/pdl/hci/hci_packets.pdl   | 15 +++++++++++++++
+ 2 files changed, 33 insertions(+)
+
+diff --git a/system/gd/hci/controller_impl.cc b/system/gd/hci/controller_impl.cc
+index 63fb83427a..98d94b54c9 100644
+--- a/system/gd/hci/controller_impl.cc
++++ b/system/gd/hci/controller_impl.cc
+@@ -632,6 +632,24 @@ struct ControllerImpl::impl {
+     vendor_capabilities_.sniff_offload_support_ = 0x00;
+ 
+     if (!complete_view.IsValid()) {
++      // Some controllers return the 8-byte v0.55 response without filtering_support.
++      auto length8_view = LeGetVendorCapabilitiesCompleteRspLength8View::Create(view);
++      if (length8_view.IsValid()) {
++        BaseVendorCapabilitiesRspLength8 base_vendor_capabilities =
++                length8_view.GetBaseVendorCapabilities();
++        vendor_capabilities_.is_supported_ = 0x01;
++        vendor_capabilities_.max_advt_instances_ = base_vendor_capabilities.max_advt_instances_;
++        vendor_capabilities_.offloaded_resolution_of_private_address_ =
++                base_vendor_capabilities.offloaded_resolution_of_private_address_;
++        vendor_capabilities_.total_scan_results_storage_ =
++                base_vendor_capabilities.total_scan_results_storage_;
++        vendor_capabilities_.max_irk_list_sz_ = base_vendor_capabilities.max_irk_list_sz_;
++        vendor_capabilities_.max_filter_ = base_vendor_capabilities.max_filter_;
++        vendor_capabilities_.filtering_support_ = vendor_capabilities_.max_filter_ > 0 ? 1 : 0;
++        vendor_capabilities_.activity_energy_info_support_ =
++                base_vendor_capabilities.activity_energy_info_support_;
++        vendor_capabilities_.version_supported_ = 55;
++      }
+       vendor_promise.set_value();
+       return;
+     }
+diff --git a/system/pdl/hci/hci_packets.pdl b/system/pdl/hci/hci_packets.pdl
+index 2e866fee69..0e654f32da 100644
+--- a/system/pdl/hci/hci_packets.pdl
++++ b/system/pdl/hci/hci_packets.pdl
+@@ -5321,6 +5321,15 @@ test LeGetVendorCapabilities {
+   "\x53\xfd\x00",
+ }
+ 
++struct BaseVendorCapabilitiesRspLength8 {
++  max_advt_instances: 8,
++  offloaded_resolution_of_private_address : 8,
++  total_scan_results_storage: 16,
++  max_irk_list_sz: 8,
++  max_filter: 8,
++  activity_energy_info_support: 8,
++}
++
+ struct BaseVendorCapabilities {
+   max_advt_instances: 8,
+   offloaded_resolution_of_private_address : 8,
+@@ -5331,6 +5340,12 @@ struct BaseVendorCapabilities {
+   activity_energy_info_support: 8,
+ }
+ 
++packet LeGetVendorCapabilitiesCompleteRspLength8 : CommandComplete (command_op_code = LE_GET_VENDOR_CAPABILITIES) {
++  status : ErrorCode,
++  base_vendor_capabilities : BaseVendorCapabilitiesRspLength8,
++  _payload_,
++}
++
+ packet LeGetVendorCapabilitiesComplete : CommandComplete (command_op_code = LE_GET_VENDOR_CAPABILITIES) {
+   status : ErrorCode,
+   base_vendor_capabilities : BaseVendorCapabilities,
+-- 
+2.43.0
+

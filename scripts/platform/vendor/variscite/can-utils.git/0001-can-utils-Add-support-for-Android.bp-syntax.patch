@@ -1,0 +1,347 @@
+From b4b06aaf4d84bd37893e0cce8d15528085866b34 Mon Sep 17 00:00:00 2001
+From: Pitchaiah P <pitchaiah.p@variscite.com>
+Date: Thu, 23 Oct 2025 12:30:13 +0200
+Subject: [PATCH] can-utils: Add support for Android.bp syntax
+
+Signed-off-by: Pitchaiah P <pitchaiah.p@variscite.com>
+---
+ Android.bp | 327 +++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 327 insertions(+)
+ create mode 100644 Android.bp
+
+diff --git a/Android.bp b/Android.bp
+new file mode 100644
+index 0000000..c987cc5
+--- /dev/null
++++ b/Android.bp
+@@ -0,0 +1,327 @@
++// CAN utilities Android.bp conversion
++
++// Global compiler flags
++cc_defaults {
++    name: "can_utils_defaults",
++    cflags: [
++        "-O2",
++        "-g",
++        "-W",
++        "-Wall",
++        "-Wno-error=unused-parameter",
++        "-DSO_RXQ_OVFL=40",
++        "-DPF_CAN=29",
++        "-DAF_CAN=PF_CAN",
++    ],
++    local_include_dirs: ["include"],
++    vendor: true,
++}
++
++//
++// canlib
++//
++cc_library_static {
++    name: "libcan",
++    defaults: ["can_utils_defaults"],
++    srcs: [
++        "lib.c",
++        "canframelen.c",
++    ],
++}
++
++//
++// j1939lib
++//
++cc_library_static {
++    name: "libj1939",
++    defaults: ["can_utils_defaults"],
++    srcs: ["libj1939.c"],
++}
++
++//
++// j1939acd
++//
++cc_binary {
++    name: "j1939acd",
++    defaults: ["can_utils_defaults"],
++    srcs: ["j1939acd.c"],
++    static_libs: ["libj1939"],
++}
++
++//
++// j1939cat
++//
++cc_binary {
++    name: "j1939cat",
++    defaults: ["can_utils_defaults"],
++    srcs: ["j1939cat.c"],
++    static_libs: ["libj1939"],
++}
++
++//
++// j1939spy
++//
++cc_binary {
++    name: "j1939spy",
++    defaults: ["can_utils_defaults"],
++    srcs: ["j1939spy.c"],
++    static_libs: ["libj1939"],
++}
++
++//
++// j1939sr
++//
++cc_binary {
++    name: "j1939sr",
++    defaults: ["can_utils_defaults"],
++    srcs: ["j1939sr.c"],
++    static_libs: ["libj1939"],
++}
++
++//
++// testj1939
++//
++cc_binary {
++    name: "testj1939",
++    defaults: ["can_utils_defaults"],
++    srcs: ["testj1939.c"],
++    static_libs: ["libj1939"],
++}
++
++//
++// candump
++//
++cc_binary {
++    name: "candump",
++    defaults: ["can_utils_defaults"],
++    srcs: ["candump.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// cansend
++//
++cc_binary {
++    name: "cansend",
++    defaults: ["can_utils_defaults"],
++    srcs: ["cansend.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// cansequence
++//
++cc_binary {
++    name: "cansequence",
++    defaults: ["can_utils_defaults"],
++    srcs: ["cansequence.c"],
++    vendor: false, // This one didn't have LOCAL_VENDOR_MODULE in the original
++}
++
++//
++// bcmserver
++//
++cc_binary {
++    name: "bcmserver",
++    defaults: ["can_utils_defaults"],
++    srcs: ["bcmserver.c"],
++}
++
++//
++// can-calc-bit-timing
++//
++cc_binary {
++    name: "can-calc-bit-timing",
++    defaults: ["can_utils_defaults"],
++    srcs: ["calc-bit-timing/can-calc-bit-timing.c"],
++}
++
++//
++// canbusload
++//
++cc_binary {
++    name: "canbusload",
++    defaults: ["can_utils_defaults"],
++    srcs: ["canbusload.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// canfdtest
++//
++cc_binary {
++    name: "canfdtest",
++    defaults: ["can_utils_defaults"],
++    srcs: ["canfdtest.c"],
++}
++
++//
++// cangen
++//
++cc_binary {
++    name: "cangen",
++    defaults: ["can_utils_defaults"],
++    srcs: ["cangen.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// cangw
++//
++cc_binary {
++    name: "cangw",
++    defaults: ["can_utils_defaults"],
++    srcs: ["cangw.c"],
++}
++
++//
++// canlogserver
++//
++cc_binary {
++    name: "canlogserver",
++    defaults: ["can_utils_defaults"],
++    srcs: ["canlogserver.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// canplayer
++//
++cc_binary {
++    name: "canplayer",
++    defaults: ["can_utils_defaults"],
++    srcs: ["canplayer.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// cansniffer
++//
++cc_binary {
++    name: "cansniffer",
++    defaults: ["can_utils_defaults"],
++    srcs: ["cansniffer.c"],
++}
++
++//
++// isotpdump
++//
++cc_binary {
++    name: "isotpdump",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotpdump.c"],
++}
++
++//
++// isotprecv
++//
++cc_binary {
++    name: "isotprecv",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotprecv.c"],
++}
++
++//
++// isotpsend
++//
++cc_binary {
++    name: "isotpsend",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotpsend.c"],
++}
++
++//
++// isotpserver
++//
++cc_binary {
++    name: "isotpserver",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotpserver.c"],
++}
++
++//
++// isotpsniffer
++//
++cc_binary {
++    name: "isotpsniffer",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotpsniffer.c"],
++}
++
++//
++// isotptun
++//
++cc_binary {
++    name: "isotptun",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotptun.c"],
++}
++
++//
++// isotpperf
++//
++cc_binary {
++    name: "isotpperf",
++    defaults: ["can_utils_defaults"],
++    srcs: ["isotpperf.c"],
++}
++
++//
++// log2asc
++//
++cc_binary {
++    name: "log2asc",
++    defaults: ["can_utils_defaults"],
++    srcs: ["log2asc.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// asc2log
++//
++cc_binary {
++    name: "asc2log",
++    defaults: ["can_utils_defaults"],
++    srcs: ["asc2log.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// log2long
++//
++cc_binary {
++    name: "log2long",
++    defaults: ["can_utils_defaults"],
++    srcs: ["log2long.c"],
++    static_libs: ["libcan"],
++}
++
++//
++// slcan_attach
++//
++cc_binary {
++    name: "slcan_attach",
++    defaults: ["can_utils_defaults"],
++    srcs: ["slcan_attach.c"],
++}
++
++//
++// slcand
++//
++cc_binary {
++    name: "slcand",
++    defaults: ["can_utils_defaults"],
++    srcs: ["slcand.c"],
++}
++
++//
++// slcanpty
++//
++cc_binary {
++    name: "slcanpty",
++    defaults: ["can_utils_defaults"],
++    srcs: [
++        "lib.c",
++        "slcanpty.c",
++    ],
++}
+-- 
+2.43.0
+

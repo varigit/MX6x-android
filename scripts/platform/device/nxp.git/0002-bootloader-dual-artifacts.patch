@@ -1,0 +1,52 @@
+From ab3093cce781b949956ceea322f04efc9c0e2c1d Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Thu, 8 Oct 2026 12:52:27 +0200
+Subject: [PATCH 2/2] build: check dual-bootloader artifacts instead of
+ installing them as u-boot.imx
+
+For *-dual U-Boot variants, AndroidUboot.sh produces spl-<platform>.bin and
+bootloader-<platform>.img rather than a standalone u-boot image. Check that
+both exist instead of installing u-boot-<platform>.imx as the default
+bootloader binary, and stop on the first failing variant (set -e) instead
+of continuing silently.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ common/build/uboot.mk | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/common/build/uboot.mk b/common/build/uboot.mk
+index 46f8dd71..0124ae32 100644
+--- a/common/build/uboot.mk
++++ b/common/build/uboot.mk
+@@ -135,7 +135,7 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ 	$(hide) echo "Building $(UBOOT_ARCH) $(UBOOT_VERSION) U-Boot ..."
+ 		. ${product_path}/AndroidUboot.sh; \
+ 		build_pre_image
+-	$(hide) for ubootplat in $(TARGET_BOOTLOADER_CONFIG); do \
++	$(hide) set -e; for ubootplat in $(TARGET_BOOTLOADER_CONFIG); do \
+ 		UBOOT_PLATFORM=`echo $$ubootplat | cut -d':' -f1`; \
+ 		UBOOT_CONFIG=`echo $$ubootplat | cut -d':' -f2`; \
+ 		$(MAKE) -C $(UBOOT_IMX_PATH)/uboot-imx/ CROSS_COMPILE="$(UBOOT_CROSS_COMPILE_WRAPPER)" O=$(realpath $(UBOOT_OUT)) mrproper; \
+@@ -150,7 +150,12 @@ $(UBOOT_BIN): $(UBOOTENVSH) | $(UBOOT_COLLECTION) $(UBOOT_OUT)
+ 		else \
+ 			install -D $(UBOOT_OUT)/u-boot$(TARGET_DTB_POSTFIX).$(TARGET_BOOTLOADER_POSTFIX) $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx; \
+ 		fi; \
+-		install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN); \
++		case "$$UBOOT_PLATFORM" in \
++			*-dual) \
++				test -s $(UBOOT_COLLECTION)/spl-$$UBOOT_PLATFORM.bin; \
++				test -s $(UBOOT_COLLECTION)/bootloader-$$UBOOT_PLATFORM.img ;; \
++			*) install -D $(UBOOT_COLLECTION)/u-boot-$$UBOOT_PLATFORM.imx $(UBOOT_BIN) ;; \
++		esac; \
+ 	done
+ 
+ .PHONY: bootloader $(UBOOT_BIN) $(UBOOTENVSH)
+@@ -164,4 +169,3 @@ ifneq ($(TARGET_UBOOT_ENV),)
+ $(UBOOT_ENV_OUT): $(TARGET_UBOOT_ENV) | $(UBOOT_BIN)
+ 	$(UBOOT_OUT)/tools/mkenvimage -s $(TARGET_UBOOT_ENV_SIZE) -o $@ $<
+ endif
+-
+-- 
+2.43.0
+

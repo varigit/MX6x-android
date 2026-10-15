@@ -1,0 +1,75 @@
+From 207e7d1316fe932851e354b1a55fb7d5179f7765 Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Wed, 7 Oct 2026 09:45:29 +0200
+Subject: [PATCH 1/2] build: support i.MX8MP products in derivative device
+ repositories
+
+Discover products below device/, keep shared build rules rooted at
+device/nxp, and load derivative BSP path overrides. Include i.MX8MP
+derivatives in the legacy VVCAM and boot-image build paths.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ common/build/Makefile    |  4 ++++
+ common/tools/imx-make.sh | 14 ++++++++++----
+ 2 files changed, 14 insertions(+), 4 deletions(-)
+
+diff --git a/common/build/Makefile b/common/build/Makefile
+index b16dd940..b200a946 100644
+--- a/common/build/Makefile
++++ b/common/build/Makefile
+@@ -11,6 +11,10 @@ export TARGET_OUT_INTERMEDIATES
+ # firstly to include UbootKernelCommonConfig.mk, then SharedBoardConfig.mk, finally UbootKernelBoardConfig.mk
+ 
+ include ${nxp_git_path}/common/imx_path/ImxPathConfig.mk
++# A derivative board may select its own BSP repositories while sharing NXP rules.
++ifneq ($(realpath $(soc_path)/..),$(realpath $(nxp_git_path)))
++include $(soc_path)/../common/imx_path/ImxPathConfig.mk
++endif
+ include ${soc_path}/UbootKernelCommonConfig.mk
+ include ${product_path}/SharedBoardConfig.mk
+ include ${product_path}/UbootKernelBoardConfig.mk
+diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
+index f8bae98e..540e040b 100755
+--- a/common/tools/imx-make.sh
++++ b/common/tools/imx-make.sh
+@@ -550,7 +550,7 @@ if [ "${enable_bazel}" -eq 1 ] && [ ${build_whole_android_flag} -eq 1 ]; then
+ fi
+ 
+ # vvcam.ko need build with in-tree modules each time to make sure "insmod vvcam.ko" works
+-if [ -n "${build_kernel_modules}" ] && [ ${TARGET_PRODUCT} = "evk_8mp" ]; then
++if [ -n "${build_kernel_modules}" ] && [[ ${TARGET_PRODUCT} == *8mp* ]]; then
+     build_vvcam="vvcam";
+     build_kernel_oot_module_flag=1;
+ fi
+@@ -561,10 +561,16 @@ if [ -n "${build_kernel_modules}" ]; then
+     build_kernel_oot_module_flag=1;
+ fi
+ 
+-product_makefile=`pwd`/`find device/nxp -maxdepth 4 -name "${TARGET_PRODUCT}.mk"`;
++# Discover board products in vendor device repositories as well as device/nxp.
++mapfile -t product_makefiles < <(find device -maxdepth 4 -name "${TARGET_PRODUCT}.mk")
++if [ "${#product_makefiles[@]}" -ne 1 ]; then
++    echo "ERROR: expected one product makefile for ${TARGET_PRODUCT}, found ${#product_makefiles[@]}" >&2
++    exit 1
++fi
++product_makefile="$(pwd)/${product_makefiles[0]}"
+ product_path=${product_makefile%/*}
+ soc_path=${product_path%/*}
+-nxp_git_path=${soc_path%/*}
++nxp_git_path="$(pwd)/device/nxp"
+ 
+ # encrypt and sign firmware for mek_8q, evk_95 and evk_952 when sign_enc_fwimage flag is set
+ if [ ${build_sign_enc_fwimage_flag} -eq 1 ]; then
+@@ -630,7 +636,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+         # Legacy flow: build kernel in-tree
+         TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
+         if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
+-            if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
++            if [[ ${TARGET_PRODUCT} == *8mp* ]] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
+             || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
+             || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+             || [ ${TARGET_PRODUCT} = "evk_95" ] || [ ${TARGET_PRODUCT} = "evk_952" ] ; then
+-- 
+2.43.0
+

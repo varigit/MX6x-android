@@ -1,0 +1,49 @@
+From da58e1ff4740b403e9b2f7e866c824407def9e5b Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Mon, 12 Oct 2026 16:57:01 +0200
+Subject: [PATCH] wlan: config: Skip wpa_supplicant.conf.imx on bcmdhd boards
+
+When BOARD_WLAN_DEVICE is bcmdhd, hardware/broadcom/wlan/bcmdhd/config
+enables its own wpa_supplicant.conf module, which installs to the same
+vendor/etc/wifi/wpa_supplicant.conf path as wpa_supplicant.conf.imx.
+Kati then fails with:
+
+  error: overriding commands for target
+  `out/target/product/<product>/vendor/etc/wifi/wpa_supplicant.conf'
+
+Both modules are generated from the same :wpa_supplicant_conf_gen
+template, so disable the NXP one when the board uses bcmdhd.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ config/Android.bp | 14 ++++++++++----
+ 1 file changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/config/Android.bp b/config/Android.bp
+index a82bdc7..aadd756 100644
+--- a/config/Android.bp
++++ b/config/Android.bp
+@@ -4,10 +4,16 @@ prebuilt_etc {
+     filename: "wpa_supplicant.conf",
+     sub_dir: "wifi",
+     vendor: true,
+-    enabled: select(soong_config_variable("IMXPLUGIN", "BOARD_PLATFORM"), {
+-        "imx8": true,
+-        "imx9": true,
+-        default: false,
++    // Boards using the Broadcom bcmdhd stack get the same file from
++    // hardware/broadcom/wlan/bcmdhd/config, which installs to the same path.
++    enabled: select((
++        soong_config_variable("IMXPLUGIN", "BOARD_PLATFORM"),
++        soong_config_variable("wpa_supplicant_8", "board_wlan_device"),
++    ), {
++        (default, "bcmdhd"): false,
++        ("imx8", default): true,
++        ("imx9", default): true,
++        (default, default): false,
+     }),
+     licenses: [
+         "external_wpa_supplicant_8_license",
+-- 
+2.43.0
+
