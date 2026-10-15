@@ -1,27 +1,37 @@
 # -------@block_infrastructure-------
+CONFIG_REPO_PATH := device/nxp
+
+PRODUCT_COPY_FILES += $(foreach recipe,$(wildcard device/variscite/scripts/uuu_scripts/emmc_burn_android_imx8mp_*.lst),$(recipe):$(notdir $(recipe)))
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
+# IMX_DEVICE_PATH refers to the Variscite SoM folder
+# NXP_DEVICE_PATH refers to the NXP EVK folder
+NXP_DEVICE_PATH := $(CONFIG_REPO_PATH)/imx8m/evk_8mp
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
 IMX_BUILD_32BIT_ROOTFS ?= false
 #true means each display can show different contents, false means secondary display is just a
 #simple mirror from primary display.
-MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= true
+MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= false
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
--include $(CONFIG_REPO_PATH)/common/imx_path/ImxPathConfig.mk
+include device/variscite/common/imx_path/ImxPathConfig.mk
+include device/variscite/common/bootanimation/variscite_bootanimation_logo.mk
 include $(CONFIG_REPO_PATH)/imx8m/ProductConfigCommon.mk
+
 
 # -------@block_common_config-------
 # Overrides
-PRODUCT_NAME := evk_8mp
-PRODUCT_DEVICE := evk_8mp
-PRODUCT_MODEL := EVK_8MP
+PRODUCT_NAME := dart_mx8mp
+PRODUCT_DEVICE := dart_mx8mp
+PRODUCT_MODEL := DART_MX8MP
+PRODUCT_MANUFACTURER := Variscite
+PRODUCT_BRAND := Variscite
 
-TARGET_BOOTLOADER_BOARD_NAME := EVK
+TARGET_BOOTLOADER_BOARD_NAME := VARISCITE_IMX8MP
 
 PRODUCT_CHARACTERISTICS := tablet
 
@@ -40,17 +50,16 @@ PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/power
 PRODUCT_SOONG_NAMESPACES += hardware/google/pixel
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/powerhint_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8mp.json
+    $(NXP_DEVICE_PATH)/powerhint_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/powerhint_imx8mp.json
 
 # Do not skip charger_not_need trigger by default
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     vendor.skip.charger_not_need=0
 
-
 PRODUCT_PACKAGES += \
     android.hardware.power-service.imx
 
-TARGET_VENDOR_PROP := $(LOCAL_PATH)/product.prop
+TARGET_VENDOR_PROP := $(NXP_DEVICE_PATH)/product.prop
 
 # HDMI CEC AIDL HAL
 PRODUCT_PACKAGES += \
@@ -69,25 +78,23 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     android.hardware.thermal-service.imx
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/thermal_info_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp.json \
-    $(IMX_DEVICE_PATH)/thermal_info_config_imx8mp_frdm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp_frdm.json
+    $(NXP_DEVICE_PATH)/thermal_info_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp.json \
+    $(NXP_DEVICE_PATH)/thermal_info_config_imx8mp_frdm.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/thermal_info_config_imx8mp_frdm.json
 
 # Media c2_component_register
 PRODUCT_COPY_FILES += \
     $(IMX_MEDIA_CODEC_XML_PATH)/codec2/store/registry/c2_component_register_8mp:$(TARGET_COPY_OUT_VENDOR)/etc/c2_component_register
 
 # -------@block_app-------
-
 # Set permission for GMS packages
 PRODUCT_COPY_FILES += \
 	  $(CONFIG_REPO_PATH)/imx8m/permissions/privapp-permissions-imx.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp.permissions-imx.xml \
 	  $(CONFIG_REPO_PATH)/imx8m/permissions/privapp-permissions_system_ext-imx.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp.permissions-imx.xml
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
+    $(NXP_DEVICE_PATH)/app_whitelist.xml:system/etc/sysconfig/app_whitelist.xml
 
 # -------@block_kernel_bootimg-------
-
 # Enable this to support vendor boot and boot header v3, this would be a MUST for GKI
 TARGET_USE_VENDOR_BOOT ?= true
 
@@ -108,11 +115,10 @@ PRODUCT_COPY_FILES += \
 endif
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
+    $(NXP_DEVICE_PATH)/early.init.cfg:$(TARGET_COPY_OUT_VENDOR)/etc/early.init.cfg \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/sdma/sdma-imx7d.bin:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/lib/firmware/imx/sdma/sdma-imx7d.bin \
     $(CONFIG_REPO_PATH)/common/init/init.insmod.sh:$(TARGET_COPY_OUT_VENDOR)/bin/init.insmod.sh \
     $(IMX_DEVICE_PATH)/ueventd.nxp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/ueventd.rc
-
 
 # -------@block_storage-------
 # support metadata checksum during first stage mount
@@ -151,24 +157,14 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     POSTINSTALL_OPTIONAL_vendor=false
 
   PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx8mp-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-$(VARISCITE_OTA_BOOTLOADER).bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
   ifeq ($(BUILD_ENCRYPTED_BOOT),true)
     PRODUCT_COPY_FILES += \
-      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx8mp-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/$(BOARD_OTA_BOOTLOADERIMAGE):$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
   endif
 endif
 
-
-# fastboot_imx_flashall scripts, imx-sdcard-partition script uuu_imx_android_flash scripts
-PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/tools/fastboot_imx_flashall.bat:fastboot_imx_flashall.bat \
-    $(CONFIG_REPO_PATH)/common/tools/fastboot_imx_flashall.sh:fastboot_imx_flashall.sh \
-    $(CONFIG_REPO_PATH)/common/tools/imx-sdcard-partition.sh:imx-sdcard-partition.sh \
-    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.bat:uuu_imx_android_flash.bat \
-    $(CONFIG_REPO_PATH)/common/tools/uuu_imx_android_flash.sh:uuu_imx_android_flash.sh
-
 # -------@block_security-------
-
 # Include keystore attestation keys and certificates.
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 -include $(IMX_SECURITY_PATH)/attestation/imx_attestation.mk
@@ -212,9 +208,11 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx \
-    android.hardware.oemlock-service-software.imx
+    android.hardware.oemlock-service.imx
 endif
+
+PRODUCT_PACKAGES += \
+    android.hardware.oemlock-service-software.imx
 
 # Add Trusty OS backed gatekeeper and secure storage proxy
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -282,46 +280,29 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/nxp_widevine_tee_8
 $(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # -------@block_audio-------
-
 # Audio card json
 PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8960_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8960_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/micfil_s32_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_s32_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/hdmi_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/hdmi_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
 
-ifeq ($(POWERSAVE),true)
-PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/audio-json/pcm512x_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/pcm512x_config.json
-endif
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
-    $(IMX_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
+    $(NXP_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
+    $(NXP_DEVICE_PATH)/usb_audio_policy_configuration-direct-output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/usb_audio_policy_configuration-direct-output.xml
 
-ifeq ($(POWERSAVE),true)
 PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/imx8mp_mcu_demo.bin:imx8mp_mcu_demo.img \
-    $(IMX_DEVICE_PATH)/audio_policy_configuration_pcm512x.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
-else
-PRODUCT_COPY_FILES += \
-    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx8mp/imx8mp_mcu_demo.img:imx8mp_mcu_demo.img \
     $(IMX_DEVICE_PATH)/audio_policy_configuration.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_policy_configuration.xml
-endif
 
 # -------@block_camera-------
-
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-basler-ov5640.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp-4k-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-4k-basler-ov5640.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp-only-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-only-ov5640.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp-os08a20-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-os08a20-ov5640.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx8mp-4k-os08a20-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-4k-os08a20-ov5640.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx8mp-dual-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp.json \
     $(IMX_DEVICE_PATH)/camera_config_imx8mp-dual-basler.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-dual-basler.json \
-    $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
+    $(IMX_DEVICE_PATH)/camera_config_imx8mp-var-basler.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-var-basler.json \
+    $(NXP_DEVICE_PATH)/camera_config_imx8mp-4k-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-4k-basler-ov5640.json \
+    $(NXP_DEVICE_PATH)/camera_config_imx8mp-basler-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx8mp-basler-ov5640.json \
+    $(NXP_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
 
 PRODUCT_SOONG_NAMESPACES += hardware/google/camera
 PRODUCT_SOONG_NAMESPACES += vendor/nxp-opensource/imx/camera
@@ -341,7 +322,6 @@ PRODUCT_PACKAGES += \
     media_profiles_8mp-ispsensor-ov5640.xml
 
 # -------@block_display-------
-
 PRODUCT_AAPT_CONFIG += xlarge large tvdpi hdpi xhdpi xxhdpi
 
 # -----some limiataion of overlay/g2d in hwcomposer3 --------
@@ -366,6 +346,7 @@ PRODUCT_PACKAGES += \
     android.hardware.graphics.allocator-service.imx \
     mapper.imx
 
+
 # 2d test
 ifneq (,$(filter userdebug eng, $(TARGET_BUILD_VARIANT)))
 PRODUCT_PACKAGES += 2d-test
@@ -377,7 +358,7 @@ PRODUCT_PACKAGES += \
 ifeq ($(MULTIDISPLAY_WITH_INDEPENDENT_CONTROL),true)
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/display_settings.xml:$(TARGET_COPY_OUT_VENDOR)/etc/display_settings.xml \
-    $(IMX_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
+    $(NXP_DEVICE_PATH)/input-port-associations.xml:$(TARGET_COPY_OUT_VENDOR)/etc/input-port-associations.xml
 endif
 
 # -------@block_gpu-------
@@ -421,25 +402,45 @@ PRODUCT_COPY_FILES += \
 -include $(FSL_PROPRIETARY_PATH)/fsl-proprietary/include/CL/cl_sdk.mk
 
 # -------@block_wifi-------
-
 PRODUCT_COPY_FILES += \
     $(CONFIG_REPO_PATH)/common/wifi/p2p_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/p2p_supplicant_overlay.conf \
     $(CONFIG_REPO_PATH)/common/wifi/wpa_supplicant_overlay.conf:$(TARGET_COPY_OUT_VENDOR)/etc/wifi/wpa_supplicant_overlay.conf
 
 # WiFi HAL
+ifneq ($(TARGET_USES_BCM_WIFI),true)
 PRODUCT_PACKAGES += \
-    android.hardware.wifi-service \
+    android.hardware.wifi-service
+endif
+
+PRODUCT_PACKAGES += \
     wificond
 
 # WiFi RRO
 PRODUCT_PACKAGES += \
     WifiOverlay
 
-# nxp wifi and bluetooth combo Firmware
+# NXP 88W8987 / IW612 firmware, shared by the supported SOM variants.
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
-    hardware/nxp/libbt/conf/nxp/evk_8mp/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
+    vendor/nxp/imx-firmware/FwImage_8987_SD/sduart8987_combo.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/sduart8987_combo.bin \
+    vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:$(TARGET_COPY_OUT_VENDOR)/firmware/sduart_nw61x_v1.bin.se \
+    vendor/nxp/imx-firmware/FwImage_IW612_SD/uartspi_n61x_v1.bin.se:$(TARGET_COPY_OUT_VENDOR)/firmware/nxp/uartspi_n61x_v1.bin.se \
+    vendor/nxp/imx-firmware/android_wifi_mod_para.conf:$(TARGET_COPY_OUT_VENDOR)/firmware/wifi_mod_para_sd8987.conf
+
+# Sterling LWB / LWB5 Wi-Fi and BT combo firmware (1.x SOM revisions)
+ifeq ($(TARGET_USES_BCM_WIFI),true)
+PRODUCT_COPY_FILES += \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM4335C0.hcd:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/BCM4335C0.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/BCM43430A1.hcd:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/BCM43430A1.hcd \
+    $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/brcmfmac4339-sdio.bin \
+    $(BCM_FIRMWARE_PATH)/brcm/brcmfmac4339-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/brcmfmac4339-sdio.txt \
+    $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.bin:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/brcmfmac43430-sdio.bin \
+    $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.txt:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/brcmfmac43430-sdio.txt \
+    $(BCM_FIRMWARE_PATH)/brcm/brcmfmac43430-sdio.clm_blob:$(TARGET_COPY_OUT_VENDOR)/firmware/brcm/brcmfmac43430-sdio.clm_blob
+
+# wpa_supplicant.conf.imx is disabled on bcmdhd boards, use the bcmdhd one
+PRODUCT_PACKAGES += \
+    wpa_supplicant.conf
+endif
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -447,15 +448,9 @@ PRODUCT_COPY_FILES += \
     external/wireless-regdb/regulatory.db.p7s:$(TARGET_COPY_OUT_VENDOR)/firmware/regulatory.db.p7s
 
 # -------@block_bluetooth-------
-
-# Bluetooth HAL
+# Bluetooth uses the kernel HCI UART transport (btnxpuart, or hci_uart BCM on 1.x SOMs).
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth \
-    android.hardware.bluetooth-service.default.nxp
-
-#nxp Bluetooth vendor config
-PRODUCT_PACKAGES += \
-    bt_vendor.conf
+    android.hardware.bluetooth-service.default
 
 # Bluetooth LE Audio
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -465,25 +460,25 @@ PRODUCT_PRODUCT_PROPERTIES += \
 
 
 # -------@block_usb-------
-
 # Usb HAL
 PRODUCT_PACKAGES += \
     android.hardware.usb-service.imx \
     android.hardware.usb.gadget-service.imx
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
+    $(NXP_DEVICE_PATH)/init.usb.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.usb.rc
 
 PRODUCT_DEFAULT_PROPERTY_OVERRIDES += \
     sys.usb.mtp.batchcancel=1
 
-# -------@block_multimedia_codec-------
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.typec.legacy=true
 
+# -------@block_multimedia_codec-------
 # Vendor seccomp policy files for media components:
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
-    $(IMX_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
-
+    $(NXP_DEVICE_PATH)/seccomp/mediacodec-seccomp.policy:vendor/etc/seccomp_policy/mediacodec.policy \
+    $(NXP_DEVICE_PATH)/seccomp/mediaextractor-seccomp.policy:vendor/etc/seccomp_policy/mediaextractor.policy
 
 PRODUCT_PACKAGES += \
     libg1 \
@@ -513,14 +508,12 @@ endif
 endif
 
 # -------@block_memory-------
-
 # Include Android Go config for low memory device.
 ifeq ($(LOW_MEMORY),true)
 $(call inherit-product, build/target/product/go_defaults.mk)
 endif
 
 # -------@block_neural_network-------
-
 # Neural Network HAL and lib
 PRODUCT_PACKAGES += \
     libtim-vx \
@@ -534,27 +527,66 @@ PRODUCT_PACKAGES += \
     label_image \
     TfliteCameraDemo
 
-# -------@block_miscellaneous-------
+# -------@block_canbus_tools-------
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
 
+# -------@block_var_mii-------------
+PRODUCT_PACKAGES += \
+    var-mii
+
+# -------@block_cm_rpmsg-------
+# Cortex-M7 demos: .bin files for U-Boot bootaux, .elf files for remoteproc.
+VARISCITE_CM_DEMOS := \
+    cm_hello_world \
+    cm_rpmsg_lite_pingpong_rtos_linux_remote \
+    cm_rpmsg_lite_str_echo_rtos
+VARISCITE_CM_ELF_DEMOS := \
+    cm_hello_world \
+    cm_rpmsg_lite_pingpong_rtos_linux_remote \
+    cm_rpmsg_lite_str_echo_rtos_imxcm7
+VARISCITE_CM_BOARDS := dart som smarc
+PRODUCT_COPY_FILES += \
+    $(foreach demo,$(VARISCITE_CM_DEMOS),$(foreach board,$(VARISCITE_CM_BOARDS),$(foreach build,debug ddr_debug, \
+        $(IMX_DEVICE_PATH)/$(demo).bin.$(build)_$(board):$(demo).bin.$(build)_$(board)))) \
+    $(foreach demo,$(VARISCITE_CM_ELF_DEMOS),$(foreach board,$(VARISCITE_CM_BOARDS),$(foreach build,debug ddr_debug, \
+        $(IMX_DEVICE_PATH)/$(demo).elf.$(build)_$(board):$(TARGET_COPY_OUT_VENDOR)/firmware/$(demo).elf.$(build)_$(board))))
+
+# imx_rpmsg_pingpong.ko and imx_rpmsg_tty.ko are installed for manual insmod.
+PRODUCT_COPY_FILES += \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:$(TARGET_COPY_OUT_VENDOR)/imx_rpmsg_pingpong.ko \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_tty.ko:$(TARGET_COPY_OUT_VENDOR)/imx_rpmsg_tty.ko
+
+# -------@block_miscellaneous-------
 # Copy device related config and binary to board
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.imx8mp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8mp.rc \
+    $(NXP_DEVICE_PATH)/init.imx8mp.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.imx8mp.rc \
     $(IMX_DEVICE_PATH)/init.rc:$(TARGET_COPY_OUT_VENDOR)/etc/init/hw/init.nxp.rc
 
 ifeq ($(TARGET_USE_VENDOR_BOOT),true)
   PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
+    $(NXP_DEVICE_PATH)/init.recovery.nxp.rc:$(TARGET_COPY_OUT_VENDOR_RAMDISK)/init.recovery.nxp.rc
 else
   PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
+    $(NXP_DEVICE_PATH)/init.recovery.nxp.rc:root/init.recovery.nxp.rc
 endif
 
 ifeq ($(POWERSAVE),true)
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/required_hardware_powersave.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
+    $(NXP_DEVICE_PATH)/required_hardware_powersave.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
 else
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
+    $(NXP_DEVICE_PATH)/required_hardware.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/required_hardware.xml
 endif
 
 # ONLY devices that meet the CDD's requirements may declare these features
@@ -577,6 +609,7 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
@@ -608,9 +641,12 @@ PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.software.app_compat_overrides.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.app_compat_overrides.xml \
     frameworks/native/data/etc/android.software.credentials.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.software.credentials.xml
 
+
 # trusty loadable apps
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
 PRODUCT_COPY_FILES += \
     vendor/nxp/fsl-proprietary/uboot-firmware/imx8m/confirmationui-imx8mp.app:/vendor/firmware/tee/confirmationui.app
+endif
 
 # Keymint configuration
 PRODUCT_COPY_FILES += \
@@ -690,22 +726,21 @@ PRODUCT_PACKAGES += \
     daA3840_30mc_1080P.json \
     daA3840_30mc_4K.json
 
-# config for os08a20
-PRODUCT_PACKAGES += \
-    OS08a20_8M_10_1080p_linear.xml \
-    OS08a20_8M_10_1080p_hdr.xml \
-    OS08a20_8M_10_4k_linear.xml \
-    OS08a20_8M_10_4k_hdr.xml \
-    os08a20-Sensor0_Entry.cfg \
-    os08a20-Sensor1_Entry.cfg \
-    sensor_dwe_os08a20_1080P_config.json \
-    sensor_dwe_os08a20_4K_config.json
-
 # make sure /vendor/etc/configs/isp/ is created
     PRODUCT_PACKAGES += hollow
+
+# config for audio selection
+PRODUCT_PACKAGES += \
+    var-audio-config \
+    var-wm8904-config-carrier.json \
+    var-wm8904-config.json
 
 # Add Virtualization support
 $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk)
 
 # Add imx private apps
 $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)
+
+# Input Device Configuration files
+PRODUCT_COPY_FILES += \
+    device/variscite/common/generic_ft5x06.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06.idc

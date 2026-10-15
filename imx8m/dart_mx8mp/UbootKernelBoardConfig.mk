@@ -2,22 +2,19 @@
 TARGET_BOOTLOADER_POSTFIX := bin
 UBOOT_POST_PROCESS := true
 
-# u-boot target
-TARGET_BOOTLOADER_CONFIG := imx8mp:imx8mp_evk_android_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-gbl:imx8mp_evk_android_gbl_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-secure-unlock-dual:imx8mp_evk_android_trusty_secure_unlock_dual_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-dual:imx8mp_evk_android_dual_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-dual:imx8mp_evk_android_trusty_dual_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-gbl-dual:imx8mp_evk_android_trusty_gbl_dual_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-rbidx-blob-dual:imx8mp_evk_android_trusty_rbidx_blob_dual_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-frdm:imx8mp_frdm_android_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-frdm-dual:imx8mp_frdm_android_trusty_dual_defconfig
-ifeq ($(POWERSAVE),true)
-TARGET_BOOTLOADER_CONFIG += imx8mp-powersave:imx8mp_evk_android_powersave_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-trusty-powersave-dual:imx8mp_evk_android_trusty_powersave_dual_defconfig
+TARGET_BOOTLOADER_CONFIG := \
+	imx8mp-var-dart:imx8mp_var_dart_android_defconfig \
+	imx8mp-var-dart-dual:imx8mp_var_dart_android_dual_defconfig
+
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+TARGET_BOOTLOADER_CONFIG += \
+	imx8mp-var-dart-trusty-secure-unlock-dual:imx8mp_var_dart_android_trusty_secure_unlock_dual_defconfig \
+	imx8mp-var-dart-trusty-dual:imx8mp_var_dart_android_trusty_dual_defconfig \
+        imx8mp-var-dart-trusty-rbidx-blob-dual:imx8mp_var_dart_android_trusty_rbidx_blob_dual_defconfig
 endif
-TARGET_BOOTLOADER_CONFIG += imx8mp-evk-uuu:imx8mp_evk_android_uuu_defconfig
-TARGET_BOOTLOADER_CONFIG += imx8mp-frdm-uuu:imx8mp_frdm_android_uuu_defconfig
+
+# Bootloader target used by UUU
+TARGET_BOOTLOADER_CONFIG += imx8mp-var-dart-uuu:imx8mp_var_dart_android_uuu_defconfig
 
 TARGET_KERNEL_DEFCONFIG := gki_defconfig
 ifeq ($(LOADABLE_KERNEL_MODULE),true)

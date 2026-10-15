@@ -1,0 +1,2 @@
+genfscon sysfs /class/rtc/rtc0/hctosys    u:object_r:sysfs_rtc:s0
+genfscon sysfs /class/backlight/backlight u:object_r:sysfs_leds:s0

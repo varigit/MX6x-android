@@ -3,6 +3,8 @@ KERNEL_NAME := Image.lz4
 TARGET_KERNEL_ARCH := arm64
 LOADABLE_KERNEL_MODULE ?= true
 BAZEL_BUILD_DLKM ?= false
+# Set to true for 1.x SOM revisions with Sterling LWB / LWB5 (Broadcom) Wi-Fi and BT.
+TARGET_USES_BCM_WIFI ?= false
 
 ifeq ($(BAZEL_BUILD_DLKM),false)
 #NXP wifi driver module
@@ -293,11 +295,16 @@ LOW_MEMORY := false
 
 # -------@block_security-------
 #Enable this to include trusty support
-PRODUCT_IMX_TRUSTY := true
+PRODUCT_IMX_TRUSTY ?= false
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
-BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx8mp-trusty-dual.img
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+VARISCITE_OTA_BOOTLOADER := imx8mp-var-dart-trusty-dual
+else
+VARISCITE_OTA_BOOTLOADER := imx8mp-var-dart-dual
+endif
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-$(VARISCITE_OTA_BOOTLOADER).img
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
@@ -307,8 +314,51 @@ IMX_NO_PRODUCT_PARTITION := false
 
 # -------@block_infrastructure-------
 CONFIG_REPO_PATH := device/nxp
+NXP_DEVICE_PATH := $(CONFIG_REPO_PATH)/imx8m/evk_8mp
 
 ifeq ($(SUPPORT_GBL),true)
 # Enable this to include the dtb images into vendor_boot image.
 TARGET_INCLUDE_DTB_TO_VENDOR_BOOT ?= true
+endif
+
+# Modules for Variscite SOMs and carriers (Android 16 in-tree build).
+ifeq ($(BAZEL_BUILD_DLKM),false)
+ifeq ($(LOADABLE_KERNEL_MODULE),true)
+BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
+    $(KERNEL_OUT)/sound/soc/codecs/snd-soc-wm8904.ko \
+    $(KERNEL_OUT)/drivers/net/phy/adin.ko \
+    $(KERNEL_OUT)/drivers/net/phy/dp83867.ko \
+    $(KERNEL_OUT)/drivers/net/phy/mxl-86110.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/qcom-phy-lib.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/at803x.ko \
+    $(KERNEL_OUT)/drivers/regulator/gpio-regulator.ko \
+    $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/edt-ft5x06.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/ads7846.ko \
+    $(KERNEL_OUT)/drivers/rtc/rtc-ds1307.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko
+
+# Bluetooth depends on rfkill, so keep the whole stack in vendor_dlkm.
+# hci_uart covers Broadcom BT on 1.x SOMs; btnxpuart covers NXP 8987/IW612.
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
+    $(KERNEL_OUT)/drivers/power/sequencing/pwrseq-core.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btbcm.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btqca.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/hci_uart.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmutil/brcmutil.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/brcmfmac.ko \
+    $(KERNEL_OUT)/drivers/net/wireless/broadcom/brcm80211/brcmfmac/wcc/brcmfmac-wcc.ko \
+    $(KERNEL_OUT)/net/can/can.ko \
+    $(KERNEL_OUT)/net/can/can-raw.ko \
+    $(KERNEL_OUT)/net/can/can-bcm.ko \
+    $(KERNEL_OUT)/net/can/can-gw.ko \
+    $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
+    $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
+endif
 endif
