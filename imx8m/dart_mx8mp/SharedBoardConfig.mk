@@ -359,6 +359,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
     $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
     $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
-    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko \
+    $(KERNEL_OUT)/drivers/misc/eeprom/at24.ko
 endif
 endif
