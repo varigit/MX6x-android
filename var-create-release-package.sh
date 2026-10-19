@@ -6,7 +6,7 @@ usage() {
 var-create-release-package.sh - Build and stage Android artifacts
 
 USAGE:
-  MACHINE=<machine> ./var-create-release-package.sh --target iw91x|lwb|both [--variant userdebug|user] [--jobs N]
+  MACHINE=<machine> ./var-create-release-package.sh --target iw61x|lwb|both [--variant userdebug|user] [--jobs N]
   ./var-create-release-package.sh --help
 
 REQUIRED:
@@ -20,23 +20,23 @@ REQUIRED:
     imx8mp-var-dart
 
 TARGET:
-  --target iw91x   Build only iw91x -> android-artifacts/android/              (DEFAULT)
+  --target iw61x   Build only iw61x -> android-artifacts/android/              (DEFAULT)
   --target lwb       Build only LWB     -> android-artifacts/android/ (when used alone)
                                           or -> android-artifacts/android/lwb/ (when used with 'both')
   --target both      Build both
 
 OPTIONS:
-  --variant V   userdebug|user (iw91x: userdebug)
-  --jobs N      Parallel jobs for imx-make.sh (iw91x: 8)
+  --variant V   userdebug|user (iw61x: userdebug)
+  --jobs N      Parallel jobs for imx-make.sh (iw61x: 8)
 
 EXAMPLES:
   MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target both --jobs 16
   MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target lwb
-  MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target iw91x
+  MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target iw61x
 EOF
 }
 
-TARGET="iw91x"     # iw91x|lwb|both
+TARGET="iw61x"     # iw61x|lwb|both
 VARIANT="userdebug"
 JOBS="8"
 
@@ -53,7 +53,7 @@ done
 [ -n "${MACHINE:-}" ] || { echo "ERROR: MACHINE is required"; usage; exit 1; }
 
 case "${VARIANT}" in userdebug|user) ;; *) echo "ERROR: invalid --variant '${VARIANT}'"; exit 1 ;; esac
-case "${TARGET}" in iw91x|lwb|both) ;; *) echo "ERROR: invalid --target '${TARGET}'"; exit 1 ;; esac
+case "${TARGET}" in iw61x|lwb|both) ;; *) echo "ERROR: invalid --target '${TARGET}'"; exit 1 ;; esac
 
 ANDROID_BUILD_ROOT="${ANDROID_BUILD_ROOT:-$(pwd)}"
 
@@ -261,11 +261,11 @@ if [ -d "${ART_ROOT}" ]; then
 fi
 
 mkdir -p "${ART_ROOT}" "${ART_SCRIPTS}"
-[ "${TARGET}" = "iw91x" ] || [ "${TARGET}" = "both" ] && mkdir -p "${ART_ANDROID_DEFAULT}"
+[ "${TARGET}" = "iw61x" ] || [ "${TARGET}" = "both" ] && mkdir -p "${ART_ANDROID_DEFAULT}"
 [ "${TARGET}" = "both" ] && mkdir -p "${ART_ANDROID_LWB}"
 
-if [ "${TARGET}" = "iw91x" ] || [ "${TARGET}" = "both" ]; then
-  run_build "iw91x" ""
+if [ "${TARGET}" = "iw61x" ] || [ "${TARGET}" = "both" ]; then
+  run_build "iw61x" ""
   copy_artifacts_for_machine "${ART_ANDROID_DEFAULT}"
 fi
 
