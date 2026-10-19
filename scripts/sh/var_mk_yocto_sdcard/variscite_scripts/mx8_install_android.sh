@@ -60,14 +60,6 @@ else
 fi
 
 function add_imx8mp_menu() {
-	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-basler-isp0.img        (DART-MX8M-PLUS V2.x with LVDS and Basler VCAM-AR0821B camera support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-basler-isp0-m7.img     (DART-MX8M-PLUS V2.x with LVDS, Basler VCAM-AR0821B camera and M7 support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard-m7.img                 (DART-MX8M-PLUS V2.x with LVDS and M7 support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-dt8mcustomboard.img                    (DART-MX8M-PLUS V2.x with LVDS support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-wbe-dt8mcustomboard.img                (DART-MX8M-PLUS V2.x with WBE and LVDS support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-wbe-dt8mcustomboard-m7.img             (DART-MX8M-PLUS V2.x with WBE, LVDS and M7 support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0.img    (DART-MX8M-PLUS V2.x with WBE, LVDS and Basler VCAM-AR0821B camera support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-wbe-dt8mcustomboard-basler-isp0-m7.img (DART-MX8M-PLUS V2.x with WBE, LVDS, Basler VCAM-AR0821B camera and M7  support on DT8MCustomBoard 2.x and above)")
 	img_list+=("dtbo-imx8mp-var-dart-sonata-basler-isp0.img                 (DART-MX8M-PLUS V2.x with Basler VCAM-AR0821B camera support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-sonata-basler-isp0-m7.img              (DART-MX8M-PLUS V2.x with Basler VCAM-AR0821B camera and M7 support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-sonata.img                             (DART-MX8M-PLUS V2.x on Sonata-Board)")
@@ -76,10 +68,6 @@ function add_imx8mp_menu() {
 	img_list+=("dtbo-imx8mp-var-dart-wbe-sonata-basler-isp0-m7.img          (DART-MX8M-PLUS V2.x with WBE, Basler VCAM-AR0821B camera and M7 support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-wbe-sonata.img                         (DART-MX8M-PLUS V2.x with WBE support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-wbe-sonata-m7.img                      (DART-MX8M-PLUS V2.x with WBE and M7 support on Sonata-Board)")
-	img_list+=("dtbo-imx8mp-var-dart-1.x-dt8mcustomboard.img                (DART-MX8M-PLUS V1.x with LVDS support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-1.x-dt8mcustomboard-m7.img             (DART-MX8M-PLUS V1.x with LVDS and M7 support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0.img    (DART-MX8M-PLUS V1.x with LVDS and Basler VCAM-AR0821B camera support on DT8MCustomBoard 2.x and above)")
-	img_list+=("dtbo-imx8mp-var-dart-1.x-dt8mcustomboard-basler-isp0-m7.img (DART-MX8M-PLUS V1.x with LVDS, Basler VCAM-AR0821B camera and M7 support on DT8MCustomBoard 2.x and above)")
 	img_list+=("dtbo-imx8mp-var-dart-1.x-sonata-basler-isp0.img             (DART-MX8M-PLUS V1.x with Basler VCAM-AR0821B camera support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-1.x-sonata-basler-isp0-m7.img          (DART-MX8M-PLUS V1.x with Basler VCAM-AR0821B camera and M7 support on Sonata-Board)")
 	img_list+=("dtbo-imx8mp-var-dart-1.x-sonata.img                         (DART-MX8M-PLUS V1.x support on Sonata-Board)")
