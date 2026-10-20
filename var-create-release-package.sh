@@ -270,7 +270,7 @@ if [ "${TARGET}" = "iw61x" ] || [ "${TARGET}" = "both" ]; then
 fi
 
 if [ "${TARGET}" = "lwb" ] || [ "${TARGET}" = "both" ]; then
-  run_build "lwb" "TARGET_BCM_WIFI=true"
+  run_build "lwb" "TARGET_USES_BCM_WIFI=true"
   copy_artifacts_for_machine "${LWB_DEST}"
 fi
 
