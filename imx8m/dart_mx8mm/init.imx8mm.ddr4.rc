@@ -1,0 +1,7 @@
+on early-boot
+    # Wifi firmware reload path
+    chown wifi wifi /sys/module/brcmfmac/parameters/alternative_fw_path
+
+    # Prepare for wifi
+    setprop wifi.interface wlan0
+    setprop wifi.direct.interface p2p-dev-wlan0
