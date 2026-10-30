@@ -1,0 +1,35 @@
+From 309b9b9b4ef10c280e3047f9800acc6d31e0c35f Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Fri, 30 Oct 2026 12:00:50 +0100
+Subject: [PATCH] soc: imx8mp: use the DART-MX8M-PLUS console UART for Trusty
+
+The i.MX8MP Trusty target prints its log on UART2, the NXP EVK console,
+and waits for the transmitter to be empty after every character. On
+DART-MX8M-PLUS, UART2 is not set up before Trusty runs, so Trusty hangs
+on its first log line.
+
+Use UART1 (0x30860000), the DART-MX8M-PLUS console UART, as on the
+Variscite Android 14 and 15 Trusty builds. VAR-SOM-MX8M-PLUS and
+VAR-SMARC-MX8M-PLUS use UART2 and keep the NXP image.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ platform/imx/soc/imx8mp/include/imx-regs.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/platform/imx/soc/imx8mp/include/imx-regs.h b/platform/imx/soc/imx8mp/include/imx-regs.h
+index 04b6866..72e948a 100644
+--- a/platform/imx/soc/imx8mp/include/imx-regs.h
++++ b/platform/imx/soc/imx8mp/include/imx-regs.h
+@@ -41,7 +41,7 @@
+ #define CONFIG_UART3_BASE 0x30880000
+ #define CONFIG_UART4_BASE 0x30A60000
+ 
+-#define CONFIG_CONSOLE_TTY_BASE CONFIG_UART2_BASE
++#define CONFIG_CONSOLE_TTY_BASE CONFIG_UART1_BASE
+ 
+ #define CONFIG_CONSOLE_TTY_VIRT (0xFFFFFFFF00000000 + CONFIG_CONSOLE_TTY_BASE)
+ #define MACH_IMX8MP
+-- 
+2.43.0
+

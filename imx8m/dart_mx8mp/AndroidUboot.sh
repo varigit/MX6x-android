@@ -19,11 +19,12 @@ build_imx_uboot()
     atf_cross="${AARCH64_GCC_CROSS_COMPILE:?AARCH64_GCC_CROSS_COMPILE is required}"
     set -- CROSS_COMPILE="$atf_cross" CC="${atf_cross}gcc" AS="${atf_cross}gcc" PLAT=imx8mp IMX_ANDROID_BUILD=true
 
-    # As in Android 15, Trusty defaults to NXP's i.MX8MP image from the same
-    # release (matching its KeyMint/Gatekeeper/Secretkeeper HALs). Set
-    # VARISCITE_TEE_IMAGE to use a custom Trusty build instead.
     case "$variant" in *-trusty-*)
-        VARISCITE_TEE_IMAGE="${VARISCITE_TEE_IMAGE:-${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx8m/tee-imx8mp.bin}"
+        case "$variant" in
+        *-var-som-*) tee_image="${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx8m/tee-imx8mp.bin" ;;
+        *) tee_image=device/variscite/imx8m/dart_mx8mp/tee-imx8mp-dart.bin ;;
+        esac
+        VARISCITE_TEE_IMAGE="${VARISCITE_TEE_IMAGE:-$tee_image}"
         if [ ! -f "$VARISCITE_TEE_IMAGE" ]; then
             echo "ERROR: Trusty image not found: $VARISCITE_TEE_IMAGE" >&2
             return 1

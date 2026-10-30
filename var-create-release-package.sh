@@ -164,6 +164,8 @@ copy_artifacts_for_machine() {
     if [ "${MACHINE}" = "imx8mm-var-dart" ]; then
       trusty_bootloaders="imx8mm-var-dart-trusty-dual imx8mm-var-dart-trusty-4g-dual"
       trusty_bootloaders="${trusty_bootloaders} imx8mm-var-som-trusty-dual imx8mm-var-som-trusty-4g-dual"
+    elif [ "${MACHINE}" = "imx8mp-var-dart" ]; then
+      trusty_bootloaders="imx8mp-var-dart-trusty-dual imx8mp-var-som-trusty-dual"
     fi
     for bl in ${trusty_bootloaders}; do
       copy_file "${OUTDIR}/spl-${bl}.bin"        "${dest}"

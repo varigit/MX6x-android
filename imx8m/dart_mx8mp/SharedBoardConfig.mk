@@ -300,7 +300,14 @@ PRODUCT_IMX_TRUSTY ?= false
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
+# Trusty logs on the board console UART, so DART and VAR-SOM/VAR-SMARC have
+# their own bootloader: build with TARGET_TEE_SOM=true for VAR-SOM and
+# VAR-SMARC OTA packages
+ifeq ($(TARGET_TEE_SOM),true)
+VARISCITE_OTA_BOOTLOADER := imx8mp-var-som-trusty-dual
+else
 VARISCITE_OTA_BOOTLOADER := imx8mp-var-dart-trusty-dual
+endif
 else
 VARISCITE_OTA_BOOTLOADER := imx8mp-var-dart-dual
 endif

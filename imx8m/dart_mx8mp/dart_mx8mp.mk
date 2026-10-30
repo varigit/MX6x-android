@@ -1,7 +1,6 @@
 # -------@block_infrastructure-------
 CONFIG_REPO_PATH := device/nxp
 
-PRODUCT_COPY_FILES += $(foreach recipe,$(wildcard device/variscite/scripts/uuu_scripts/emmc_burn_android_imx8mp_*.lst),$(recipe):$(notdir $(recipe)))
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
 # IMX_DEVICE_PATH refers to the Variscite SoM folder
@@ -17,6 +16,13 @@ MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= false
 
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
+
+# Trusty UUU lists flash the Trusty bootloaders, built only with PRODUCT_IMX_TRUSTY=true
+IMX8MP_UUU_LISTS := $(wildcard device/variscite/scripts/uuu_scripts/emmc_burn_android_imx8mp_*.lst)
+ifneq ($(PRODUCT_IMX_TRUSTY),true)
+IMX8MP_UUU_LISTS := $(filter-out %_trusty.lst,$(IMX8MP_UUU_LISTS))
+endif
+PRODUCT_COPY_FILES += $(foreach recipe,$(IMX8MP_UUU_LISTS),$(recipe):$(notdir $(recipe)))
 
 include device/variscite/common/imx_path/ImxPathConfig.mk
 include device/variscite/common/bootanimation/variscite_bootanimation_logo.mk
