@@ -1,0 +1,51 @@
+From bc67b755ceb5e5e0f19fc90683a1acc7e1bd6923 Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Sat, 24 Oct 2026 14:47:57 +0200
+Subject: [PATCH] build: only build the device trees listed by the product
+
+KERNEL_DTB runs "make dtbs", which compiles every device tree enabled for
+the SoC family (about 960 for arm64 i.MX) although dtbo.mk only packs the
+ones listed in TARGET_BOARD_DTS_CONFIG. The generated dtbs-list command
+for that many targets also exceeds the shell argument limit.
+
+Pass the listed device trees to make as explicit targets instead, and
+keep "make dtbs" for products that list none. Build them one after
+another, as Kbuild starts a separate sub-make for each named device tree
+and parallel sub-makes race on the base device trees shared by composite
+ones.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ common/build/kernel.mk | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/common/build/kernel.mk b/common/build/kernel.mk
+index 8537384c..fac13bf9 100644
+--- a/common/build/kernel.mk
++++ b/common/build/kernel.mk
+@@ -248,10 +248,21 @@ KERNEL_MODULES: $(KERNEL_CONFIG) $(TARGET_KERNEL_SRC) | $(KERNEL_OUT)
+ 	$(hide) $(kernel_build_shell_env) $(MAKE) $(kernel_build_make_env) syncconfig
+ 	$(hide) $(kernel_build_shell_env) $(MAKE) $(kernel_build_make_env) modules
+ 
++# Only build the device trees packed by dtbo.mk instead of every dtb enabled
++# for the SoC family. Fall back to all dtbs if the product lists none.
++# The arm64 device trees are in the freescale vendor directory, as in dtbo.mk,
++# which is not included when the kernel is built on its own.
++# Kbuild starts one sub-make per named dtb, and parallel sub-makes would race
++# on the base dtbs shared by composite dtbs, so build them one after another.
++KERNEL_DTB_TARGETS = $(strip $(foreach dts_config,$(TARGET_BOARD_DTS_CONFIG), \
++	$(addprefix $(if $(filter arm64,$(TARGET_KERNEL_ARCH)),freescale/),$(word 2,$(subst :, ,$(dts_config))))))
++
+ KERNEL_DTB: $(KERNEL_CONFIG) $(TARGET_KERNEL_SRC) | $(KERNEL_OUT)
+ 	$(hide) echo "Building $(KERNEL_ARCH) $(KERNEL_VERSION) device trees ..."
+ 	$(hide) $(kernel_build_shell_env) $(MAKE) $(kernel_build_make_env) syncconfig
+-	$(hide) $(kernel_build_shell_env) $(MAKE) $(kernel_build_make_env) dtbs
++	$(hide) for dtb in $(or $(KERNEL_DTB_TARGETS),dtbs); do \
++		$(kernel_build_shell_env) $(MAKE) $(kernel_build_make_env) $$dtb || exit 1; \
++	done
+ 
+ $(KERNEL_OUT)/vmlinux: $(KERNEL_BIN)
+ 	@true
+-- 
+2.43.0
+

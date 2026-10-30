@@ -157,10 +157,29 @@ copy_artifacts_for_machine() {
 
   copy_file "${OUTDIR}/spl-${MACHINE}-dual.bin"               "${dest}"
   copy_file "${OUTDIR}/bootloader-${MACHINE}-dual.img"        "${dest}"
+
+  # Trusty bootloaders are only built with PRODUCT_IMX_TRUSTY=true
+  if [ "${PRODUCT_IMX_TRUSTY:-}" = "true" ]; then
+    trusty_bootloaders="${MACHINE}-trusty-dual"
+    if [ "${MACHINE}" = "imx8mm-var-dart" ]; then
+      trusty_bootloaders="imx8mm-var-dart-trusty-dual imx8mm-var-dart-trusty-4g-dual"
+      trusty_bootloaders="${trusty_bootloaders} imx8mm-var-som-trusty-dual imx8mm-var-som-trusty-4g-dual"
+    fi
+    for bl in ${trusty_bootloaders}; do
+      copy_file "${OUTDIR}/spl-${bl}.bin"        "${dest}"
+      copy_file "${OUTDIR}/bootloader-${bl}.img" "${dest}"
+    done
+  fi
+
   copy_file "${OUTDIR}/boot.img"                              "${dest}"
   copy_file "${OUTDIR}/init_boot.img"                         "${dest}"
   copy_glob "${OUTDIR}/dtbo-*.img"                            "${dest}"
   copy_glob "${OUTDIR}/vbmeta-*.img"                          "${dest}"
+
+  if [ "${MACHINE}" = "imx8mm-var-dart" ]; then
+    copy_file "${OUTDIR}/u-boot-${MACHINE}-uuu.imx" "${dest}"
+    copy_file "${OUTDIR}/partition-table-dual.img" "${dest}"
+  fi
 
   if [ "${MACHINE}" = "imx8qm-var-som" ]; then
     copy_file "${OUTDIR}/vendor_ramdisk/lib/firmware/hdmitxfw.bin"        "${dest}"
@@ -208,6 +227,10 @@ copy_artifacts_for_machine() {
     *) uuu_prefix="${MACHINE%%-*}_" ;;
   esac
   copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_${uuu_prefix}*.lst" "${dest}"
+  # Trusty UUU lists flash the Trusty bootloaders
+  if [ "${PRODUCT_IMX_TRUSTY:-}" != "true" ]; then
+    rm -f "${dest}"/emmc_burn_android_${uuu_prefix}*_trusty.lst "${dest}"/emmc_burn_android_${uuu_prefix}*_trusty_4g.lst
+  fi
 }
 
 copy_scripts() {

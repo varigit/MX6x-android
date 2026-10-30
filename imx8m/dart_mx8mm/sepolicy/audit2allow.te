@@ -1,0 +1,8 @@
+# This file must be generated following the instructions in
+#    https://source.android.com/docs/security/features/selinux/validate#using_audit2allow
+# adb pull /sys/fs/selinux/policy
+# adb logcat -b events -d | audit2allow -p policy
+# Be aware that some of these lines may cause sepolicy violations during the build: just comment the relevant lines
+
+#============= hal_wifi_default ==============
+allow hal_wifi_default self:capability sys_module;

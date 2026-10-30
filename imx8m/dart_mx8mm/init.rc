@@ -9,7 +9,7 @@ on early-init
 on early-init
     start early_init_sh
     # Set the host name which used in console
-    export HOSTNAME evk_8mm
+    export HOSTNAME dart_8mm
 
     # Due keymaster start very early so set prop here
     # Also gatekeeper share same role for keymaster
@@ -98,6 +98,12 @@ on early-boot && property:vendor.skip.charger_not_need=0
 
     # Set tracefs permission to 755
     chmod 0755 /sys/kernel/debug/tracing
+
+    # Default backlight device
+    setprop vendor.hw.backlight.dev "backlight"
+    # Chmod/chown FSL specific sys entry
+    chown system system /sys/class/backlight/backlight/brightness
+    chmod 0660 /sys/class/backlight/backlight/brightness
 
     # Set light sensor sysfs path and light sensor threshold lux value
     setprop ro.hardware.lightsensor "/sys/class/i2c-dev/i2c-0/device/0-0044/"
@@ -192,9 +198,10 @@ service storageproxyd /vendor/bin/storageproxyd -p /data/vendor/ss -r /dev/mmcbl
    group system
    user root
 
-# When androidboot.lcd_density is set, use it to override ro.sf.lcd_density. Or set 240 as default
+# When androidboot.lcd_density is set, use it to override ro.sf.lcd_density.
+# Otherwise use 160 dpi to match the Variscite LCDs.
 on property:ro.boot.lcd_density=""
-    setprop ro.sf.lcd_density 240
+    setprop ro.sf.lcd_density 160
 
 on property:ro.boot.lcd_density=*
     setprop ro.sf.lcd_density ${ro.boot.lcd_density}
