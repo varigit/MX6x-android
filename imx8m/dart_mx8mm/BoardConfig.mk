@@ -135,28 +135,42 @@ BOARD_KERNEL_BASE := 0x40400000
 TARGET_BOARD_DTS_CONFIG := \
 	imx8mm-var-som-symphony:imx8mm-var-som-symphony.dtb \
 	imx8mm-var-som-symphony-m4:imx8mm-var-som-symphony-m4.dtb \
+	imx8mm-var-som-symphony-2.0:imx8mm-var-som-symphony-2.0.dtb \
+	imx8mm-var-som-symphony-2.0-m4:imx8mm-var-som-symphony-2.0-m4.dtb \
 	imx8mm-var-som-1.x-symphony:imx8mm-var-som-1.x-symphony.dtb \
 	imx8mm-var-som-1.x-symphony-m4:imx8mm-var-som-1.x-symphony-m4.dtb \
 	imx8mm-var-som-symphony-1.x:imx8mm-var-som-symphony-1.x.dtb \
 	imx8mm-var-som-symphony-1.x-m4:imx8mm-var-som-symphony-1.x-m4.dtb \
+	imx8mm-var-som-1.x-symphony-2.0:imx8mm-var-som-1.x-symphony-2.0.dtb \
+	imx8mm-var-som-1.x-symphony-2.0-m4:imx8mm-var-som-1.x-symphony-2.0-m4.dtb \
 	imx8mm-var-som-1.x-symphony-1.x:imx8mm-var-som-1.x-symphony-1.x.dtb \
 	imx8mm-var-som-1.x-symphony-1.x-m4:imx8mm-var-som-1.x-symphony-1.x-m4.dtb \
 	imx8mm-var-som-wbe-symphony:imx8mm-var-som-wbe-symphony.dtb \
 	imx8mm-var-som-wbe-symphony-m4:imx8mm-var-som-wbe-symphony-m4.dtb \
+	imx8mm-var-som-wbe-symphony-2.0:imx8mm-var-som-wbe-symphony-2.0.dtb \
+	imx8mm-var-som-wbe-symphony-2.0-m4:imx8mm-var-som-wbe-symphony-2.0-m4.dtb \
 	imx8mm-var-som-wbe-symphony-1.x:imx8mm-var-som-wbe-symphony-1.x.dtb \
 	imx8mm-var-som-wbe-symphony-1.x-m4:imx8mm-var-som-wbe-symphony-1.x-m4.dtb \
-	imx8mm-var-dart-dt8mcustomboard:imx8mm-var-dart-dt8mcustomboard.dtb \
-	imx8mm-var-dart-dt8mcustomboard-m4:imx8mm-var-dart-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-3.x-dt8mcustomboard:imx8mm-var-dart-3.x-dt8mcustomboard.dtb \
+	imx8mm-var-dart-3.x-dt8mcustomboard-m4:imx8mm-var-dart-3.x-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-2.x-dt8mcustomboard:imx8mm-var-dart-2.x-dt8mcustomboard.dtb \
+	imx8mm-var-dart-2.x-dt8mcustomboard-m4:imx8mm-var-dart-2.x-dt8mcustomboard-m4.dtb \
 	imx8mm-var-dart-1.x-dt8mcustomboard:imx8mm-var-dart-1.x-dt8mcustomboard.dtb \
 	imx8mm-var-dart-1.x-dt8mcustomboard-m4:imx8mm-var-dart-1.x-dt8mcustomboard-m4.dtb \
-	imx8mm-var-dart-wbe-dt8mcustomboard:imx8mm-var-dart-wbe-dt8mcustomboard.dtb \
-	imx8mm-var-dart-wbe-dt8mcustomboard-m4:imx8mm-var-dart-wbe-dt8mcustomboard-m4.dtb \
-	imx8mm-var-dart-sonata-m4:imx8mm-var-dart-sonata-m4.dtb \
+	imx8mm-var-dart-2.x-wbe-dt8mcustomboard:imx8mm-var-dart-2.x-wbe-dt8mcustomboard.dtb \
+	imx8mm-var-dart-2.x-wbe-dt8mcustomboard-m4:imx8mm-var-dart-2.x-wbe-dt8mcustomboard-m4.dtb \
+	imx8mm-var-dart-3.x-wbe-dt8mcustomboard:imx8mm-var-dart-3.x-wbe-dt8mcustomboard.dtb \
+	imx8mm-var-dart-3.x-wbe-dt8mcustomboard-m4:imx8mm-var-dart-3.x-wbe-dt8mcustomboard-m4.dtb \
 	imx8mm-var-dart-1.x-sonata:imx8mm-var-dart-1.x-sonata.dtb \
 	imx8mm-var-dart-1.x-sonata-m4:imx8mm-var-dart-1.x-sonata-m4.dtb \
-	imx8mm-var-dart-sonata:imx8mm-var-dart-sonata.dtb \
-	imx8mm-var-dart-wbe-sonata:imx8mm-var-dart-wbe-sonata.dtb \
-	imx8mm-var-dart-wbe-sonata-m4:imx8mm-var-dart-wbe-sonata-m4.dtb
+	imx8mm-var-dart-2.x-sonata:imx8mm-var-dart-2.x-sonata.dtb \
+	imx8mm-var-dart-2.x-sonata-m4:imx8mm-var-dart-2.x-sonata-m4.dtb  \
+	imx8mm-var-dart-2.x-wbe-sonata:imx8mm-var-dart-2.x-wbe-sonata.dtb \
+	imx8mm-var-dart-2.x-wbe-sonata-m4:imx8mm-var-dart-2.x-wbe-sonata-m4.dtb \
+	imx8mm-var-dart-3.x-sonata:imx8mm-var-dart-3.x-sonata.dtb \
+	imx8mm-var-dart-3.x-sonata-m4:imx8mm-var-dart-3.x-sonata-m4.dtb \
+	imx8mm-var-dart-3.x-wbe-sonata:imx8mm-var-dart-3.x-wbe-sonata.dtb \
+	imx8mm-var-dart-3.x-wbe-sonata-m4:imx8mm-var-dart-3.x-wbe-sonata-m4.dtb
 
 ALL_DEFAULT_INSTALLED_MODULES += $(BOARD_VENDOR_KERNEL_MODULES)
 
