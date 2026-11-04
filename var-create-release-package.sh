@@ -184,7 +184,7 @@ copy_artifacts_for_machine() {
   elif [ "${MACHINE}" = "imx8mn-var-som" ]; then
     copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_hello_world.bin.debug" "${dest}" "cm_hello_world.bin"
     copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug" "${dest}" "cm_rpmsg_lite_pingpong_rtos_linux_remote.bin"
-    copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos.bin.debug" "${dest}" "cm_rpmsg_lite_str_echo_rtos.bin"
+    copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/som_mx8mn/cm_rpmsg_lite_str_echo_rtos_imxcm7.bin.debug" "${dest}" "cm_rpmsg_lite_str_echo_rtos_imxcm7.bin"
   elif [ "${MACHINE}" = "imx8mp-var-dart" ]; then
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_som" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_som" "${dest}"
