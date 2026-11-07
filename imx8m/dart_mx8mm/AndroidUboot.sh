@@ -43,6 +43,7 @@ build_imx_uboot()
 	cp ${UBOOT_OUT}/spl/u-boot-spl.bin  ${VARISCITE_PATH}/imx-mkimage/iMX8M/
 	cp ${UBOOT_OUT}/tools/mkimage  ${VARISCITE_PATH}/imx-mkimage/iMX8M/mkimage_uboot
 	cp ${UBOOT_OUT}/arch/arm/dts/imx8mm-var-dart-dt8mcustomboard.dtb  ${VARISCITE_PATH}/imx-mkimage/iMX8M/
+	cp ${UBOOT_OUT}/arch/arm/dts/imx8mm-var-dart-3.x-dt8mcustomboard.dtb ${VARISCITE_PATH}/imx-mkimage/iMX8M/
 	cp ${UBOOT_OUT}/arch/arm/dts/imx8mm-var-som-symphony.dtb  ${VARISCITE_PATH}/imx-mkimage/iMX8M/
 	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4_pmu_train* ${VARISCITE_PATH}/imx-mkimage/iMX8M/
 	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/ddr4* ${VARISCITE_PATH}/imx-mkimage/iMX8M/
