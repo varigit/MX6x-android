@@ -1,8 +1,8 @@
-From ab3093cce781b949956ceea322f04efc9c0e2c1d Mon Sep 17 00:00:00 2001
+From 6650f5a36b798b3f561f8d19c83383139aef6a3f Mon Sep 17 00:00:00 2001
 From: Marius Bagassien <marius.b@variscite.com>
 Date: Thu, 8 Oct 2026 12:52:27 +0200
-Subject: [PATCH 2/2] build: check dual-bootloader artifacts instead of
- installing them as u-boot.imx
+Subject: [PATCH] build: check dual-bootloader artifacts instead of installing
+ them as u-boot.imx
 
 For *-dual U-Boot variants, AndroidUboot.sh produces spl-<platform>.bin and
 bootloader-<platform>.img rather than a standalone u-boot image. Check that

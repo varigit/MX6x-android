@@ -1,4 +1,4 @@
-From bc67b755ceb5e5e0f19fc90683a1acc7e1bd6923 Mon Sep 17 00:00:00 2001
+From 65bfaf09977fbb5d9031583a01abe52951634394 Mon Sep 17 00:00:00 2001
 From: Marius Bagassien <marius.b@variscite.com>
 Date: Sat, 24 Oct 2026 14:47:57 +0200
 Subject: [PATCH] build: only build the device trees listed by the product

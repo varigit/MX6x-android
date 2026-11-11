@@ -1,18 +1,21 @@
-From 207e7d1316fe932851e354b1a55fb7d5179f7765 Mon Sep 17 00:00:00 2001
+From d33da190010b290c169b5718c61ea77ef7c35ed5 Mon Sep 17 00:00:00 2001
 From: Marius Bagassien <marius.b@variscite.com>
 Date: Wed, 7 Oct 2026 09:45:29 +0200
-Subject: [PATCH 1/2] build: support i.MX8MP products in derivative device
- repositories
+Subject: [PATCH] build: support i.MX8MP and i.MX8MM products in derivative
+ device repositories
 
 Discover products below device/, keep shared build rules rooted at
 device/nxp, and load derivative BSP path overrides. Include i.MX8MP
-derivatives in the legacy VVCAM and boot-image build paths.
+derivatives in the legacy VVCAM build path, and i.MX8MP and i.MX8MM
+derivatives in the boot-image step of the in-tree kernel flow, so that
+both keep the first kernel build as boot-imx.img and rebuild boot.img
+the same way.
 
 Signed-off-by: Marius Bagassien <marius.b@variscite.com>
 ---
  common/build/Makefile    |  4 ++++
- common/tools/imx-make.sh | 14 ++++++++++----
- 2 files changed, 14 insertions(+), 4 deletions(-)
+ common/tools/imx-make.sh | 16 +++++++++++-----
+ 2 files changed, 15 insertions(+), 5 deletions(-)
 
 diff --git a/common/build/Makefile b/common/build/Makefile
 index b16dd940..b200a946 100644
@@ -30,7 +33,7 @@ index b16dd940..b200a946 100644
  include ${product_path}/SharedBoardConfig.mk
  include ${product_path}/UbootKernelBoardConfig.mk
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index f8bae98e..540e040b 100755
+index f8bae98e..25a2b57b 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
 @@ -550,7 +550,7 @@ if [ "${enable_bazel}" -eq 1 ] && [ ${build_whole_android_flag} -eq 1 ]; then
@@ -61,15 +64,18 @@ index f8bae98e..540e040b 100755
  
  # encrypt and sign firmware for mek_8q, evk_95 and evk_952 when sign_enc_fwimage flag is set
  if [ ${build_sign_enc_fwimage_flag} -eq 1 ]; then
-@@ -630,7 +636,7 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+@@ -630,9 +636,9 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
          # Legacy flow: build kernel in-tree
          TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
          if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
 -            if [ ${TARGET_PRODUCT} = "evk_8mp" ] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
 +            if [[ ${TARGET_PRODUCT} == *8mp* ]] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
              || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
-             || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+-            || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
++            || [[ ${TARGET_PRODUCT} == *8mm* ]] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
              || [ ${TARGET_PRODUCT} = "evk_95" ] || [ ${TARGET_PRODUCT} = "evk_952" ] ; then
+                 if [ ${enable_gki} -eq 1 ]; then
+                     mv ${OUT}/boot.img ${OUT}/boot-imx.img
 -- 
 2.43.0
 
