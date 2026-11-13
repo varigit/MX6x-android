@@ -1,0 +1,9 @@
+{
+    "firmwares": [
+        {
+            "name": "vpu",
+            "id": 0,
+            "path": "/vendor/firmware/wave633c_codec_fw.bin.signed"
+        }
+    ]
+}

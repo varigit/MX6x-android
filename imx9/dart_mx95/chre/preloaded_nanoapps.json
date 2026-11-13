@@ -1,0 +1,6 @@
+{
+  "source_dir": "/vendor/etc/chre",
+  "nanoapps": [
+    "hello_world",
+  ]
+}
