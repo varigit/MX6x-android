@@ -1,151 +1,86 @@
-#!/bin/bash
+#!/bin/sh
+# Sourced by device/nxp/common/build/uboot.mk from the Android source root.
+# Use the same BSP paths as this product's ImxPathConfig.mk.
+VARISCITE_PATH=vendor/variscite
+IMX_MKIMAGE_PATH=vendor/variscite
+FSL_PROPRIETARY_PATH=vendor/nxp
 
-# hardcode this one again in this shell script
-CONFIG_REPO_PATH=device/nxp
+SM_PATH="${VARISCITE_PATH}/imx-sm"
+OEI_PATH="${VARISCITE_PATH}/imx-oei"
 
-# import other paths in the file "common/imx_path/ImxPathConfig.mk" of this
-# repository
-
-while read -r line
-do
-	if [ "$(echo ${line} | grep "=")" != "" ]; then
-		env_arg=`echo ${line} | cut -d "=" -f1`
-		env_arg=${env_arg%:}
-		env_arg=`eval echo ${env_arg}`
-
-		env_arg_value=`echo ${line} | cut -d "=" -f2`
-		env_arg_value=`eval echo ${env_arg_value}`
-
-		eval ${env_arg}=${env_arg_value}
-	fi
-done < ${CONFIG_REPO_PATH}/common/imx_path/ImxPathConfig.mk
-
-if [ "${AARCH64_GCC_CROSS_COMPILE}" != "" ]; then
-	ATF_CROSS_COMPILE=`eval echo ${AARCH64_GCC_CROSS_COMPILE}`
-else
-	echo ERROR: \*\*\* env AARCH64_GCC_CROSS_COMPILE is not set
-	exit 1
-fi
-
-if [ "${AARCH32_GCC_CROSS_COMPILE}" != "" ]; then
-	SM_OEI_CROSS_COMPILE=`eval echo ${AARCH32_GCC_CROSS_COMPILE}`
-else
-	echo ERROR: \*\*\* env AARCH32_GCC_CROSS_COMPILE is not set
-	exit 1
-fi
-
-MKIMAGE_SOC=iMX95
-BOARD_MKIMAGE_PATH=${IMX_MKIMAGE_PATH}/imx-mkimage/${MKIMAGE_SOC}
-BOARD_SM_PATH=${IMX_PATH}/imx-sm
-BOARD_OEI_PATH=${IMX_PATH}/imx-oei
+# System Manager configurations:
+# - dart-mx95: A55 only
+# - dart-mx95-m7: Cortex-M7 logical machine for the RPMSG bootloader
+# - dart-mx95-android: A55 secure resources for Trusty
+SM_CONFIGS="dart-mx95 dart-mx95-m7 dart-mx95-android"
 
 build_pre_image()
-{
-	echo Building imx-sm ...
-	make -C ${BOARD_SM_PATH} really-clean
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evkrpmsg 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evkrpmsg 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evk-android 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evk-android 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95evksof 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95evksof 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95frdm-pro 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95frdm-pro 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" cfg config=mx95frdm-pro-android 1>/dev/null || exit 1
-	make -C ${BOARD_SM_PATH} SM_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" all config=mx95frdm-pro-android 1>/dev/null || exit 1
-	echo Building imx-oei ...
-	make -C ${BOARD_OEI_PATH} really-clean
-	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=b0 oei=ddr d=1 all 1>/dev/null || exit 1
-	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp5 r=b0 oei=tcm d=1 all 1>/dev/null || exit 1
-	make -C ${BOARD_OEI_PATH} OEI_CROSS_COMPILE="${SM_OEI_CROSS_COMPILE}" board=mx95lp4x-15 r=b0 oei=ddr d=1 all 1>/dev/null || exit 1
-}
+(
+    sm_cross="${AARCH32_GCC_CROSS_COMPILE:?AARCH32_GCC_CROSS_COMPILE is required}"
+    # Exported by UbootKernelBoardConfig.mk from TARGET_DRAM_SIZE_GB.
+    ddr_config="${TARGET_DDR_CONFIG:?TARGET_DDR_CONFIG is required}"
+
+    echo "Building imx-sm ..."
+    make -C "$SM_PATH" really-clean || return 1
+    for config in $SM_CONFIGS; do
+        make -C "$SM_PATH" SM_CROSS_COMPILE="$sm_cross" cfg config="$config" >/dev/null || return 1
+        make -C "$SM_PATH" SM_CROSS_COMPILE="$sm_cross" all config="$config" >/dev/null || return 1
+    done
+
+    echo "Building imx-oei with ${ddr_config} ..."
+    make -C "$OEI_PATH" really-clean || return 1
+    set -- OEI_CROSS_COMPILE="$sm_cross" board=mx95-var-dart r=b0 d=1
+    make -C "$OEI_PATH" "$@" oei=ddr DDR_CONFIG="$ddr_config" all >/dev/null || return 1
+    make -C "$OEI_PATH" "$@" oei=tcm all >/dev/null || return 1
+)
 
 build_imx_uboot()
-{
-	echo Building i.MX U-Boot with firmware
-	if echo "$2" | grep -q "15x15" ; then
-		cp ${BOARD_OEI_PATH}/build/mx95lp4x-15/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
-	else
-		cp ${BOARD_OEI_PATH}/build/mx95lp5/ddr/oei-m33-ddr.bin ${BOARD_MKIMAGE_PATH}/oei-m33-ddr.bin
-	fi
-	cp ${BOARD_OEI_PATH}/build/mx95lp5/tcm/oei-m33-tcm.bin ${BOARD_MKIMAGE_PATH}
+(
+    postfix=$1 variant=$2
+    mkimage_dir="${IMX_MKIMAGE_PATH}/imx-mkimage"
+    image_dir="${mkimage_dir}/iMX95"
+    atf_dir="${VARISCITE_PATH}/arm-trusted-firmware"
+    atf_cross="${AARCH64_GCC_CROSS_COMPILE:?AARCH64_GCC_CROSS_COMPILE is required}"
 
-	if echo "$2" | grep -q "trusty-frdm-pro-dual" ; then
-		cp ${BOARD_SM_PATH}/build/mx95frdm-pro-android/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif echo "$2" | grep -q "frdm-pro" ; then
-		cp ${BOARD_SM_PATH}/build/mx95frdm-pro/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif [ `echo $2 | cut -d '-' -f2` = "trusty" ]; then
-		cp ${BOARD_SM_PATH}/build/mx95evk-android/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
-		cp ${BOARD_SM_PATH}/build/mx95evkrpmsg/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	elif [ `echo $2 | cut -d '-' -f2` = "sof" ]; then
-		cp ${BOARD_SM_PATH}/build/mx95evksof/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	else
-		cp ${BOARD_SM_PATH}/build/mx95evk/m33_image.bin ${BOARD_MKIMAGE_PATH}/m33_image.bin
-	fi
+    case "$variant" in
+    *-trusty-*) sm_config=dart-mx95-android ;;
+    *-rpmsg-*) sm_config=dart-mx95-m7 ;;
+    *) sm_config=dart-mx95 ;;
+    esac
 
-	if echo "$2" | grep -q "15x15-frdm" ; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_15x15_frdm_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
-	elif echo "$2" | grep -q "frdm-pro" ; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_frdm_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
-	elif echo "$2" | grep -q "15x15" ; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_15x15_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
-	else
-		if [ "${ENABLE_CONTEXTHUB}" = "true" ]; then
-			cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_chre.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
-		else
-			cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo.img ${BOARD_MKIMAGE_PATH}/m7_image.bin
-		fi
-	fi
+    cp "$OEI_PATH/build/mx95-var-dart/ddr/oei-m33-ddr.bin" "$image_dir/" || return 1
+    cp "$OEI_PATH/build/mx95-var-dart/tcm/oei-m33-tcm.bin" "$image_dir/" || return 1
+    cp "$SM_PATH/build/$sm_config/m33_image.bin" "$image_dir/" || return 1
+    cp "${FSL_PROPRIETARY_PATH}/ele/mx95b0-ahab-container.img" "$image_dir/" || return 1
+    cp "${UBOOT_OUT}/u-boot.${postfix}" "$image_dir/" || return 1
+    cp "${UBOOT_OUT}/spl/u-boot-spl.bin" "$image_dir/" || return 1
+    cp "${UBOOT_OUT}/tools/mkimage" "$image_dir/mkimage_uboot" || return 1
+    cp "${FSL_PROPRIETARY_PATH}"/linux-firmware-imx/firmware/ddr/synopsys/lpddr5_[id]mem_* "$image_dir/" || return 1
 
-	cp ${FSL_PROPRIETARY_PATH}/ele/mx95b0-ahab-container.img ${BOARD_MKIMAGE_PATH}/mx95b0-ahab-container.img
-	cp ${UBOOT_OUT}/u-boot.$1 ${BOARD_MKIMAGE_PATH}
-	cp ${UBOOT_OUT}/spl/u-boot-spl.bin ${BOARD_MKIMAGE_PATH}
-	cp ${UBOOT_OUT}/tools/mkimage ${BOARD_MKIMAGE_PATH}/mkimage_uboot
-	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4x_imem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
-	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr4x_dmem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
-	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr5_imem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
-	cp ${FSL_PROPRIETARY_PATH}/linux-firmware-imx/firmware/ddr/synopsys/lpddr5_dmem_* ${IMX_MKIMAGE_PATH}/imx-mkimage/iMX95/
+    # NXP's Trusty for i.MX95 logs on LPUART1, the DART-MX95 console too.
+    set -- CROSS_COMPILE="$atf_cross" PLAT=imx95
+    rm -f "$image_dir/tee.bin"
+    case "$variant" in *-trusty-*)
+        cp "${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin" "$image_dir/tee.bin" || return 1
+        set -- "$@" SPD=trusty
+    esac
+    make -C "$atf_dir" "$@" clean || return 1
+    make -C "$atf_dir" "$@" bl31 -B || return 1
+    cp "$atf_dir/build/imx95/release/bl31.bin" "$image_dir/bl31.bin" || return 1
 
-	# build ATF based on whether tee is involved
-	make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` clean
-	if [ `echo $2 | cut -d '-' -f2` = "trusty" ] && [ `echo $2 | rev | cut -d '-' -f1` != "uuu" ]; then
-		cp ${FSL_PROPRIETARY_PATH}/fsl-proprietary/uboot-firmware/imx95/tee-imx95.bin ${BOARD_MKIMAGE_PATH}/tee.bin
-		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B SPD=trusty 1>/dev/null || exit 1
-	else
-		if [ -f ${BOARD_MKIMAGE_PATH}/tee.bin ] ; then
-			rm -rf ${BOARD_MKIMAGE_PATH}/tee.bin
-		fi
-		make -C ${IMX_PATH}/arm-trusted-firmware/ CROSS_COMPILE="${ATF_CROSS_COMPILE}" PLAT=`echo $2 | cut -d '-' -f1` bl31 -B 1>/dev/null || exit 1
-	fi
+    # The Cortex-M7 image is not packed into the container: U-Boot loads it
+    # from the mcu_os partition (CONFIG_FLASH_MCUFIRMWARE_SUPPORT).
+    # imx-mkimage sets MKIMG from $(PWD), so point PWD at its directory.
+    make -C "$mkimage_dir" clean || return 1
+    PWD="$(pwd)/$mkimage_dir" make -C "$mkimage_dir" SOC=iMX95 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES flash_a55 || return 1
 
-	cp ${IMX_PATH}/arm-trusted-firmware/build/`echo $2 | cut -d '-' -f1`/release/bl31.bin ${BOARD_MKIMAGE_PATH}/bl31.bin
-
-	make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ clean
-	# in imx-mkimage/Makefile, MKIMG is assigned with a value of "$(PWD)/mkimage_imx8", the value of PWD is set by shell to current
-	# directory. Directly execute "make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ ..." command in this script, PWD is the top dir of Android
-	# codebase, so mkimage_imx8 will be generated under Android codebase top dir.
-	pwd_backup=${PWD}
-	PWD=${PWD}/${IMX_MKIMAGE_PATH}/imx-mkimage/
-	if echo "$2" | grep -q "15x15" ; then
-		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr4x OEI=YES || exit 1
-	elif [ `echo $2 | cut -d '-' -f2` = "rpmsg" ]; then
-		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
-	elif [ `echo $2 | cut -d '-' -f2` = "sof" ]; then
-		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_a55 REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
-	else
-		make -C ${IMX_MKIMAGE_PATH}/imx-mkimage/ SOC=${MKIMAGE_SOC} flash_all REV=B0 LPDDR_TYPE=lpddr5 OEI=YES || exit 1
-	fi
-
-	PWD=${pwd_backup}
-
-	if [ `echo $2 | rev | cut -d '-' -f1 | rev` != "dual" ]; then
-		cp ${BOARD_MKIMAGE_PATH}/flash.bin ${UBOOT_COLLECTION}/u-boot-$2.imx
-	else
-		cp ${BOARD_MKIMAGE_PATH}/boot-spl-container.img ${UBOOT_COLLECTION}/spl-$2.bin
-		cp ${BOARD_MKIMAGE_PATH}/u-boot-atf-container.img ${UBOOT_COLLECTION}/bootloader-$2.img
-	fi
-
-}
+    case "$variant" in
+    *-dual)
+        cp "$image_dir/boot-spl-container.img" "${UBOOT_COLLECTION}/spl-${variant}.bin" || return 1
+        cp "$image_dir/u-boot-atf-container.img" "${UBOOT_COLLECTION}/bootloader-${variant}.img" || return 1
+        ;;
+    *)
+        cp "$image_dir/flash.bin" "${UBOOT_COLLECTION}/u-boot-${variant}.imx" || return 1
+        ;;
+    esac
+)

@@ -1,21 +1,26 @@
-From d33da190010b290c169b5718c61ea77ef7c35ed5 Mon Sep 17 00:00:00 2001
+From 7ec30b568162b9ece74c9cfc77927e06f5febb4d Mon Sep 17 00:00:00 2001
 From: Marius Bagassien <marius.b@variscite.com>
 Date: Wed, 7 Oct 2026 09:45:29 +0200
-Subject: [PATCH] build: support i.MX8MP and i.MX8MM products in derivative
- device repositories
+Subject: [PATCH] build: support i.MX8MP, i.MX8MM and i.MX95 products in
+ derivative device repositories
 
 Discover products below device/, keep shared build rules rooted at
 device/nxp, and load derivative BSP path overrides. Include i.MX8MP
-derivatives in the legacy VVCAM build path, and i.MX8MP and i.MX8MM
-derivatives in the boot-image step of the in-tree kernel flow, so that
-both keep the first kernel build as boot-imx.img and rebuild boot.img
-the same way.
+derivatives in the legacy VVCAM build path, and i.MX8MP, i.MX8MM and
+i.MX95 derivatives in the boot-image step of the in-tree kernel flow, so
+that they keep the first kernel build as boot-imx.img and rebuild
+boot.img the same way.
+
+i.MX95 derivatives (product names ending in "95") also sign and encrypt
+the Wave633C VPU firmware like evk_95, as the product installs
+wave633c_codec_fw.bin.signed.
 
 Signed-off-by: Marius Bagassien <marius.b@variscite.com>
 ---
- common/build/Makefile    |  4 ++++
- common/tools/imx-make.sh | 16 +++++++++++-----
- 2 files changed, 15 insertions(+), 5 deletions(-)
+ common/build/Makefile                     |  4 ++++
+ common/build/encrypt_and_sign_firmware.mk |  2 +-
+ common/tools/imx-make.sh                  | 22 ++++++++++++++--------
+ 3 files changed, 19 insertions(+), 9 deletions(-)
 
 diff --git a/common/build/Makefile b/common/build/Makefile
 index b16dd940..b200a946 100644
@@ -32,10 +37,32 @@ index b16dd940..b200a946 100644
  include ${soc_path}/UbootKernelCommonConfig.mk
  include ${product_path}/SharedBoardConfig.mk
  include ${product_path}/UbootKernelBoardConfig.mk
+diff --git a/common/build/encrypt_and_sign_firmware.mk b/common/build/encrypt_and_sign_firmware.mk
+index 31a15f65..519546c5 100644
+--- a/common/build/encrypt_and_sign_firmware.mk
++++ b/common/build/encrypt_and_sign_firmware.mk
+@@ -95,7 +95,7 @@ endif
+ 
+ ifeq ("$(TARGET_PRODUCT)", "mek_8q")
+ FIRMWARE_BINARIES += $(TOP)/vendor/nxp/linux-firmware-imx/firmware/vpu/vpu_fw_imx8_dec.bin
+-else ifeq ("$(TARGET_PRODUCT)", "evk_95")
++else ifneq ($(filter %95,$(TARGET_PRODUCT)),)
+ FIRMWARE_BINARIES += $(TOP)/vendor/nxp/linux-firmware-imx/firmware/vpu/wave633c_codec_fw.bin
+ else ifeq ("$(TARGET_PRODUCT)", "evk_952")
+ FIRMWARE_BINARIES += $(TOP)/vendor/nxp/linux-firmware-imx/firmware/vpu/wave511_dec_fw.bin
 diff --git a/common/tools/imx-make.sh b/common/tools/imx-make.sh
-index f8bae98e..25a2b57b 100755
+index f8bae98e..8a512b6c 100755
 --- a/common/tools/imx-make.sh
 +++ b/common/tools/imx-make.sh
+@@ -161,7 +161,7 @@ if [ "${build_bootloader}" = "" ] && [ "${build_kernel}" = "" ] && \
+     fi
+     build_whole_android_flag=1
+     # For mek_8q and evk_95, also enable sign_enc_fwimage when building everything
+-    if [ "${TARGET_PRODUCT}" = "evk_95" ] || [ "${TARGET_PRODUCT}" = "mek_8q" ] || [ "${TARGET_PRODUCT}" = "evk_952" ]; then
++    if [[ ${TARGET_PRODUCT} == *95 ]] || [ "${TARGET_PRODUCT}" = "mek_8q" ] || [ "${TARGET_PRODUCT}" = "evk_952" ]; then
+         build_sign_enc_fwimage_flag=1
+     fi
+ fi
 @@ -550,7 +550,7 @@ if [ "${enable_bazel}" -eq 1 ] && [ ${build_whole_android_flag} -eq 1 ]; then
  fi
  
@@ -45,7 +72,7 @@ index f8bae98e..25a2b57b 100755
      build_vvcam="vvcam";
      build_kernel_oot_module_flag=1;
  fi
-@@ -561,10 +561,16 @@ if [ -n "${build_kernel_modules}" ]; then
+@@ -561,14 +561,20 @@ if [ -n "${build_kernel_modules}" ]; then
      build_kernel_oot_module_flag=1;
  fi
  
@@ -64,7 +91,12 @@ index f8bae98e..25a2b57b 100755
  
  # encrypt and sign firmware for mek_8q, evk_95 and evk_952 when sign_enc_fwimage flag is set
  if [ ${build_sign_enc_fwimage_flag} -eq 1 ]; then
-@@ -630,9 +636,9 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
+-    if [ "${TARGET_PRODUCT}" = "evk_95" ] || [ "${TARGET_PRODUCT}" = "mek_8q" ] || [ "${TARGET_PRODUCT}" = "evk_952" ]; then
++    if [[ ${TARGET_PRODUCT} == *95 ]] || [ "${TARGET_PRODUCT}" = "mek_8q" ] || [ "${TARGET_PRODUCT}" = "evk_952" ]; then
+         echo ">>> Encrypting and signing firmware for ${TARGET_PRODUCT} <<<"
+         make -f ${nxp_git_path}/common/build/encrypt_and_sign_firmware.mk manifest build encrypt sign clean< /dev/null || exit
+     else
+@@ -630,10 +636,10 @@ if [ ${build_android_flag} -eq 1 ] || [ ${build_whole_android_flag} -eq 1 ]; the
          # Legacy flow: build kernel in-tree
          TARGET_IMX_KERNEL=true make ${parallel_option} ${build_bootimage} ${build_vendorbootimage} ${build_dtboimage} ${build_vendordlkmimage} || exit
          if [ -n "${build_bootimage}" ] || [ ${build_whole_android_flag} -eq 1 ]; then
@@ -72,10 +104,12 @@ index f8bae98e..25a2b57b 100755
 +            if [[ ${TARGET_PRODUCT} == *8mp* ]] || [ ${TARGET_PRODUCT} = "evk_8mn" ] \
              || [ ${TARGET_PRODUCT} = "evk_8ulp" ] || [ ${TARGET_PRODUCT} = "mek_8q" ] \
 -            || [ ${TARGET_PRODUCT} = "evk_8mm" ] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
+-            || [ ${TARGET_PRODUCT} = "evk_95" ] || [ ${TARGET_PRODUCT} = "evk_952" ] ; then
 +            || [[ ${TARGET_PRODUCT} == *8mm* ]] || [ ${TARGET_PRODUCT} = "evk_8mq" ] \
-             || [ ${TARGET_PRODUCT} = "evk_95" ] || [ ${TARGET_PRODUCT} = "evk_952" ] ; then
++            || [[ ${TARGET_PRODUCT} == *95 ]] || [ ${TARGET_PRODUCT} = "evk_952" ] ; then
                  if [ ${enable_gki} -eq 1 ]; then
                      mv ${OUT}/boot.img ${OUT}/boot-imx.img
+                     make bootimage
 -- 
 2.43.0
 

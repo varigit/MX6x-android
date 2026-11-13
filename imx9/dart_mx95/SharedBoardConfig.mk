@@ -59,7 +59,6 @@ IMX_ANDROID_FIRST_STAGE_MODULES += \
     $(KERNEL_OUT)/drivers/i2c/i2c-mux.ko \
     $(KERNEL_OUT)/drivers/i3c/master/svc-i3c-master.ko \
     $(KERNEL_OUT)/drivers/irqchip/irq-imx-irqsteer.ko \
-    $(KERNEL_OUT)/drivers/rtc/rtc-imx-sm-bbm.ko \
     $(KERNEL_OUT)/drivers/firmware/imx/sm-misc.ko \
     $(KERNEL_OUT)/drivers/cpufreq/cpufreq-dt.ko \
     $(KERNEL_OUT)/drivers/watchdog/imx7ulp_wdt.ko \
@@ -248,10 +247,40 @@ BOARD_VENDOR_KERNEL_MODULES += \
 endif
 endif
 
-#NXP wifi driver module
 BOARD_VENDOR_KERNEL_MODULES += \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/mlan.ko \
     $(TARGET_OUT_INTERMEDIATES)/MXMWIFI_OBJ/moal.ko
+
+# Modules for the DART-MX95
+ifeq ($(LOADABLE_KERNEL_MODULE),true)
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/drivers/net/phy/mxl-86110.ko \
+    $(KERNEL_OUT)/drivers/net/phy/adin.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/qcom-phy-lib.ko \
+    $(KERNEL_OUT)/drivers/net/phy/qcom/at803x.ko \
+    $(KERNEL_OUT)/drivers/net/mdio/mdio-i2c.ko \
+    $(KERNEL_OUT)/drivers/net/phy/sfp.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/edt-ft5x06.ko \
+    $(KERNEL_OUT)/drivers/input/touchscreen/ads7846.ko \
+    $(KERNEL_OUT)/drivers/rtc/rtc-ds1307.ko \
+    $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko
+
+BOARD_VENDOR_KERNEL_MODULES += \
+    $(KERNEL_OUT)/net/bluetooth/bluetooth.ko \
+    $(KERNEL_OUT)/drivers/power/sequencing/pwrseq-core.ko \
+    $(KERNEL_OUT)/lib/crc/crc8.ko \
+    $(KERNEL_OUT)/drivers/bluetooth/btnxpuart.ko \
+    $(KERNEL_OUT)/net/can/can.ko \
+    $(KERNEL_OUT)/net/can/can-raw.ko \
+    $(KERNEL_OUT)/net/can/can-bcm.ko \
+    $(KERNEL_OUT)/net/can/can-gw.ko \
+    $(KERNEL_OUT)/drivers/net/can/dev/can-dev.ko \
+    $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko
+endif
 
 #neutron driver module
 BOARD_VENDOR_KERNEL_MODULES += \
@@ -277,16 +306,29 @@ endif
 endif
 
 # -------@block_memory-------
-#Enable this to config 1GB ddr on evk_95
 LOW_MEMORY := false
 
 # -------@block_security-------
 #Enable this to include trusty support
-PRODUCT_IMX_TRUSTY := true
+PRODUCT_IMX_TRUSTY ?= false
+
+# -------@block_rpmsg-------
+# Enable this to boot the Cortex-M7 with the RPMSG bootloader
+PRODUCT_IMX_RPMSG ?= false
+ifeq ($(ENABLE_CONTEXTHUB),true)
+PRODUCT_IMX_RPMSG := true
+endif
 
 # -------@block_storage-------
 # the bootloader image used in dual-bootloader OTA
-BOARD_OTA_BOOTLOADERIMAGE := bootloader-imx95-trusty-dual.img
+ifeq ($(PRODUCT_IMX_TRUSTY),true)
+VARISCITE_OTA_BOOTLOADER := imx95-var-dart-trusty-dual
+else ifeq ($(PRODUCT_IMX_RPMSG),true)
+VARISCITE_OTA_BOOTLOADER := imx95-var-dart-rpmsg-dual
+else
+VARISCITE_OTA_BOOTLOADER := imx95-var-dart-dual
+endif
+BOARD_OTA_BOOTLOADERIMAGE := bootloader-$(VARISCITE_OTA_BOOTLOADER).img
 
 #Enable this to use dynamic partitions for the readonly partitions not touched by bootloader
 TARGET_USE_DYNAMIC_PARTITIONS ?= true
@@ -296,8 +338,10 @@ IMX_NO_PRODUCT_PARTITION := false
 
 # -------@block_infrastructure-------
 CONFIG_REPO_PATH := device/nxp
+NXP_DEVICE_PATH := $(CONFIG_REPO_PATH)/imx9/evk_95
 
 ifeq ($(SUPPORT_GBL),true)
 # Enable this to include the dtb images into vendor_boot image.
 TARGET_INCLUDE_DTB_TO_VENDOR_BOOT ?= true
 endif
+

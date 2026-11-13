@@ -18,6 +18,7 @@ REQUIRED:
     imx8qm-var-som
     imx8mn-var-som
     imx8mp-var-dart
+    imx95-var-dart
 
 TARGET:
   --target iw61x   Build only iw61x -> android-artifacts/android/              (DEFAULT)
@@ -77,6 +78,7 @@ case "$MACHINE" in
   imx8mq-var-dart) PRODUCT="dart_mx8mq";  LUNCH_PRODUCT="dart_mx8mq" ;;
   imx8mp-var-dart) PRODUCT="dart_mx8mp";  LUNCH_PRODUCT="dart_mx8mp" ;;
   imx8mm-var-dart) PRODUCT="dart_mx8mm";  LUNCH_PRODUCT="dart_mx8mm" ;;
+  imx95-var-dart)  PRODUCT="dart_mx95";  LUNCH_PRODUCT="dart_mx95" ;;
   imx8qxp-var-som|imx8qxpb0-var-som) PRODUCT="som_mx8q"; LUNCH_PRODUCT="som_mx8qx" ;;
   imx8qm-var-som) PRODUCT="som_mx8q";    LUNCH_PRODUCT="som_mx8qm" ;;
   imx8mn-var-som) PRODUCT="som_mx8mn";   LUNCH_PRODUCT="som_mx8mn" ;;
@@ -158,6 +160,12 @@ copy_artifacts_for_machine() {
   copy_file "${OUTDIR}/spl-${MACHINE}-dual.bin"               "${dest}"
   copy_file "${OUTDIR}/bootloader-${MACHINE}-dual.img"        "${dest}"
 
+  # i.MX95: bootloader that starts the Cortex-M7 image from mcu_os
+  if [ "${MACHINE}" = "imx95-var-dart" ]; then
+    copy_file "${OUTDIR}/spl-${MACHINE}-rpmsg-dual.bin"        "${dest}"
+    copy_file "${OUTDIR}/bootloader-${MACHINE}-rpmsg-dual.img" "${dest}"
+  fi
+
   # Trusty bootloaders are only built with PRODUCT_IMX_TRUSTY=true
   if [ "${PRODUCT_IMX_TRUSTY:-}" = "true" ]; then
     trusty_bootloaders="${MACHINE}-trusty-dual"
@@ -178,7 +186,7 @@ copy_artifacts_for_machine() {
   copy_glob "${OUTDIR}/dtbo-*.img"                            "${dest}"
   copy_glob "${OUTDIR}/vbmeta-*.img"                          "${dest}"
 
-  if [ "${MACHINE}" = "imx8mm-var-dart" ]; then
+  if [ "${MACHINE}" = "imx8mm-var-dart" ] || [ "${MACHINE}" = "imx95-var-dart" ]; then
     copy_file "${OUTDIR}/u-boot-${MACHINE}-uuu.imx" "${dest}"
     copy_file "${OUTDIR}/partition-table-dual.img" "${dest}"
   fi
@@ -216,6 +224,12 @@ copy_artifacts_for_machine() {
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_hello_world.bin.debug_smarc" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_smarc" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mp/cm_rpmsg_lite_str_echo_rtos.bin.debug_smarc" "${dest}"
+  elif [ "${MACHINE}" = "imx95-var-dart" ]; then
+      for demo in cm_hello_world_cm7 cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7 cm_rpmsg_lite_str_echo_rtos_remote_cm7; do
+        copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx9/dart_mx95/${demo}.bin.debug" "${dest}"
+      done
+      # CHRE MCU image, installed only with ENABLE_CONTEXTHUB=true
+      copy_file "${OUTDIR}/rpmsg_chre_rtos_cm7.bin" "${dest}"
   elif [ "${MACHINE}" = "imx8qxp-var-som" ] || [ "${MACHINE}" = "imx8qxpb0-var-som" ]; then
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug" "${dest}"
       copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8q/som_mx8q/cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.elf.debug" "${dest}"

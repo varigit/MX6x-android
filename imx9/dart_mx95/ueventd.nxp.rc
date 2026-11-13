@@ -1,5 +1,6 @@
 /dev/block/by-name/presistdata 0600   system     system
 /dev/block/by-name/fbmisc 0600   system     system
+/dev/rfkill               0660   bluetooth  bluetooth
 /dev/ttyLP4              0660   bluetooth  bluetooth
 # for libcamera
 /dev/media* 0660 system camera

@@ -8,6 +8,6 @@
     ignoreOrientationRequest="true"
     shouldShowSystemDecors="true"
     shouldShowIme="true"
-    forcedDensity="240" />
+    forcedDensity="160" />
 
 </display-settings>

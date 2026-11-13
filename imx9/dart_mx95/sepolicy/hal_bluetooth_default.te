@@ -1,0 +1,2 @@
+# Access rfkill to control BT power state
+allow hal_bluetooth_default rfkill_device:chr_file { open read write };

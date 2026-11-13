@@ -1,6 +1,11 @@
 # -------@block_infrastructure-------
+CONFIG_REPO_PATH := device/nxp
+
 CURRENT_FILE_PATH :=  $(lastword $(MAKEFILE_LIST))
 IMX_DEVICE_PATH := $(strip $(patsubst %/, %, $(dir $(CURRENT_FILE_PATH))))
+# IMX_DEVICE_PATH refers to the Variscite SoM folder
+# NXP_DEVICE_PATH refers to the NXP EVK folder
+NXP_DEVICE_PATH := $(CONFIG_REPO_PATH)/imx9/evk_95
 
 PRODUCT_ENFORCE_ARTIFACT_PATH_REQUIREMENTS := true
 #Enable this to choose 32 bit user space build
@@ -12,16 +17,26 @@ MULTIDISPLAY_WITH_INDEPENDENT_CONTROL ?= true
 # configs shared between uboot, kernel and Android rootfs
 include $(IMX_DEVICE_PATH)/SharedBoardConfig.mk
 
--include $(CONFIG_REPO_PATH)/common/imx_path/ImxPathConfig.mk
+# Trusty UUU lists flash the Trusty bootloaders, built only with PRODUCT_IMX_TRUSTY=true
+IMX95_UUU_LISTS := $(wildcard device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_*.lst)
+ifneq ($(PRODUCT_IMX_TRUSTY),true)
+IMX95_UUU_LISTS := $(filter-out %_trusty.lst,$(IMX95_UUU_LISTS))
+endif
+PRODUCT_COPY_FILES += $(foreach recipe,$(IMX95_UUU_LISTS),$(recipe):$(notdir $(recipe)))
+
+include device/variscite/common/imx_path/ImxPathConfig.mk
+include device/variscite/common/bootanimation/variscite_bootanimation_logo.mk
 include $(CONFIG_REPO_PATH)/imx9/ProductConfigCommon.mk
 
 # -------@block_common_config-------
 # Overrides
-PRODUCT_NAME := evk_95
-PRODUCT_DEVICE := evk_95
-PRODUCT_MODEL := EVK_95
+PRODUCT_NAME := dart_mx95
+PRODUCT_DEVICE := dart_mx95
+PRODUCT_MODEL := DART_MX95
+PRODUCT_MANUFACTURER := Variscite
+PRODUCT_BRAND := Variscite
 
-TARGET_BOOTLOADER_BOARD_NAME := EVK_95
+TARGET_BOOTLOADER_BOARD_NAME := VARISCITE_IMX95
 
 PRODUCT_CHARACTERISTICS := tablet
 
@@ -146,10 +161,10 @@ ifneq ($(filter TRUE true 1,$(IMX_OTA_POSTINSTALL)),)
     POSTINSTALL_OPTIONAL_vendor=false
 
   PRODUCT_COPY_FILES += \
-    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-imx95-trusty-dual.bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/spl-$(VARISCITE_OTA_BOOTLOADER).bin:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader0.img
   ifeq ($(BUILD_ENCRYPTED_BOOT),true)
     PRODUCT_COPY_FILES += \
-      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/bootloader-imx95-trusty-dual.img:$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
+      $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/UBOOT_COLLECTION/$(BOARD_OTA_BOOTLOADERIMAGE):$(TARGET_COPY_OUT_VENDOR)/etc/bootloader_ab.img
   endif
 endif
 
@@ -208,9 +223,12 @@ PRODUCT_PROPERTY_OVERRIDES += ro.frp.pst=/dev/block/by-name/presistdata
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
 #Oemlock HAL support
 PRODUCT_PACKAGES += \
-    android.hardware.oemlock-service.imx \
-    android.hardware.oemlock-service-software.imx
+    android.hardware.oemlock-service.imx
 endif
+
+# The software keystore (non-Trusty builds) needs its own OemLock HAL.
+PRODUCT_PACKAGES += \
+    android.hardware.oemlock-service-software.imx
 
 # Add Trusty OS backed gatekeeper and secure storage proxy
 ifeq ($(PRODUCT_IMX_TRUSTY),true)
@@ -292,19 +310,11 @@ $(call inherit-product-if-exists, vendor/nxp-private/widevine/apex/device.mk)
 
 # Audio card json
 PRODUCT_COPY_FILES += \
-    $(CONFIG_REPO_PATH)/common/audio-json/cs42448_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42448_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/cs42888_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/cs42888_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/wm8962_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8962_config.json \
-    $(CONFIG_REPO_PATH)/common/audio-json/sof_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/sof_config.json \
+    $(IMX_DEVICE_PATH)/wm8904_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/wm8904_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/micfil_s32_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/micfil_s32_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/btsco_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/btsco_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/mqs_config.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/mqs_config.json \
     $(CONFIG_REPO_PATH)/common/audio-json/readme.txt:$(TARGET_COPY_OUT_VENDOR)/etc/configs/audio/readme.txt
-
-# LPA demo
-PRODUCT_COPY_FILES += \
-    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_lpa.img:imx95_mcu_demo.img
 
 PRODUCT_COPY_FILES += \
     $(IMX_DEVICE_PATH)/audio_effects.xml:$(TARGET_COPY_OUT_VENDOR)/etc/audio_effects.xml \
@@ -325,20 +335,8 @@ PRODUCT_COPY_FILES += \
 # -------@block_camera-------
 
 PRODUCT_COPY_FILES += \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-ap1302.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-ap1302.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-mbcam.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-mbcam.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-frdm-dual-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-frdm-dual-os08a20.json \
-    $(IMX_DEVICE_PATH)/camera_config_imx95-dual-os08a20.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95-dual-os08a20.json \
+    $(IMX_DEVICE_PATH)/camera_config_imx95-dual-ov5640.json:$(TARGET_COPY_OUT_VENDOR)/etc/configs/camera_config_imx95.json \
     $(IMX_DEVICE_PATH)/external_camera_config.xml:$(TARGET_COPY_OUT_VENDOR)/etc/external_camera_config.xml
-
-PRODUCT_PACKAGES += \
-    media_profiles_95-ap1302.xml \
-    media_profiles_95-mbcam.xml \
-    media_profiles_95-dual-os08a20.xml
-
-PRODUCT_PACKAGES += \
-    ap1302_ar0144_single_fw.bin
 
 PREBUILT_LIBCAMERA := false
 PRODUCT_PACKAGES += \
@@ -447,12 +445,11 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     WifiOverlay
 
-# nxp wifi and bluetooth combo Firmware
+# NXP IW612 Wi-Fi and Bluetooth firmware
 PRODUCT_COPY_FILES += \
-    vendor/nxp/imx-firmware/FwImage_9098_PCIE/pcieuart9098_combo_v1.bin:vendor/firmware/pcieuart9098_combo_v1.bin \
-    vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:vendor/firmware/sduart_nw61x_v1.bin.se \
-    vendor/nxp/imx-firmware/android_wifi_mod_para.conf:vendor/firmware/wifi_mod_para.conf \
-    hardware/nxp/libbt/conf/nxp/evk_95/bt_vendor.conf:/vendor/etc/bluetooth/bt_vendor.conf
+    vendor/nxp/imx-firmware/FwImage_IW612_SD/sduart_nw61x_v1.bin.se:$(TARGET_COPY_OUT_VENDOR)/firmware/sduart_nw61x_v1.bin.se \
+    vendor/nxp/imx-firmware/FwImage_IW612_SD/uartspi_n61x_v1.bin.se:$(TARGET_COPY_OUT_VENDOR)/firmware/nxp/uartspi_n61x_v1.bin.se \
+    $(IMX_DEVICE_PATH)/wifi_mod_para.conf:$(TARGET_COPY_OUT_VENDOR)/firmware/wifi_mod_para.conf
 
 # Wifi regulatory
 PRODUCT_COPY_FILES += \
@@ -461,14 +458,9 @@ PRODUCT_COPY_FILES += \
 
 # -------@block_bluetooth-------
 
-# Bluetooth HAL
+# Bluetooth uses the kernel HCI UART transport (btnxpuart).
 PRODUCT_PACKAGES += \
-    android.hardware.bluetooth \
-    android.hardware.bluetooth-service.default.nxp
-
-#nxp Bluetooth vendor config
-PRODUCT_PACKAGES += \
-    bt_vendor.conf
+    android.hardware.bluetooth-service.default
 
 # Bluetooth LE Audio
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -526,7 +518,7 @@ PRODUCT_COPY_FILES += \
     $(LINUX_FIRMWARE_IMX_PATH)/linux-firmware-imx/firmware/vpu/wave633c_codec_fw.bin.signed:$(TARGET_COPY_OUT_VENDOR)/firmware/wave633c_codec_fw.bin.signed \
 
 PRODUCT_COPY_FILES += \
-    device/nxp/imx9/evk_95/firmware_loader.json:$(TARGET_COPY_OUT_VENDOR)/etc/firmware_loader.json
+    $(IMX_DEVICE_PATH)/firmware_loader.json:$(TARGET_COPY_OUT_VENDOR)/etc/firmware_loader.json
 
 # -------@block_memory-------
 
@@ -549,6 +541,39 @@ PRODUCT_PACKAGES += \
     benchmark_model \
     label_image \
     TfliteCameraDemo
+
+# -------@block_canbus_tools-------
+# CANbus tools
+PRODUCT_PACKAGES += \
+    candump \
+    cansend \
+    cangen \
+    canfdtest \
+    cangw \
+    canplayer \
+    cansniffer \
+    isotprecv \
+    isotpsend \
+    isotpserver
+
+# -------@block_var_mii-------------
+PRODUCT_PACKAGES += \
+    var-mii
+
+# -------@block_cm_rpmsg-------
+# Cortex-M7 demos: .bin files for the mcu_os partition, .elf files for remoteproc.
+VARISCITE_CM_DEMOS := \
+    cm_hello_world_cm7 \
+    cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7 \
+    cm_rpmsg_lite_str_echo_rtos_remote_cm7
+PRODUCT_COPY_FILES += \
+    $(foreach demo,$(VARISCITE_CM_DEMOS),$(IMX_DEVICE_PATH)/$(demo).bin.debug:$(demo).bin.debug) \
+    $(foreach demo,$(VARISCITE_CM_DEMOS),$(IMX_DEVICE_PATH)/$(demo).elf.debug:$(TARGET_COPY_OUT_VENDOR)/firmware/$(demo).elf.debug)
+
+# imx_rpmsg_pingpong.ko and imx_rpmsg_tty.ko are installed for manual insmod.
+PRODUCT_COPY_FILES += \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_pingpong.ko:$(TARGET_COPY_OUT_VENDOR)/imx_rpmsg_pingpong.ko \
+    $(OUT_DIR)/target/product/$(firstword $(PRODUCT_DEVICE))/obj/KERNEL_OBJ/drivers/rpmsg/imx_rpmsg_tty.ko:$(TARGET_COPY_OUT_VENDOR)/imx_rpmsg_tty.ko
 
 # -------@block_miscellaneous-------
 
@@ -582,6 +607,7 @@ endif
 
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.audio.output.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.audio.output.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth.xml \
     frameworks/native/data/etc/android.hardware.bluetooth_le.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.screen.landscape.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.screen.landscape.xml \
@@ -640,6 +666,10 @@ $(call inherit-product, packages/modules/Virtualization/apex/product_packages.mk
 # Add imx private apps
 $(call inherit-product-if-exists, vendor/nxp-private/imx-apps/imx-private-app.mk)
 
+# Input Device Configuration files
+PRODUCT_COPY_FILES += \
+    device/variscite/common/generic_ft5x06.idc:$(TARGET_COPY_OUT_VENDOR)/usr/idc/generic_ft5x06.idc
+
 # -------@block_mcu_contexthub-------
 
 # context hub
@@ -653,4 +683,12 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.context_hub.xml:$(TARGET_COPY_OUT_VENDOR)/etc/permissions/android.hardware.context_hub.xml \
     $(IMX_DEVICE_PATH)/chre/preloaded_nanoapps.json:$(TARGET_COPY_OUT_VENDOR)/etc/chre/preloaded_nanoapps.json
+endif
+
+# CHRE MCU image with two NanoApps, flashed to the mcu_os partition:
+# 1. message_world (statically built into the MCU firmware)
+# 2. hello_world (preloaded NanoApp, built as a separate binary)
+ifeq ($(ENABLE_CONTEXTHUB),true)
+PRODUCT_COPY_FILES += \
+    $(FSL_PROPRIETARY_PATH)/fsl-proprietary/mcu-sdk/imx95/imx95_19x19_mcu_demo_chre.img:rpmsg_chre_rtos_cm7.bin
 endif
