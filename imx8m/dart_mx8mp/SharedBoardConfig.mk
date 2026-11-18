@@ -343,6 +343,7 @@ BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/input/touchscreen/edt-ft5x06.ko \
     $(KERNEL_OUT)/drivers/input/touchscreen/ads7846.ko \
     $(KERNEL_OUT)/drivers/rtc/rtc-ds1307.ko \
+    $(KERNEL_OUT)/drivers/rtc/rtc-pcf85363.ko \
     $(KERNEL_OUT)/drivers/extcon/extcon-ptn5150.ko \
     $(KERNEL_OUT)/drivers/extcon/extcon-usb-gpio.ko
 
