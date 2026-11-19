@@ -12,7 +12,12 @@ OEI_PATH="${VARISCITE_PATH}/imx-oei"
 # - dart-mx95: A55 only
 # - dart-mx95-m7: Cortex-M7 logical machine for the RPMSG bootloader
 # - dart-mx95-android: A55 secure resources for Trusty
+# Each config above has a "deb" variant with the System Manager monitor on LPUART8,
+# when SM_MONITOR=true.
 SM_CONFIGS="dart-mx95 dart-mx95-m7 dart-mx95-android"
+if [ "${SM_MONITOR}" = "true" ]; then
+    SM_CONFIGS="dart-mx95deb dart-mx95-m7deb dart-mx95-androiddeb"
+fi
 
 build_pre_image()
 (
@@ -47,6 +52,7 @@ build_imx_uboot()
     *-rpmsg-*) sm_config=dart-mx95-m7 ;;
     *) sm_config=dart-mx95 ;;
     esac
+    [ "${SM_MONITOR}" = "true" ] && sm_config="${sm_config}deb"
 
     cp "$OEI_PATH/build/mx95-var-dart/ddr/oei-m33-ddr.bin" "$image_dir/" || return 1
     cp "$OEI_PATH/build/mx95-var-dart/tcm/oei-m33-tcm.bin" "$image_dir/" || return 1
