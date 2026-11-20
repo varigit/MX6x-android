@@ -69,6 +69,9 @@ function rename_remoteproc_images {
 		cp -ar device/variscite/imx8q/som_mx8q/*_m40.bin.debug ${imagesdir}
 		cp -ar device/variscite/imx8q/som_mx8q/*_m40.elf.debug ${imagesdir}
 		cp ${imagesdir}/${mcu_os_demo_file_8q_som}	${imagesdir}/${mcu_os_demo_file}
+	elif [[ "$1" == *"imx95-var-dart"* ]]; then
+		cp -ar device/variscite/imx9/dart_mx95/*.bin.debug ${imagesdir}
+		cp ${imagesdir}/${mcu_os_demo_file_95_dart}	${imagesdir}/${mcu_os_demo_file}
 	elif [[ "$1" == *"imx8qm-var"* ]]; then
 		cp -ar device/variscite/imx8q/som_mx8q/*.bin.debug ${imagesdir}
 		cp -ar device/variscite/imx8q/som_mx8q/*.elf.debug ${imagesdir}
@@ -105,6 +108,9 @@ elif [[ "${soc_name}" = *"mx8mp"* ]]; then
 elif [[ "${soc_name}" = *"mx8mq"* ]]; then
 	imagesdir="out/target/product/dart_mx8mq"
 	sdshared=true
+elif [[ "${soc_name}" = *"mx95"* ]]; then
+	imagesdir="out/target/product/dart_mx95"
+	sdshared=false
 elif [[ "${soc_name}" = *"mx8qxp-b0"* ]]; then
 	imagesdir="out/target/product/som_mx8q"
 	sdshared=true
@@ -170,6 +176,7 @@ mcu_os_demo_file_8mp_smarc="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug_s
 mcu_os_demo_file_8mq_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mn_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
 mcu_os_demo_file_8mm_som="cm_rpmsg_lite_pingpong_rtos_linux_remote.bin.debug"
+mcu_os_demo_file_95_dart="cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.bin.debug"
 mcu_os_demo_file_8q_som="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
 
 
@@ -209,6 +216,17 @@ if [[ "${soc_name}" = *"mx8mp"* ]]; then
 	bootloader_offset=32
 	bootloader_file=spl-imx8mp-var-dart-dual.bin
 	uboot_proper_file=bootloader-imx8mp-var-dart-dual.img
+fi
+
+if [[ "${soc_name}" = *"mx95"* ]]; then
+	bootloader_offset=32
+	bootloader_file=spl-imx95-var-dart-dual.bin
+	uboot_proper_file=bootloader-imx95-var-dart-dual.img
+	# The M7 configurations need the bootloader that powers on the Cortex-M7
+	if [[ "${soc_name}" = *"-m7" ]]; then
+		bootloader_file=spl-imx95-var-dart-rpmsg-dual.bin
+		uboot_proper_file=bootloader-imx95-var-dart-rpmsg-dual.img
+	fi
 fi
 
 if [[ "${soc_name}" = *"mx8qx"* ]]; then
