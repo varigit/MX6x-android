@@ -54,6 +54,9 @@ elif grep -q "i.MX8QXP" /sys/devices/soc0/soc_id; then
 elif grep -q "i.MX8QM" /sys/devices/soc0/soc_id; then
 	node=/dev/mmcblk0
 	som="imx8qm"
+elif grep -q "i.MX95" /sys/devices/soc0/soc_id; then
+	node=/dev/mmcblk0
+	som="imx95"
 else
 	red_bold_echo "ERROR: Unsupported board"
 	exit 1
@@ -211,6 +214,12 @@ function add_imx8mn_menu() {
 	img_list+=("dtbo-imx8mn-var-som-wbe-symphony-m7.img     (VAR-SOM-MX8M-NANO V2.x with WBE on Symphony-Board V2.x with M7 support)")
 }
 
+function add_imx95_menu() {
+	img_list+=("dtbo-imx95-var-dart-sonata.img                              (DART-MX95 on Sonata-Board)")
+	img_list+=("dtbo-imx95-var-dart-sonata-m7.img                           (DART-MX95 with M7 support on Sonata-Board)")
+	img_list+=("dtbo-imx95-var-dart-sonata-vcam-5640s-1st.img               (DART-MX95 with VCAM-5640S camera on Sonata-Board)")
+}
+
 imagesdir="/opt/images/Android"
 bundled_mode=false
 if [ -d "$bundled_android_dir" ]; then
@@ -264,6 +273,8 @@ case $som in
 		add_imx8mq_menu;;
 	"imx8mn")
 		add_imx8mn_menu;;
+	"imx95")
+		add_imx95_menu;;
 	*)
 		echo "Invalid SOM"; exit;;
 esac
@@ -301,7 +312,7 @@ if [[ $soc_name == "showoptions" ]] && [[ ${#img_list[@]} > 1 ]] ; then
 			echo invalid option
 			continue
 		else
-			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QM\|i.MX8QP\|i.MX8QXP" /sys/devices/soc0/soc_id; then
+			if grep -q "i.MX8MM\|i.MX8MN\|i.MX8MQ\|i.MX8MP\|i.MX8QM\|i.MX8QP\|i.MX8QXP\|i.MX95" /sys/devices/soc0/soc_id; then
 				dtbo_img=`echo $opt | cut -d " " -f1`
 				# Remove .img extension and dtbo- prefix
 				soc_name=`echo $dtbo_img | sed 's/\.img$//' | sed "s/${img_prefix}//"`
@@ -396,6 +407,18 @@ if [[ "${soc_name}" = *"mx8qm"* ]] || [[ "${soc_name}" = *"mx8qp"* ]]; then
 	bootloader_file="spl-imx8qm-var-som-dual.bin"
 	uboot_proper_file="bootloader-imx8qm-var-som-dual.img"
 	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_m40.bin.debug"
+fi
+
+if [[ "${soc_name}" = *"mx95"* ]]; then
+	bootloader_offset=32
+	mcu_os_demo_file="cm_rpmsg_lite_pingpong_rtos_linux_remote_cm7.bin.debug"
+	bootloader_file=spl-imx95-var-dart-dual.bin
+	uboot_proper_file=bootloader-imx95-var-dart-dual.img
+	# The M7 configurations need the bootloader that powers on the Cortex-M7
+	if [[ "${soc_name}" = *"-m7" ]]; then
+		bootloader_file=spl-imx95-var-dart-rpmsg-dual.bin
+		uboot_proper_file=bootloader-imx95-var-dart-rpmsg-dual.img
+	fi
 fi
 
 if [[ "${soc_name}" = *"mx8mn"* ]]; then
