@@ -250,6 +250,10 @@ copy_artifacts_for_machine() {
   if [ "${PRODUCT_IMX_TRUSTY:-}" != "true" ]; then
     rm -f "${dest}"/emmc_burn_android_${uuu_prefix}*_trusty.lst "${dest}"/emmc_burn_android_${uuu_prefix}*_trusty_4g.lst
   fi
+  # CHRE UUU lists flash the CHRE MCU image, built only with ENABLE_CONTEXTHUB=true
+  if [ ! -e "${dest}/rpmsg_chre_rtos_cm7.bin" ]; then
+    rm -f "${dest}"/emmc_burn_android_${uuu_prefix}*_chre.lst
+  fi
 }
 
 copy_scripts() {
