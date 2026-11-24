@@ -1,0 +1,33 @@
+From ae1a0ae4474229310b724eb8101e2bea0902dce0 Mon Sep 17 00:00:00 2001
+From: Marius Bagassien <marius.b@variscite.com>
+Date: Tue, 24 Nov 2026 12:18:21 +0100
+Subject: [PATCH] fsl_imx_demo: IMXChreDemo: Do not crash when sending a
+ message before the Info click
+
+The Context Hub client is only created by the CONTEXT HUB INFO button, so
+SEND MESSAGE dereferenced a null client when it was clicked first. Print
+a message asking to click Info instead.
+
+Signed-off-by: Marius Bagassien <marius.b@variscite.com>
+---
+ ContextHubDemo/java/com/example/imxchre/MainActivity.java | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/ContextHubDemo/java/com/example/imxchre/MainActivity.java b/ContextHubDemo/java/com/example/imxchre/MainActivity.java
+index c2e590c..a18f9b3 100755
+--- a/ContextHubDemo/java/com/example/imxchre/MainActivity.java
++++ b/ContextHubDemo/java/com/example/imxchre/MainActivity.java
+@@ -374,6 +374,10 @@ public class MainActivity extends AppCompatActivity {
+ 
+     /* send message to nanoapp callback */
+     public void ClickSendMessageButton(View view) {
++        if (mContextHubClient == null) {
++            printToScreen("Context Hub client is not registered, please click Info first", true);
++            return;
++        }
+         byte[] test_data= {0x5, 0x4, 0x3, 0x2, 0x1, 0xa, 0x9, 0x8, 0x7, 0x6};
+         NanoAppMessage message =
+             NanoAppMessage.createMessageToNanoApp(
+-- 
+2.43.0
+
