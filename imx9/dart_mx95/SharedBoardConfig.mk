@@ -73,7 +73,8 @@ IMX_ANDROID_FIRST_STAGE_MODULES += \
     $(KERNEL_OUT)/drivers/soc/imx/soc-imx9.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-adp5585.ko \
     $(KERNEL_OUT)/drivers/gpio/gpio-pca953x.ko \
-    $(KERNEL_OUT)/drivers/gpio/gpio-vf610.ko
+    $(KERNEL_OUT)/drivers/gpio/gpio-vf610.ko \
+    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko
 
 IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/video/backlight/led_bl.ko \
@@ -148,18 +149,18 @@ IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES += \
     $(KERNEL_OUT)/drivers/gpu/drm/panel/panel-lvds.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/display/drm_display_helper.ko \
     $(KERNEL_OUT)/drivers/gpu/drm/imx/dpu95/imx95-dpu-drm.ko \
-    $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko
+    $(KERNEL_OUT)/drivers/gpu/drm/imx/display-imx-rpmsg.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
+    ${KERNEL_OUT}/drivers/media/v4l2-core/v4l2-isp.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/neoisp/neoisp.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
+    $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko
 
 BOARD_VENDOR_RAMDISK_KERNEL_MODULES += \
     $(IMX_ANDROID_FIRST_STAGE_MODULES) \
     $(IMX_RECOVERY_FIRST_STAGE_ADDITION_MODULES)
 
 BOARD_VENDOR_KERNEL_MODULES += \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/imx8-isi/imx8-isi.ko \
-    ${KERNEL_OUT}/drivers/media/v4l2-core/v4l2-isp.ko \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/neoisp/neoisp.ko \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/imx-csi-formatter.ko \
-    $(KERNEL_OUT)/drivers/media/platform/nxp/dwc-mipi-csi2.ko \
     $(KERNEL_OUT)/drivers/media/i2c/ap1302.ko \
     $(KERNEL_OUT)/drivers/media/i2c/ox03c10.ko \
     $(KERNEL_OUT)/drivers/media/i2c/max96717_lib.ko \
@@ -278,8 +279,7 @@ BOARD_VENDOR_KERNEL_MODULES += \
     $(KERNEL_OUT)/drivers/net/can/spi/mcp251xfd/mcp251xfd.ko \
     $(KERNEL_OUT)/drivers/char/tpm/tpm.ko \
     $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_core.ko \
-    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko \
-    $(KERNEL_OUT)/drivers/media/i2c/ov5640.ko
+    $(KERNEL_OUT)/drivers/char/tpm/tpm_tis_i2c.ko
 endif
 
 #neutron driver module
