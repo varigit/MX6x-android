@@ -18,21 +18,21 @@ REQUIRED:
     imx8qm-var-som
     imx8mn-var-som
     imx8mp-var-dart
-    imx95-var-dart (only --target iw91x)
+    imx95-var-dart (only --target iw61x)
 
 TARGET:
   --target iw61x   Build only iw61x -> android-artifacts/android/              (DEFAULT)
   --target lwb       Build only LWB     -> android-artifacts/android/ (when used alone)
                                           or -> android-artifacts/android/lwb/ (when used with 'both')
   --target both      Build both
-  imx95-var-dart supports only --target iw91x.
+  imx95-var-dart supports only --target iw61x.
 
 OPTIONS:
   --variant V   userdebug|user (iw61x: userdebug)
   --jobs N      Parallel jobs for imx-make.sh (iw61x: 8)
 
 EXAMPLES:
-  MACHINE=imx95-var-dart ./var-create-release-package.sh --target iw91x
+  MACHINE=imx95-var-dart ./var-create-release-package.sh --target iw61x
   MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target both --jobs 16
   MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target lwb
   MACHINE=imx8mp-var-dart ./var-create-release-package.sh --target iw61x
@@ -87,8 +87,8 @@ case "$MACHINE" in
   *) echo "ERROR: unsupported MACHINE: $MACHINE"; usage; exit 1 ;;
 esac
 
-if [ "${MACHINE}" = "imx95-var-dart" ] && [ "${TARGET}" != "iw91x" ]; then
-  echo "ERROR: imx95-var-dart supports only --target iw91x"
+if [ "${MACHINE}" = "imx95-var-dart" ] && [ "${TARGET}" != "iw61x" ]; then
+  echo "ERROR: imx95-var-dart supports only --target iw61x"
   exit 1
 fi
 
