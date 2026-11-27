@@ -63,11 +63,15 @@ ART_ROOT="${SCRIPT_DIR}/android-artifacts"
 ART_ANDROID_DEFAULT="${ART_ROOT}/android"
 ART_ANDROID_LWB="${ART_ROOT}/android/lwb"
 ART_SCRIPTS="${ART_ROOT}/scripts"
+ART_SBOM_DEFAULT="${ART_ROOT}/sbom"
+ART_SBOM_LWB="${ART_ROOT}/sbom/lwb"
 
 if [ "${TARGET}" = "lwb" ]; then
   LWB_DEST="${ART_ANDROID_DEFAULT}"
+  LWB_SBOM_DEST="${ART_SBOM_DEFAULT}"
 else
   LWB_DEST="${ART_ANDROID_LWB}"
+  LWB_SBOM_DEST="${ART_SBOM_LWB}"
 fi
 
 INSTALL_SCRIPT_DIR="${ANDROID_BUILD_ROOT}/device/variscite/scripts/target/"
@@ -148,12 +152,19 @@ run_build() {
     else
       ./imx-make.sh -j"${JOBS}"
     fi
+
+    echo "=== SBOM ${MACHINE} ${label} : m sbom ==="
+    if [ -n "${extra_env}" ]; then
+      export ${extra_env}
+    fi
+    m -j"${JOBS}" sbom
   )
 }
 
 copy_artifacts_for_machine() {
   dest="$1"
-  echo "=== COPY ${MACHINE} -> ${dest} ==="
+  sbom_dest="$2"
+  echo "=== COPY ${MACHINE} -> ${dest} (SBOM -> ${sbom_dest}) ==="
 
   [ -d "${OUTDIR}" ] || { echo "ERROR: output dir not found: ${OUTDIR}"; exit 1; }
 
@@ -205,6 +216,7 @@ copy_artifacts_for_machine() {
   fi
 
   copy_file "${OUTDIR}/vendor_boot.img"                       "${dest}"
+  copy_file "${ANDROID_BUILD_ROOT}/out/soong/sbom/${LUNCH_PRODUCT}/sbom.spdx.json" "${sbom_dest}"
 
   if [ "${MACHINE}" = "imx8mm-var-dart" ]; then
     copy_file "${ANDROID_BUILD_ROOT}/device/variscite/imx8m/dart_mx8mm/cm_hello_world.bin.debug" "${dest}" "cm_hello_world.bin.debug"
@@ -312,12 +324,12 @@ mkdir -p "${ART_ROOT}" "${ART_SCRIPTS}"
 
 if [ "${TARGET}" = "iw61x" ] || [ "${TARGET}" = "both" ]; then
   run_build "iw61x" ""
-  copy_artifacts_for_machine "${ART_ANDROID_DEFAULT}"
+  copy_artifacts_for_machine "${ART_ANDROID_DEFAULT}" "${ART_SBOM_DEFAULT}"
 fi
 
 if [ "${TARGET}" = "lwb" ] || [ "${TARGET}" = "both" ]; then
   run_build "lwb" "TARGET_USES_BCM_WIFI=true"
-  copy_artifacts_for_machine "${LWB_DEST}"
+  copy_artifacts_for_machine "${LWB_DEST}" "${LWB_SBOM_DEST}"
 fi
 
 copy_scripts
