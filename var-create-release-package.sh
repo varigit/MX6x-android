@@ -18,7 +18,7 @@ REQUIRED:
     imx8qm-var-som
     imx8mn-var-som
     imx8mp-var-dart
-    imx95-var-dart
+    imx95-var-dart (only --target iw61x)
 
 TARGET:
   --target iw61x   Build only iw61x -> android-artifacts/android/              (DEFAULT)
@@ -55,6 +55,11 @@ done
 
 case "${VARIANT}" in userdebug|user) ;; *) echo "ERROR: invalid --variant '${VARIANT}'"; exit 1 ;; esac
 case "${TARGET}" in iw61x|lwb|both) ;; *) echo "ERROR: invalid --target '${TARGET}'"; exit 1 ;; esac
+
+if [ "${MACHINE}" = "imx95-var-dart" ] && [ "${TARGET}" != "iw61x" ]; then
+  echo "ERROR: imx95-var-dart supports only --target iw61x"
+  exit 1
+fi
 
 ANDROID_BUILD_ROOT="${ANDROID_BUILD_ROOT:-$(pwd)}"
 
