@@ -168,8 +168,16 @@ copy_artifacts_for_machine() {
   copy_file "${OUTDIR}/bootloader-${MACHINE}-dual.img"        "${dest}"
   copy_file "${OUTDIR}/boot.img"                              "${dest}"
   copy_file "${OUTDIR}/init_boot.img"                         "${dest}"
-  copy_glob "${OUTDIR}/dtbo-*.img"                            "${dest}"
-  copy_glob "${OUTDIR}/vbmeta-*.img"                          "${dest}"
+
+  if [ "${MACHINE}" = "imx95-var-dart" ]; then
+    copy_file "${OUTDIR}/dtbo-${MACHINE}-sonata.img"            "${dest}"
+    copy_file "${OUTDIR}/dtbo-${MACHINE}-dt8mcustomboard.img"   "${dest}"
+    copy_file "${OUTDIR}/vbmeta-${MACHINE}-sonata.img"          "${dest}"
+    copy_file "${OUTDIR}/vbmeta-${MACHINE}-dt8mcustomboard.img" "${dest}"
+  else
+    copy_glob "${OUTDIR}/dtbo-*.img"                            "${dest}"
+    copy_glob "${OUTDIR}/vbmeta-*.img"                          "${dest}"
+  fi
 
   if [ "${MACHINE}" = "imx8qm-var-som" ]; then
     copy_file "${OUTDIR}/vendor_ramdisk/lib/firmware/hdmitxfw.bin"        "${dest}"
@@ -219,7 +227,14 @@ copy_artifacts_for_machine() {
     imx8qxpb0-var-som) uuu_prefix="var_som_mx8x_b0" ;;
     *) uuu_prefix="${MACHINE%%-*}_" ;;
   esac
-  copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_${uuu_prefix}*.lst" "${dest}"
+  if [ "${MACHINE}" = "imx95-var-dart" ]; then
+     copy_file "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_sonata.lst" "${dest}"
+     copy_file "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_imx95_var_dart_dt8mcustomboard.lst" "${dest}"
+  else
+     copy_glob "${ANDROID_BUILD_ROOT}/device/variscite/scripts/uuu_scripts/emmc_burn_android_${uuu_prefix}*.lst" "${dest}"
+  fi
+  copy_file "${OUTDIR}/u-boot-${MACHINE}-uuu.imx" "${dest}"
+  copy_file "${OUTDIR}/partition-table-dual.img" "${dest}"
 }
 
 copy_scripts() {
